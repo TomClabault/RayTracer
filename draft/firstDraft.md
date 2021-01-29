@@ -3,7 +3,7 @@
 ## A faire en premier
 
 - Parseur de fichier pov.
-- Forme géométrique ( dessin des formes à partir des points)
+- Forme géométrique avec JavaFX ( dessin des formes à partir des points)
 - Moteur de rendu (lanceur de rayon) + ombrage de phong
 
 source lumineuse
