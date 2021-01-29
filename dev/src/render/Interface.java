@@ -1,4 +1,4 @@
-package interface;
+package render;
 
 /*import javafx.application.Application;*/
 
