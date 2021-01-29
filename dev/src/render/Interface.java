@@ -1,6 +1,6 @@
 package render;
 
-/*import javafx.application.Application;*/
+import javafx.application.Application;
 
 public class Interface {
 
