@@ -1,6 +1,6 @@
 package geometry;
 
-public class Line 
+public class Line
 {
 	private Vector directeur;
 	
