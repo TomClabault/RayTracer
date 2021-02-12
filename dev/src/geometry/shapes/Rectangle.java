@@ -1,6 +1,6 @@
 package geometry.shapes;
 
-public class Cube 
+public class Rectangle 
 {
 
 }
