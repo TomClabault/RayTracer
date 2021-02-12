@@ -1,6 +1,6 @@
 package geometry.shapes;
 
-public class Sphere 
+public class Sphere implements Shape
 {
 
 }
