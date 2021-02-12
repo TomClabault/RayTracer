@@ -1,6 +1,6 @@
 package geometry;
 
-public class Point 
+public class Vector 
 {
 
 }
