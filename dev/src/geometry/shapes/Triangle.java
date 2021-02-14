@@ -2,11 +2,9 @@ package geometry.shapes;
 
 import geometry.Point;
 
-public class Triangle 
+public class Triangle implements Shape
 {
-	Point A;
-	Point B;
-	Point C;
+	Point A, B, C;
 	
 	public Triangle(Point A, Point B, Point C)
 	{
