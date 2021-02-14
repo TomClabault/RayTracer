@@ -1,38 +1,16 @@
-public class Shape {
-    protected float height, width, length;
+/*package geometry;*/
 
+import java.util.ArrayList;
+import geometry.shapes.Triangle;
 
-    public Shape(float height){
-        this.height = height;
+public class Shape
+{
+    protected ArrayList<Triangle> forme;
+
+    public Shape(ArrayList<Triangle> forme)
+    {
+        this.forme = forme;
     }
-
-    public Shape(float width, float length,float height){
-        this.height = height;
-        this.width = width;
-        this.length = length;
-    }
-
-    public float getHeight(){
-        return this.height;
-    }
-
-    public float getWidth(){
-        return this.width;
-    }
-
-    public float getLength(){
-        return this.length;
-    }
-
-    public float basisSurface() {
-        return this.width * this.length;
-    }
-
-
-
-
-
-
 
 
 }
