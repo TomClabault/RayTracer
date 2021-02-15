@@ -22,9 +22,9 @@ public class Vector
 	{
 		Point vectorPoint = Point.sub(b, a);
 		
-		this.x = vectorPoint.x;
-		this.y = vectorPoint.y;
-		this.z = vectorPoint.z;
+		this.x = vectorPoint.getX();
+		this.y = vectorPoint.getY();
+		this.z = vectorPoint.getZ();
 	}
 	
 	/*
