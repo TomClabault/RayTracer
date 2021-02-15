@@ -35,7 +35,7 @@ public class Vector
 	 * 
 	 * @return u + v
 	 */
-	public Vector add(Vector u, Vector v)
+	public static Vector add(Vector u, Vector v)
 	{
 		return new Vector(v.x + u.x, v.y + u.y, v.z + u.z);
 	}
@@ -46,7 +46,7 @@ public class Vector
 	 * 
 	 * @return Le produit vectoriel de u et v
 	 */
-	public Vector crossProduct(Vector u, Vector v)
+	public static Vector crossProduct(Vector u, Vector v)
 	{
 		return new Vector(u.y*v.z - u.z*v.y, u.z*v.x - u.x*v.z, u.x*v.y - u.y*v.x);
 	}
@@ -59,7 +59,7 @@ public class Vector
 	 * 
 	 * @return Produit scalaire de u et v
 	 */
-	public float dotProduct(Vector u, Vector v)
+	public static float dotProduct(Vector u, Vector v)
 	{
 		return u.x*u.x + u.y*v.y + u.z*v.z;
 	}
@@ -82,7 +82,7 @@ public class Vector
 	 * 
 	 * @return u - v
 	 */
-	public Vector sub(Vector u, Vector v)
+	public static Vector sub(Vector u, Vector v)
 	{
 		return new Vector(u.x - v.x, u.y - v.y, u.z - v.z);
 	}
