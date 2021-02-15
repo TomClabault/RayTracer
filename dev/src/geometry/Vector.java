@@ -14,6 +14,20 @@ public class Vector
 	}
 	
 	/*
+	 * Construit un vecteur à partir de deux points
+	 * 
+	 * @param a 
+	 */
+	public Vector(Point a, Point b)
+	{
+		Point vectorPoint = Point.sub(b, a);
+		
+		this.x = vectorPoint.x;
+		this.y = vectorPoint.y;
+		this.z = vectorPoint.z;
+	}
+	
+	/*
 	 * Ajoute deux vecteurs et retourne le vecteur somme
 	 * 
 	 * @param u Premier terme de l'addition des deux vecteurs

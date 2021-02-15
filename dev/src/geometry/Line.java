@@ -11,9 +11,4 @@ public class Line
 		this.directeur = vecteurDirecteur;
 		this.point = point;
 	}
-	
-	public boolean intersect(Shape shape)
-	{
-		return true;
-	}
 }
