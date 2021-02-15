@@ -87,6 +87,16 @@ public class Vector
 	}
 	
 	/*
+	 * Permet de "convertir" un point en vecteur (puisque les coordonées d'un point peuvent simplement être interprétée comme les coordonées d'un vecteur)
+	 * 
+	 * @return Le vecteur de même coordoonées que le point passé en argument
+	 */
+	public static Vector pointToV(Point point) 
+	{
+		return new Vector(point.getX(), point.getY(), point.getZ());
+	}
+	
+	/*
 	 * Ajoute deux vecteurs et retourne le vecteur somme
 	 * 
 	 * @param u Premier terme de la soustraction des deux vecteurs
