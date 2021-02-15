@@ -16,6 +16,8 @@ public class Triangle implements ShapeTriangle
 		this.A = A;
 		this.B = B;
 		this.C = C;
+		
+		this.planeNormal = Vector.crossProduct(new Vector(A, B), new Vector(A, C));
 	}
 	
 	public Point intersect(Line line)
