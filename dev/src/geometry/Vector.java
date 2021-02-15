@@ -41,6 +41,18 @@ public class Vector
 	}
 	
 	/*
+	 * Ajoute un vecteur au vecteur représenté par l'instance appelante
+	 * 
+	 * @param u Deuxième terme de l'addition des deux vecteurs
+	 * 
+	 * @return this + v
+	 */
+	public Vector add(Vector v)
+	{
+		return new Vector(this.x + v.x, this.y + v.y, this.z + v.z);
+	}
+	
+	/*
 	 * @param u Premier vecteur
 	 * @param v Deuxième vecteur
 	 * 
