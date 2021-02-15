@@ -1,8 +1,7 @@
-/*package geometry;*/
+package geometry;
 
 import java.util.ArrayList;
 import geometry.shapes.Triangle;
-import geometry.Point;
 
 public class Shape
 {
