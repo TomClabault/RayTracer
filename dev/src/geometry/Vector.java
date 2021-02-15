@@ -51,6 +51,16 @@ public class Vector
 	}
 	
 	/*
+	 * Calcule la longueur du vecteur
+	 * 
+	 * @return Longueur du vecteur
+	 */
+	public double length()
+	{
+		return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z);
+	}
+	
+	/*
 	 * Ajoute deux vecteurs et retourne le vecteur somme
 	 * 
 	 * @param u Premier terme de la soustraction des deux vecteurs
