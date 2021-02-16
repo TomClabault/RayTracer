@@ -5,36 +5,36 @@ package geometry;
  */
 public class Point 
 {
-    private float x,y,z;
-
-    public Point(float x, float y, float z)
+    private double x, y, z;
+    
+    public Point(double x, double y, double z)
     {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public float getX(){
+    public double getX(){
         return this.x;
     }
 
-    public float getY(){
+    public double getY(){
         return this.y;
     }
 
-    public float getZ(){
+    public double getZ(){
         return this.z;
     }
 
-    public void setX(float newX){
+    public void setX(double newX){
         this.x = newX;
     }
 
-    public void setY(float newY){
+    public void setY(double newY){
         this.y = newY;
     }
 
-    public void setZ(float newZ){
+    public void setZ(double newZ){
         this.z = newZ;
     }
 
@@ -52,6 +52,18 @@ public class Point
     }
     
     /*
+     * Crée et retourne un vecteur ayant les même coordonnées que le point passé en paramètre
+     * 
+     * @param point Un point de coordonnées (x, y, z)
+     * 
+     * @return Le vecteur de coordonnées (x, y, z)
+     */
+    public static Vector p2v(Point point)
+    {
+    	return new Vector(point);
+    }
+    
+    /*
      * Multiplie les coordonnées d'un point par un scalaire et retourne le point résultant
      * 
      * @param scalar Un scalaire
@@ -59,7 +71,7 @@ public class Point
      * 
      * @return Le point de coordonnées (a*scalar, b*scalar, c*scalar)
      */
-    public static Point scalarMul(float scalar, Point a)
+    public static Point scalarMul(double scalar, Point a)
     {
     	return new Point(a.getX()*scalar, a.getY()*scalar, a.getZ()*scalar);
     }

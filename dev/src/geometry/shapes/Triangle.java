@@ -66,7 +66,7 @@ public class Triangle implements ShapeTriangle
 	public Point intersect(Ray ray)
 	{
 		Point intersection = null;
-		float planeD;//Composante D du plan formé par les 3 points du triangle dans l'équation de plan Ax + By + Cz + D = 0
+		double planeD;//Composante D du plan formé par les 3 points du triangle dans l'équation de plan Ax + By + Cz + D = 0
 		
 		if(Vector.dotProduct(this.planeNormal, ray.getDirection()) < 0.0000001d)//Si la normale du plan et la direction du rayon sont perpendiculaires, le plan et le rayon sont parallèles, pas d'intersection
 			return null;
@@ -74,14 +74,14 @@ public class Triangle implements ShapeTriangle
 		planeD = Vector.dotProduct(this.planeNormal, new Vector(this.A.getX(), this.A.getY(), this.A.getZ()));
 		
 		//Le point d'intersection est sur le rayon. On peut trouver ses coordonnées avec l'équation P = ray.origin + k*ray.direction. Cette coeffVectorPoint = k
-		float coeffVectorPoint = -(Vector.dotProduct(this.planeNormal, new Vector(ray.getOrigin())) + planeD)
+		double coeffVectorPoint = -(Vector.dotProduct(this.planeNormal, ray.getOriginV()) + planeD)
 								  /Vector.dotProduct(this.planeNormal, ray.getDirection());
 		
 		if(coeffVectorPoint < 0)//L'intersection est dans la direction opposée du rayon, c'est à dire derrière la caméra
 			return null;
 		
 		//Calcule les coordonnées du point d'intersection entre le rayon et le plan formé par les 3 points du triangle grâce à l'équation P = ray.origin + coeff.ray.direction
-		intersection = Point.add(ray.getOrigin(), Point.scalarMul(coeffVectorPoint, Vector.vToPoint(ray.getDirection())));
+		intersection = Point.add(ray.getOrigin(), Point.scalarMul(coeffVectorPoint, ray.getDirectionP()));
 		
 		if(this.insideOutsideTest(intersection))//Si le point d'intersection du rayon et du plan est dans le triangle, on a trouve notre point d'intersection
 			return intersection;//On le retourne

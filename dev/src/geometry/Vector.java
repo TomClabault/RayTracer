@@ -5,9 +5,7 @@ package geometry;
  */
 public class Vector 
 {
-	private float x;
-	private float y;
-	private float z;
+	private double x, y, z;
 	
 	/*
 	 * Contruit un vecteur à partir de ses trois composantes x, y et z
@@ -16,7 +14,7 @@ public class Vector
 	 * @param y Composante y du vecteur
 	 * @param z Composante z du vecteur
 	 */
-	public Vector(float x, float y, float z)
+	public Vector(double x, double y, double z)
 	{
 		this.x = x;
 		this.y = y;
@@ -94,7 +92,7 @@ public class Vector
 	 * 
 	 * @return Produit scalaire de u et v
 	 */
-	public static float dotProduct(Vector u, Vector v)
+	public static double dotProduct(Vector u, Vector v)
 	{
 		return u.x*u.x + u.y*v.y + u.z*v.z;
 	}
@@ -107,16 +105,6 @@ public class Vector
 	public double length()
 	{
 		return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z);
-	}
-	
-	/*
-	 * Permet de "convertir" un point en vecteur (puisque les coordonées d'un point peuvent simplement être interprétée comme les coordonées d'un vecteur)
-	 * 
-	 * @return Le vecteur de même coordoonées que le point passé en argument
-	 */
-	public static Vector pointToV(Point point) 
-	{
-		return new Vector(point.getX(), point.getY(), point.getZ());
 	}
 	
 	/*
@@ -139,7 +127,7 @@ public class Vector
 	 * 
 	 * @return Le point de coordonnées (x, y, z)
 	 */
-	public static Point vToPoint(Vector u)
+	public static Point v2p(Vector u)
 	{
 		return new Point(u.x, u.y, u.z);
 	}

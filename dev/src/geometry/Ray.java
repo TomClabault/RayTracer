@@ -23,6 +23,16 @@ public class Ray
 	}
 	
 	/*
+	 * Retourne la direction du rayon sous la forme d'un point
+	 * 
+	 * @return Pour un rayon de direction v(x, y, z), retourne le point p(x, y, z)
+	 */
+	public Point getDirectionP()
+	{
+		return Vector.v2p(this.direction);
+	}
+	
+	/*
 	 * Permet d'obtenir l'origine du rayon
 	 * 
 	 * @return Un point représentant l'origin du rayon
@@ -30,5 +40,15 @@ public class Ray
 	public Point getOrigin()
 	{
 		return this.origin;
+	}
+	
+	/*
+	 * Retourne l'origine du rayon sous la forme d'un vecteur
+	 * 
+	 * @return Vecteur de même coordonnées que le point d'origine du rayon
+	 */
+	public Vector getOriginV()
+	{
+		return new Vector(this.origin);
 	}
 }
