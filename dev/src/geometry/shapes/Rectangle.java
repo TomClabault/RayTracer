@@ -12,7 +12,7 @@ public class Rectangle implements Shape
 
 	protected double height,width,length,volume;
 	protected float diagonal;
-	protected Point coin1,coin2,difference;
+	protected Point coin1,coin2;
 	protected ArrayList<Triangle> listeTriangle;
 
 	public Rectangle(Point coin1, float height, float length, float width)
@@ -31,7 +31,7 @@ public class Rectangle implements Shape
 
 
 
-	public void buildRectangle()
+	public ArrayList<Triangle> buildRectangle()
 	{
 		if(this.coin1 != null && this.coin2 != null)
 		{
@@ -40,6 +40,7 @@ public class Rectangle implements Shape
 			this.length = this.coin2.getX() - this.coin1.getX();
 			this.height = this.coin2.getZ() - this.coin1.getZ();
 			this.width = this.coin2.getY() - this.coin1.getY();
+
 		}
 		else if(this.coin1 != null && this.length == length  && this.height == height && this.width == width)
 		{
