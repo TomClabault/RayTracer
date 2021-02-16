@@ -81,7 +81,7 @@ public class Triangle implements ShapeTriangle
 			return null;
 		
 		//Calcule les coordonnées du point d'intersection entre le rayon et le plan formé par les 3 points du triangle grâce à l'équation P = ray.origin + coeff.ray.direction
-		intersection = Point.add(ray.getOrigin(), Point.scalarMul(coeffVectorPoint, ray.getDirectionP()));
+		intersection = ray.determinePoint(coeffVectorPoint);
 		
 		if(this.insideOutsideTest(intersection))//Si le point d'intersection du rayon et du plan est dans le triangle, on a trouve notre point d'intersection
 			return intersection;//On le retourne

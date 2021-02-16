@@ -1,4 +1,9 @@
-package geometry;
+package geometry.shapes;
+
+import geometry.Point;
+import geometry.Ray;
+import geometry.ShapeMaths;
+import geometry.Vector;
 
 public class SphereMaths implements ShapeMaths
 {
@@ -60,7 +65,7 @@ public class SphereMaths implements ShapeMaths
 			k1 = k2;
 		//On peut maintenant calculer les coordonnées du point d'intersection avec la sphère à l'aide de k1 qui contient le "bon" k
 		
-		intersection = Point.add(ray.getOrigin(), Point.scalarMul(k1, ray.getDirectionP()));
+		intersection = ray.determinePoint(k1);
 		
 		return intersection;
 	}

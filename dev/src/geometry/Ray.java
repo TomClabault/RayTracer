@@ -12,6 +12,11 @@ public class Ray
 		this.origin = origin;
 	}
 	
+	public Point determinePoint(double coefficient)
+	{
+		return Point.add(this.getOrigin(), Point.scalarMul(coefficient, this.getDirectionP()));
+	}
+	
 	/*
 	 * Permet d'obtenir la direction du rayon
 	 * 
