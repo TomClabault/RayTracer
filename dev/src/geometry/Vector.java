@@ -131,4 +131,16 @@ public class Vector
 	{
 		return new Vector(u.x - v.x, u.y - v.y, u.z - v.z);
 	}
+	
+	/*
+	 * Utilise les coordoonées d'un vecteur pour définir un point
+	 * 
+	 * @param u Un vecteur de coordonnées (x, y, z)
+	 * 
+	 * @return Le point de coordonnées (x, y, z)
+	 */
+	public static Point vToPoint(Vector u)
+	{
+		return new Point(u.x, u.y, u.z);
+	}
 }
