@@ -1,11 +1,21 @@
 package geometry;
 
+/*
+ * Classe permettant de représenter un vecteur en coordonnées réelles dans l'espace
+ */
 public class Vector 
 {
 	private float x;
 	private float y;
 	private float z;
 	
+	/*
+	 * Contruit un vecteur à partir de ses trois composantes x, y et z
+	 * 
+	 * @param x Composante x du vecteur
+	 * @param y Composante y du vecteur
+	 * @param z Composante z du vecteur
+	 */
 	public Vector(float x, float y, float z)
 	{
 		this.x = x;
@@ -14,9 +24,22 @@ public class Vector
 	}
 	
 	/*
-	 * Construit un vecteur à partir de deux points
+	 * Construit un vecteur (x, y, z) avec un point (a, b, c) tel que x = a, y = b, z = c. Il s'agit simplement d'une recopie de coordonnées
 	 * 
-	 * @param a 
+	 *  @param p Le point à partir du quel créer le vecteur
+	 */
+	public Vector(Point p)
+	{
+		this.x = p.getX();
+		this.y = p.getY();
+		this.z = p.getZ();
+	}
+	
+	/*
+	 * Construit le vecteur AB à partir des points a et b passés en paramètre
+	 * 
+	 * @param a Point A
+	 * @param b Point B
 	 */
 	public Vector(Point a, Point b)
 	{

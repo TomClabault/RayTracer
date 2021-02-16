@@ -6,11 +6,11 @@ package geometry;
 public interface ShapeTriangle 
 {
 	/*
-	 * Calcule le point d'intersection et le renvoie si existant
+	 * Calcule le point d'intersection avec un rayon et le renvoie si existant
 	 * 
-	 * @param line Droite avec laquelle tester l'intersection
+	 * @param ray Rayon avec lequel chercher une intersection
 	 * 
-	 * @return Renvoie le point d'intersection de la droite et de l'objet. Null s'il n'y a pas de point d'intersection
+	 * @return Renvoie le point d'intersection du rayon et de l'objet. Null s'il n'y a pas de point d'intersection
 	 */
-	public Point intersect(Line line);
+	public Point intersect(Ray ray);
 }
