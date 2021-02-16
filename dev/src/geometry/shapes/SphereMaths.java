@@ -5,6 +5,10 @@ import geometry.Ray;
 import geometry.ShapeMaths;
 import geometry.Vector;
 
+/*
+ * Classe représentant une sphère décrite par son centre ainsi que son rayon. Représente la "version" mathématique d'une sphère. 
+ * Pour une représentation polygonale d'une sphère, voir SphereTriangle
+ */
 public class SphereMaths implements ShapeMaths
 {
 	Point center;
@@ -17,6 +21,13 @@ public class SphereMaths implements ShapeMaths
 		this.radius = radius;
 	}
 	
+	/*
+	 * Calcule de façon analytique l'intersection d'un rayon et d'une sphère
+	 * 
+	 * @param ray Le rayon avec lequel l'intersection avec la sphère doit être calculée
+	 * 
+	 * @return Retourne le point d'intersection avec la sphère s'il existe (s'il y a deux points d'intersection, ne retourne que le point le plus près de l'origine du rayon). Retourne null sinon.
+	 */
 	public Point intersect(Ray ray)
 	{
 		Point intersection = null;
