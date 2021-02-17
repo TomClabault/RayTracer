@@ -87,6 +87,8 @@ public class RayTracer
 							
 				}
 			}
+			else//Le rayon n'a rien intersecté --> noir
+				return Color.rgb(0, 0, 0);//Couleur du fond, noir si on a pas de fond
 		}
 		
 		return pixel;
