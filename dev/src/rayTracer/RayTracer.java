@@ -2,6 +2,7 @@ package rayTracer;
 
 import java.util.ArrayList;
 
+import geometry.Point;
 import geometry.Ray;
 import geometry.Shape;
 import javafx.scene.paint.Color;
@@ -62,7 +63,15 @@ public class RayTracer
 		
 		for(Shape object : objectsList)
 		{
+			Point intersectionPoint = object.intersect(ray);
 			
+			if(intersectionPoint != null)//Il y a un point d'intersection
+			{
+				//On tire un rayon vers la source de lumière d'origine le point d'intersection précédent + un très léger décalage
+				Point interPointShift = Point.add(intersectionPoint, new Point(0.0001d, 0.0001d, 0.0001d));
+				Vector shadowRayDir = new Vector();
+				Ray shadowRay = new Ray(shadowRayDir);
+			}
 		}
 		
 		return pixel;

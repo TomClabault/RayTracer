@@ -3,7 +3,7 @@ package geometry;
 public interface Shape
 {
 	/*
-	 * Calcule le point d'intersection avec un rayon et le renvoie si existant
+	 * Calcule le point d'intersection avec un rayon et le renvoie si existant. Le point d'intersection n'est cherché que "en face" du rayon.
 	 * 
 	 * @param ray Rayon avec lequel chercher une intersection
 	 * 

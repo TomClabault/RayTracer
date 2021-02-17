@@ -108,6 +108,18 @@ public class Vector
 	}
 	
 	/*
+	 * Normalise le vecteur
+	 */
+	public void normalize()
+	{
+		double length = this.length();
+		
+		this.x /= length;
+		this.y /= length;
+		this.z /= length;
+	}
+	
+	/*
 	 * Ajoute deux vecteurs et retourne le vecteur somme
 	 * 
 	 * @param u Premier terme de la soustraction des deux vecteurs

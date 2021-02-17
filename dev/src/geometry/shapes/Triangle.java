@@ -5,7 +5,7 @@ import geometry.Ray;
 import geometry.ShapeTriangle;
 import geometry.Vector;
 
-public class Triangle implements ShapeTriangle
+public class Triangle
 {
 	Point A, B, C;
 	
