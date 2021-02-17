@@ -30,6 +30,16 @@ public class Scene
 	}
 	
 	/*
+	 * Retourne la source de lumière de la scène
+	 * 
+	 * @return La source de lumière de la scène
+	 */
+	public Light getLight()
+	{
+		return this.light;
+	}
+	
+	/*
 	 * Permet d'obtenir la liste des formes de la scène
 	 * 
 	 * @return Une ArrayList<Shape> contenant toutes les formes de la scène

@@ -56,4 +56,12 @@ public class Ray
 	{
 		return new Vector(this.origin);
 	}
+	
+	/*
+	 * Normalise la direction du rayon
+	 */
+	public void normalize()
+	{
+		this.direction.normalize();
+	}
 }
