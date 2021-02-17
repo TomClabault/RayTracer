@@ -1,6 +1,6 @@
 package geometry;
 
-public interface ShapeMaths 
+public interface ShapeMaths extends Shape
 {
-	public Point intersect(Ray ray);
+	
 }

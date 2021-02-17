@@ -28,4 +28,14 @@ public class Scene
 		this.light = light;
 		this.shapes = shapes;
 	}
+	
+	/*
+	 * Permet d'obtenir la liste des formes de la scène
+	 * 
+	 * @return Une ArrayList<Shape> contenant toutes les formes de la scène
+	 */
+	public ArrayList<Shape> getSceneObjects()
+	{
+		return this.shapes;
+	}
 }
