@@ -80,7 +80,7 @@ public class RayTracer
 				{
 					Point shadowRayInter = objectAgain.intersect(shadowRay);
 					if(shadowRayInter == null)//Pas d'intersection, on retourne la pleine lumière
-						return Color.rgb(255, 255, 255); 
+						return object.getColor(); 
 					else//Une intersection a été trouvée, on retourne donc un pixel d'ombre tout noir
 						return Color.rgb(0, 0, 0);
 							
