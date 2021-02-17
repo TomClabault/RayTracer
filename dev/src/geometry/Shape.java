@@ -1,7 +1,14 @@
 package geometry;
 
+import javafx.scene.paint.Color;
+
 public interface Shape
 {
+	/*
+	 * Retourne le couleur de l'objet sous la forme d'un objet Color.RGB(r, g, b)
+	 */
+	public abstract Color getColor();
+	
 	/*
 	 * Permet d'obtenir la normale à un point donné de la forme
 	 * 

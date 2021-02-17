@@ -4,6 +4,7 @@ import geometry.Point;
 import geometry.Ray;
 import geometry.ShapeMaths;
 import geometry.Vector;
+import javafx.scene.paint.Color;
 
 /*
  * Classe représentant une sphère décrite par son centre ainsi que son rayon. Représente la "version" mathématique d'une sphère. 
@@ -12,6 +13,8 @@ import geometry.Vector;
 public class SphereMaths implements ShapeMaths
 {
 	Point center;
+
+	Color sphereColor;
 	
 	double radius;
 	
@@ -19,6 +22,18 @@ public class SphereMaths implements ShapeMaths
 	{
 		this.center = center;
 		this.radius = radius;
+		
+		this.sphereColor = Color.rgb(255, 255, 255);
+	}
+	
+	/*
+	 * Permet d'obtenir la couleur de la sphère
+	 * 
+	 * @return Objet Color.RGB contenant la couleur de la sphère
+	 */
+	public Color getColor()
+	{
+		return this.sphereColor;
 	}
 	
 	public Vector getNormal(Point point)

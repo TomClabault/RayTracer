@@ -68,11 +68,23 @@ public class RayTracer
 			
 			if(intersectionPoint != null)//Il y a un point d'intersection
 			{
-				Vector normalAtIntersection = object.getNormal(intersectionPoint);
+				Vector normalAtIntersection = object.getNormal(intersectionPoint);//On calcule la normale au point d'intersection avec la forme
 				Point interPointShift = Point.add(intersectionPoint, Point.scalarMul(0.0001d, Vector.v2p(normalAtIntersection)));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
 				
-				Vector shadowRayDir = new Vector(interPointShift, renderScene.getLight().getCenter());
-				Ray shadowRay = new Ray(shadowRayDir);
+				Vector shadowRayDir = new Vector(interPointShift, renderScene.getLight().getCenter());//On calcule la direction du rayon secondaire
+				
+				Ray shadowRay = new Ray(shadowRayDir, interPointShift);//Création du rayon secondaire avec pour origine le premier point d'intersection décalé et avec comme direction le centre de la lampe
+				
+				//On cherche une intersection avec un objet qui se trouverait entre la lampe et l'origine du shadow ray
+				for(Shape objectAgain : objectsList)
+				{
+					Point shadowRayInter = objectAgain.intersect(shadowRay);
+					if(shadowRayInter == null)//Pas d'intersection, on retourne la pleine lumière
+						return Color.rgb(255, 255, 255); 
+					else//Une intersection a été trouvée, on retourne donc un pixel d'ombre tout noir
+						return Color.rgb(0, 0, 0);
+							
+				}
 			}
 		}
 		
