@@ -30,6 +30,16 @@ public class Scene
 	}
 	
 	/*
+	 * Retourne la caméra de la scène
+	 * 
+	 * @return La caméra de la scène
+	 */
+	public Camera getCamera()
+	{
+		return this.camera;
+	}
+	
+	/*
 	 * Retourne la source de lumière de la scène
 	 * 
 	 * @return La source de lumière de la scène

@@ -7,6 +7,7 @@ import geometry.Ray;
 import geometry.Shape;
 import geometry.Vector;
 import javafx.scene.paint.Color;
+import scene.Camera;
 import scene.Scene;
 
 /*
@@ -42,7 +43,7 @@ public class RayTracer
 		{
 			for(int x = 0; x < this.renderLength; x++)
 			{
-				
+				Point this.convPxCoToWorldCoords(renderScene.getCamera(), x, y);
 			}
 		}
 		
@@ -89,6 +90,17 @@ public class RayTracer
 		}
 		
 		return pixel;
+	}
+	
+	public Point convPxCoToWorldCoords(Camera camera, int x, int y)
+	{
+		Point worldCoords;
+		
+		double xWorld = (double)x;
+		double yWorld = (double)y;
+		
+		
+		return worldCoords;
 	}
 	
 	/*
