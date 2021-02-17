@@ -60,7 +60,10 @@ public class RayTracer
 		
 		ArrayList<Shape> objectsList = renderScene.getSceneObjects();
 		
-		for(Shape : objectsList)
+		for(Shape object : objectsList)
+		{
+			
+		}
 		
 		return pixel;
 	}

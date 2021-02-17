@@ -1,6 +1,3 @@
 package geometry;
 
-public interface ShapeMaths extends Shape
-{
-	
-}
+public interface ShapeMaths extends Shape{}
