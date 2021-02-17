@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.lang.Math;
 
 
-public class Rectangle implements Shape
+public class Rectangle implements ShapeTriangle
 {
 
 	protected double height,width,length,volume;
