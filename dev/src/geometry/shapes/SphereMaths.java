@@ -21,6 +21,11 @@ public class SphereMaths implements ShapeMaths
 		this.radius = radius;
 	}
 	
+	public Vector getNormal(Point point)
+	{
+		return Vector.normalize(Point.p2v(Point.sub(point, center)));
+	}
+	
 	/*
 	 * Calcule de façon analytique l'intersection d'un rayon et d'une sphère
 	 * 
@@ -40,9 +45,9 @@ public class SphereMaths implements ShapeMaths
 		double a = Vector.dotProduct(ray.getDirection(), ray.getDirection());// = D²
 		double b = 2*Vector.dotProduct(ray.getOriginV(), ray.getDirection()) + 2*Vector.dotProduct(ray.getDirection(), Point.p2v(this.center));// = 2OD + 2DC
 		double c =   Vector.dotProduct(ray.getOriginV(), ray.getOriginV()) 
-				+   Vector.dotProduct(Point.p2v(this.center), Point.p2v(this.center)) 
-			    + 2*Vector.dotProduct(ray.getOriginV(), Point.p2v(this.center))
-			    - this.radius*this.radius;
+				 +   Vector.dotProduct(Point.p2v(this.center), Point.p2v(this.center)) 
+			     + 2*Vector.dotProduct(ray.getOriginV(), Point.p2v(this.center))
+			     - this.radius*this.radius;
 		
 		double b2 = b*b;
 		double ac4 = 4*a*c;

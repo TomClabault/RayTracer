@@ -49,6 +49,16 @@ public class Vector
 	}
 	
 	/*
+	 * Créer un nouveau vecteur à partir d'un existant. i.e. fait une copie
+	 */
+	public Vector(Vector u)
+	{
+		this.x = u.x;
+		this.y = u.y;
+		this.z = u.z;
+	}
+	
+	/*
 	 * Ajoute deux vecteurs et retourne le vecteur somme
 	 * 
 	 * @param u Premier terme de l'addition des deux vecteurs
@@ -117,6 +127,14 @@ public class Vector
 		this.x /= length;
 		this.y /= length;
 		this.z /= length;
+	}
+	
+	public static Vector normalize(Vector toNormalize)
+	{
+		Vector normalized = new Vector(toNormalize);
+		normalized.normalize();
+		
+		return normalized; 
 	}
 	
 	/*

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import geometry.Point;
 import geometry.Ray;
 import geometry.Shape;
+import geometry.Vector;
 import javafx.scene.paint.Color;
 import scene.Scene;
 
@@ -67,9 +68,10 @@ public class RayTracer
 			
 			if(intersectionPoint != null)//Il y a un point d'intersection
 			{
-				//On tire un rayon vers la source de lumière d'origine le point d'intersection précédent + un très léger décalage
-				Point interPointShift = Point.add(intersectionPoint, new Point(0.0001d, 0.0001d, 0.0001d));
-				Vector shadowRayDir = new Vector();
+				Vector normalAtIntersection = object.getNormal(intersectionPoint);
+				Point interPointShift = Point.add(intersectionPoint, Point.scalarMul(0.0001d, Vector.v2p(normalAtIntersection)));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
+				
+				Vector shadowRayDir = new Vector(interPointShift, renderScene.getLight().getCenter());
 				Ray shadowRay = new Ray(shadowRayDir);
 			}
 		}
