@@ -18,12 +18,30 @@ public class SphereMaths implements ShapeMaths
 	
 	double radius;
 	
+	/*
+	 * Crée une sphère blanche à partie de son centre et de son rayon
+	 * 
+	 * @param center Point représentant le centre de la sphère
+	 * @param radius Rayon de la sphère 
+	 */
 	public SphereMaths(Point center, double radius)
 	{
+		this(center, Color.rgb(255, 255, 255), radius);
+	}
+	
+	/*
+	 * Crée une sphère blanche à partie de son centre et de son rayon
+	 * 
+	 * @param center Point représentant le centre de la sphère
+	 * @param sphereColor Objet Color.RGB représentant la couleur de la sphère
+	 * @param radius Rayon de la sphère 
+	 */
+	public SphereMaths(Point center, Color sphereColor, double radius) 
+	{
 		this.center = center;
-		this.radius = radius;
+		this.sphereColor = sphereColor;
 		
-		this.sphereColor = Color.rgb(255, 255, 255);
+		this.radius = radius;
 	}
 	
 	/*
