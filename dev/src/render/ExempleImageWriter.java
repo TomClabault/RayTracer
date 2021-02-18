@@ -24,7 +24,8 @@ public class ExempleImageWriter extends Application {
     pw.setColor(2,2,Color.web("0x0000FF"));
     pw.setColor(2,3,Color.web("0x0000FF"));
     pw.setColor(3,2,Color.web("0x0000FF"));
-    pw.setColor(3,3,Color.web("0x0000FF"));
+    pw.setColor(3,3,Color.web("0x0000FF"));/*Color.rgb(0,0,255)*/
+    /*Prend en argument un tableau de couleur*/
 
     ImageView imageView = new ImageView();
     imageView.setImage(writableImage);
@@ -35,5 +36,11 @@ public class ExempleImageWriter extends Application {
     stage.setScene(scene);
     stage.setTitle("");
     stage.show();
+
+    pw.setColor(2,2,Color.web("0xFF0000"));
+    pw.setColor(3,2,Color.web("0xFF0000"));
+    pw.setColor(2,3,Color.web("0xFF0000"));
+    pw.setColor(3,3,Color.web("0xFF0000"));
+
   }
 }
