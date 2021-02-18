@@ -12,7 +12,7 @@ public class Camera
 	
 	Vector direction;//Direction dans laquelle regarde la caméra
 	
-	float degreeFOV;//Champ de vision de la caméra
+	double degreeFOV;//Champ de vision de la caméra
 	
 	/*
 	 * Crée une caméra d'origine le point (0, 0, 0) et de direction (0, 0, -1)
@@ -95,6 +95,16 @@ public class Camera
 	public void setDirection(Vector newDirection)
 	{
 		this.direction = newDirection;
+	}
+	
+	/*
+	 * Redéfinit le FOV (champ de vision) de la caméra.
+	 * 
+	 * @param angle Un réel entre 0 et 180 représentant le champ de vision de la caméra en degré
+	 */
+	public void setFOV(double newFOV)
+	{
+		this.degreeFOV = newFOV;
 	}
 	
 	/*

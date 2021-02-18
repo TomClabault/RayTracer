@@ -89,6 +89,11 @@ public class Point
     	return new Point(a.x - b.x, a.y - b.y, a.z - b.z);
     }
     
+    /*
+     * Redéfinition de toString() pour afficher les points sous la forme "(x, y, z)"
+     * 
+     * @return Retourne une chaîne de caractère de la forme "(x, y, z)" avec x, y et z les coordoonées du point 
+     */
     @Override
     public String toString()
     {

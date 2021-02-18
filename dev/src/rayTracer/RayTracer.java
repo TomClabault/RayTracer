@@ -29,14 +29,16 @@ public class RayTracer
 	{
 		RayTracer r = new RayTracer(1920, 1080);
 		
-		Camera c = new Camera();
+		Camera c = new Camera(); c.setFOV(100);
 		Light l = new LightBulb(Point.add(c.getPosition(), new Point(-1, 1, 0)));
 		ArrayList<Shape> sphere = new ArrayList<>();
 		sphere.add(new SphereMaths(new Point(0, 0, -4), 1));
 		
 		Scene s = new Scene(c, l, sphere);
 		
-		r.convPxCoToWorldCoords(s.getCamera(), 1919, 0);
+		Point pixelCoorrs = r.convPxCoToWorldCoords(s.getCamera(), 1919, 0);
+		
+		System.out.println(pixelCoorrs);
 	}
 	
 	public RayTracer(int renderLength, int renderHeight)
