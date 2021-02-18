@@ -97,6 +97,6 @@ public class Point
     @Override
     public String toString()
     {
-    	return String.format("%.03f, %.03f, %.03f)", this.x, this.y, this.z);
+    	return String.format("(%.03f, %.03f, %.03f)", this.x, this.y, this.z);
     }
 }

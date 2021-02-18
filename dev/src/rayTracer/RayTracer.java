@@ -30,11 +30,11 @@ public class RayTracer
 		RayTracer r = new RayTracer(1920, 1080);
 		
 		Camera c = new Camera(); c.setFOV(100);
-		Light l = new LightBulb(Point.add(c.getPosition(), new Point(-1, 1, 0)));
+		Light l = new LightBulb(Point.add(c.getPosition(), new Point(-1, 1, 0)), 1);
 		ArrayList<Shape> sphere = new ArrayList<>();
 		sphere.add(new SphereMaths(new Point(0, 0, -4), 1));
 		
-		Scene s = new Scene(c, l, sphere);
+		Scene s = new Scene(c, l, sphere, 0.5);
 		
 		Point pixelCoorrs = r.convPxCoToWorldCoords(s.getCamera(), 1919, 0);
 		
@@ -105,9 +105,17 @@ public class RayTracer
 				{
 					Point shadowRayInter = objectAgain.intersect(shadowRay);
 					if(shadowRayInter == null)//Pas d'intersection, on retourne la pleine lumière
-						return object.getColor(); 
-					else//Une intersection a été trouvée, on retourne donc un pixel d'ombre tout noir
-						return Color.rgb(0, 0, 0);
+					{
+						double objectRed = object.getColor().getRed();
+						double objectGreen = object.getColor().getRed();
+						double objectBlue = object.getColor().getRed();
+						
+						double lightIntensity = renderScene.getLight().getIntensity();
+						
+						return Color.rgb((int)(objectRed*lightIntensity), (int)(objectGreen*lightIntensity), (int)(objectBlue*lightIntensity));
+					}
+					else//Une intersection a été trouvée, on retourne donc un pixel d'ombre sombre
+						return object.getColor().darker();
 							
 				}
 			}
@@ -118,6 +126,15 @@ public class RayTracer
 		return pixel;
 	}
 	
+	/*
+	 * Convertit les coordonnées d'un pixel sur l'image (1920x1080 par exemple) en coordonnées 3D dans la scène à rendre
+	 * 
+	 * @param camera La caméra selon laquelle on souhaite obtenir les coordonnées du pixel
+	 * @param x Coordonnées x du pixel sur l'image (de 0 à 1919 pour une résolution de 1920 de large par exemple)
+	 * @param y Coordonnées y du pixel sur l'image (de 0 à 1079 pour une résolution de 1080 de haut par exemple)
+	 * 
+	 * @return Un point de cooordonnées (x, y, z) tel que x, y et z représentent les coordonnées du pixel dans la scène
+	 */
 	public Point convPxCoToWorldCoords(Camera camera, int x, int y)
 	{
 		double xWorld = (double)x;

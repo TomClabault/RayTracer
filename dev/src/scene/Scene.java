@@ -15,6 +15,8 @@ public class Scene
 	
 	ArrayList<Shape> shapes;
 	
+	double ambientLightIntensity;
+	
 	/*
 	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
 	 * 
@@ -22,11 +24,22 @@ public class Scene
 	 * @param light La lumière permettant d'illuminer la scène
 	 * @param shapes Liste de forme qui seront rendues
 	 */
-	public Scene(Camera camera, Light light, ArrayList<Shape> shapes)
+	public Scene(Camera camera, Light light, ArrayList<Shape> shapes, double ambientLightIntensity)
 	{
 		this.camera = camera;
 		this.light = light;
 		this.shapes = shapes;
+		this.ambientLightIntensity = ambientLightIntensity;
+	}
+	
+	/*
+	 * Permet d'obtenir l'intensité de la lumière ambiante de la scène
+	 * 
+	 * @return L'intensité de la lumière ambiante de la scène, un réel entre 0 et 1
+	 */
+	public double getAmbientLightIntensity()
+	{
+		return this.ambientLightIntensity;
 	}
 	
 	/*
