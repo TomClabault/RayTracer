@@ -12,6 +12,12 @@ public class Ray
 		this.origin = origin;
 	}
 	
+	public Ray(Point direction, Point origin)
+	{
+		this.origin = origin;
+		this.direction = new Vector(direction, origin);
+	}
+	
 	public Point determinePoint(double coefficient)
 	{
 		return Point.add(this.getOrigin(), Point.scalarMul(coefficient, this.getDirectionP()));

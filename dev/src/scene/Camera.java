@@ -78,6 +78,16 @@ public class Camera
 	}
 	
 	/*
+	 * Retourne le champ de vision (FOV) de la caméra. Ce FOV est donné en degré entre 0 et 180
+	 * 
+	 * @return Un réel pour le champ de vision de la caméra en degré entre 0 et 180
+	 */
+	public double getFOV()
+	{
+		return this.degreeFOV;
+	}
+	
+	/*
 	 * Redéfinit la direction de la caméra
 	 * 
 	 * @param newDirection Un vecteur pour redéfinir la direction de la caméra

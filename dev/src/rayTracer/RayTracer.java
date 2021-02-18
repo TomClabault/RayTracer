@@ -6,9 +6,12 @@ import geometry.Point;
 import geometry.Ray;
 import geometry.Shape;
 import geometry.Vector;
+import geometry.shapes.SphereMaths;
 import javafx.scene.paint.Color;
 import scene.Camera;
 import scene.Scene;
+import scene.lights.Light;
+import scene.lights.LightBulb;
 
 /*
  * Une instance de RayTracer créée à partir de la largeur et de la hauteur du rendu voulu. Permet de générer les 
@@ -22,12 +25,26 @@ public class RayTracer
 	
 	Color[][] renderedPixels;
 	
-	public RayTracer(int height, int length)
+	public static void main(String[] args)
 	{
-		this.renderLength = length;
-		this.renderHeight = height;
+		RayTracer r = new RayTracer(1920, 1080);
 		
-		renderedPixels = new Color[height][length];
+		Camera c = new Camera();
+		Light l = new LightBulb(Point.add(c.getPosition(), new Point(-1, 1, 0)));
+		ArrayList<Shape> sphere = new ArrayList<>();
+		sphere.add(new SphereMaths(new Point(0, 0, -4), 1));
+		
+		Scene s = new Scene(c, l, sphere);
+		
+		r.convPxCoToWorldCoords(s.getCamera(), 1919, 0);
+	}
+	
+	public RayTracer(int renderLength, int renderHeight)
+	{
+		this.renderLength = renderLength;
+		this.renderHeight = renderHeight;
+		
+		renderedPixels = new Color[renderHeight][renderLength];
 	}
 	
 	/*
@@ -43,7 +60,12 @@ public class RayTracer
 		{
 			for(int x = 0; x < this.renderLength; x++)
 			{
-				Point this.convPxCoToWorldCoords(renderScene.getCamera(), x, y);
+				Point pixelWorldCoords = this.convPxCoToWorldCoords(renderScene.getCamera(), x, y);
+				
+				Ray cameraRay = new Ray(renderScene.getCamera().getPosition(), pixelWorldCoords);
+				cameraRay.normalize();
+				
+				this.renderedPixels[y][x] = this.computePixel(renderScene, cameraRay);
 			}
 		}
 		
@@ -96,13 +118,22 @@ public class RayTracer
 	
 	public Point convPxCoToWorldCoords(Camera camera, int x, int y)
 	{
-		Point worldCoords;
-		
 		double xWorld = (double)x;
 		double yWorld = (double)y;
 		
+		double aspectRatio = (double)this.renderLength / (double)this.renderHeight;
+		double demiHeightPlane = Math.tan(Math.toRadians(camera.getFOV())/2);
 		
-		return worldCoords;
+		xWorld = (xWorld + 0.5) / this.renderLength;//Normalisation des pixels. Maintenant dans [0, 1]
+		xWorld = xWorld * 2 - 1;//Décalage des pixels dans [-1, 1]
+		xWorld *= aspectRatio;//Prise en compte de l'aspect ratio. Maintenant dans [-aspectRatio; aspectRatio]
+		xWorld *= demiHeightPlane;
+		
+		yWorld = (yWorld + 0.5) / this.renderHeight;//Normalisation des pixels. Maintenant dans [0, 1]
+		yWorld = 1 - yWorld * 2;//Décalage des pixels dans [-1, 1]
+		yWorld *= demiHeightPlane;
+		
+		return new Point(xWorld, yWorld, camera.getPosition().getZ());
 	}
 	
 	/*
