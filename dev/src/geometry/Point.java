@@ -88,4 +88,10 @@ public class Point
     {
     	return new Point(a.x - b.x, a.y - b.y, a.z - b.z);
     }
+    
+    @Override
+    public String toString()
+    {
+    	return String.format("%.03f, %.03f, %.03f)", this.x, this.y, this.z);
+    }
 }
