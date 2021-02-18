@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 //from ww  w  . j  av  a2s  . c  om
 public class ExempleImageWriter extends Application {
+
   public static void main(String[] args) {
     Application.launch(args);
   }
@@ -21,7 +22,7 @@ public class ExempleImageWriter extends Application {
 
     PixelWriter pw = writableImage.getPixelWriter();
 
-    pw.setColor(2,2,Color.web("0x0000FF"));
+    /*pw.setColor(2,2,Color.web("0x0000FF"));
     pw.setColor(2,3,Color.web("0x0000FF"));
     pw.setColor(3,2,Color.web("0x0000FF"));
     pw.setColor(3,3,Color.web("0x0000FF"));/*Color.rgb(0,0,255)*/
@@ -37,10 +38,23 @@ public class ExempleImageWriter extends Application {
     stage.setTitle("");
     stage.show();
 
-    pw.setColor(2,2,Color.web("0xFF0000"));
+    /*pw.setColor(2,2,Color.web("0xFF0000"));
     pw.setColor(3,2,Color.web("0xFF0000"));
     pw.setColor(2,3,Color.web("0xFF0000"));
-    pw.setColor(3,3,Color.web("0xFF0000"));
+    pw.setColor(3,3,Color.web("0xFF0000"));*/
+    Color[][] colorTab = new Color[1920][1080];
+    doImage(colorTab, pw);/*TODO trouver un moyen d'executer cette foction en récupérant le tableau ici*/
+
+  }
+
+  public void doImage(Color[][] colorTab, PixelWriter pw) {
+      int height = colorTab[0].length;
+
+      for (int i = 0; i < colorTab.length; i++) {
+          for (int j = 0; j < height; j++) {
+              pw.setColor(i,j,colorTab[i][j]);
+          }
+      }
 
   }
 }
