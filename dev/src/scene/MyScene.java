@@ -8,7 +8,7 @@ import scene.lights.Light;
 /*
  * Permet de représenter une scène de rendu contenant une caméra, une lumière et une liste de formes
  */
-public class Scene 
+public class MyScene 
 {
 	Camera camera;
 	Light light;
@@ -24,7 +24,7 @@ public class Scene
 	 * @param light La lumière permettant d'illuminer la scène
 	 * @param shapes Liste de forme qui seront rendues
 	 */
-	public Scene(Camera camera, Light light, ArrayList<Shape> shapes, double ambientLightIntensity)
+	public MyScene(Camera camera, Light light, ArrayList<Shape> shapes, double ambientLightIntensity)
 	{
 		this.camera = camera;
 		this.light = light;

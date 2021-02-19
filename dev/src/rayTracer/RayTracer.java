@@ -9,7 +9,7 @@ import geometry.Vector;
 import geometry.shapes.SphereMaths;
 import javafx.scene.paint.Color;
 import scene.Camera;
-import scene.Scene;
+import scene.MyScene;
 import scene.lights.Light;
 import scene.lights.LightBulb;
 
@@ -34,7 +34,7 @@ public class RayTracer
 		ArrayList<Shape> sphere = new ArrayList<>();
 		sphere.add(new SphereMaths(new Point(0, 0, -4), 1));
 		
-		Scene s = new Scene(c, l, sphere, 0.5);
+		MyScene s = new MyScene(c, l, sphere, 0.5);
 		
 		Point pixelCoorrs = r.convPxCoToWorldCoords(s.getCamera(), 1919, 0);
 		
@@ -56,7 +56,7 @@ public class RayTracer
 	 * 
 	 * @return Un tableau de Color.RGB(r, g, b) de dimension renderHeight*renderLength
 	 */
-	public Color[][] computeImage(Scene renderScene)
+	public Color[][] computeImage(MyScene renderScene)
 	{
 		for(int y = 0; y < this.renderHeight; y++)
 		{
@@ -81,7 +81,7 @@ public class RayTracer
 	 * 
 	 * @return Une instance de Color.RGB(r, g, b)
 	 */
-	public Color computePixel(Scene renderScene, Ray ray)
+	public Color computePixel(MyScene renderScene, Ray ray)
 	{
 		Color pixel = Color.rgb(0, 0, 0);//On initialise le pixel à noir
 		
