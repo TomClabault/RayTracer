@@ -70,13 +70,19 @@ public class ExempleImageWriter extends Application {
   }
 
   public void doImage(Color[][] colorTab, PixelWriter pw) {
-      int height = colorTab[0].length;
+      System.out.println("colorTab.length = " + colorTab.length);
+      System.out.println("colorTab[0].length = " + colorTab[0].length);
+      int width = colorTab[0].length;
+      int height = colorTab.length;
 
-      for (int i = 0; i < colorTab.length; i++) {
-          for (int j = 0; j < height; j++) {
-              pw.setColor(i,j,colorTab[i][j]);
+      for (int i = 0; i < height; i++) {
+          for (int j = 0; j < width; j++) {
+              //System.out.println(height);
+              //System.out.println(String.format("%d %d",i,j));
+              pw.setColor(j,i,colorTab[i][j]);
           }
       }
+      System.out.println("finish");
 
   }
 }
