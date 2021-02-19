@@ -1,10 +1,7 @@
 package povParser;
-import java.io.File;
+import java.io.*;
 import java.util.Iterator;
 import java.util.Scanner;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 
 public class PovParser
 {
@@ -14,60 +11,44 @@ public class PovParser
     private final String START_MULTILINE_COMMENT = "/*";
     private final String END_MULTILINE_COMMENT = "*/";
 
-    public PovParser(String povFile)
+    public PovParser(String pathName)
     {
         this.pathName = pathName;
     }
 
     public File removeComments()
     {
-        String regexStartSingleLineComment = new String ("^" + SINGLE_LINE_COMMENT); //regex to find "//" at the beginning of a line
-        File tempFile = new File("src/povParser/temp.pov");
-        if(tempFile.exists())
-        {
-            try {
-                Scanner fileScanner = new Scanner(tempFile);
-
-                while(fileScanner.hasNextLine())
-                {
-                    String currentLine = fileScanner.nextLine();
-                    if (!currentLine.contains(regexStartSingleLineComment))
-                    {
-
-                    }
-                }
-            }
-            catch (FileNotFoundException e)
-            {
-                e.getMessage();
-            }
-        }
-        File oldFile = new File("src/povParser/test.pov");
+        File povFile = new File("src/povParser/test2.pov");
+        File originalFile = new File(this.pathName);
         try
         {
-            Scanner povReader = new Scanner(oldFile);
-            while (povReader.hasNextLine())
+            Scanner oldFileScanner = new Scanner(originalFile);
+            BufferedWriter povFileWriter = new BufferedWriter(new FileWriter(povFile));
+            while (oldFileScanner.hasNextLine())
             {
-                String currentLine = povReader.nextLine();
-                if (! currentLine.matches(regexStartSingleLineComment))
-                {
-                    //TODO: a finir
-                }
-                System.out.println(currentLine);
+                String currentLine = oldFileScanner.nextLine();
+                currentLine = currentLine.replaceAll("//.*", "");
+                currentLine = currentLine.replaceAll("/\\*.*\\*/", "");
+                if(! currentLine.isBlank())
+                    povFileWriter.write(currentLine);
             }
         }
-        catch(FileNotFoundException e)
+        catch (FileNotFoundException e)
         {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
-        return null;//TODO: return new file without comments
+        catch (IOException e)
+        {
+            System.err.println(e.getMessage());
+        }
+        return povFile;
     }
 
-    public void printFile()
+    public static void printFile(File file)
     {
         try
         {
-            Scanner povReader = new Scanner(new File("src/povParser/test.pov"));
+            Scanner povReader = new Scanner(file);
             while (povReader.hasNextLine())
             {
                 String currentLine = povReader.nextLine();
@@ -81,7 +62,8 @@ public class PovParser
     }
     public static void main(String[] args)
     {
-        final String testFile = "src/povParser/test.pov";
+        final String testFile = "src/povParser/temp.pov";
         PovParser povFile= new PovParser(testFile);
+        File noComments = povFile.removeComments();
     }
 }
