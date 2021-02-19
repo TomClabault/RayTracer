@@ -14,5 +14,6 @@ public interface ShapeTriangle extends Shape
 	 * 
 	 * @return ArrayList<Triangle> contenant tous les triangles composant la forme
 	 */
+
 	public abstract ArrayList<Triangle> getTriangleList();
 }

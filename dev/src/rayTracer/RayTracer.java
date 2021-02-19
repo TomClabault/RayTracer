@@ -112,7 +112,8 @@ public class RayTracer
 						
 						double lightIntensity = renderScene.getLight().getIntensity();
 						
-						return Color.rgb((int)(objectRed*lightIntensity), (int)(objectGreen*lightIntensity), (int)(objectBlue*lightIntensity));
+						return Color.rgb(255, 0, 0);
+						//return Color.rgb((int)(objectRed*lightIntensity), (int)(objectGreen*lightIntensity), (int)(objectBlue*lightIntensity));
 					}
 					else//Une intersection a été trouvée, on retourne donc un pixel d'ombre sombre
 						return object.getColor().darker();
@@ -120,7 +121,8 @@ public class RayTracer
 				}
 			}
 			else//Le rayon n'a rien intersecté --> noir
-				return Color.rgb(0, 0, 0);//Couleur du fond, noir si on a pas de fond
+				return Color.rgb(0, 255, 0);
+				//return Color.rgb(0, 0, 0);//Couleur du fond, noir si on a pas de fond
 		}
 		
 		return pixel;
