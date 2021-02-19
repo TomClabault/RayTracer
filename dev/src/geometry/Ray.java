@@ -71,6 +71,14 @@ public class Ray
 		this.direction.normalize();
 	}
 	
+	/*
+	 * Retourne une chaîne de caractère représentant le rayon.
+	 * 
+	 * @return Une chaîne de caractère de la forme:
+	 * 
+	 * Origine: (x, y, z)
+	 * Direciton: (x, y, z)
+	 */
 	public String toString()
 	{
 		return String.format("Origine: %s\nDirection: %s\n\n", this.getOrigin().toString(), this.getDirection().toString());

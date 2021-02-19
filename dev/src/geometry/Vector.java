@@ -151,6 +151,14 @@ public class Vector
 	}
 	
 	/*
+	 * 
+	 */
+	public String toString()
+	{
+		return String.format("(%.3f, %.3f, %.3f)", this.x, this.y, this.z);
+	}
+	
+	/*
 	 * Utilise les coordoonées d'un vecteur pour définir un point
 	 * 
 	 * @param u Un vecteur de coordonnées (x, y, z)

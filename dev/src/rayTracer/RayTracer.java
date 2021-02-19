@@ -64,7 +64,7 @@ public class RayTracer
 			{
 				Point pixelWorldCoords = this.convPxCoToWorldCoords(renderScene.getCamera(), x, y);
 				
-				Ray cameraRay = new Ray(renderScene.getCamera().getPosition(), pixelWorldCoords);
+				Ray cameraRay = new Ray(pixelWorldCoords, renderScene.getCamera().getPosition());
 				cameraRay.normalize();
 				
 				System.out.println(cameraRay.toString());
