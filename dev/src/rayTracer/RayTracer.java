@@ -116,7 +116,8 @@ public class RayTracer
 						//return Color.rgb((int)(objectRed*lightIntensity), (int)(objectGreen*lightIntensity), (int)(objectBlue*lightIntensity));
 					}
 					else//Une intersection a été trouvée, on retourne donc un pixel d'ombre sombre
-						return object.getColor().darker();
+						//return object.getColor().darker();
+						return Color.rgb(0, 0, 255);
 							
 				}
 			}
