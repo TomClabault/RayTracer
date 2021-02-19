@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="RayTracer" default="compile" basedir=".">
+
+    <property name="src" value="src"/>
+    <property name="build" value="build"/>
+    <property name="classpath" value="lib"/>
+    <property name="modulepath" value="javafx.controls"/>
+
+    <target name="init">
+      <!-- Create the time stamp -->
+      <tstamp/>
+      <!-- Create the build directory structure used by compile -->
+      <mkdir dir="${build}"/>
+    </target>
+
+    <target name="compile" depends="init" description="compile the source">
+        <!-- Compile the Java code from ${src} into ${build} -->
+        <javac srcdir="${src}" destdir="${build}" classpath="${classpath}" modulepath="${modulepath}">
+            <exclude name="src/render/choiceWindow.java"/>
+        </javac>
+    </target>
+
+</project>
