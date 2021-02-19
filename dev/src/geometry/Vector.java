@@ -171,4 +171,19 @@ public class Vector
 	{
 		return new Point(u.x, u.y, u.z);
 	}
+
+	public double getX() 
+	{
+		return this.x;
+	}
+	
+	public double getY() 
+	{
+		return this.y;
+	}
+	
+	public double getZ() 
+	{
+		return this.z;
+	}
 }

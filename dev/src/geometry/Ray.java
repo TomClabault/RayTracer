@@ -15,7 +15,7 @@ public class Ray
 	public Ray(Point direction, Point origin)
 	{
 		this.origin = origin;
-		this.direction = new Vector(direction, origin);
+		this.direction = new Vector(origin, direction);
 	}
 	
 	public Point determinePoint(double coefficient)

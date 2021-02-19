@@ -65,9 +65,7 @@ public class RayTracer
 				Point pixelWorldCoords = this.convPxCoToWorldCoords(renderScene.getCamera(), x, y);
 				
 				Ray cameraRay = new Ray(pixelWorldCoords, renderScene.getCamera().getPosition());
-				//cameraRay.normalize();
-				
-				System.out.println(cameraRay.toString());
+				cameraRay.normalize();
 				
 				this.renderedPixels[y][x] = this.computePixel(renderScene, cameraRay);
 			}
@@ -157,7 +155,7 @@ public class RayTracer
 		yWorld = 1 - yWorld * 2;//Décalage des pixels dans [-1, 1]
 		yWorld *= demiHeightPlane;
 		
-		return new Point(xWorld, yWorld, camera.getPosition().getZ());
+		return new Point(xWorld, yWorld, camera.getDirection().getZ());
 	}
 	
 	/*
