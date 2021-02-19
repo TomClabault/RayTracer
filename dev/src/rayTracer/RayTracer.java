@@ -49,6 +49,34 @@ public class RayTracer
 		renderedPixels = new Color[renderHeight][renderLength];
 	}
 	
+//	public Shape computeClosestInterObj(ArrayList<Point> intersectionPointList, Point intersectionPoint, ArrayList<Shape> intersectedObjects)
+//	{
+//		for(int i = 0; i < intersectionPointList.size(); i++)
+//			if(intersectionPointList.get(i).equals(intersectionPoint))
+//				return intersectedObjects.get(i);
+//		
+//		return null;//Normalement impossible
+//	}
+//	
+//	Point computeClosestIntersection(ArrayList<Point> intersectionPointList, Camera camera) 
+//	{
+//		Double min = null;
+//		
+//		Point closestPoint = null;
+//		
+//		for(Point point : intersectionPointList)
+//		{
+//			double cameraPointDist = Point.distance(point, camera.getPosition());
+//			if(min == null || cameraPointDist < min)
+//			{
+//				min = cameraPointDist;
+//				closestPoint = point;
+//			}
+//		}
+//		
+//		return closestPoint;
+//	}
+	
 	/*
 	 * Calcule tous les pixels de la scène donnée en argument et retourne un tableau de couleur RGB correspondant aux pixels
 	 * 
@@ -63,12 +91,9 @@ public class RayTracer
 			for(int x = 0; x < this.renderLength; x++)
 			{
 				Point pixelWorldCoords = this.convPxCoToWorldCoords(renderScene.getCamera(), x, y);
-				//if(pixelWorldCoords.getX() > -0.1 && pixelWorldCoords.getX() < 0.1)
-//					System.out.println(pixelWorldCoords);
 				
 				Ray cameraRay = new Ray(renderScene.getCamera().getPosition(), pixelWorldCoords);
 				cameraRay.normalize();
-				//System.out.println(cameraRay);
 				
 				this.renderedPixels[y][x] = this.computePixel(renderScene, cameraRay);
 			}
@@ -90,45 +115,82 @@ public class RayTracer
 		
 		ArrayList<Shape> objectsList = renderScene.getSceneObjects();
 		
+		ArrayList<Point> intersectionPoints = new ArrayList<>();
+		ArrayList<Shape> intersectedObjects = new ArrayList<>();
+		
 		for(Shape object : objectsList)
 		{
-			Point intersectionPoint = object.intersect(ray);
-			
-			if(intersectionPoint != null)//Il y a un point d'intersection
+			Point inter = object.intersect(ray);//On calcule le point d'intersection
+			if(inter != null)//Si il y a effectivement un point d'intersection
 			{
-				Vector normalAtIntersection = object.getNormal(intersectionPoint);//On calcule la normale au point d'intersection avec la forme
-				Point interPointShift = Point.add(intersectionPoint, Point.scalarMul(0.0001d, Vector.v2p(normalAtIntersection)));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
-				
-				Vector shadowRayDir = new Vector(interPointShift, renderScene.getLight().getCenter());//On calcule la direction du rayon secondaire
-				
-				Ray shadowRay = new Ray(interPointShift, shadowRayDir);//Création du rayon secondaire avec pour origine le premier point d'intersection décalé et avec comme direction le centre de la lampe
-				
-				//On cherche une intersection avec un objet qui se trouverait entre la lampe et l'origine du shadow ray
-				for(Shape objectAgain : objectsList)
+				intersectionPoints.add(object.intersect(ray));//On l'ajoute à la liste des points d'intersection trouvés
+				intersectedObjects.add(object);//On ajoute l'objet qui correspond au point d'intersection. i.e. l'objet qui a été intersecté
+			}
+		}
+			
+			
+		if(intersectionPoints.size() > 0)//Il y a au moins un point d'intersection
+		{
+			Point closestIntersectionPoint = null;//On ne va garder que le point d'intersection qui est le plus près de la caméra puisque les autres point d'intersetions qui seront plus loins seront cachés par le plus proche
+			Shape closestIntersectedObject = null;
+			if(intersectionPoints.size() > 1)//Il y plus d'un point d'intersection, on va devoir calculer le quel est le plus proche
+			{
+				Double min = null;
+				for(int i = 0; i < intersectionPoints.size(); i++)
 				{
-					Point shadowRayInter = objectAgain.intersect(shadowRay);
-					if(shadowRayInter == null)//Pas d'intersection, on retourne la pleine lumière
+					Point point = intersectionPoints.get(i);
+					double distPointCam = Point.distance(point,  renderScene.getCamera().getPosition());
+					
+					if(min == null || min > distPointCam)
 					{
-						double objectRed = object.getColor().getRed()*255;
-						double objectGreen = object.getColor().getRed()*255;
-						double objectBlue = object.getColor().getRed()*255;
+						min = distPointCam;
 						
-						double lightIntensity = renderScene.getLight().getIntensity();
-						
-						
-						
-						return Color.rgb((int)(objectRed*lightIntensity), (int)(objectGreen*lightIntensity), (int)(objectBlue*lightIntensity));
+						closestIntersectionPoint = point;
+						closestIntersectedObject = intersectedObjects.get(i);
 					}
-					else//Une intersection a été trouvée, on retourne donc un pixel d'ombre sombre
-						return object.getColor().darker();
-							
 				}
 			}
-			else//Le rayon n'a rien intersecté --> noir
-				return Color.rgb(0, 0, 0);//Couleur du fond, noir si on a pas de fond
+			else//Il n'y a qu'un seul point d'intersection donc on peut récupérer le premier élément de la liste des points d'intersection
+			{
+				closestIntersectionPoint = intersectionPoints.get(0);
+				closestIntersectedObject = intersectedObjects.get(0);
+			}
+			
+			
+			
+			
+			Vector normalAtIntersection = closestIntersectedObject.getNormal(closestIntersectionPoint);//On calcule la normale au point d'intersection avec la forme
+			Point interPointShift = Point.add(closestIntersectionPoint, Point.scalarMul(0.0001d, Vector.v2p(normalAtIntersection)));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
+			
+			Vector shadowRayDir = new Vector(interPointShift, renderScene.getLight().getCenter());//On calcule la direction du rayon secondaire
+			
+			Ray shadowRay = new Ray(interPointShift, shadowRayDir);//Création du rayon secondaire avec pour origine le premier point d'intersection décalé et avec comme direction le centre de la lampe
+			
+			//On cherche une intersection avec un objet qui se trouverait entre la lampe et l'origine du shadow ray
+			for(Shape objectAgain : objectsList)
+			{
+				Point shadowRayInter = objectAgain.intersect(shadowRay);
+				if(shadowRayInter == null)//Pas d'intersection, on retourne la pleine lumière
+				{
+					double objectRed = closestIntersectedObject.getColor().getRed()*255;
+					double objectGreen = closestIntersectedObject.getColor().getRed()*255;
+					double objectBlue = closestIntersectedObject.getColor().getRed()*255;
+					
+					double lightIntensity = renderScene.getLight().getIntensity();
+					
+					
+					
+					return Color.rgb((int)(objectRed*lightIntensity), (int)(objectGreen*lightIntensity), (int)(objectBlue*lightIntensity));
+				}
+				else//Une intersection a été trouvée, on retourne donc un pixel d'ombre sombre
+					return closestIntersectedObject.getColor().darker();
+						
+			}
 		}
+		else//Le rayon n'a rien intersecté --> noir
+			return Color.rgb(0, 0, 0);//Couleur du fond, noir si on a pas de fond
 		
-		return pixel;
+		return pixel;//S'il n'y a pas d'objet dans la scène
 	}
 	
 	/*

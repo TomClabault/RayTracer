@@ -52,6 +52,20 @@ public class Point
     }
     
     /*
+     * Calcule et retourne la distance entre deux points
+     * 
+     * @param p1 Le premier point
+     * @param p2 Le deuxième point
+     * 
+     * @return La distance entre les deux points
+     */
+    public static double distance(Point p1, Point p2)
+    {
+    	Point pSub = Point.sub(p2,  p1);
+    	return Math.sqrt(pSub.getX()*pSub.getX() + pSub.getY()*pSub.getY() + pSub.getZ()*pSub.getZ());
+    }
+    
+    /*
      * Crée et retourne un vecteur ayant les même coordonnées que le point passé en paramètre
      * 
      * @param point Un point de coordonnées (x, y, z)
