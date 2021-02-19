@@ -2,14 +2,18 @@ package geometry.shapes;
 
 import geometry.Point;
 import geometry.Ray;
+import geometry.Shape;
 import geometry.ShapeTriangle;
 import geometry.Vector;
+import javafx.scene.paint.Color;
 
-public class Triangle
+public class Triangle implements Shape
 {
 	Point A, B, C;
 	
 	Vector planeNormal;//Vecteur normal du plan formé par les 3 points du triangle
+	
+	Color color;
 	
 	public Triangle(Point A, Point B, Point C)
 	{
@@ -18,6 +22,18 @@ public class Triangle
 		this.C = C;
 		
 		this.planeNormal = Vector.crossProduct(new Vector(A, B), new Vector(A, C));
+		
+		this.color = Color.rgb(255, 255, 255);
+	}
+	
+	public Color getColor()
+	{
+		return this.color;
+	}
+	
+	public Vector getNormal(Point point)
+	{
+		return this.planeNormal;
 	}
 	
 	/*
