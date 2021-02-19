@@ -71,9 +71,16 @@ public class choiceWindow extends Application {
 
         result.ifPresent(hauteurlargeur -> {
             System.out.println("hauteur=" + hauteurlargeur.getKey() + ", largeur=" + hauteurlargeur.getValue());
-            ExempleImageWriter exampleWriter = new ExempleImageWriter();
-            exampleWriter.doImage(colorTab);/*TODO finir l'appel de la fonction*/
+            String[] args = new String[2];
+            args[0] = hauteurlargeur.getKey();
+            args[1] = hauteurlargeur.getValue();
+            ExempleImageWriter.main(args);
+
         });
+
+
+
+
     }
 
     public static void main(String[] args) {
