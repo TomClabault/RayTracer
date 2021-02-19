@@ -45,6 +45,8 @@ public class Rectangle implements ShapeTriangle
 		this.length = this.G.getX() - this.A.getX();
 		this.height = this.G.getZ() - this.A.getZ();
 		this.width = this.G.getY() - this.A.getY();
+
+		this.buildRectangle();
 	}
 
 	public Rectangle(Point A, double height, double length, double width)
@@ -59,14 +61,14 @@ public class Rectangle implements ShapeTriangle
 		this.G.setY(this.A.getZ() + this.height);
 		this.volume = this.length * this.height * this.width;
 
-
+		this.buildRectangle();
 	}
 
 
 
 
 
-	public ArrayList<Triangle> buildRectangle()
+	protected void buildRectangle()
 	{
 
 		/*on localise les points selon les */
@@ -106,7 +108,11 @@ public class Rectangle implements ShapeTriangle
 		this.listeTriangle.add(tr12);
 
 		/*on retourne la liste des triangles*/
-		return listeTriangle;
+		/*return listeTriangle;*/
 	}
 
+	public ArrayList<Triangle> getTriangleList()
+	{
+		return listeTriangle;
+	}
 }
