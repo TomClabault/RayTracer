@@ -67,6 +67,8 @@ public class RayTracer
 				Ray cameraRay = new Ray(renderScene.getCamera().getPosition(), pixelWorldCoords);
 				cameraRay.normalize();
 				
+				System.out.println(cameraRay.toString());
+				
 				this.renderedPixels[y][x] = this.computePixel(renderScene, cameraRay);
 			}
 		}

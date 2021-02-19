@@ -70,4 +70,9 @@ public class Ray
 	{
 		this.direction.normalize();
 	}
+	
+	public String toString()
+	{
+		return String.format("Origine: %s\nDirection: %s\n\n", this.getOrigin().toString(), this.getDirection().toString());
+	}
 }
