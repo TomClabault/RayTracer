@@ -1,5 +1,14 @@
 package render;
 
+import java.util.ArrayList;
+
+import geometry.shapes.*;
+import geometry.*;
+
+import scene.*;
+import scene.MyScene;
+import scene.lights.*;
+import rayTracer.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -18,7 +27,7 @@ public class ExempleImageWriter extends Application {
   @Override
   public void start(Stage stage) {
 
-    WritableImage writableImage = new WritableImage(200,200);
+    WritableImage writableImage = new WritableImage(800,600);
 
     PixelWriter pw = writableImage.getPixelWriter();
 
@@ -42,8 +51,21 @@ public class ExempleImageWriter extends Application {
     pw.setColor(3,2,Color.web("0xFF0000"));
     pw.setColor(2,3,Color.web("0xFF0000"));
     pw.setColor(3,3,Color.web("0xFF0000"));*/
-    Color[][] colorTab = new Color[1920][1080];
-    doImage(colorTab, pw);/*TODO trouver un moyen d'executer cette foction en récupérant le tableau ici*/
+    //RayTracer rayTracer = new RayTracer(800,600);
+    //computeImage = rayTracer.computeImage();
+    //doImage(colorTab, pw);/*TODO trouver un moyen d'executer cette foction en récupérant le tableau ici*/
+
+    RayTracer r = new RayTracer(800, 600);
+
+    Camera c = new Camera(); c.setFOV(100);
+    Light l = new LightBulb(Point.add(c.getPosition(), new Point(-1, 1, 0)), 1);
+    ArrayList<Shape> sphere = new ArrayList<>();
+    sphere.add(new SphereMaths(new Point(0, 0, -4), 1));
+
+    MyScene s = new MyScene(c, l, sphere, 0.5);
+
+
+    doImage(r.computeImage(s),pw);
 
   }
 
