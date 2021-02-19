@@ -151,7 +151,9 @@ public class Vector
 	}
 	
 	/*
+	 * Retourne la représentation mathématique du vecteur
 	 * 
+	 * @return Une chaîne de caractère de la forme: (x, y, z) avec x, y et z les coordonnées du vecteur
 	 */
 	public String toString()
 	{
