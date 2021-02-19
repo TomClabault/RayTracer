@@ -1,5 +1,10 @@
 package geometry.shapes;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+
 import geometry.Point;
 import geometry.Ray;
 import geometry.ShapeMaths;
@@ -69,18 +74,24 @@ public class SphereMaths implements ShapeMaths
 	public Point intersect(Ray ray)
 	{
 		Point intersection = null;
+
+		//System.out.println("Ray: " + ray);
 		
 		//Équation de sphère: (P-C)² - R² = 0 avec P un point sur la sphère, C le centre de la sphère et R le rayon
 		//Équation paramétrique d'un rayon: O + kD avec O l'origine du rayon, D la direction du rayon et k un réel
 		//En substituant on obtient (O + kD - C)² - R² = 0 <--> O² + (kD)² + C² + 2OkD + 2OC + 2kDC - R² = 0 <--> k²(D²) + k(2OD + 2DC) + (O² + C² + 2OC - R²) = 0
 		//On cherche k
 		
+		//Vector OC = new Vector(ray.getOrigin(), center);
+		
 		double a = Vector.dotProduct(ray.getDirection(), ray.getDirection());// = D²
-		double b = 2*Vector.dotProduct(ray.getOriginV(), ray.getDirection()) + 2*Vector.dotProduct(ray.getDirection(), Point.p2v(this.center));// = 2OD + 2DC
+		double b = 2*Vector.dotProduct(ray.getOriginV(), ray.getDirection()) - 2*Vector.dotProduct(ray.getDirection(), Point.p2v(this.center));// = 2OD - 2DC
 		double c =   Vector.dotProduct(ray.getOriginV(), ray.getOriginV()) 
 				 +   Vector.dotProduct(Point.p2v(this.center), Point.p2v(this.center)) 
 			     + 2*Vector.dotProduct(ray.getOriginV(), Point.p2v(this.center))
 			     - this.radius*this.radius;
+		
+		//System.out.println(String.format("a, b, c = %.3f, %.3f, %.3f", a, b, c));
 		
 		double b2 = b*b;
 		double ac4 = 4*a*c;

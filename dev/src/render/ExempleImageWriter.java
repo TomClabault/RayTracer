@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
-//from ww  w  . j  av  a2s  . c  om
+//from www.java2s.com
 public class ExempleImageWriter extends Application {
 
   public static void main(String[] args) {
@@ -25,9 +25,18 @@ public class ExempleImageWriter extends Application {
   }
 
   @Override
-  public void start(Stage stage) {
-
-    WritableImage writableImage = new WritableImage(800,600);
+  public void start(Stage stage) 
+  {
+//	Shape sphere = new SphereMaths(new Point(0, 0, -2), 1);
+//	Ray rayon = new Ray(new Point(0,0 ,0), new Vector(0, 0, -1));
+//	Point intersection = sphere.intersect(rayon);
+//	System.out.println(intersection);
+//	return;
+	
+	  int height = 1080;
+	  int width = 1920;
+	  
+    WritableImage writableImage = new WritableImage(width,height);
 
     PixelWriter pw = writableImage.getPixelWriter();
 
@@ -55,14 +64,14 @@ public class ExempleImageWriter extends Application {
     //computeImage = rayTracer.computeImage();
     //doImage(colorTab, pw);/*TODO trouver un moyen d'executer cette foction en récupérant le tableau ici*/
 
-    RayTracer r = new RayTracer(800, 600);
+    RayTracer r = new RayTracer(width, height);
 
-    Camera c = new Camera(); c.setFOV(100);
+    Camera c = new Camera(); c.setFOV(90);
     Light l = new LightBulb(Point.add(c.getPosition(), new Point(-1, 1, 0)), 1);
 
     ArrayList<Shape> shapeList = new ArrayList<>();
     shapeList.add(new SphereMaths(new Point(0, 0, -4), 1));
-    shapeList.add(new Triangle(new Point(-1,-1,-1.5),new Point(1,-1,-1.5),new Point(0,2,-1.5)));
+    //shapeList.add(new Triangle(new Point(-1,-1,-1.5),new Point(1,-1,-1.5),new Point(0,2,-1.5)));
 
 
     MyScene s = new MyScene(c, l, shapeList, 0.5);

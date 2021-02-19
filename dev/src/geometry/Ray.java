@@ -6,13 +6,13 @@ public class Ray
 	
 	private Point origin;
 	
-	public Ray(Vector direction, Point origin)
+	public Ray(Point origin, Vector direction)
 	{
 		this.direction = direction;
 		this.origin = origin;
 	}
 	
-	public Ray(Point direction, Point origin)
+	public Ray(Point origin, Point direction)
 	{
 		this.origin = origin;
 		this.direction = new Vector(origin, direction);
