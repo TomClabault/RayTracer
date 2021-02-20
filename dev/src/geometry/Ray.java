@@ -18,6 +18,19 @@ public class Ray
 		this.direction = new Vector(origin, direction);
 	}
 	
+	/*
+	 * Ce constructeur permet de créer un rayon et de le normaliser lors de sa création
+	 * 
+	 * @param origin Point d'origine du rayon
+	 * @param direction Point utilisé pour calculer la direction du rayon
+	 * @isNormalized True pour normaliser la direction du rayon à sa création, false sinon
+	 */
+	public Ray(Point origin, Point direction, boolean isNormalized)
+	{
+		this(origin, direction);
+		this.normalize();
+	}
+	
 	public Point determinePoint(double coefficient)
 	{
 		return Point.add(this.getOrigin(), Point.scalarMul(coefficient, this.getDirectionP()));

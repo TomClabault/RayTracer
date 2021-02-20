@@ -70,7 +70,7 @@ public class ExempleImageWriter extends Application {
     Light l = new LightBulb(Point.add(c.getPosition(), new Point(-1, 1, 0)), 1);
 
     ArrayList<Shape> shapeList = new ArrayList<>();
-    shapeList.add(new SphereMaths(new Point(-1, 0, -14), 1));
+    shapeList.add(new SphereMaths(new Point(0, 0, -4), 1));
 
 
     MyScene s = new MyScene(c, l, shapeList, 0.5);

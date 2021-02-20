@@ -104,7 +104,7 @@ public class Vector
 	 */
 	public static double dotProduct(Vector u, Vector v)
 	{
-		return u.x*u.x + u.y*v.y + u.z*v.z;
+		return u.x*v.x + u.y*v.y + u.z*v.z;
 	}
 	
 	/*
@@ -135,6 +135,11 @@ public class Vector
 		normalized.normalize();
 		
 		return normalized; 
+	}
+	
+	public static Vector scalarMul(Vector u, double scalar)
+	{
+		return new Vector(u.getX()*scalar, u.getY()*scalar, u.getZ()*scalar);
 	}
 	
 	/*
