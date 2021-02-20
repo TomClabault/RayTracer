@@ -33,8 +33,8 @@ public class ExempleImageWriter extends Application {
 //		System.out.println(intersection);
 //		return;
 	
-	  int width = 1680;
-	  int height = 1050;
+	  int width = 1920;
+	  int height = 1080;
 	  
     WritableImage writableImage = new WritableImage(width,height);
 
