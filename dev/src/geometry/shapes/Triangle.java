@@ -68,6 +68,8 @@ public class Triangle implements Shape
 		Vector vecCP = new Vector(this.C, point);
 		
 		normalLocal = Vector.crossProduct(sideCA, vecCP);
+		if(Vector.dotProduct(normalLocal, this.planeNormal) < 0)//Le point est sur le côté droit du segment BC, pas à l'intérieur du triangle
+			return false;
 		
 		return true;
 	}
@@ -84,13 +86,13 @@ public class Triangle implements Shape
 		Point intersection = null;
 		double planeD;//Composante D du plan formé par les 3 points du triangle dans l'équation de plan Ax + By + Cz + D = 0
 		
-		if(Vector.dotProduct(this.planeNormal, ray.getDirection()) < 0.0000001d)//Si la normale du plan et la direction du rayon sont perpendiculaires, le plan et le rayon sont parallèles, pas d'intersection
+		if(Math.abs(Vector.dotProduct(this.planeNormal, ray.getDirection())) < 0.0000001d)//Si la normale du plan et la direction du rayon sont perpendiculaires, le plan et le rayon sont parallèles, pas d'intersection
 			return null;
 		
 		planeD = Vector.dotProduct(this.planeNormal, new Vector(this.A.getX(), this.A.getY(), this.A.getZ()));
 		
 		//Le point d'intersection est sur le rayon. On peut trouver ses coordonnées avec l'équation P = ray.origin + k*ray.direction. Cette coeffVectorPoint = k
-		double coeffVectorPoint = -(Vector.dotProduct(this.planeNormal, ray.getOriginV()) + planeD)
+		double coeffVectorPoint = (Vector.dotProduct(this.planeNormal, ray.getOriginV()) + planeD)
 								  /Vector.dotProduct(this.planeNormal, ray.getDirection());
 		
 		if(coeffVectorPoint < 0)//L'intersection est dans la direction opposée du rayon, c'est à dire derrière la caméra

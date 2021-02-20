@@ -27,12 +27,6 @@ public class ExempleImageWriter extends Application {
   @Override
   public void start(Stage stage) 
   {
-//	  	Shape sphere = new SphereMaths(new Point(0, 0, -2), 1);
-//		Ray rayon = new Ray(new Point(0,0 ,0), new Vector(0, 0, -1));
-//		Point intersection = sphere.intersect(rayon);
-//		System.out.println(intersection);
-//		return;
-	
 	  int width = 1920;
 	  int height = 1080;
 	  
@@ -74,7 +68,7 @@ public class ExempleImageWriter extends Application {
     shapeList.add(new SphereMaths(new Point(0.5, 1, -5), 0.25, Color.web("ED4747")));
     shapeList.add(new SphereMaths(new Point(1, 0, -5), 0.25, Color.rgb(200, 0, 0)));
     shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.web("F51B1B")));
-
+    
 
     MyScene s = new MyScene(c, l, shapeList, 0.5);
 
