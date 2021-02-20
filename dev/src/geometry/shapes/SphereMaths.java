@@ -31,7 +31,7 @@ public class SphereMaths implements ShapeMaths
 	 */
 	public SphereMaths(Point center, double radius)
 	{
-		this(center, Color.rgb(255, 255, 255), radius);
+		this(center, radius, Color.rgb(255, 255, 255));
 	}
 	
 	/*
@@ -41,7 +41,7 @@ public class SphereMaths implements ShapeMaths
 	 * @param sphereColor Objet Color.RGB représentant la couleur de la sphère
 	 * @param radius Rayon de la sphère 
 	 */
-	public SphereMaths(Point center, Color sphereColor, double radius) 
+	public SphereMaths(Point center, double radius, Color sphereColor) 
 	{
 		this.center = center;
 		this.sphereColor = sphereColor;

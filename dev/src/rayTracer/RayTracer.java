@@ -173,8 +173,8 @@ public class RayTracer
 				if(shadowRayInter == null)//Pas d'intersection, on retourne la pleine lumière
 				{
 					double objectRed = closestIntersectedObject.getColor().getRed()*255;
-					double objectGreen = closestIntersectedObject.getColor().getRed()*255;
-					double objectBlue = closestIntersectedObject.getColor().getRed()*255;
+					double objectGreen = closestIntersectedObject.getColor().getGreen()*255;
+					double objectBlue = closestIntersectedObject.getColor().getBlue()*255;
 					
 					double lightIntensity = renderScene.getLight().getIntensity();
 					
