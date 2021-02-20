@@ -85,7 +85,7 @@ public class SphereMaths implements ShapeMaths
 		Vector OC = new Vector(ray.getOrigin(), center);
 		
 		double a = Vector.dotProduct(ray.getDirection(), ray.getDirection());// = D²
-		double b = -2* Vector.dotProduct(ray.getDirection(), OC);// = 2D(O-C)
+		double b = -2 * Vector.dotProduct(ray.getDirection(), OC);// = 2D(O-C)
 		double c = Vector.dotProduct(OC, OC) - radius*radius;
 		
 		assert a == 1.0 : String.format("a != 1 dans SphereMaths.intersect()\na = %.3f\n%s\n", a, ray);

@@ -111,8 +111,6 @@ public class RayTracer
 	 */
 	public Color computePixel(MyScene renderScene, Ray ray)
 	{
-		Color pixel = Color.rgb(0, 0, 0);//On initialise le pixel à noir
-		
 		ArrayList<Shape> objectsList = renderScene.getSceneObjects();
 		
 		ArrayList<Point> intersectionPoints = new ArrayList<>();
@@ -163,34 +161,34 @@ public class RayTracer
 			Point interPointShift = Point.add(closestIntersectionPoint, Point.scalarMul(0.0001d, Vector.v2p(normalAtIntersection)));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
 			
 			Vector shadowRayDir = new Vector(interPointShift, renderScene.getLight().getCenter());//On calcule la direction du rayon secondaire
-			
-			Ray shadowRay = new Ray(interPointShift, shadowRayDir);//Création du rayon secondaire avec pour origine le premier point d'intersection décalé et avec comme direction le centre de la lampe
+			Ray shadowRay = new Ray(interPointShift, shadowRayDir, true);//Création du rayon secondaire avec pour origine le premier point d'intersection décalé et avec comme direction le centre de la lampe
+			Point shadowRayInter = null;
 			
 			//On cherche une intersection avec un objet qui se trouverait entre la lampe et l'origine du shadow ray
 			for(Shape objectAgain : objectsList)
 			{
-				Point shadowRayInter = objectAgain.intersect(shadowRay);
-				if(shadowRayInter == null)//Pas d'intersection, on retourne la pleine lumière
-				{
-					double objectRed = closestIntersectedObject.getColor().getRed()*255;
-					double objectGreen = closestIntersectedObject.getColor().getGreen()*255;
-					double objectBlue = closestIntersectedObject.getColor().getBlue()*255;
-					
-					double lightIntensity = renderScene.getLight().getIntensity();
-					
-					
-					
-					return Color.rgb((int)(objectRed*lightIntensity), (int)(objectGreen*lightIntensity), (int)(objectBlue*lightIntensity));
-				}
-				else//Une intersection a été trouvée, on retourne donc un pixel d'ombre sombre
-					return closestIntersectedObject.getColor().darker();
-						
+				shadowRayInter = objectAgain.intersect(shadowRay);
+				if(shadowRayInter != null)
+					break;
 			}
+
+			if(shadowRayInter == null)//Pas d'intersection, on retourne la pleine lumière
+			{
+				double objectRed = closestIntersectedObject.getColor().getRed()*255;
+				double objectGreen = closestIntersectedObject.getColor().getGreen()*255;
+				double objectBlue = closestIntersectedObject.getColor().getBlue()*255;
+				
+				double lightIntensity = renderScene.getLight().getIntensity();
+				
+				
+				
+				return Color.rgb((int)(objectRed*lightIntensity), (int)(objectGreen*lightIntensity), (int)(objectBlue*lightIntensity));
+			}
+			else//Une intersection a été trouvée, on retourne donc un pixel d'ombre sombre
+				return closestIntersectedObject.getColor().darker();
 		}
 		else//Le rayon n'a rien intersecté --> noir
 			return Color.rgb(0, 0, 0);//Couleur du fond, noir si on a pas de fond
-		
-		return pixel;//S'il n'y a pas d'objet dans la scène
 	}
 	
 	/*

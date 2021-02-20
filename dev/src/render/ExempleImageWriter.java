@@ -33,8 +33,8 @@ public class ExempleImageWriter extends Application {
 //		System.out.println(intersection);
 //		return;
 	
-	  int width = 1280/2;
-	  int height = 720/2;
+	  int width = 1680;
+	  int height = 1050;
 	  
     WritableImage writableImage = new WritableImage(width,height);
 
@@ -70,8 +70,8 @@ public class ExempleImageWriter extends Application {
     Light l = new LightBulb(Point.add(c.getPosition(), new Point(5, 0, -1)), 1);
 
     ArrayList<Shape> shapeList = new ArrayList<>();
-    shapeList.add(new SphereMaths(new Point(0, 0, -6), 1));
-    shapeList.add(new SphereMaths(new Point(0, 0, -4), 0.25, Color.rgb(200, 0, 0)));
+    shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.web("F86624")));
+    shapeList.add(new SphereMaths(new Point(1, 0, -5), 0.25, Color.rgb(200, 0, 0)));
 
 
     MyScene s = new MyScene(c, l, shapeList, 0.5);

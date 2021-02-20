@@ -22,6 +22,19 @@ public class Ray
 	 * Ce constructeur permet de créer un rayon et de le normaliser lors de sa création
 	 * 
 	 * @param origin Point d'origine du rayon
+	 * @param direction Vecteur dont les coordoonnées seront utilisées pour calculer la direction du rayon
+	 * @isNormalized True pour normaliser la direction du rayon à sa création, false sinon
+	 */
+	public Ray(Point origin, Vector direction, boolean isNormalized)
+	{
+		this(origin, direction);
+		this.normalize();
+	}
+	
+	/*
+	 * Ce constructeur permet de créer un rayon et de le normaliser lors de sa création
+	 * 
+	 * @param origin Point d'origine du rayon
 	 * @param direction Point utilisé pour calculer la direction du rayon
 	 * @isNormalized True pour normaliser la direction du rayon à sa création, false sinon
 	 */
