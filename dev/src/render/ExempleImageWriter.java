@@ -27,58 +27,56 @@ public class ExempleImageWriter extends Application {
   @Override
   public void start(Stage stage) 
   {
-//	Shape sphere = new SphereMaths(new Point(0, 0, -2), 1);
-//	Ray rayon = new Ray(new Point(0,0 ,0), new Vector(0, 0, -1));
-//	Point intersection = sphere.intersect(rayon);
-//	System.out.println(intersection);
-//	return;
+	  	Shape sphere = new SphereMaths(new Point(0, 0, -2), 1);
+		Ray rayon = new Ray(new Point(0,0 ,0), new Vector(0, 0, -1));
+		Point intersection = sphere.intersect(rayon);
+		System.out.println(intersection);
+		return;
 	
-	  int height = 1080;
-	  int width = 1920;
-	  
-    WritableImage writableImage = new WritableImage(width,height);
-
-    PixelWriter pw = writableImage.getPixelWriter();
-
-    /*pw.setColor(2,2,Color.web("0x0000FF"));
-    pw.setColor(2,3,Color.web("0x0000FF"));
-    pw.setColor(3,2,Color.web("0x0000FF"));
-    pw.setColor(3,3,Color.web("0x0000FF"));/*Color.rgb(0,0,255)*/
-    /*Prend en argument un tableau de couleur*/
-
-    ImageView imageView = new ImageView();
-    imageView.setImage(writableImage);
-
-    Pane root = new Pane();
-    root.getChildren().add(imageView);
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
-    stage.setTitle("");
-    stage.show();
-
-    /*pw.setColor(2,2,Color.web("0xFF0000"));
-    pw.setColor(3,2,Color.web("0xFF0000"));
-    pw.setColor(2,3,Color.web("0xFF0000"));
-    pw.setColor(3,3,Color.web("0xFF0000"));*/
-    //RayTracer rayTracer = new RayTracer(800,600);
-    //computeImage = rayTracer.computeImage();
-    //doImage(colorTab, pw);/*TODO trouver un moyen d'executer cette foction en récupérant le tableau ici*/
-
-    RayTracer r = new RayTracer(width, height);
-
-    Camera c = new Camera(); c.setFOV(40);
-    Light l = new LightBulb(Point.add(c.getPosition(), new Point(-1, 1, 0)), 1);
-
-    ArrayList<Shape> shapeList = new ArrayList<>();
-    shapeList.add(new SphereMaths(new Point(0, 0, -5), 1));
-    shapeList.add(new SphereMaths(new Point(0, 0, -5), 1));
-    //shapeList.add(new Triangle(new Point(-1,-1,-1.5),new Point(1,-1,-1.5),new Point(0,2,-1.5)));
-
-
-    MyScene s = new MyScene(c, l, shapeList, 0.5);
-
-
-    doImage(r.computeImage(s),pw);
+//	  int height = 1080;
+//	  int width = 1920;
+//	  
+//    WritableImage writableImage = new WritableImage(width,height);
+//
+//    PixelWriter pw = writableImage.getPixelWriter();
+//
+//    /*pw.setColor(2,2,Color.web("0x0000FF"));
+//    pw.setColor(2,3,Color.web("0x0000FF"));
+//    pw.setColor(3,2,Color.web("0x0000FF"));
+//    pw.setColor(3,3,Color.web("0x0000FF"));/*Color.rgb(0,0,255)*/
+//    /*Prend en argument un tableau de couleur*/
+//
+//    ImageView imageView = new ImageView();
+//    imageView.setImage(writableImage);
+//
+//    Pane root = new Pane();
+//    root.getChildren().add(imageView);
+//    Scene scene = new Scene(root);
+//    stage.setScene(scene);
+//    stage.setTitle("");
+//    stage.show();
+//
+//    /*pw.setColor(2,2,Color.web("0xFF0000"));
+//    pw.setColor(3,2,Color.web("0xFF0000"));
+//    pw.setColor(2,3,Color.web("0xFF0000"));
+//    pw.setColor(3,3,Color.web("0xFF0000"));*/
+//    //RayTracer rayTracer = new RayTracer(800,600);
+//    //computeImage = rayTracer.computeImage();
+//    //doImage(colorTab, pw);/*TODO trouver un moyen d'executer cette foction en récupérant le tableau ici*/
+//
+//    RayTracer r = new RayTracer(width, height);
+//
+//    Camera c = new Camera(); c.setFOV(40);
+//    Light l = new LightBulb(Point.add(c.getPosition(), new Point(-1, 1, 0)), 1);
+//
+//    ArrayList<Shape> shapeList = new ArrayList<>();
+//    shapeList.add(new SphereMaths(new Point(-1, 0, -14), 1));
+//
+//
+//    MyScene s = new MyScene(c, l, shapeList, 0.5);
+//
+//
+//    doImage(r.computeImage(s),pw);
 
   }
 

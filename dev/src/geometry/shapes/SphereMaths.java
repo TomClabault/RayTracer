@@ -82,10 +82,10 @@ public class SphereMaths implements ShapeMaths
 		//En substituant on obtient (O + kD - C)² - R² = 0 <--> O² + (kD)² + C² + 2OkD + 2OC + 2kDC - R² = 0 <--> k²(D²) + k(2OD + 2DC) + (O² + C² + 2OC - R²) = 0
 		//On cherche k
 		
-		//Vector OC = new Vector(ray.getOrigin(), center);
+		Vector OC = new Vector(center, ray.getOrigin());
 		
 		double a = Vector.dotProduct(ray.getDirection(), ray.getDirection());// = D²
-		double b = 2*Vector.dotProduct(ray.getOriginV(), ray.getDirection()) - 2*Vector.dotProduct(ray.getDirection(), Point.p2v(this.center));// = 2OD - 2DC
+		double b = 2*Vector.dotProduct(ray.getDirection(), OC);// = 2D(O-C)
 		double c =   Vector.dotProduct(ray.getOriginV(), ray.getOriginV()) 
 				 +   Vector.dotProduct(Point.p2v(this.center), Point.p2v(this.center)) 
 			     + 2*Vector.dotProduct(ray.getOriginV(), Point.p2v(this.center))

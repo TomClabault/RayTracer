@@ -39,9 +39,9 @@ public class Vector
 	 * @param a Point A
 	 * @param b Point B
 	 */
-	public Vector(Point a, Point b)
+	public Vector(Point originPoint, Point directionPoint)
 	{
-		Point vectorPoint = Point.sub(b, a);
+		Point vectorPoint = Point.sub(directionPoint, originPoint);
 		
 		this.x = vectorPoint.getX();
 		this.y = vectorPoint.getY();
