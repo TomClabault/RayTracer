@@ -86,10 +86,9 @@ public class SphereMaths implements ShapeMaths
 		
 		double a = Vector.dotProduct(ray.getDirection(), ray.getDirection());// = D²
 		double b = 2*Vector.dotProduct(ray.getDirection(), OC);// = 2D(O-C)
-		double c =   Vector.dotProduct(ray.getOriginV(), ray.getOriginV()) 
-				 +   Vector.dotProduct(Point.p2v(this.center), Point.p2v(this.center)) 
-			     + 2*Vector.dotProduct(ray.getOriginV(), Point.p2v(this.center))
-			     - this.radius*this.radius;
+		double c = Vector.dotProduct(OC, OC) - radius*radius;
+		
+		assert a == 1 : String.format("a != 1 dans SphereMaths.intersect()\na = %.3f\n%s\n", a, ray);;
 		
 		//System.out.println(String.format("a, b, c = %.3f, %.3f, %.3f", a, b, c));
 		
@@ -102,29 +101,29 @@ public class SphereMaths implements ShapeMaths
 		if(discri < 0)
 			return null;
 		else if(discri == 0)
-			 k1 = -b/2*a;
+			 k1 = -b/(2*a);
 		else
 		{
 			k1 = (-b - Math.sqrt(discri))/2*a;
 			k2 = (-b + Math.sqrt(discri))/2*a;
+			
+			//Les deux intersections sont derrière la caméra, il n'y a donc pas d'intersection valable, on renvoie null
+			if(k1 < 0 && k2 < 0)
+				return null;
+			
+			//On ne prend en compte que la première intersection avec la sphère donc on cherche quel k est le plus petit
+			if(k2 < k1)
+			{
+				double temp = k1;
+				k1 = k2;
+				k2 = temp;
+			}
+			
+			if(k1 < 0)//Si le k le plus petit est en fait négatif, on choisit l'autre k
+				k1 = k2;
 		}
-		
-		//Les deux intersections sont derrière la caméra, il n'y a donc pas d'intersection valable, on renvoie null
-		if(k1 < 0 && k2 < 0)
-			return null;
-		
-		//On ne prend en compte que la première intersection avec la sphère donc on cherche quel k est le plus petit
-		if(k2 < k1)
-		{
-			double temp = k1;
-			k1 = k2;
-			k2 = temp;
-		}
-		
-		if(k1 < 0)//Si le k le plus petit est en fait négatif, on choisit l'autre k
-			k1 = k2;
+	
 		//On peut maintenant calculer les coordonnées du point d'intersection avec la sphère à l'aide de k1 qui contient le "bon" k
-		
 		intersection = ray.determinePoint(k1);
 		
 		return intersection;

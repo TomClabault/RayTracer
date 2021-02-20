@@ -66,6 +66,39 @@ public class Point
     }
     
     /*
+     * Permet de comparer deux instances de la classe Point entre elles
+     * 
+     * @param o Un point de coordonnées (x, y, z)
+     * 
+     * @return Avec le point de l'instance appelante de coordonnées (x1, y1, z1), retourne true si x1 == x && y1 == y && z1 == 1. False sinon
+     */
+    @Override
+    public boolean equals(Object o)
+    {
+    	if(! (o instanceof Point))
+    		return false;
+    	else
+    	{
+    		Point oPoint = (Point)o;
+    		if(oPoint.getX() != this.getX() || oPoint.getY() != this.getY() || oPoint.getZ() != this.getZ())
+    			return false;
+    	}
+    	
+    	return true;
+    }
+    
+    /*
+     * Redéfinition de la méthode hashCode pour qu'elle retourne le hash du point en fonction de ses coordonnées
+     * 
+     * @return Un hash basé sur les coordonnées du point
+     */
+    @Override
+    public int hashCode() 
+    {
+    	return java.util.Objects.hash(this.getX(), this.getY(), this.getZ());
+    }
+    
+    /*
      * Crée et retourne un vecteur ayant les même coordonnées que le point passé en paramètre
      * 
      * @param point Un point de coordonnées (x, y, z)
