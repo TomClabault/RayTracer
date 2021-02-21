@@ -6,12 +6,9 @@ import geometry.Point;
 import geometry.Ray;
 import geometry.Shape;
 import geometry.Vector;
-import geometry.shapes.SphereMaths;
 import javafx.scene.paint.Color;
 import scene.Camera;
 import scene.MyScene;
-import scene.lights.Light;
-import scene.lights.LightBulb;
 
 /*
  * Une instance de RayTracer créée à partir de la largeur et de la hauteur du rendu voulu. Permet de générer les 
@@ -134,17 +131,17 @@ public class RayTracer
 					break;
 			}
 
+			
+
+			double lightIntensity = renderScene.getLight().getIntensity();
+			double ambientTerm = lightIntensity * renderScene.getAmbientLightIntensity();
+
+			int objectRed = (int)(closestIntersectedObject.getColor().getRed()*255);
+			int objectGreen = (int)(closestIntersectedObject.getColor().getGreen()*255);
+			int objectBlue = (int)(closestIntersectedObject.getColor().getBlue()*255);
 			if(shadowRayInter == null)//Pas d'intersection, on retourne la pleine lumière
 			{
-				int objectRed = (int)closestIntersectedObject.getColor().getRed()*255;
-				int objectGreen = (int)closestIntersectedObject.getColor().getGreen()*255;
-				int objectBlue = (int)closestIntersectedObject.getColor().getBlue()*255;
-				
-				
-				
-				double lightIntensity = renderScene.getLight().getIntensity();
 			
-				double ambientTerm = lightIntensity * renderScene.getAmbientLightIntensity();
 				double diffuseTerm = lightIntensity*closestIntersectedObject.getDiffuse()*Vector.dotProduct(shadowRayDir, normalAtIntersection);
 				
 				Vector refVector = Vector.normalize(this.getReflectionVector(normalAtIntersection, shadowRayDir));
@@ -162,7 +159,13 @@ public class RayTracer
 				return Color.rgb(pixelRed, pixelGreen, pixelBlue);
 			}
 			else//Une intersection a été trouvée, on retourne donc un pixel d'ombre sombre
-				return closestIntersectedObject.getColor().darker();
+			{
+				int pixelRed = (int)((double)objectRed * ambientTerm);
+				int pixelGreen = (int)((double)objectGreen * ambientTerm);
+				int pixelBlue = (int)((double)objectBlue * ambientTerm);
+
+				return Color.rgb(pixelRed, pixelGreen, pixelBlue);
+			}
 		}
 		else//Le rayon n'a rien intersecté --> noir
 			return Color.rgb(0, 0, 0);//Couleur du fond, noir si on a pas de fond
