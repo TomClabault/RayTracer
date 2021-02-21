@@ -27,11 +27,13 @@ public interface Shape
 	public abstract Vector getNormal(Point point);
 	
 	/*
-	 * Permet d'obtenir la composante spéculaire de l'objet
+	 * Permet d'obtenir la brillance de l'objet
 	 * 
-	 * @return Retourne un entier positif représentant la composante spéculaire de l'objet
+	 * @return Retourne un entier positif représentant la brillance de l'objet. Plus l'objet est brillant plut la valeur de shininess est petite 
 	 */
-	public abstract int getSpecular(); 
+	public abstract int getShininess(); 
+	
+	public abstract double getSpecularCoeff();
 	
 	/*
 	 * Calcule le point d'intersection avec un rayon et le renvoie si existant. Le point d'intersection n'est cherché que "en face" du rayon.

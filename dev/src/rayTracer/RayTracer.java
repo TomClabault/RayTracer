@@ -136,6 +136,8 @@ public class RayTracer
 			double lightIntensity = renderScene.getLight().getIntensity();
 			double ambientTerm = lightIntensity * renderScene.getAmbientLightIntensity();
 
+			
+			
 			int objectRed = (int)(closestIntersectedObject.getColor().getRed()*255);
 			int objectGreen = (int)(closestIntersectedObject.getColor().getGreen()*255);
 			int objectBlue = (int)(closestIntersectedObject.getColor().getBlue()*255);
@@ -145,10 +147,12 @@ public class RayTracer
 				double diffuseTerm = lightIntensity*closestIntersectedObject.getDiffuse()*Vector.dotProduct(shadowRayDir, normalAtIntersection);
 				
 				Vector refVector = Vector.normalize(this.getReflectionVector(normalAtIntersection, shadowRayDir));
-				double spec2 = Math.pow(Vector.dotProduct(ray.negate(), refVector), closestIntersectedObject.getSpecular());
+				double spec2 = Math.pow(Vector.dotProduct(refVector, ray.negate()), closestIntersectedObject.getShininess());
 				double specularTerm = lightIntensity*spec2;
+				if(specularTerm < 0)
+					specularTerm = 0;
 				
-				double phongShadingCoeff = ambientTerm + diffuseTerm + specularTerm;
+				double phongShadingCoeff = ambientTerm + specularTerm*closestIntersectedObject.getSpecularCoeff();
 				
 				
 				
@@ -156,9 +160,10 @@ public class RayTracer
 				int pixelRed = (int)(objectRed * phongShadingCoeff); pixelRed = pixelRed > 255 ? 255 : pixelRed;
 				int pixelGreen = (int)(objectGreen * phongShadingCoeff); pixelGreen = pixelGreen > 255 ? 255 : pixelGreen;
 				int pixelBlue = (int)(objectBlue * phongShadingCoeff); pixelBlue = pixelBlue > 255 ? 255 : pixelBlue;
+				
 				return Color.rgb(pixelRed, pixelGreen, pixelBlue);
 			}
-			else//Une intersection a été trouvée, on retourne donc un pixel d'ombre sombre
+			else//Une intersection a été trouvée, on retourne donc un pixel colorée et de luminosité égale à la luminosité ambiante de la scène
 			{
 				int pixelRed = (int)((double)objectRed * ambientTerm);
 				int pixelGreen = (int)((double)objectGreen * ambientTerm);
@@ -240,7 +245,7 @@ public class RayTracer
 	 */
 	public Vector getReflectionVector(Vector normalToSurface, Vector intersectToLightVec)
 	{
-		return Vector.sub(Vector.scalarMul(normalToSurface, 2*Vector.dotProduct(intersectToLightVec, normalToSurface)), intersectToLightVec.negate());//2*(L.N)*N-L
+		return Vector.sub(Vector.scalarMul(normalToSurface, 2*Vector.dotProduct(intersectToLightVec, normalToSurface)), intersectToLightVec);//2*(L.N)*N-L
 	}
 	
 	/*

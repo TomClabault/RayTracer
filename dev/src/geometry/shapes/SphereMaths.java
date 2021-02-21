@@ -16,7 +16,8 @@ public class SphereMaths implements ShapeMaths
 	double radius;
 
 	Color sphereColor;
-	int specularComponent;
+	int shininess;
+	double specularCoeff;
 	double diffuseComponent;
 	
 	/*
@@ -27,23 +28,25 @@ public class SphereMaths implements ShapeMaths
 	 */
 	public SphereMaths(Point center, double radius)
 	{
-		this(center, radius, Color.rgb(255, 255, 255), 20, 0.5);
+		this(center, radius, Color.rgb(255, 255, 255), 20, 1, 0.5);
 	}
 	
 	/*
 	 * Crée une sphère blanche à partie de son centre et de son rayon
 	 * 
 	 * @param center Point représentant le centre de la sphère
-	 * @param sphereColor Objet Color.RGB représentant la couleur de la sphère
 	 * @param radius Rayon de la sphère 
+	 * @param sphereColor Objet Color.RGB représentant la couleur de la sphère
+	 * @param specularComponent Caractéristique spéculaire de la sphère. Entier positif
 	 */
-	public SphereMaths(Point center, double radius, Color sphereColor, int specularComponent, double diffuseComponent) 
+	public SphereMaths(Point center, double radius, Color sphereColor, int shininess, double specularCoeff, double diffuseComponent) 
 	{
 		this.center = center;
 		this.radius = radius;
 
 		this.sphereColor = sphereColor;
-		this.specularComponent = specularComponent;
+		this.shininess = shininess;
+		this.specularCoeff = specularCoeff;
 		this.diffuseComponent = diffuseComponent;
 	}
 	
@@ -79,9 +82,14 @@ public class SphereMaths implements ShapeMaths
 	 * 
 	 * @return Un entier positif représentant la composante spéculaire de l'objet
 	 */
-	public int getSpecular()
+	public int getShininess()
 	{
-		return this.specularComponent;
+		return this.shininess;
+	}
+	
+	public double getSpecularCoeff()
+	{
+		return this.specularCoeff;
 	}
 	
 	/*

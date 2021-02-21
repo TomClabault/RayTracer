@@ -17,7 +17,6 @@ public class MyScene
 	ArrayList<Shape> shapes;
 
 	double ambientLightIntensity;
-	double sceneSpecularIntensity;
 	
 	/*
 	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
@@ -28,14 +27,13 @@ public class MyScene
 	 * 
 	 * @param shapes Liste de forme qui seront rendues
 	 */
-	public MyScene(Camera camera, Light light, ArrayList<Shape> shapes, double ambientLightIntensity, double sceneSpecularIntensity) 
+	public MyScene(Camera camera, Light light, ArrayList<Shape> shapes, double ambientLightIntensity) 
 	{
 		this.camera = camera;
 		this.light = light;
 		this.shapes = shapes;
 
 		this.ambientLightIntensity = ambientLightIntensity;
-		this.sceneSpecularIntensity = sceneSpecularIntensity;
 	}
 
 	/*
