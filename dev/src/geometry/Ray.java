@@ -90,6 +90,16 @@ public class Ray
 	}
 	
 	/*
+	 * Retourne l'opposé du vecteur de direction du rayon
+	 * 
+	 * @return Si d = (x, y, z) le vecteur de direction du rayon, retourne v = (-x, -y, -z)
+	 */
+	public Vector negate()
+	{
+		return this.direction.negate();
+	}
+	
+	/*
 	 * Normalise la direction du rayon
 	 */
 	public void normalize()

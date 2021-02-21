@@ -25,22 +25,6 @@ public class RayTracer
 	
 	Color[][] renderedPixels;
 	
-	public static void main(String[] args)
-	{
-		RayTracer r = new RayTracer(1920, 1080);
-		
-		Camera c = new Camera(); c.setFOV(100);
-		Light l = new LightBulb(Point.add(c.getPosition(), new Point(-1, 1, 0)), 1);
-		ArrayList<Shape> sphere = new ArrayList<>();
-		sphere.add(new SphereMaths(new Point(0, 0, -4), 1));
-		
-		MyScene s = new MyScene(c, l, sphere, 0.5);
-		
-		Point pixelCoorrs = r.convPxCoToWorldCoords(s.getCamera(), 1919, 0);
-		
-		System.out.println(pixelCoorrs);
-	}
-	
 	public RayTracer(int renderLength, int renderHeight)
 	{
 		this.renderLength = renderLength;
@@ -152,19 +136,30 @@ public class RayTracer
 
 			if(shadowRayInter == null)//Pas d'intersection, on retourne la pleine lumière
 			{
-				double objectRed = closestIntersectedObject.getColor().getRed()*255;
-				double objectGreen = closestIntersectedObject.getColor().getGreen()*255;
-				double objectBlue = closestIntersectedObject.getColor().getBlue()*255;
+				int objectRed = (int)closestIntersectedObject.getColor().getRed()*255;
+				int objectGreen = (int)closestIntersectedObject.getColor().getGreen()*255;
+				int objectBlue = (int)closestIntersectedObject.getColor().getBlue()*255;
+				
+				
 				
 				double lightIntensity = renderScene.getLight().getIntensity();
-				
+			
 				double ambientTerm = lightIntensity * renderScene.getAmbientLightIntensity();
-				double diffuseTerm = ;
-				double specularTerm = Vector.dotProduct(ray.negate(), getReflectionVector());
-				double phongShadingTerm = ambientTerm + diffuseTerm + specularTerm;
+				double diffuseTerm = lightIntensity*closestIntersectedObject.getDiffuse()*Vector.dotProduct(shadowRayDir, normalAtIntersection);
+				
+				Vector refVector = Vector.normalize(this.getReflectionVector(normalAtIntersection, shadowRayDir));
+				double spec2 = Math.pow(Vector.dotProduct(ray.negate(), refVector), closestIntersectedObject.getSpecular());
+				double specularTerm = lightIntensity*spec2;
+				
+				double phongShadingCoeff = ambientTerm + diffuseTerm + specularTerm;
 				
 				
-				return Color.rgb((int)(objectRed*phongShadingTerm), (int)(objectGreen*phongShadingTerm), (int)(objectBlue*phongShadingTerm));
+				
+				//On calcule la couleur de chacune des composantes en fonction de la couleur de l'objet et de l'ombrage de Phong. On ramène les valeurs à 255 si elles sont supérieures à 255.
+				int pixelRed = (int)(objectRed * phongShadingCoeff); pixelRed = pixelRed > 255 ? 255 : pixelRed;
+				int pixelGreen = (int)(objectGreen * phongShadingCoeff); pixelGreen = pixelGreen > 255 ? 255 : pixelGreen;
+				int pixelBlue = (int)(objectBlue * phongShadingCoeff); pixelBlue = pixelBlue > 255 ? 255 : pixelBlue;
+				return Color.rgb(pixelRed, pixelGreen, pixelBlue);
 			}
 			else//Une intersection a été trouvée, on retourne donc un pixel d'ombre sombre
 				return closestIntersectedObject.getColor().darker();
@@ -230,6 +225,19 @@ public class RayTracer
 		}
 		
 		return closestIntersectedObject;
+	}
+	
+	/*
+	 * Calcule le rayon réfléchi par la surface en fonction de la position de la lumière par rapport au point d'intersection
+	 * 
+	 * @param normalToSurface N, le vecteur normal normalisé de la surface au point d'intersection
+	 * @param intersectToLightVec L, le vecteur normalisé d'origine le point d'intersection et de direction la source de lumière
+	 * 
+	 * @return R, le vecteur d'origine le point d'intersection et de direction la direction de réflexion calculée par cette méthode 
+	 */
+	public Vector getReflectionVector(Vector normalToSurface, Vector intersectToLightVec)
+	{
+		return Vector.sub(Vector.scalarMul(normalToSurface, 2*Vector.dotProduct(intersectToLightVec, normalToSurface)), intersectToLightVec.negate());//2*(L.N)*N-L
 	}
 	
 	/*

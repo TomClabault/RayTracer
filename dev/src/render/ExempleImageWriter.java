@@ -27,8 +27,8 @@ public class ExempleImageWriter extends Application {
   @Override
   public void start(Stage stage) 
   {
-	  int width = 1920;
-	  int height = 1080;
+	  int width = 1280/4;
+	  int height = 720/4;
 	  
     WritableImage writableImage = new WritableImage(width,height);
 
@@ -64,13 +64,13 @@ public class ExempleImageWriter extends Application {
     Light l = new LightBulb(Point.add(c.getPosition(), new Point(5, 0, -1)), 1);
 
     ArrayList<Shape> shapeList = new ArrayList<>();
-    shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.web("F86624")));
-    shapeList.add(new SphereMaths(new Point(0.5, 1, -5), 0.25, Color.web("ED4747")));
-    shapeList.add(new SphereMaths(new Point(1, 0, -5), 0.25, Color.rgb(200, 0, 0)));
-    shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.web("F51B1B")));
+    shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.web("F86624"), 2, 0.5));
+    //shapeList.add(new SphereMaths(new Point(0.5, 1, -5), 0.25, Color.web("ED4747"), 10, 0.5));
+    //shapeList.add(new SphereMaths(new Point(1, 0, -5), 0.25, Color.rgb(200, 0, 0), 10, 0.5));
+    //shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.web("F51B1B"), 10, 0.5));
     
 
-    MyScene s = new MyScene(c, l, shapeList, 0.2);
+    MyScene s = new MyScene(c, l, shapeList, 0.2, 0.08);
 
 
     doImage(r.computeImage(s),pw);

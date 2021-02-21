@@ -1,10 +1,5 @@
 package geometry.shapes;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-
 import geometry.Point;
 import geometry.Ray;
 import geometry.ShapeMaths;
@@ -18,10 +13,11 @@ import javafx.scene.paint.Color;
 public class SphereMaths implements ShapeMaths
 {
 	Point center;
+	double radius;
 
 	Color sphereColor;
-	
-	double radius;
+	int specularComponent;
+	double diffuseComponent;
 	
 	/*
 	 * Crée une sphère blanche à partie de son centre et de son rayon
@@ -31,7 +27,7 @@ public class SphereMaths implements ShapeMaths
 	 */
 	public SphereMaths(Point center, double radius)
 	{
-		this(center, radius, Color.rgb(255, 255, 255));
+		this(center, radius, Color.rgb(255, 255, 255), 20, 0.5);
 	}
 	
 	/*
@@ -41,12 +37,14 @@ public class SphereMaths implements ShapeMaths
 	 * @param sphereColor Objet Color.RGB représentant la couleur de la sphère
 	 * @param radius Rayon de la sphère 
 	 */
-	public SphereMaths(Point center, double radius, Color sphereColor) 
+	public SphereMaths(Point center, double radius, Color sphereColor, int specularComponent, double diffuseComponent) 
 	{
 		this.center = center;
-		this.sphereColor = sphereColor;
-		
 		this.radius = radius;
+
+		this.sphereColor = sphereColor;
+		this.specularComponent = specularComponent;
+		this.diffuseComponent = diffuseComponent;
 	}
 	
 	/*
@@ -59,9 +57,31 @@ public class SphereMaths implements ShapeMaths
 		return this.sphereColor;
 	}
 	
+	public double getDiffuse()
+	{
+		return this.diffuseComponent;
+	}
+	
+	/*
+	 * Retourne le vecteur normal à la sphère à un point donné
+	 * 
+	 * @param point Le point définissant la direction du vecteur normal de la sphère
+	 * 
+	 * @return Un vecteur d'origine le centre de la sphère et de direction le point passé en argument représentant la normale de la sphère en un point donné. Ce vecteur est normalisé  
+	 */
 	public Vector getNormal(Point point)
 	{
 		return Vector.normalize(Point.p2v(Point.sub(point, center)));
+	}
+	
+	/*
+	 * Retourne la composante spéculaire de l'objet
+	 * 
+	 * @return Un entier positif représentant la composante spéculaire de l'objet
+	 */
+	public int getSpecular()
+	{
+		return this.specularComponent;
 	}
 	
 	/*

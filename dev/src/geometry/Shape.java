@@ -7,8 +7,17 @@ public interface Shape
 	
 	/*
 	 * Retourne le couleur de l'objet sous la forme d'un objet Color.RGB(r, g, b)
+	 * 
+	 * @return Color.rgb(r, g, b), la couleur de l'objet au format RGB
 	 */
 	public abstract Color getColor();
+	
+	/*
+	 * Permet d'obtenir la composante diffuse d'un objet
+	 * 
+	 * @return Retourne un réel entre 0 et 1 représentant le pourcentage de diffusion de la lumière par l'objet
+	 */
+	public abstract double getDiffuse();
 	
 	/*
 	 * Permet d'obtenir la normale à un point donné de la forme
@@ -16,6 +25,13 @@ public interface Shape
 	 * @param point Le point par rapport auquel on souhaite la normale
 	 */
 	public abstract Vector getNormal(Point point);
+	
+	/*
+	 * Permet d'obtenir la composante spéculaire de l'objet
+	 * 
+	 * @return Retourne un entier positif représentant la composante spéculaire de l'objet
+	 */
+	public abstract int getSpecular(); 
 	
 	/*
 	 * Calcule le point d'intersection avec un rayon et le renvoie si existant. Le point d'intersection n'est cherché que "en face" du rayon.
