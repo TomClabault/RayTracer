@@ -147,12 +147,12 @@ public class RayTracer
 				double diffuseTerm = lightIntensity*closestIntersectedObject.getDiffuse()*Vector.dotProduct(shadowRayDir, normalAtIntersection);
 				
 				Vector refVector = Vector.normalize(this.getReflectionVector(normalAtIntersection, shadowRayDir));
-				double spec2 = Math.pow(Vector.dotProduct(refVector, ray.negate()), closestIntersectedObject.getShininess());
+				double spec2 = Math.pow(Math.max(Vector.dotProduct(refVector, ray.negate()), 0.0), closestIntersectedObject.getShininess());
 				double specularTerm = lightIntensity*spec2;
 				if(specularTerm < 0)
 					specularTerm = 0;
 				
-				double phongShadingCoeff = ambientTerm + specularTerm*closestIntersectedObject.getSpecularCoeff();
+				double phongShadingCoeff = ambientTerm + diffuseTerm + specularTerm*closestIntersectedObject.getSpecularCoeff();
 				
 				
 				
