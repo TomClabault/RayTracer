@@ -70,7 +70,7 @@ public class ExempleImageWriter extends Application {
     shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.web("F51B1B")));
     
 
-    MyScene s = new MyScene(c, l, shapeList, 0.5);
+    MyScene s = new MyScene(c, l, shapeList, 0.2);
 
 
     doImage(r.computeImage(s),pw);

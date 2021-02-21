@@ -118,6 +118,16 @@ public class Vector
 	}
 	
 	/*
+	 * Calcule et retourne l'opposé du vecteur de l'instance appelante
+	 * 
+	 * @return Si le vecteur de l'instance appelante est de coordonnée (x, y, z), retourne un vecteur de coordoonnées (-x, -y, -z)
+	 */
+	public Vector negate()
+	{
+		return new Vector(-this.x, -this.y, -this.z);
+	}
+	
+	/*
 	 * Normalise le vecteur
 	 */
 	public void normalize()

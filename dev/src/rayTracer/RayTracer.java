@@ -129,30 +129,8 @@ public class RayTracer
 			
 		if(intersectionPoints.size() > 0)//Il y a au moins un point d'intersection
 		{
-			Point closestIntersectionPoint = null;//On ne va garder que le point d'intersection qui est le plus près de la caméra puisque les autres point d'intersetions qui seront plus loins seront cachés par le plus proche
-			Shape closestIntersectedObject = null;
-			if(intersectionPoints.size() > 1)//Il y plus d'un point d'intersection, on va devoir calculer le quel est le plus proche
-			{
-				Double min = null;
-				for(int i = 0; i < intersectionPoints.size(); i++)
-				{
-					Point point = intersectionPoints.get(i);
-					double distPointCam = Point.distance(point,  renderScene.getCamera().getPosition());
-					
-					if(min == null || min > distPointCam)
-					{
-						min = distPointCam;
-						
-						closestIntersectionPoint = point;
-						closestIntersectedObject = intersectedObjects.get(i);
-					}
-				}
-			}
-			else//Il n'y a qu'un seul point d'intersection donc on peut récupérer le premier élément de la liste des points d'intersection
-			{
-				closestIntersectionPoint = intersectionPoints.get(0);
-				closestIntersectedObject = intersectedObjects.get(0);
-			}
+			Point closestIntersectionPoint = new Point(0, 0, 0);//On crée une instance de point qui va nous permettre de garder le point d'intersection le plus proche de la caméra parmis tous les objets intersectés
+			Shape closestIntersectedObject = detClosestInterPointObj(renderScene, intersectionPoints, intersectedObjects, closestIntersectionPoint);
 			
 			
 			
@@ -180,9 +158,13 @@ public class RayTracer
 				
 				double lightIntensity = renderScene.getLight().getIntensity();
 				
+				double ambientTerm = lightIntensity * renderScene.getAmbientLightIntensity();
+				double diffuseTerm = ;
+				double specularTerm = Vector.dotProduct(ray.negate(), getReflectionVector());
+				double phongShadingTerm = ambientTerm + diffuseTerm + specularTerm;
 				
 				
-				return Color.rgb((int)(objectRed*lightIntensity), (int)(objectGreen*lightIntensity), (int)(objectBlue*lightIntensity));
+				return Color.rgb((int)(objectRed*phongShadingTerm), (int)(objectGreen*phongShadingTerm), (int)(objectBlue*phongShadingTerm));
 			}
 			else//Une intersection a été trouvée, on retourne donc un pixel d'ombre sombre
 				return closestIntersectedObject.getColor().darker();
@@ -218,6 +200,36 @@ public class RayTracer
 		yWorld *= demiHeightPlane;
 		
 		return new Point(xWorld, yWorld, camera.getDirection().getZ());
+	}
+	
+	public Shape detClosestInterPointObj(MyScene renderScene, ArrayList<Point> intersectionPoints, ArrayList<Shape> intersectedObjects, Point outClosestInterPoint)
+	{
+		Shape closestIntersectedObject = null;
+		
+		if(intersectionPoints.size() > 1)//Il y plus d'un point d'intersection, on va devoir calculer le quel est le plus proche
+		{
+			Double min = null;
+			for(int i = 0; i < intersectionPoints.size(); i++)
+			{
+				Point point = intersectionPoints.get(i);
+				double distPointCam = Point.distance(point,  renderScene.getCamera().getPosition());
+				
+				if(min == null || min > distPointCam)
+				{
+					min = distPointCam;
+					
+					outClosestInterPoint.copyIn(point);
+					closestIntersectedObject = intersectedObjects.get(i);
+				}
+			}
+		}
+		else//Il n'y a qu'un seul point d'intersection donc on peut récupérer le premier élément de la liste des points d'intersection
+		{
+			outClosestInterPoint.copyIn(intersectionPoints.get(0));
+			closestIntersectedObject = intersectedObjects.get(0);
+		}
+		
+		return closestIntersectedObject;
 	}
 	
 	/*

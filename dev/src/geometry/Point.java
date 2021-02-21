@@ -51,6 +51,13 @@ public class Point
     	return new Point(a.getX() + b.getX(), a.getY() + b.getY(), a.getZ() + b.getZ());
     }
     
+    public void copyIn(Point pointToCopy)
+    {
+    	this.x = pointToCopy.getX();
+    	this.y = pointToCopy.getY();
+    	this.z = pointToCopy.getZ();
+    }
+    
     /*
      * Calcule et retourne la distance entre deux points
      * 
