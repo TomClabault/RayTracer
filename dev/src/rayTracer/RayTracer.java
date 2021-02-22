@@ -6,9 +6,16 @@ import geometry.Point;
 import geometry.Ray;
 import geometry.Shape;
 import geometry.Vector;
+import geometry.shapes.SphereMaths;
 import javafx.scene.paint.Color;
 import scene.Camera;
 import scene.MyScene;
+
+/*
+ * Lumière dans la sphère: traverse
+ * Lumière en dessous du plan, traverse
+ * Classe matériaux --> couleur, specular, diffuse
+ */
 
 /*
  * Une instance de RayTracer créée à partir de la largeur et de la hauteur du rendu voulu. Permet de générer les 
@@ -30,33 +37,40 @@ public class RayTracer
 		renderedPixels = new Color[renderHeight][renderLength];
 	}
 	
-//	public Shape computeClosestInterObj(ArrayList<Point> intersectionPointList, Point intersectionPoint, ArrayList<Shape> intersectedObjects)
-//	{
-//		for(int i = 0; i < intersectionPointList.size(); i++)
-//			if(intersectionPointList.get(i).equals(intersectionPoint))
-//				return intersectedObjects.get(i);
-//		
-//		return null;//Normalement impossible
-//	}
-//	
-//	Point computeClosestIntersection(ArrayList<Point> intersectionPointList, Camera camera) 
-//	{
-//		Double min = null;
-//		
-//		Point closestPoint = null;
-//		
-//		for(Point point : intersectionPointList)
-//		{
-//			double cameraPointDist = Point.distance(point, camera.getPosition());
-//			if(min == null || cameraPointDist < min)
-//			{
-//				min = cameraPointDist;
-//				closestPoint = point;
-//			}
-//		}
-//		
-//		return closestPoint;
-//	}
+	/*
+	 * Calcule le premier point d'intersection du rayon passé en argument avec les objets de la scène
+	 * 
+	 * @param objectList Liste des objets de la scène. Obtenable avec MyScene.getSceneObjects()
+	 * @param ray Rayon duquel chercher les points d'intersection avec les objets de la scène
+	 * @param outClosestInterPoint
+	 * 
+	 * @return Retourne l'objet avec lequel le rayon a fait son intersection. 'outClosestInterPoint' est un point de l'objet retourné 
+	 */
+	public Shape computeClosestInterPoint(ArrayList<Shape> objectList, Ray ray, Point outClosestInterPoint)
+	{
+		Shape closestObjectIntersected = null;
+		Double distanceMin = null;
+		
+		for(Shape object : objectList)
+		{
+			double distRayOriInter = -1;
+			Point intersection = object.intersect(ray);
+			if(intersection != null)
+			{
+				distRayOriInter = Point.distance(ray.getOrigin(), intersection);
+			
+				if(distanceMin == null || distRayOriInter < distanceMin)
+				{
+					distanceMin = distRayOriInter;
+					
+					outClosestInterPoint.copyIn(intersection);
+					closestObjectIntersected = object;
+				}
+			}
+		}
+		
+		return closestObjectIntersected;
+	}
 	
 	/*
 	 * Calcule tous les pixels de la scène donnée en argument et retourne un tableau de couleur RGB correspondant aux pixels
@@ -76,11 +90,39 @@ public class RayTracer
 				Ray cameraRay = new Ray(renderScene.getCamera().getPosition(), pixelWorldCoords);
 				cameraRay.normalize();
 				
-				this.renderedPixels[y][x] = this.computePixel(renderScene, cameraRay);
+				this.renderedPixels[y][x] = this.computePixel(x, y, renderScene, cameraRay);
 			}
 		}
 		
 		return renderedPixels;
+	}
+	
+	public Color computePhongShading(MyScene renderScene, Ray ray, Vector shadowRayDir, Shape closestIntersectedObject, Vector normalAtIntersection)
+	{
+		double lightIntensity = renderScene.getLight().getIntensity();
+		
+		double ambientTerm = lightIntensity * renderScene.getAmbientLightIntensity();
+		
+		double diffuseTerm = lightIntensity*closestIntersectedObject.getDiffuse()*Vector.dotProduct(shadowRayDir, normalAtIntersection);
+		if(diffuseTerm < 0)
+			diffuseTerm = 0;
+		
+		Vector refVector = Vector.normalize(this.getReflectionVector(normalAtIntersection, shadowRayDir));
+		double spec2 = Math.pow(Math.max(Vector.dotProduct(refVector, ray.negate()), 0), closestIntersectedObject.getShininess());
+		double specularTerm = lightIntensity*spec2;
+		if(specularTerm < 0)
+			specularTerm = 0;
+		
+		double phongShadingCoeff = ambientTerm + diffuseTerm + specularTerm*closestIntersectedObject.getSpecularCoeff();
+		
+		
+		
+		//On calcule la couleur de chacune des composantes en fonction de la couleur de l'objet et de l'ombrage de Phong. On ramène les valeurs à 255 si elles sont supérieures à 255.
+		int pixelRed = (int)(closestIntersectedObject.getColor().getRed() * phongShadingCoeff * 255); pixelRed = pixelRed > 255 ? 255 : pixelRed;
+		int pixelGreen = (int)(closestIntersectedObject.getColor().getGreen() * phongShadingCoeff * 255); pixelGreen = pixelGreen > 255 ? 255 : pixelGreen;
+		int pixelBlue = (int)(closestIntersectedObject.getColor().getBlue() * phongShadingCoeff * 255); pixelBlue = pixelBlue > 255 ? 255 : pixelBlue;
+		
+		return Color.rgb(pixelRed, pixelGreen, pixelBlue);
 	}
 	
 	/*
@@ -90,52 +132,31 @@ public class RayTracer
 	 * 
 	 * @return Une instance de Color.RGB(r, g, b)
 	 */
-	public Color computePixel(MyScene renderScene, Ray ray)
+	public Color computePixel(int x, int y, MyScene renderScene, Ray ray)
 	{
-		ArrayList<Shape> objectsList = renderScene.getSceneObjects();
+		ArrayList<Shape> objectList = renderScene.getSceneObjects();
 		
-		ArrayList<Point> intersectionPoints = new ArrayList<>();
-		ArrayList<Shape> intersectedObjects = new ArrayList<>();
+		Point rayInterPoint = new Point(0, 0, 0);
+		Shape rayInterObject = computeClosestInterPoint(objectList, ray, rayInterPoint);
 		
-		for(Shape object : objectsList)
+		if(rayInterObject != null)//Il y a au moins un point d'intersection
 		{
-			Point inter = object.intersect(ray);//On calcule le point d'intersection
-			if(inter != null)//Si il y a effectivement un point d'intersection
-			{
-				intersectionPoints.add(object.intersect(ray));//On l'ajoute à la liste des points d'intersection trouvés
-				intersectedObjects.add(object);//On ajoute l'objet qui correspond au point d'intersection. i.e. l'objet qui a été intersecté
-			}
-		}
-			
-			
-		if(intersectionPoints.size() > 0)//Il y a au moins un point d'intersection
-		{
-			Point closestIntersectionPoint = new Point(0, 0, 0);//On crée une instance de point qui va nous permettre de garder le point d'intersection le plus proche de la caméra parmis tous les objets intersectés
-			Shape closestIntersectedObject = detClosestInterPointObj(renderScene, intersectionPoints, intersectedObjects, closestIntersectionPoint);
-			
-			
-			
-			
-			Vector normalAtIntersection = closestIntersectedObject.getNormal(closestIntersectionPoint);//On calcule la normale au point d'intersection avec la forme
-			Point interPointShift = Point.add(closestIntersectionPoint, Point.scalarMul(0.0001d, Vector.v2p(normalAtIntersection)));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
+			Point interPointShift = Point.add(rayInterPoint, Point.scalarMul(0.0001d, Vector.v2p(ray.negate())));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
 			
 			
 			Vector shadowRayDir = new Vector(interPointShift, renderScene.getLight().getCenter());//On calcule la direction du rayon secondaire
-			double interToLightLength = shadowRayDir.length();
-			
-			Ray shadowRay = new Ray(interPointShift, shadowRayDir, true);//Création du rayon secondaire avec pour origine le premier point d'intersection décalé et avec comme direction le centre de la lampe
-			Point shadowRayInter = null;
+			Ray shadowRay = new Ray(interPointShift, shadowRayDir);//Création du rayon secondaire avec pour origine le premier point d'intersection décalé et avec comme direction le centre de la lampe
+			double interToLightDist = shadowRayDir.length();
+			shadowRay.normalize();
+			shadowRayDir.normalize();
 			
 			//On cherche une intersection avec un objet qui se trouverait entre la lampe et l'origine du shadow ray
-			for(Shape objectAgain : objectsList)
-			{
-				shadowRayInter = objectAgain.intersect(shadowRay);
-				if(shadowRayInter != null)
-					break;
-			}
-			double interToShadowInterLength = 0;
-			if(shadowRayInter != null)
-				interToShadowInterLength = new Vector(closestIntersectionPoint, shadowRayInter).length();
+			Point shadowInterPoint = new Point(0, 0, 0);
+			Shape shadowInterObject = computeClosestInterPoint(objectList, shadowRay, shadowInterPoint);
+
+			double interToShadowInterDist = 0;
+			if(shadowInterPoint != null)
+				interToShadowInterDist = new Vector(rayInterPoint, shadowInterPoint).length();
 			
 
 			double lightIntensity = renderScene.getLight().getIntensity();
@@ -143,38 +164,21 @@ public class RayTracer
 
 			
 			
-			int objectRed = (int)(closestIntersectedObject.getColor().getRed()*255);
-			int objectGreen = (int)(closestIntersectedObject.getColor().getGreen()*255);
-			int objectBlue = (int)(closestIntersectedObject.getColor().getBlue()*255);
-			if(shadowRayInter == null || interToShadowInterLength > interToLightLength)//On a pas trouvé d'intersection entre l'objet et la lumière c'est à dire pas d'intersection trouvée ou alors une intersection derrière la lumière
+			if(shadowInterObject == null || interToShadowInterDist > interToLightDist)//On a pas trouvé d'intersection entre l'objet et la lumière c'est à dire pas d'intersection trouvée ou alors une intersection derrière la lumière
 			{
-			
-				double diffuseTerm = lightIntensity*closestIntersectedObject.getDiffuse()*Vector.dotProduct(shadowRayDir, normalAtIntersection);
-				if(diffuseTerm < 0)
-					diffuseTerm = 0;
+				//SphereMaths objSphere = (SphereMaths)shadowInterObject;
+				//Point center = objSphere.getCenter();
 				
-				Vector refVector = Vector.normalize(this.getReflectionVector(normalAtIntersection, shadowRayDir));
-				double spec2 = Math.pow(Math.max(Vector.dotProduct(refVector, ray.negate()), 0), closestIntersectedObject.getShininess());
-				double specularTerm = lightIntensity*spec2;
-				if(specularTerm < 0)
-					specularTerm = 0;
+				Vector normalAtIntersection = rayInterObject.getNormal(rayInterPoint);//Normale au point d'intersection avec la forme
+				Color phongShadingColor = computePhongShading(renderScene, ray, shadowRayDir, rayInterObject, normalAtIntersection);
 				
-				double phongShadingCoeff = ambientTerm + diffuseTerm + specularTerm*closestIntersectedObject.getSpecularCoeff();
-				
-				
-				
-				//On calcule la couleur de chacune des composantes en fonction de la couleur de l'objet et de l'ombrage de Phong. On ramène les valeurs à 255 si elles sont supérieures à 255.
-				int pixelRed = (int)(objectRed * phongShadingCoeff); pixelRed = pixelRed > 255 ? 255 : pixelRed;
-				int pixelGreen = (int)(objectGreen * phongShadingCoeff); pixelGreen = pixelGreen > 255 ? 255 : pixelGreen;
-				int pixelBlue = (int)(objectBlue * phongShadingCoeff); pixelBlue = pixelBlue > 255 ? 255 : pixelBlue;
-				
-				return Color.rgb(pixelRed, pixelGreen, pixelBlue);
+				return phongShadingColor;
 			}
 			else//Une intersection a été trouvée, on retourne donc un pixel colorée et de luminosité égale à la luminosité ambiante de la scène
 			{
-				int pixelRed = (int)((double)objectRed * ambientTerm);
-				int pixelGreen = (int)((double)objectGreen * ambientTerm);
-				int pixelBlue = (int)((double)objectBlue * ambientTerm);
+				int pixelRed = (int)(rayInterObject.getColor().getRed() * ambientTerm * 255);
+				int pixelGreen = (int)(rayInterObject.getColor().getGreen() * ambientTerm * 255);
+				int pixelBlue = (int)(rayInterObject.getColor().getBlue() * ambientTerm * 255);
 
 				return Color.rgb(pixelRed, pixelGreen, pixelBlue);
 			}
@@ -212,35 +216,35 @@ public class RayTracer
 		return new Point(xWorld, yWorld, camera.getDirection().getZ());
 	}
 	
-	public Shape detClosestInterPointObj(MyScene renderScene, ArrayList<Point> intersectionPoints, ArrayList<Shape> intersectedObjects, Point outClosestInterPoint)
-	{
-		Shape closestIntersectedObject = null;
-		
-		if(intersectionPoints.size() > 1)//Il y plus d'un point d'intersection, on va devoir calculer le quel est le plus proche
-		{
-			Double min = null;
-			for(int i = 0; i < intersectionPoints.size(); i++)
-			{
-				Point point = intersectionPoints.get(i);
-				double distPointCam = Point.distance(point,  renderScene.getCamera().getPosition());
-				
-				if(min == null || min > distPointCam)
-				{
-					min = distPointCam;
-					
-					outClosestInterPoint.copyIn(point);
-					closestIntersectedObject = intersectedObjects.get(i);
-				}
-			}
-		}
-		else//Il n'y a qu'un seul point d'intersection donc on peut récupérer le premier élément de la liste des points d'intersection
-		{
-			outClosestInterPoint.copyIn(intersectionPoints.get(0));
-			closestIntersectedObject = intersectedObjects.get(0);
-		}
-		
-		return closestIntersectedObject;
-	}
+//	public Shape detClosestInterPointObj(MyScene renderScene, ArrayList<Point> intersectionPoints, ArrayList<Shape> intersectedObjects, Point outClosestInterPoint)
+//	{
+//		Shape closestIntersectedObject = null;
+//		
+//		if(intersectionPoints.size() > 1)//Il y plus d'un point d'intersection, on va devoir calculer le quel est le plus proche
+//		{
+//			Double min = null;
+//			for(int i = 0; i < intersectionPoints.size(); i++)
+//			{
+//				Point point = intersectionPoints.get(i);
+//				double distPointCam = Point.distance(point,  renderScene.getCamera().getPosition());
+//				
+//				if(min == null || min > distPointCam)
+//				{
+//					min = distPointCam;
+//					
+//					outClosestInterPoint.copyIn(point);
+//					closestIntersectedObject = intersectedObjects.get(i);
+//				}
+//			}
+//		}
+//		else//Il n'y a qu'un seul point d'intersection donc on peut récupérer le premier élément de la liste des points d'intersection
+//		{
+//			outClosestInterPoint.copyIn(intersectionPoints.get(0));
+//			closestIntersectedObject = intersectedObjects.get(0);
+//		}
+//		
+//		return closestIntersectedObject;
+//	}
 	
 	/*
 	 * Calcule le rayon réfléchi par la surface en fonction de la position de la lumière par rapport au point d'intersection

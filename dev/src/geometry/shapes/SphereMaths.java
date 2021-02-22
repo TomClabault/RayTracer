@@ -51,6 +51,16 @@ public class SphereMaths implements ShapeMaths
 	}
 	
 	/*
+	 * Permet d'obtenir le centre de la sphère
+	 * 
+	 * @return Instance sur le point représentant le centre de la sphère 
+	 */
+	public Point getCenter()
+	{
+		return this.center;
+	}
+	
+	/*
 	 * Permet d'obtenir la couleur de la sphère
 	 * 
 	 * @return Objet Color.RGB contenant la couleur de la sphère

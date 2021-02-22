@@ -118,7 +118,7 @@ public class Vector
 	}
 	
 	/*
-	 * Calcule et retourne l'opposé du vecteur de l'instance appelante
+	 * Calcule et retourne l'opposé du vecteur de l'instance appelante. Ne modifie pas l'instance appelante
 	 * 
 	 * @return Si le vecteur de l'instance appelante est de coordonnée (x, y, z), retourne un vecteur de coordoonnées (-x, -y, -z)
 	 */

@@ -8,40 +8,14 @@ public class Ray
 	
 	public Ray(Point origin, Vector direction)
 	{
-		this.direction = direction;
 		this.origin = origin;
+		this.direction = new Vector(direction);
 	}
 	
 	public Ray(Point origin, Point direction)
 	{
 		this.origin = origin;
 		this.direction = new Vector(origin, direction);
-	}
-	
-	/*
-	 * Ce constructeur permet de créer un rayon et de le normaliser lors de sa création
-	 * 
-	 * @param origin Point d'origine du rayon
-	 * @param direction Vecteur dont les coordoonnées seront utilisées pour calculer la direction du rayon
-	 * @isNormalized True pour normaliser la direction du rayon à sa création, false sinon
-	 */
-	public Ray(Point origin, Vector direction, boolean isNormalized)
-	{
-		this(origin, direction);
-		this.normalize();
-	}
-	
-	/*
-	 * Ce constructeur permet de créer un rayon et de le normaliser lors de sa création
-	 * 
-	 * @param origin Point d'origine du rayon
-	 * @param direction Point utilisé pour calculer la direction du rayon
-	 * @isNormalized True pour normaliser la direction du rayon à sa création, false sinon
-	 */
-	public Ray(Point origin, Point direction, boolean isNormalized)
-	{
-		this(origin, direction);
-		this.normalize();
 	}
 	
 	public Point determinePoint(double coefficient)
@@ -90,7 +64,7 @@ public class Ray
 	}
 	
 	/*
-	 * Retourne l'opposé du vecteur de direction du rayon
+	 * Retourne l'opposé du vecteur de direction du rayon. Ne modifie pas l'instance appelante 
 	 * 
 	 * @return Si d = (x, y, z) le vecteur de direction du rayon, retourne v = (-x, -y, -z)
 	 */

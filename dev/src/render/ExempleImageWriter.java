@@ -30,8 +30,8 @@ public class ExempleImageWriter extends Application
 	@Override
 	public void start(Stage stage) 
 	{
-		int width = 1680;
-		int height = 1000;
+		int width = 1280;
+		int height = 720;
 
 		WritableImage writableImage = new WritableImage(width, height);
 
@@ -70,19 +70,22 @@ public class ExempleImageWriter extends Application
 
 		Camera c = new Camera();
 		c.setFOV(40);
-		Light l = new LightBulb(Point.add(c.getPosition(), new Point(1, 1, -4)), 1);
+		Light l = new LightBulb(new Point(2, -3, -8), 1);
 
 		ArrayList<Shape> shapeList = new ArrayList<>();
-		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), -2));
-		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.web("F86624"), 50, 1, 0.5));
-		shapeList.add(new SphereMaths(new Point(0.5, 1, -5), 0.25, Color.web("ED4747"), 80, 1, 0.5));
-		shapeList.add(new SphereMaths(new Point(1, 0, -5), 0.25, Color.rgb(200, 0, 0), 80, 1, 0.5));
-		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.web("F51B1B"), 80, 1, 0.5));
+		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), -2, Color.rgb(125, 125, 125)));
+		
+		
+		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.CHOCOLATE, 128, 0.5, 0.5));
+		
+		
+		shapeList.add(new SphereMaths(new Point(0.5, 1, -5), 0.25, Color.DIMGREY, 80, 1, 0.5));
+		//shapeList.add(new SphereMaths(new Point(1, 0, -5), 0.25, Color.rgb(200, 0, 0), 80, 1, 0.5));
+		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.DARKCYAN, 80, 1, 0.5));
 
 		MyScene s = new MyScene(c, l, shapeList,Color.web("3DCDF5"), 1);
 
 		doImage(r.computeImage(s), pw);
-
 	}
 
 	public void doImage(Color[][] colorTab, PixelWriter pw) 
