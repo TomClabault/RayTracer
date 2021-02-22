@@ -119,7 +119,10 @@ public class RayTracer
 			Vector normalAtIntersection = closestIntersectedObject.getNormal(closestIntersectionPoint);//On calcule la normale au point d'intersection avec la forme
 			Point interPointShift = Point.add(closestIntersectionPoint, Point.scalarMul(0.0001d, Vector.v2p(normalAtIntersection)));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
 			
+			
 			Vector shadowRayDir = new Vector(interPointShift, renderScene.getLight().getCenter());//On calcule la direction du rayon secondaire
+			double interToLightLength = shadowRayDir.length();
+			
 			Ray shadowRay = new Ray(interPointShift, shadowRayDir, true);//Création du rayon secondaire avec pour origine le premier point d'intersection décalé et avec comme direction le centre de la lampe
 			Point shadowRayInter = null;
 			
@@ -130,7 +133,9 @@ public class RayTracer
 				if(shadowRayInter != null)
 					break;
 			}
-
+			double interToShadowInterLength = 0;
+			if(shadowRayInter != null)
+				interToShadowInterLength = new Vector(closestIntersectionPoint, shadowRayInter).length();
 			
 
 			double lightIntensity = renderScene.getLight().getIntensity();
@@ -141,13 +146,15 @@ public class RayTracer
 			int objectRed = (int)(closestIntersectedObject.getColor().getRed()*255);
 			int objectGreen = (int)(closestIntersectedObject.getColor().getGreen()*255);
 			int objectBlue = (int)(closestIntersectedObject.getColor().getBlue()*255);
-			if(shadowRayInter == null)//Pas d'intersection, on retourne la pleine lumière
+			if(shadowRayInter == null || interToShadowInterLength > interToLightLength)//On a pas trouvé d'intersection entre l'objet et la lumière c'est à dire pas d'intersection trouvée ou alors une intersection derrière la lumière
 			{
 			
 				double diffuseTerm = lightIntensity*closestIntersectedObject.getDiffuse()*Vector.dotProduct(shadowRayDir, normalAtIntersection);
+				if(diffuseTerm < 0)
+					diffuseTerm = 0;
 				
 				Vector refVector = Vector.normalize(this.getReflectionVector(normalAtIntersection, shadowRayDir));
-				double spec2 = Math.pow(Math.max(Vector.dotProduct(refVector, ray.negate()), 0.0), closestIntersectedObject.getShininess());
+				double spec2 = Math.pow(Math.max(Vector.dotProduct(refVector, ray.negate()), 0), closestIntersectedObject.getShininess());
 				double specularTerm = lightIntensity*spec2;
 				if(specularTerm < 0)
 					specularTerm = 0;

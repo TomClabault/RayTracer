@@ -70,14 +70,14 @@ public class ExempleImageWriter extends Application
 
 		Camera c = new Camera();
 		c.setFOV(40);
-		Light l = new LightBulb(Point.add(c.getPosition(), new Point(0, 1, -3)), 1);
+		Light l = new LightBulb(Point.add(c.getPosition(), new Point(1, 1, -4)), 1);
 
 		ArrayList<Shape> shapeList = new ArrayList<>();
 		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), -2));
-		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.web("F86624"), 1, 1, 0.5));
-		shapeList.add(new SphereMaths(new Point(0.5, 1, -5), 0.25, Color.web("ED4747"), 10, 1, 0.5));
-		shapeList.add(new SphereMaths(new Point(1, 0, -5), 0.25, Color.rgb(200, 0, 0), 10, 1, 0.5));
-		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.web("F51B1B"), 10, 1, 0.5));
+		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.web("F86624"), 50, 1, 0.5));
+		shapeList.add(new SphereMaths(new Point(0.5, 1, -5), 0.25, Color.web("ED4747"), 80, 1, 0.5));
+		shapeList.add(new SphereMaths(new Point(1, 0, -5), 0.25, Color.rgb(200, 0, 0), 80, 1, 0.5));
+		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.web("F51B1B"), 80, 1, 0.5));
 
 		MyScene s = new MyScene(c, l, shapeList,Color.web("3DCDF5"), 1);
 
