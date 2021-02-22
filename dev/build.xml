@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="RayTracer" default="compile" basedir=".">
+<project name="RayTracer" default="packaging" basedir=".">
 
     <property name="src" value="src"/>
     <property name="build" value="build"/>
@@ -10,7 +10,9 @@
         <fileset dir="${projet.lib.dir}">
             <include name="*.jar"/>
         </fileset>
-        <pathelement location="${projet.bin.dir}"/>
+        <fileset dir="${build}">
+            <include name="**/*.class"/>
+        </fileset>
     </path>
 
     <target name="init">
@@ -27,6 +29,15 @@
             <exclude name="**/Rectangle.java"/>
             <classpath refid="projet.classpath"/>
         </javac>
+    </target>
+
+    <!--<target name="run" description="execution" depends="compile">
+        <java classname="render.ExempleImageWriter">
+            <classpath refid="./build/render/classes"/>
+        </java>
+    </target>-->
+    <target name="packaging" depends="compile">
+        <jar jarfile="test.jar" basedir="${build}" manifest="${basedir}/Manifest.txt"/>
     </target>
 
 </project>
