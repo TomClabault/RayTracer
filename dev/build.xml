@@ -3,7 +3,6 @@
 
     <property name="src" value="src"/>
     <property name="build" value="build"/>
-    <property name="classpath" value="lib"/>
     <property name="modulepath" value="javafx.controls"/>
     <property name="projet.lib.dir" value="lib"/>
 
@@ -23,7 +22,7 @@
 
     <target name="compile" depends="init" description="compile the source">
         <!-- Compile the Java code from ${src} into ${build} -->
-        <javac srcdir="${src}" destdir="${build}" classpath="${classpath}">
+        <javac srcdir="${src}" destdir="${build}">
             <exclude name="**/choiceWindow.java"/>
             <exclude name="**/Rectangle.java"/>
             <classpath refid="projet.classpath"/>
