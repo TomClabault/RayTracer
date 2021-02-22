@@ -14,8 +14,15 @@ public class Triangle implements Shape
 	Vector planeNormal;//Vecteur normal du plan formé par les 3 points du triangle
 	
 	Color color;
+	int shininess;
+	double specularCoeff;
 	
 	public Triangle(Point A, Point B, Point C)
+	{
+		this(A, B, C, Color.rgb(255, 255, 255), 10, 1);
+	}
+	
+	public Triangle(Point A, Point B, Point C, Color triangleColor, int shininess, double specularCoeff)
 	{
 		this.A = A;
 		this.B = B;
@@ -24,6 +31,8 @@ public class Triangle implements Shape
 		this.planeNormal = Vector.crossProduct(new Vector(A, B), new Vector(A, C));
 		
 		this.color = Color.rgb(255, 255, 255);
+		this.shininess = shininess;
+		this.specularCoeff = specularCoeff;
 	}
 	
 	public Color getColor()
@@ -81,6 +90,7 @@ public class Triangle implements Shape
 	 * 
 	 * @return Le point d'intersection du rayon et du triangle. Null s'il n'y a pas d'intersection
 	 */
+	@Override
 	public Point intersect(Ray ray)
 	{
 		Point intersection = null;
@@ -105,5 +115,23 @@ public class Triangle implements Shape
 			return intersection;//On le retourne
 		else//Cela veut dire que le rayon intersecte le plan formé par le triangle mais pas le triangle lui même
 			return null;
+	}
+
+	@Override
+	public double getDiffuse() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getShininess() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getSpecularCoeff() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

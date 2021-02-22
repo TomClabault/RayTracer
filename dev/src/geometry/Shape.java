@@ -33,6 +33,11 @@ public interface Shape
 	 */
 	public abstract int getShininess(); 
 	
+	/*
+	 * Permet d'obtenir le coefficient de spécularité de l'objet
+	 * 
+	 * @return Un réel entre 0 et 1 représentant le coefficient de spécularité de l'objet
+	 */
 	public abstract double getSpecularCoeff();
 	
 	/*

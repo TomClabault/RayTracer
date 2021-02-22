@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 
 import geometry.Shape;
+import javafx.scene.paint.Color;
 import scene.lights.Light;
 
 /*
@@ -16,6 +17,7 @@ public class MyScene
 
 	ArrayList<Shape> shapes;
 
+	Color backgroundColor;
 	double ambientLightIntensity;
 	
 	/*
@@ -27,12 +29,13 @@ public class MyScene
 	 * 
 	 * @param shapes Liste de forme qui seront rendues
 	 */
-	public MyScene(Camera camera, Light light, ArrayList<Shape> shapes, double ambientLightIntensity) 
+	public MyScene(Camera camera, Light light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity) 
 	{
 		this.camera = camera;
 		this.light = light;
 		this.shapes = shapes;
 
+		this.backgroundColor = backgroundColor;
 		this.ambientLightIntensity = ambientLightIntensity;
 	}
 
@@ -46,6 +49,16 @@ public class MyScene
 		return this.ambientLightIntensity;
 	}
 
+	/*
+	 * Permet d'obtenir la couleur du fond de la scène
+	 * 
+	 * @return La couleur du fond de la scène sous la forme d'un objet Color
+	 */
+	public Color getBackgroundColor()
+	{
+		return this.backgroundColor;
+	}
+	
 	/*
 	 * Retourne la caméra de la scène
 	 * 

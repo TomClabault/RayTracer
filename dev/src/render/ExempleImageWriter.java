@@ -17,81 +17,81 @@ import javafx.stage.Stage;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
+
 //from www.java2s.com
-public class ExempleImageWriter extends Application {
+public class ExempleImageWriter extends Application 
+{
 
-  public static void main(String[] args) {
-    Application.launch(args);
-  }
+	public static void main(String[] args) 
+	{
+		Application.launch(args);
+	}
 
-  @Override
-  public void start(Stage stage) 
-  {
-	  int width = 1680;
-	  int height = 1000;
-	  
-    WritableImage writableImage = new WritableImage(width,height);
+	@Override
+	public void start(Stage stage) 
+	{
+		int width = 1680;
+		int height = 1000;
 
-    PixelWriter pw = writableImage.getPixelWriter();
+		WritableImage writableImage = new WritableImage(width, height);
 
-    /*pw.setColor(2,2,Color.web("0x0000FF"));
-    pw.setColor(2,3,Color.web("0x0000FF"));
-    pw.setColor(3,2,Color.web("0x0000FF"));
-    pw.setColor(3,3,Color.web("0x0000FF"));/*Color.rgb(0,0,255)*/
-    /*Prend en argument un tableau de couleur*/
+		PixelWriter pw = writableImage.getPixelWriter();
 
-    ImageView imageView = new ImageView();
-    imageView.setImage(writableImage);
+		/*
+		 * pw.setColor(2,2,Color.web("0x0000FF"));
+		 * pw.setColor(2,3,Color.web("0x0000FF"));
+		 * pw.setColor(3,2,Color.web("0x0000FF"));
+		 * pw.setColor(3,3,Color.web("0x0000FF"));/*Color.rgb(0,0,255)
+		 */
+		/* Prend en argument un tableau de couleur */
 
-    Pane root = new Pane();
-    root.getChildren().add(imageView);
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
-    stage.setTitle("");
-    stage.show();
+		ImageView imageView = new ImageView();
+		imageView.setImage(writableImage);
 
-    /*pw.setColor(2,2,Color.web("0xFF0000"));
-    pw.setColor(3,2,Color.web("0xFF0000"));
-    pw.setColor(2,3,Color.web("0xFF0000"));
-    pw.setColor(3,3,Color.web("0xFF0000"));*/
-    //RayTracer rayTracer = new RayTracer(800,600);
-    //computeImage = rayTracer.computeImage();
-    //doImage(colorTab, pw);/*TODO trouver un moyen d'executer cette foction en récupérant le tableau ici*/
+		Pane root = new Pane();
+		root.getChildren().add(imageView);
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.setTitle("");
+		stage.show();
 
-    RayTracer r = new RayTracer(width, height);
+		/*
+		 * pw.setColor(2,2,Color.web("0xFF0000"));
+		 * pw.setColor(3,2,Color.web("0xFF0000"));
+		 * pw.setColor(2,3,Color.web("0xFF0000"));
+		 * pw.setColor(3,3,Color.web("0xFF0000"));
+		 */
+		// RayTracer rayTracer = new RayTracer(800,600);
+		// computeImage = rayTracer.computeImage();
+		// doImage(colorTab, pw);/*TODO trouver un moyen d'executer cette foction en
+		// récupérant le tableau ici*/
 
-    Camera c = new Camera(); c.setFOV(40);
-    Light l = new LightBulb(Point.add(c.getPosition(), new Point(0, 0, -3)), 1);
+		RayTracer r = new RayTracer(width, height);
 
-    ArrayList<Shape> shapeList = new ArrayList<>();
-    //shapeList.add(new PlaneMaths(new Vector(0, 1, 0), 0, Color.rgb(200, 200, 200)));
-    shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.web("F86624"), 128, 1, 0.5));
-    shapeList.add(new SphereMaths(new Point(0.5, 1, -5), 0.25, Color.web("ED4747"), 10, 1, 0.5));
-    shapeList.add(new SphereMaths(new Point(1, 0, -5), 0.25, Color.rgb(200, 0, 0), 10, 1, 0.5));
-    shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.web("F51B1B"), 10, 1, 0.5));
-    
+		Camera c = new Camera();
+		c.setFOV(40);
+		Light l = new LightBulb(Point.add(c.getPosition(), new Point(0, 1, -3)), 1);
 
-    MyScene s = new MyScene(c, l, shapeList, 0.7);
+		ArrayList<Shape> shapeList = new ArrayList<>();
+		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), -2));
+		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.web("F86624"), 1, 1, 0.5));
+		shapeList.add(new SphereMaths(new Point(0.5, 1, -5), 0.25, Color.web("ED4747"), 10, 1, 0.5));
+		shapeList.add(new SphereMaths(new Point(1, 0, -5), 0.25, Color.rgb(200, 0, 0), 10, 1, 0.5));
+		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.web("F51B1B"), 10, 1, 0.5));
 
+		MyScene s = new MyScene(c, l, shapeList,Color.web("3DCDF5"), 1);
 
-    doImage(r.computeImage(s),pw);
+		doImage(r.computeImage(s), pw);
 
-  }
+	}
 
-  public void doImage(Color[][] colorTab, PixelWriter pw) {
-      System.out.println("colorTab.length = " + colorTab.length);
-      System.out.println("colorTab[0].length = " + colorTab[0].length);
-      int width = colorTab[0].length;
-      int height = colorTab.length;
+	public void doImage(Color[][] colorTab, PixelWriter pw) 
+	{
+		int width = colorTab[0].length;
+		int height = colorTab.length;
 
-      for (int i = 0; i < height; i++) {
-          for (int j = 0; j < width; j++) {
-              //System.out.println(height);
-              //System.out.println(String.format("%d %d",i,j));
-              pw.setColor(j,i,colorTab[i][j]);
-          }
-      }
-      System.out.println("finish");
-
-  }
+		for (int i = 0; i < height; i++)
+			for (int j = 0; j < width; j++)
+				pw.setColor(j, i, colorTab[i][j]);
+	}
 }
