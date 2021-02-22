@@ -5,6 +5,14 @@
     <property name="build" value="build"/>
     <property name="classpath" value="lib"/>
     <property name="modulepath" value="javafx.controls"/>
+    <property name="projet.lib.dir" value="lib"/>
+
+    <path id="projet.classpath">
+        <fileset dir="${projet.lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement location="${projet.bin.dir}"/>
+    </path>
 
     <target name="init">
       <!-- Create the time stamp -->
@@ -15,8 +23,10 @@
 
     <target name="compile" depends="init" description="compile the source">
         <!-- Compile the Java code from ${src} into ${build} -->
-        <javac srcdir="${src}" destdir="${build}" classpath="${classpath}" modulepath="${modulepath}">
-            <exclude name="src/render/choiceWindow.java"/>
+        <javac srcdir="${src}" destdir="${build}" classpath="${classpath}">
+            <exclude name="**/choiceWindow.java"/>
+            <exclude name="**/Rectangle.java"/>
+            <classpath refid="projet.classpath"/>
         </javac>
     </target>
 
