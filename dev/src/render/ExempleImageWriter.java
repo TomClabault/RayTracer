@@ -70,10 +70,10 @@ public class ExempleImageWriter extends Application
 
 		Camera c = new Camera();
 		c.setFOV(40);
-		Light l = new LightBulb(new Point(2, -3, -8), 1);
+		Light l = new LightBulb(new Point(0, 2, -4), 1);
 
 		ArrayList<Shape> shapeList = new ArrayList<>();
-		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), -2, Color.rgb(125, 125, 125)));
+		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), Color.rgb(125, 125, 125)));
 		
 		
 		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.CHOCOLATE, 128, 0.5, 0.5));

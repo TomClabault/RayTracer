@@ -20,11 +20,11 @@ public class Ray
 	
 	public Point determinePoint(double coefficient)
 	{
-		return Point.add(this.getOrigin(), Point.scalarMul(coefficient, this.getDirectionP()));
+		return Point.add(Point.scalarMul(coefficient, this.getDirectionP()), this.getOrigin());
 	}
 	
 	/*
-	 * Permet d'obtenir la direction du rayon
+	 * Permet d'obtenir la direction du rayon	
 	 * 
 	 * @return Vecteur représentant la direction du rayon
 	 */

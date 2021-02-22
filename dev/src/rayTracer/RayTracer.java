@@ -6,7 +6,6 @@ import geometry.Point;
 import geometry.Ray;
 import geometry.Shape;
 import geometry.Vector;
-import geometry.shapes.SphereMaths;
 import javafx.scene.paint.Color;
 import scene.Camera;
 import scene.MyScene;
@@ -155,27 +154,21 @@ public class RayTracer
 			Shape shadowInterObject = computeClosestInterPoint(objectList, shadowRay, shadowInterPoint);
 
 			double interToShadowInterDist = 0;
-			if(shadowInterPoint != null)
-				interToShadowInterDist = new Vector(rayInterPoint, shadowInterPoint).length();
-			
-
-			double lightIntensity = renderScene.getLight().getIntensity();
-			double ambientTerm = lightIntensity * renderScene.getAmbientLightIntensity();
+			if(shadowInterObject != null)
+				interToShadowInterDist = Point.distance(rayInterPoint, shadowInterPoint);
 
 			
-			
-			if(shadowInterObject == null || interToShadowInterDist > interToLightDist)//On a pas trouvé d'intersection entre l'objet et la lumière c'est à dire pas d'intersection trouvée ou alors une intersection derrière la lumière
+			if(shadowInterObject == null || interToShadowInterDist > interToLightDist)//Aucune intersection trouvée pour aller jusqu'à la lumière, on peut calculer l'intensité avec Phong
 			{
-				//SphereMaths objSphere = (SphereMaths)shadowInterObject;
-				//Point center = objSphere.getCenter();
-				
 				Vector normalAtIntersection = rayInterObject.getNormal(rayInterPoint);//Normale au point d'intersection avec la forme
 				Color phongShadingColor = computePhongShading(renderScene, ray, shadowRayDir, rayInterObject, normalAtIntersection);
 				
 				return phongShadingColor;
 			}
-			else//Une intersection a été trouvée, on retourne donc un pixel colorée et de luminosité égale à la luminosité ambiante de la scène
+			else//Une intersection a été trouvée et l'objet intersecté est entre la lumière et le départ du shadow ray, le pixel est dans l'ombre. On retourne la couleur * la luminosité ambiante
 			{
+				double ambientTerm = renderScene.getLight().getIntensity() * renderScene.getAmbientLightIntensity();
+				
 				int pixelRed = (int)(rayInterObject.getColor().getRed() * ambientTerm * 255);
 				int pixelGreen = (int)(rayInterObject.getColor().getGreen() * ambientTerm * 255);
 				int pixelBlue = (int)(rayInterObject.getColor().getBlue() * ambientTerm * 255);
@@ -188,7 +181,7 @@ public class RayTracer
 	}
 	
 	/*
-	 * Convertit les coordonnées d'un pixel sur l'image (1920x1080 par exemple) en coordonnées 3D dans la scène à rendre
+	 * Convertit les coordonnées d'un pixel sur l'image (un pixel de l'image 1920x1080 par exemple) en coordonnées 3D dans la scène à rendre
 	 * 
 	 * @param camera La caméra selon laquelle on souhaite obtenir les coordonnées du pixel
 	 * @param x Coordonnées x du pixel sur l'image (de 0 à 1919 pour une résolution de 1920 de large par exemple)
@@ -215,36 +208,6 @@ public class RayTracer
 		
 		return new Point(xWorld, yWorld, camera.getDirection().getZ());
 	}
-	
-//	public Shape detClosestInterPointObj(MyScene renderScene, ArrayList<Point> intersectionPoints, ArrayList<Shape> intersectedObjects, Point outClosestInterPoint)
-//	{
-//		Shape closestIntersectedObject = null;
-//		
-//		if(intersectionPoints.size() > 1)//Il y plus d'un point d'intersection, on va devoir calculer le quel est le plus proche
-//		{
-//			Double min = null;
-//			for(int i = 0; i < intersectionPoints.size(); i++)
-//			{
-//				Point point = intersectionPoints.get(i);
-//				double distPointCam = Point.distance(point,  renderScene.getCamera().getPosition());
-//				
-//				if(min == null || min > distPointCam)
-//				{
-//					min = distPointCam;
-//					
-//					outClosestInterPoint.copyIn(point);
-//					closestIntersectedObject = intersectedObjects.get(i);
-//				}
-//			}
-//		}
-//		else//Il n'y a qu'un seul point d'intersection donc on peut récupérer le premier élément de la liste des points d'intersection
-//		{
-//			outClosestInterPoint.copyIn(intersectionPoints.get(0));
-//			closestIntersectedObject = intersectedObjects.get(0);
-//		}
-//		
-//		return closestIntersectedObject;
-//	}
 	
 	/*
 	 * Calcule le rayon réfléchi par la surface en fonction de la position de la lumière par rapport au point d'intersection

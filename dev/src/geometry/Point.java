@@ -14,27 +14,33 @@ public class Point
         this.z = z;
     }
 
-    public double getX(){
+    public double getX()
+    {
         return this.x;
     }
 
-    public double getY(){
+    public double getY()
+    {
         return this.y;
     }
 
-    public double getZ(){
+    public double getZ()
+    {
         return this.z;
     }
 
-    public void setX(double newX){
+    public void setX(double newX)
+    {
         this.x = newX;
     }
 
-    public void setY(double newY){
+    public void setY(double newY)
+    {
         this.y = newY;
     }
 
-    public void setZ(double newZ){
+    public void setZ(double newZ)
+    {
         this.z = newZ;
     }
 

@@ -8,58 +8,50 @@ import javafx.scene.paint.Color;
 
 public class PlaneMaths implements ShapeMaths
 {
-	//Equation de plan: Ax + By + Cz + D = 0
+	//Equation de plan: (p - point).normal = 0
 	Vector normal;//partie (A, B, C) de l'équation
-	double d;//partie D de l'équation
+	Point point;//partie D de l'équation
 	
 	Color color;
 	int shininess;
 	double diffuse;
 	
 	/*
-	 * Crée un plan à partir d'un vecteur normal au plan et du coefficient D de l'équation de plan. D agit sur le "coulissement" du plan le long de sa normale. 
-	 * Un D positif remontera le plan dans le sens de sa normale, un D négatif le descendra
+	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan
 	 * 
 	 * @param normal Vecteur normal au plan
-	 * @param d Composante D de l'équation du plan
+	 * @param point Point par lequel passe le vecteur
 	 */
-	public PlaneMaths(Vector normal, double d)
+	public PlaneMaths(Vector normal, Point point)
 	{
-		this(normal, d, Color.rgb(128, 128, 128), 100, 1);
+		this(normal, point, Color.rgb(128, 128, 128), 100, 1);
 	}
 	
 	/*
-	 * Crée un plan à partir d'un vecteur normal au plan et du coefficient D de l'équation de plan. D agit sur le "coulissement" du plan le long de sa normale. 
-	 * Un D positif remontera le plan dans le sens de sa normale, un D négatif le descendra
+	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan 
 	 * 
 	 * @param normal Vecteur normal au plan
-	 * @param d Composante D de l'équation du plan
+	 * @param point Point par lequel passe le vecteur
 	 * @param color Couleur du plan
 	 */
-	public PlaneMaths(Vector normal, double d, Color color)
+	public PlaneMaths(Vector normal, Point point, Color color)
 	{
-		this.normal = normal;
-		this.d = d;
-
-		this.color = color;
-		this.shininess = 2;
-		this.diffuse = 0.5;
+		this(normal, point, color, 2, 0.5);
 	}
 	
 	/*
-	 * Crée un plan à partir d'un vecteur normal au plan et du coefficient D de l'équation de plan. D agit sur le "coulissement" du plan le long de sa normale. 
-	 * Un D positif remontera le plan dans le sens de sa normale, un D négatif le descendra
+	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan 
 	 * 
 	 * @param normal Vecteur normal au plan
-	 * @param d Composante D de l'équation du plan
+	 * @param point Point par lequel passe le vecteur
 	 * @param color Couleur du plan
 	 * @param shininess Brillance du plan. Plus la valeur est petite pour le plan est brillant
 	 * @param diffuseCoeff Coefficient de diffusion de la lumière à l'impact du plan. Plus le coefficient est petit moins le plan est diffus
 	 */
-	public PlaneMaths(Vector normal, double d, Color color, int shininess, double diffuseCoeff)
+	public PlaneMaths(Vector normal, Point point, Color color, int shininess, double diffuseCoeff)
 	{
 		this.normal = normal;
-		this.d = d;
+		this.point = point;
 
 		this.color = color;
 		this.shininess = shininess;
@@ -134,13 +126,16 @@ public class PlaneMaths implements ShapeMaths
 	@Override
 	public Point intersect(Ray ray) 
 	{
-		if(Math.abs(Vector.dotProduct(ray.getDirection(), this.normal)) < 0.0000001d)//Le rayon et le plan sont parallèles
+		double NL = Vector.dotProduct(normal, ray.getDirection());
+		if(NL > 0.0000001d && NL < 0.0000001d)//Le rayon et le plan sont parallèles
 			return null;
 			
-		double coeffVectorPoint = (Vector.dotProduct(this.normal, ray.getOriginV()) + this.d) / Vector.dotProduct(this.normal, ray.getDirection());
-		if(coeffVectorPoint > 0)
+		
+	    Vector p0l0 = Point.p2v(Point.sub(this.point, ray.getOrigin())); 
+	    double coeffVectorPoint = Vector.dotProduct(p0l0, this.normal) / NL;
+	    if(coeffVectorPoint > 0)
 			return ray.determinePoint(coeffVectorPoint);
-		else
+	    else
 			return null;
 	}
 }
