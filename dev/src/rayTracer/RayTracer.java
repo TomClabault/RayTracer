@@ -8,6 +8,7 @@ import maths.CTWMatrix;
 import maths.MatrixD;
 import maths.Point;
 import maths.Ray;
+import maths.RotationMatrix;
 import maths.Vector;
 import scene.MyScene;
 
@@ -82,7 +83,7 @@ public class RayTracer
 	public Color[][] computeImage(MyScene renderScene)
 	{
 		CTWMatrix ctwMatrix = new CTWMatrix(renderScene.getCamera().getPosition(), renderScene.getCamera().getDirection());
-		//RotationMatrix rotMatrix = new RotationMatrix(RotationMatrix.yAxis, 0);
+		//RotationMatrix rotMatrix = new RotationMatrix(RotationMatrix.yAxis, -30);
 		//MatrixD transformMatrix = MatrixD.mulMatrix(ctwMatrix, rotMatrix);
 		
 		double FOV = renderScene.getCamera().getFOV();
@@ -96,7 +97,7 @@ public class RayTracer
 				Ray cameraRay = new Ray(ctwMatrix.mulPoint(new Point(0, 0, 0)), pixelWorldCoords);
 				cameraRay.normalize();
 				
-				this.renderedPixels[y][x] = this.computePixel(x, y, renderScene, cameraRay);
+				this.renderedPixels[y][x] = this.computePixel(renderScene, cameraRay);
 			}
 		}
 		
@@ -141,7 +142,7 @@ public class RayTracer
 	 * 
 	 * @return Une instance de Color.RGB(r, g, b)
 	 */
-	public Color computePixel(int x, int y, MyScene renderScene, Ray ray)
+	public Color computePixel(MyScene renderScene, Ray ray)
 	{
 		ArrayList<Shape> objectList = renderScene.getSceneObjects();
 		
