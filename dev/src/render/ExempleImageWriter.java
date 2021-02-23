@@ -32,8 +32,8 @@ public class ExempleImageWriter extends Application
 	@Override
 	public void start(Stage stage) 
 	{
-		int width = 1920;
-		int height = 1080;
+		int width = 1720;
+		int height = 1000;
 
 		WritableImage writableImage = new WritableImage(width, height);
 
@@ -56,7 +56,8 @@ public class ExempleImageWriter extends Application
 		RayTracer rayTracerInstance = new RayTracer(width, height);
 
 		//Camera cameraRT = new Camera(new Point(-2, 0, -6), Point.p2v(Point.sub(new Point(0, 0, -6), new Point(2, 0, -6))));
-		Camera cameraRT = new Camera();
+		Camera cameraRT = new Camera(new Point(1, 0, 1));
+		//Camera cameraRT = new Camera();
 		cameraRT.setFOV(40);
 		Light l = new LightBulb(new Point(0, 2, -4), 1);
 

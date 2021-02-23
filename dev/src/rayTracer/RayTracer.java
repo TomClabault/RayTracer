@@ -83,7 +83,7 @@ public class RayTracer
 	public Color[][] computeImage(MyScene renderScene)
 	{
 		CTWMatrix ctwMatrix = new CTWMatrix(renderScene.getCamera().getPosition(), Vector.v2p(renderScene.getCamera().getDirection()));
-		RotationMatrix rotMatrix = new RotationMatrix(RotationMatrix.xAxis, -90);
+		RotationMatrix rotMatrix = new RotationMatrix(RotationMatrix.yAxis, -90);
 		MatrixD transformMatrix = MatrixD.mulMatrix(ctwMatrix, rotMatrix);
 		
 		double FOV = renderScene.getCamera().getFOV();

@@ -21,7 +21,7 @@ public class RotationMatrix extends MatrixD
 		
 		switch (axis) 
 		{
-		case zAxis: 
+		case xAxis: 
 		{
 			super.matrix[0][0] = 1;
 			super.matrix[1][0] = 0;
@@ -51,7 +51,7 @@ public class RotationMatrix extends MatrixD
 			
 			break;
 		}
-		case xAxis:
+		case zAxis:
 		{
 			super.matrix[2][0] = 0;
 			super.matrix[2][1] = 0;

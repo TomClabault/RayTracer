@@ -84,8 +84,12 @@ public class MatrixD
 		double[][] newCoeffs = new double[m1.m][m2.n];
 		for(int i = 0; i < m1.m; i++)
 			for(int j = 0; j < m2.n; j++)
+				newCoeffs[i][j] = 0;
+		
+		for(int i = 0; i < m1.m; i++)
+			for(int j = 0; j < m2.n; j++)
 				for(int k = 0; k < m1.n; k++)
-					newCoeffs[i][j] = m1.get(i, k) + m2.get(k, j);
+					newCoeffs[i][j] += m1.get(i, k) * m2.get(k, j);
 		
 		return new MatrixD(m1.m, m2.n, newCoeffs);
 	}
@@ -102,10 +106,26 @@ public class MatrixD
 		double[] pointToConvertCoords = new double[] {pointToConvert.getX(), pointToConvert.getY(), pointToConvert.getZ()};
 		double[] convertedPointCoords = new double[] {0, 0, 0};
 		
-		for(int i = 0; i < 3 ; i++)
-			for(int j = 0; j < 4; j++)
-				convertedPointCoords[i] += pointToConvertCoords[i] * this.matrix[j][i];
+		for(int i = 0; i < 3 ; i++)//< 3 car on convertit des points 3D. Cette fonction n'est pas flexible
+			for(int j = 0; j < 3; j++)
+				convertedPointCoords[i] += pointToConvertCoords[j] * this.matrix[j][i];
 		
 		return new Point(convertedPointCoords[0], convertedPointCoords[1], convertedPointCoords[2]);
+	}
+	
+	public String toString()
+	{
+		String output = "";
+
+		for(int i = 0; i < this.m; i++)
+		{
+			for(int j = 0; j < this.n; j++)
+			{
+				output += String.format("%5.02f ", this.matrix[i][j]);
+			}
+			output += "\n";
+		}
+		
+		return output;
 	}
 }
