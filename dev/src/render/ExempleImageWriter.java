@@ -14,6 +14,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import maths.Point;
+import maths.Vector;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
@@ -30,20 +32,12 @@ public class ExempleImageWriter extends Application
 	@Override
 	public void start(Stage stage) 
 	{
-		int width = 1280;
-		int height = 720;
+		int width = 1920;
+		int height = 1080;
 
 		WritableImage writableImage = new WritableImage(width, height);
 
 		PixelWriter pw = writableImage.getPixelWriter();
-
-		/*
-		 * pw.setColor(2,2,Color.web("0x0000FF"));
-		 * pw.setColor(2,3,Color.web("0x0000FF"));
-		 * pw.setColor(3,2,Color.web("0x0000FF"));
-		 * pw.setColor(3,3,Color.web("0x0000FF"));/*Color.rgb(0,0,255)
-		 */
-		/* Prend en argument un tableau de couleur */
 
 		ImageView imageView = new ImageView();
 		imageView.setImage(writableImage);
@@ -55,37 +49,26 @@ public class ExempleImageWriter extends Application
 		stage.setTitle("");
 		stage.show();
 
-		/*
-		 * pw.setColor(2,2,Color.web("0xFF0000"));
-		 * pw.setColor(3,2,Color.web("0xFF0000"));
-		 * pw.setColor(2,3,Color.web("0xFF0000"));
-		 * pw.setColor(3,3,Color.web("0xFF0000"));
-		 */
-		// RayTracer rayTracer = new RayTracer(800,600);
-		// computeImage = rayTracer.computeImage();
-		// doImage(colorTab, pw);/*TODO trouver un moyen d'executer cette foction en
-		// récupérant le tableau ici*/
 
-		RayTracer r = new RayTracer(width, height);
+		
+		
+		
+		RayTracer rayTracerInstance = new RayTracer(width, height);
 
-		Camera c = new Camera();
-		c.setFOV(40);
+		//Camera cameraRT = new Camera(new Point(-2, 0, -6), Point.p2v(Point.sub(new Point(0, 0, -6), new Point(2, 0, -6))));
+		Camera cameraRT = new Camera();
+		cameraRT.setFOV(40);
 		Light l = new LightBulb(new Point(0, 2, -4), 1);
 
 		ArrayList<Shape> shapeList = new ArrayList<>();
 		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), Color.rgb(125, 125, 125)));
-		
-		
 		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.CHOCOLATE, 128, 0.5, 0.5));
-		
-		
 		shapeList.add(new SphereMaths(new Point(0.5, 1, -5), 0.25, Color.DIMGREY, 80, 1, 0.5));
-		//shapeList.add(new SphereMaths(new Point(1, 0, -5), 0.25, Color.rgb(200, 0, 0), 80, 1, 0.5));
 		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.DARKCYAN, 80, 1, 0.5));
 
-		MyScene s = new MyScene(c, l, shapeList,Color.web("3DCDF5"), 1);
+		MyScene sceneRT = new MyScene(cameraRT, l, shapeList,Color.LIGHTSKYBLUE, 1);
 
-		doImage(r.computeImage(s), pw);
+		doImage(rayTracerInstance.computeImage(sceneRT), pw);
 	}
 
 	public void doImage(Color[][] colorTab, PixelWriter pw) 

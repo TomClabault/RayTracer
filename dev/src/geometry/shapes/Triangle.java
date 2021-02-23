@@ -1,11 +1,11 @@
 package geometry.shapes;
 
-import geometry.Point;
-import geometry.Ray;
 import geometry.Shape;
 import geometry.ShapeTriangle;
-import geometry.Vector;
 import javafx.scene.paint.Color;
+import maths.Point;
+import maths.Ray;
+import maths.Vector;
 
 public class Triangle implements Shape
 {

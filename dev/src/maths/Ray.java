@@ -1,4 +1,4 @@
-package geometry;
+package maths;
 
 public class Ray
 {

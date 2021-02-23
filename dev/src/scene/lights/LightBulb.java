@@ -1,6 +1,6 @@
 package scene.lights;
 
-import geometry.Point;
+import maths.Point;
 
 public class LightBulb implements Light 
 {

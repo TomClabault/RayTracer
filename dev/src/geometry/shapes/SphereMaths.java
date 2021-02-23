@@ -1,10 +1,10 @@
 package geometry.shapes;
 
-import geometry.Point;
-import geometry.Ray;
 import geometry.ShapeMaths;
-import geometry.Vector;
 import javafx.scene.paint.Color;
+import maths.Point;
+import maths.Ray;
+import maths.Vector;
 
 /*
  * Classe représentant une sphère décrite par son centre ainsi que son rayon. Représente la "version" mathématique d'une sphère. 

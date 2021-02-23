@@ -1,7 +1,7 @@
 package scene;
 
-import geometry.Point;
-import geometry.Vector;
+import maths.Point;
+import maths.Vector;
 
 /*
  * Class permettant de représenter une caméra définie par sa position dans l'espace, la direction dans laquelle elle regarde ainsi que son champ de vision

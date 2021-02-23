@@ -1,10 +1,10 @@
 package geometry.shapes;
 
-import geometry.Point;
-import geometry.Ray;
 import geometry.ShapeMaths;
-import geometry.Vector;
 import javafx.scene.paint.Color;
+import maths.Point;
+import maths.Ray;
+import maths.Vector;
 
 public class PlaneMaths implements ShapeMaths
 {

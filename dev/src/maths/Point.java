@@ -1,4 +1,4 @@
-package geometry;
+package maths;
 
 /*
  * Classe permettant de représenter un point de l'espace en coordonnées réelles

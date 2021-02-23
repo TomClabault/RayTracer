@@ -1,9 +1,10 @@
 package geometry.shapes;
 
 import geometry.shapes.Triangle;
+import maths.Point;
 import geometry.Shape;
 import geometry.ShapeTriangle;
-import geometry.Point;
+
 import java.util.ArrayList;
 import java.lang.Math;
 

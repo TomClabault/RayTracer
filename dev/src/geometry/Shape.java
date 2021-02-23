@@ -1,6 +1,9 @@
 package geometry;
 
 import javafx.scene.paint.Color;
+import maths.Point;
+import maths.Ray;
+import maths.Vector;
 
 public interface Shape
 {

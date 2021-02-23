@@ -2,12 +2,14 @@ package rayTracer;
 
 import java.util.ArrayList;
 
-import geometry.Point;
-import geometry.Ray;
 import geometry.Shape;
-import geometry.Vector;
 import javafx.scene.paint.Color;
-import scene.Camera;
+import maths.CTWMatrix;
+import maths.MatrixD;
+import maths.Point;
+import maths.Ray;
+import maths.RotationMatrix;
+import maths.Vector;
 import scene.MyScene;
 
 /*
@@ -80,11 +82,17 @@ public class RayTracer
 	 */
 	public Color[][] computeImage(MyScene renderScene)
 	{
+		CTWMatrix ctwMatrix = new CTWMatrix(renderScene.getCamera().getPosition(), Vector.v2p(renderScene.getCamera().getDirection()));
+		RotationMatrix rotMatrix = new RotationMatrix(RotationMatrix.xAxis, -90);
+		MatrixD transformMatrix = MatrixD.mulMatrix(ctwMatrix, rotMatrix);
+		
+		double FOV = renderScene.getCamera().getFOV();
+		
 		for(int y = 0; y < this.renderHeight; y++)
 		{
 			for(int x = 0; x < this.renderLength; x++)
 			{
-				Point pixelWorldCoords = this.convPxCoToWorldCoords(renderScene.getCamera(), x, y);
+				Point pixelWorldCoords = this.convPxCoToWorldCoords(FOV, x, y, transformMatrix);
 				
 				Ray cameraRay = new Ray(renderScene.getCamera().getPosition(), pixelWorldCoords);
 				cameraRay.normalize();
@@ -100,14 +108,17 @@ public class RayTracer
 	{
 		double lightIntensity = renderScene.getLight().getIntensity();
 		
+		//Composante ambiante
 		double ambientTerm = lightIntensity * renderScene.getAmbientLightIntensity();
 		
+		//Composante diffuse
 		double diffuseTerm = lightIntensity*closestIntersectedObject.getDiffuse()*Vector.dotProduct(shadowRayDir, normalAtIntersection);
 		if(diffuseTerm < 0)
 			diffuseTerm = 0;
 		
-		Vector refVector = Vector.normalize(this.getReflectionVector(normalAtIntersection, shadowRayDir));
-		double spec2 = Math.pow(Math.max(Vector.dotProduct(refVector, ray.negate()), 0), closestIntersectedObject.getShininess());
+		//Composante spéculaire
+		Vector reflectVector = Vector.normalize(this.getReflectionVector(normalAtIntersection, shadowRayDir));
+		double spec2 = Math.pow(Math.max(Vector.dotProduct(reflectVector, ray.negate()), 0), closestIntersectedObject.getShininess());
 		double specularTerm = lightIntensity*spec2;
 		if(specularTerm < 0)
 			specularTerm = 0;
@@ -189,13 +200,13 @@ public class RayTracer
 	 * 
 	 * @return Un point de cooordonnées (x, y, z) tel que x, y et z représentent les coordonnées du pixel dans la scène
 	 */
-	public Point convPxCoToWorldCoords(Camera camera, int x, int y)
+	public Point convPxCoToWorldCoords(double FOV, int x, int y, MatrixD ctwMatrix)
 	{
 		double xWorld = (double)x;
 		double yWorld = (double)y;
 		
 		double aspectRatio = (double)this.renderLength / (double)this.renderHeight;
-		double demiHeightPlane = Math.tan(Math.toRadians(camera.getFOV())/2);
+		double demiHeightPlane = Math.tan(Math.toRadians(FOV/2));
 		
 		xWorld = (xWorld + 0.5) / this.renderLength;//Normalisation des pixels. Maintenant dans [0, 1]
 		xWorld = xWorld * 2 - 1;//Décalage des pixels dans [-1, 1]
@@ -206,7 +217,10 @@ public class RayTracer
 		yWorld = 1 - yWorld * 2;//Décalage des pixels dans [-1, 1]
 		yWorld *= demiHeightPlane;
 		
-		return new Point(xWorld, yWorld, camera.getDirection().getZ());
+		Point pixelWorld = new Point(xWorld, yWorld, -1);
+		Point pixelWorldConverted = ctwMatrix.mulPoint(pixelWorld);
+		
+		return pixelWorldConverted;
 	}
 	
 	/*
