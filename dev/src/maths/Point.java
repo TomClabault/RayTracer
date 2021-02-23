@@ -57,6 +57,11 @@ public class Point
     	return new Point(a.getX() + b.getX(), a.getY() + b.getY(), a.getZ() + b.getZ());
     }
     
+    /*
+     * Permet de copier un point passé en argument dans l'instance du point appelante
+     * 
+     * @param pointToCopy Point dont les coordonnées vont être copiées dans l'instance actuelle
+     */
     public void copyIn(Point pointToCopy)
     {
     	this.x = pointToCopy.getX();

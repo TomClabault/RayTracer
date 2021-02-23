@@ -84,6 +84,38 @@ public class Vector
 	}
 	
 	/*
+	 * Vérifie si deux vecteurs sont colinéaires ou non
+	 * *
+	 * @param u Premier vecteur
+	 * @param v Deuxième vecteur
+	 * 
+	 * @return True si les deux vecteurs passés en argument sont coliénaires. False sinon
+	 */
+	public static boolean areColinear(Vector u, Vector v)
+	{
+		double xy = u.x*v.y - u.y*v.x;
+		double xz = u.x*v.z - u.z*v.x;
+		double yz = u.y*v.z - u.z*v.y;
+		
+		if(Math.abs(xy + xz) < 0.00001d && Math.abs(xy + yz) < 0.00001d && Math.abs(xz + yz) < 0.0001d)
+			return true;
+		else
+			return false;
+	}
+	
+	/*
+     * Permet de copier un vecteur passé en argument dans l'instance du vecteur appelante
+     * 
+     * @param vectorToCopy Vecteur dont les coordonnées vont être copiées dans l'instance actuelle
+     */
+    public void copyIn(Vector vectorToCopy)
+    {
+    	this.x = vectorToCopy.x;
+    	this.y = vectorToCopy.y;
+    	this.z = vectorToCopy.z;
+    }
+	
+	/*
 	 * @param u Premier vecteur
 	 * @param v Deuxième vecteur
 	 * 

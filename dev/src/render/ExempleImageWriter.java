@@ -51,15 +51,13 @@ public class ExempleImageWriter extends Application
 
 
 		
-		
-		
 		RayTracer rayTracerInstance = new RayTracer(width, height);
 
 		//Camera cameraRT = new Camera(new Point(-2, 0, -6), Point.p2v(Point.sub(new Point(0, 0, -6), new Point(2, 0, -6))));
-		Camera cameraRT = new Camera(new Point(3, 0, -6), new Point(0, 0, -6));
+		Camera cameraRT = new Camera(new Point(1, 0, 0), new Point(0, 0, -1));
 		//Camera cameraRT = new Camera(new Point(0.1, 0, 2));
 		//Camera cameraRT = new Camera();
-		cameraRT.setFOV(90);
+		cameraRT.setFOV(40);
 		Light l = new LightBulb(new Point(0, 2, -4), 1);
 
 		ArrayList<Shape> shapeList = new ArrayList<>();

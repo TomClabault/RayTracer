@@ -8,7 +8,6 @@ import maths.CTWMatrix;
 import maths.MatrixD;
 import maths.Point;
 import maths.Ray;
-import maths.RotationMatrix;
 import maths.Vector;
 import scene.MyScene;
 
@@ -83,8 +82,8 @@ public class RayTracer
 	public Color[][] computeImage(MyScene renderScene)
 	{
 		CTWMatrix ctwMatrix = new CTWMatrix(renderScene.getCamera().getPosition(), renderScene.getCamera().getDirection());
-		RotationMatrix rotMatrix = new RotationMatrix(RotationMatrix.yAxis, 0);
-		MatrixD transformMatrix = MatrixD.mulMatrix(ctwMatrix, rotMatrix);
+		//RotationMatrix rotMatrix = new RotationMatrix(RotationMatrix.yAxis, 0);
+		//MatrixD transformMatrix = MatrixD.mulMatrix(ctwMatrix, rotMatrix);
 		
 		double FOV = renderScene.getCamera().getFOV();
 		

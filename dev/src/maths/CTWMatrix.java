@@ -11,7 +11,14 @@ public class CTWMatrix extends MatrixD
 		
 		//Point cameraDirectionNorm = Vector.v2p(Vector.normalize(Point.p2v(cameraDirection)));
 		
-		Vector magicVector = new Vector(new Point(0, 1, 0));
+		Vector magicVector = new Vector(0, 1, 0);
+		
+		//Si jamais l'axe z de la caméra est colinéaire au magic vector, on ne va pas 
+		//pouvoir déterminer un vecteur perpendiculaire au deux qui nous donnerait l'axe x.
+		//Il faut donc qu'on modifie le magicVector en le rendant non colinéaire à l'axe de regard de la caméra
+		if(Vector.areColinear(magicVector, new Vector(cameraDirection, cameraOrigin))) 
+			magicVector = new Vector(1, 1, 0);
+			
 		Vector zAxis = Vector.normalize(new Vector(cameraDirection, cameraOrigin));
 		Vector xAxis = Vector.normalize(Vector.crossProduct(magicVector, zAxis));
 		Vector yAxis = Vector.crossProduct(zAxis, xAxis);
