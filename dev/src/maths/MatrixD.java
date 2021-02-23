@@ -79,12 +79,9 @@ public class MatrixD
 	public static MatrixD mulMatrix(MatrixD m1, MatrixD m2)
 	{
 		if(m1.n != m2.m)
-			throw new IncompatibleMatricesException("Les deux matrices passées en argument ne peuvent pas être multipliées?");
+			throw new IncompatibleMatricesException("Les deux matrices passées en argument ne peuvent pas être multipliées");
 		
 		double[][] newCoeffs = new double[m1.m][m2.n];
-		for(int i = 0; i < m1.m; i++)
-			for(int j = 0; j < m2.n; j++)
-				newCoeffs[i][j] = 0;
 		
 		for(int i = 0; i < m1.m; i++)
 			for(int j = 0; j < m2.n; j++)
@@ -104,13 +101,14 @@ public class MatrixD
 	public Point mulPoint(Point pointToConvert)
 	{
 		double[] pointToConvertCoords = new double[] {pointToConvert.getX(), pointToConvert.getY(), pointToConvert.getZ()};
-		double[] convertedPointCoords = new double[] {0, 0, 0};
+		double[] convertedPointCoords = new double[] {0, 0, 0, 0};
 		
-		for(int i = 0; i < 3 ; i++)//< 3 car on convertit des points 3D. Cette fonction n'est pas flexible
+		for(int i = 0; i < 3; i++)//< 3 car on convertit des points 3D. Cette fonction n'est pas flexible
 			for(int j = 0; j < 3; j++)
 				convertedPointCoords[i] += pointToConvertCoords[j] * this.matrix[j][i];
 		
-		return new Point(convertedPointCoords[0], convertedPointCoords[1], convertedPointCoords[2]);
+		//On retourne le point de bonnes coordonnées + la translation qui se trouve à la 4ème ligne de la matrice 
+		return Point.add(new Point(convertedPointCoords[0], convertedPointCoords[1], convertedPointCoords[2]), new Point(this.matrix[3][0], this.matrix[3][1], this.matrix[3][2]));
 	}
 	
 	public String toString()

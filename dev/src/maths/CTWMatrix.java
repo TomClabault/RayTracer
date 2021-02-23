@@ -9,7 +9,9 @@ public class CTWMatrix extends MatrixD
 	{
 		super(4, 3);
 		
-		Vector magicVector = new Vector(new Point(0, 0, 0), new Point(0, 1, 0));
+		//Point cameraDirectionNorm = Vector.v2p(Vector.normalize(Point.p2v(cameraDirection)));
+		
+		Vector magicVector = new Vector(new Point(0, 1, 0));
 		Vector zAxis = Vector.normalize(new Vector(cameraDirection, cameraOrigin));
 		Vector xAxis = Vector.normalize(Vector.crossProduct(magicVector, zAxis));
 		Vector yAxis = Vector.crossProduct(zAxis, xAxis);

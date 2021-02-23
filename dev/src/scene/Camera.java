@@ -1,7 +1,6 @@
 package scene;
 
 import maths.Point;
-import maths.Vector;
 
 /*
  * Class permettant de représenter une caméra définie par sa position dans l'espace, la direction dans laquelle elle regarde ainsi que son champ de vision
@@ -10,7 +9,7 @@ public class Camera
 {
 	Point position;
 	
-	Vector direction;//Direction dans laquelle regarde la caméra
+	Point pointDirection;//Point que regarde la caméra
 	
 	double degreeFOV;//Champ de vision de la caméra
 	
@@ -19,7 +18,7 @@ public class Camera
 	 */
 	public Camera()
 	{
-		this(new Point(0, 0, 0), new Vector(0, 0, -1), 90);
+		this(new Point(0, 0, 0), new Point(0, 0, -1), 90);
 	}
 	
 	/*
@@ -29,18 +28,18 @@ public class Camera
 	 */
 	public Camera(Point position)
 	{
-		this(position, new Vector(0, 0, -1), 90);
+		this(position, new Point(0, 0, -1), 90);
 	}
 	
 	/*
-	 * Crée une caméra à partir d'un point d'origine ainsi que d'une direction
+	 * Crée une caméra à partir d'un point d'origine ainsi que d'un point que le caméra regarde
 	 * 
 	 *  @param position Le point d'origine de la caméra
-	 *  @param direction La direction dans laquelle regarde la caméra
+	 *  @param pointDirection Le point que regarde la caméra. Utilisé pour calculer la direction de la caméra
 	 */
-	public Camera(Point position, Vector direction)
+	public Camera(Point position, Point pointDirection)
 	{
-		this(position, direction, 90);
+		this(position, pointDirection, 90);
 	}
 	
 	/*
@@ -50,10 +49,10 @@ public class Camera
 	 * @param direction Vector de coordoonnées (x, y, z) pour définir la direction de la caméra
 	 * @param degreeFOV Réel 
 	 */
-	public Camera(Point position, Vector direction, float degreeFOV)
+	public Camera(Point position, Point pointDirection, float degreeFOV)
 	{
 		this.position = position;
-		this.direction = direction;
+		this.pointDirection = pointDirection;
 		this.degreeFOV = degreeFOV;
 	}
 	
@@ -62,9 +61,9 @@ public class Camera
 	 * 
 	 * @return Un vecteur de coordonnées (x, y, z) définissant la direction dans laquelle regarde la caméra 
 	 */
-	public Vector getDirection()
+	public Point getDirection()
 	{
-		return this.direction;
+		return this.pointDirection;
 	}
 	
 	/*
@@ -92,9 +91,9 @@ public class Camera
 	 * 
 	 * @param newDirection Un vecteur pour redéfinir la direction de la caméra
 	 */
-	public void setDirection(Vector newDirection)
+	public void setDirection(Point newPointDirection)
 	{
-		this.direction = newDirection;
+		this.pointDirection = newPointDirection;
 	}
 	
 	/*

@@ -32,7 +32,7 @@ public class ExempleImageWriter extends Application
 	@Override
 	public void start(Stage stage) 
 	{
-		int width = 1720;
+		int width = 1777;
 		int height = 1000;
 
 		WritableImage writableImage = new WritableImage(width, height);
@@ -56,9 +56,10 @@ public class ExempleImageWriter extends Application
 		RayTracer rayTracerInstance = new RayTracer(width, height);
 
 		//Camera cameraRT = new Camera(new Point(-2, 0, -6), Point.p2v(Point.sub(new Point(0, 0, -6), new Point(2, 0, -6))));
-		Camera cameraRT = new Camera(new Point(1, 0, 1));
+		Camera cameraRT = new Camera(new Point(3, 0, -6), new Point(0, 0, -6));
+		//Camera cameraRT = new Camera(new Point(0.1, 0, 2));
 		//Camera cameraRT = new Camera();
-		cameraRT.setFOV(40);
+		cameraRT.setFOV(90);
 		Light l = new LightBulb(new Point(0, 2, -4), 1);
 
 		ArrayList<Shape> shapeList = new ArrayList<>();
@@ -66,6 +67,7 @@ public class ExempleImageWriter extends Application
 		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.CHOCOLATE, 128, 0.5, 0.5));
 		shapeList.add(new SphereMaths(new Point(0.5, 1, -5), 0.25, Color.DIMGREY, 80, 1, 0.5));
 		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.DARKCYAN, 80, 1, 0.5));
+		shapeList.add(new SphereMaths(new Point(5, -1, 0), 0.2, Color.ORANGERED, 80, 1, 0.5));
 
 		MyScene sceneRT = new MyScene(cameraRT, l, shapeList,Color.LIGHTSKYBLUE, 1);
 
