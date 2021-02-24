@@ -1,6 +1,7 @@
 package render;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 
 import geometry.shapes.*;
 import geometry.*;
@@ -16,6 +17,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import maths.Point;
 import maths.Vector;
+import multithreading.ThreadsTaskList;
+import multithreading.TileThread;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
@@ -74,27 +77,37 @@ public class ExempleImageWriter extends Application
 		
 		
 		
-		int nbCore = 8;
-		int nbTilesX = width / nbCore;
-		int nbTilesY = height / nbCore;
-		int nbTotalTiles = nbTilesX * nbTilesY;
+		int nbCore = 2;
+		
+		ThreadsTaskList threadTaskList = new ThreadsTaskList();
+		threadTaskList.initTaskList(nbCore, width, height);
+		
+		for(int i = 1; i < nbCore; i++)
+		{
+			TileThread thread = new TileThread(threadTaskList, rayTracerInstance, sceneRT);
+			thread.startThread();
+		}
+			
 		
 		long start = System.currentTimeMillis();
-		rayTracerInstance.computeImage(sceneRT);
+		while(threadTaskList.getTotalTaskFinished() < threadTaskList.getTotalTaskCount())
+		{
+			System.out.println(threadTaskList.getTotalTaskFinished());
+			rayTracerInstance.computeTask(sceneRT, threadTaskList, width);
+		}
 		long end = System.currentTimeMillis();
+		System.out.println(threadTaskList.getTotalTaskFinished());
+		System.out.println("here" + threadTaskList.getTotalTaskCount());
 		
 		System.out.println("Compute time: " + Long.toString(end - start) + "ms");
 		
-		doImage(rayTracerInstance.getRenderedPixels(), pw);
+		doImage(rayTracerInstance.getRenderedPixels(), height, width, pw);
 	}
 
-	public void doImage(Color[][] colorTab, PixelWriter pw) 
+	public void doImage(AtomicReferenceArray<Color> colorTab, int renderHeight, int renderWidth, PixelWriter pw) 
 	{
-		int width = colorTab[0].length;
-		int height = colorTab.length;
-
-		for (int i = 0; i < height; i++)
-			for (int j = 0; j < width; j++)
-				pw.setColor(j, i, colorTab[i][j]);
+		for (int i = 0; i < renderHeight; i++)
+			for (int j = 0; j < renderWidth; j++)
+				pw.setColor(j, i, colorTab.get(i*renderWidth + j));
 	}
 }

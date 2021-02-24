@@ -1,6 +1,8 @@
 package rayTracer;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 
 import geometry.Shape;
 import javafx.scene.paint.Color;
@@ -10,6 +12,8 @@ import maths.Point;
 import maths.Ray;
 import maths.RotationMatrix;
 import maths.Vector;
+import multithreading.ThreadsTaskList;
+import multithreading.TileTask;
 import scene.MyScene;
 
 /*
@@ -24,16 +28,18 @@ import scene.MyScene;
 public class RayTracer 
 {
 	private int renderHeight;
-	private int renderLength;
+	private int renderWidth;
 	
-	Color[][] renderedPixels;
+	AtomicReferenceArray<Color> renderedPixels;
 	
-	public RayTracer(int renderLength, int renderHeight)
+	public RayTracer(int renderWidth, int renderHeight)
 	{
-		this.renderLength = renderLength;
+		this.renderWidth = renderWidth;
 		this.renderHeight = renderHeight;
 		
-		renderedPixels = new Color[renderHeight][renderLength];
+		this.renderedPixels = new AtomicReferenceArray<>(renderWidth*renderHeight);
+		for(int i = 0; i < renderWidth*renderHeight; i++)
+			this.renderedPixels.set(i, Color.rgb(255, 0, 0));
 	}
 	
 	/*
@@ -78,7 +84,7 @@ public class RayTracer
 	 * 
 	 * @return Un tableau de Color.RGB(r, g, b) de dimension renderHeight*renderLength
 	 */
-	public Color[][] computeImage(MyScene renderScene)
+	public AtomicReferenceArray<Color> computeImage(MyScene renderScene, int renderWidth, int startX, int startY, int endX, int endY)
 	{
 		CTWMatrix ctwMatrix = new CTWMatrix(renderScene.getCamera().getPosition(), renderScene.getCamera().getDirection());
 		//RotationMatrix rotMatrix = new RotationMatrix(RotationMatrix.yAxis, -30);
@@ -86,16 +92,16 @@ public class RayTracer
 		
 		double FOV = renderScene.getCamera().getFOV();
 		
-		for(int y = 0; y < this.renderHeight; y++)
+		for(int y = startY; y < endY; y++)
 		{
-			for(int x = 0; x < this.renderLength; x++)
+			for(int x = startX; x < endX; x++)
 			{
 				Point pixelWorldCoords = this.convPxCoToWorldCoords(FOV, x, y, ctwMatrix);
 				
 				Ray cameraRay = new Ray(MatrixD.mulPoint(new Point(0, 0, 0), ctwMatrix), pixelWorldCoords);
 				cameraRay.normalize();
 				
-				this.renderedPixels[y][x] = this.computePixel(renderScene, cameraRay);
+				this.renderedPixels.set(y*renderWidth + x, this.computePixel(renderScene, cameraRay));
 			}
 		}
 		
@@ -189,6 +195,20 @@ public class RayTracer
 			return renderScene.getBackgroundColor();//Couleur du fond, noir si on a pas de fond
 	}
 	
+	public boolean computeTask(MyScene renderScene, ThreadsTaskList taskList, int renderWidth)
+	{
+		if(taskList.getTotalTaskGiven() >= taskList.getTotalTaskCount())
+			return false;//Plus de tuile à calculer
+		
+		TileTask computeTask = taskList.getTask(taskList.getTotalTaskGiven());
+		taskList.incrementTaskGiven();
+		
+		this.computeImage(renderScene, renderWidth, computeTask.getStartX(), computeTask.getStartY(), computeTask.getEndX(), computeTask.getEndY());
+		
+		taskList.incrementTaskFinished();
+		return true;//Encore des tuiles à calculer
+	}
+	
 	/*
 	 * Convertit les coordonnées d'un pixel sur l'image (un pixel de l'image 1920x1080 par exemple) en coordonnées 3D dans la scène à rendre
 	 * 
@@ -203,10 +223,10 @@ public class RayTracer
 		double xWorld = (double)x;
 		double yWorld = (double)y;
 		
-		double aspectRatio = (double)this.renderLength / (double)this.renderHeight;
+		double aspectRatio = (double)this.renderWidth / (double)this.renderHeight;
 		double demiHeightPlane = Math.tan(Math.toRadians(FOV/2));
 		
-		xWorld = (xWorld + 0.5) / this.renderLength;//Normalisation des pixels. Maintenant dans [0, 1]
+		xWorld = (xWorld + 0.5) / this.renderWidth;//Normalisation des pixels. Maintenant dans [0, 1]
 		xWorld = xWorld * 2 - 1;//Décalage des pixels dans [-1, 1]
 		xWorld *= aspectRatio;//Prise en compte de l'aspect ratio. Maintenant dans [-aspectRatio; aspectRatio]
 		xWorld *= demiHeightPlane;
@@ -219,6 +239,11 @@ public class RayTracer
 		Point pixelWorldConverted = MatrixD.mulPoint(pixelWorld, ctwMatrix);
 		
 		return pixelWorldConverted;
+	}
+	
+	public int getRenderWidth()
+	{
+		return this.renderHeight;
 	}
 	
 	/*
@@ -240,7 +265,7 @@ public class RayTracer
 	 * 
 	 * @param Un tableau de Color.RGB(r, g, b) de dimension renderHeight*renderLength. Renvoie null si encore aucune image n'a été rendue
 	 */
-	public Color[][] getRenderedPixels()
+	public AtomicReferenceArray<Color> getRenderedPixels()
 	{
 		return this.renderedPixels;
 	}
