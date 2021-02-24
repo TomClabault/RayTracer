@@ -1,5 +1,7 @@
 package rayTracer;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicReferenceArray;
@@ -84,8 +86,10 @@ public class RayTracer
 	 * 
 	 * @return Un tableau de Color.RGB(r, g, b) de dimension renderHeight*renderLength
 	 */
-	public AtomicReferenceArray<Color> computeImage(MyScene renderScene, int renderWidth, int startX, int startY, int endX, int endY)
+	public void computeImage(MyScene renderScene, int startX, int startY, int endX, int endY)
 	{
+		//System.out.println(String.format("Tiles info: %d-->%d | %d-->%d", startX, endX, startY, endY));
+		
 		CTWMatrix ctwMatrix = new CTWMatrix(renderScene.getCamera().getPosition(), renderScene.getCamera().getDirection());
 		//RotationMatrix rotMatrix = new RotationMatrix(RotationMatrix.yAxis, -30);
 		//MatrixD transformMatrix = MatrixD.mulMatrix(ctwMatrix, rotMatrix);
@@ -101,11 +105,50 @@ public class RayTracer
 				Ray cameraRay = new Ray(MatrixD.mulPoint(new Point(0, 0, 0), ctwMatrix), pixelWorldCoords);
 				cameraRay.normalize();
 				
-				this.renderedPixels.set(y*renderWidth + x, this.computePixel(renderScene, cameraRay));
+				Color pixelColor = this.computePixel(renderScene, cameraRay);
+				this.renderedPixels.set(y*renderWidth + x, pixelColor);
 			}
 		}
 		
-		return renderedPixels;
+		//System.out.println("tile completed... writing image state...");
+//		FileWriter output= null;
+//		try {
+//			output = new FileWriter(String.format("Output %d_%d___%d_%d.txt", startX, endX, startY, endY));
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		for(int i = 0; i < renderHeight; i++)
+//		{
+//			for(int j = 0; j < renderWidth; j++) 
+//			{
+//				Color color = this.renderedPixels.get(i*renderHeight + j);
+//				
+//				double red = color.getRed();
+//				double green = color.getGreen();
+//				double blue = color.getBlue();
+//				
+//				try {
+//					output.write(String.format("(%.1f, %.1f, %.1f) | ", red, green, blue));
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+//			try {
+//				output.write('\n');
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//		try {
+//			output.close();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		System.out.println("done");
 	}
 	
 	public Color computePhongShading(MyScene renderScene, Ray ray, Vector shadowRayDir, Shape closestIntersectedObject, Vector normalAtIntersection)
@@ -195,15 +238,20 @@ public class RayTracer
 			return renderScene.getBackgroundColor();//Couleur du fond, noir si on a pas de fond
 	}
 	
-	public boolean computeTask(MyScene renderScene, ThreadsTaskList taskList, int renderWidth)
+	public boolean computeTask(MyScene renderScene, ThreadsTaskList taskList)
 	{
-		if(taskList.getTotalTaskGiven() >= taskList.getTotalTaskCount())
-			return false;//Plus de tuile à calculer
+		Integer taskNumber = 0;
+		TileTask currentTileTask = null;
+		synchronized(taskNumber)
+		{
+			taskNumber = taskList.getTotalTaskGiven();
+			if(taskNumber >= taskList.getTotalTaskCount())
+				return false;
 		
-		TileTask computeTask = taskList.getTask(taskList.getTotalTaskGiven());
-		taskList.incrementTaskGiven();
-		
-		this.computeImage(renderScene, renderWidth, computeTask.getStartX(), computeTask.getStartY(), computeTask.getEndX(), computeTask.getEndY());
+			currentTileTask = taskList.getTask(taskList.getTotalTaskGiven());
+			taskList.incrementTaskGiven();
+		}
+		this.computeImage(renderScene, currentTileTask.getStartX(), currentTileTask.getStartY(), currentTileTask.getEndX(), currentTileTask.getEndY());
 		
 		taskList.incrementTaskFinished();
 		return true;//Encore des tuiles à calculer

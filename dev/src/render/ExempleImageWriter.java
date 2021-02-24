@@ -35,8 +35,8 @@ public class ExempleImageWriter extends Application
 	@Override
 	public void start(Stage stage) 
 	{
-		int width = 1777;
-		int height = 1000;
+		int width = 1280;
+		int height = 720;
 
 		WritableImage writableImage = new WritableImage(width, height);
 
@@ -56,9 +56,9 @@ public class ExempleImageWriter extends Application
 		
 		RayTracer rayTracerInstance = new RayTracer(width, height);
 
-		Camera cameraRT = new Camera(new Point(-3, 0, -3), new Point(0, 0, -6));
+		Camera cameraRT = new Camera(new Point(-2, 0, -3), new Point(0, 0, -6));
 		cameraRT.setFOV(60);
-		Light l = new LightBulb(new Point(0, 2, -4), 1);
+		Light l = new LightBulb(new Point(0, 0, -4), 1);
 
 		ArrayList<Shape> shapeList = new ArrayList<>();
 		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), Color.rgb(125, 125, 125)));
@@ -77,35 +77,33 @@ public class ExempleImageWriter extends Application
 		
 		
 		
-		int nbCore = 2;
-		
-		ThreadsTaskList threadTaskList = new ThreadsTaskList();
-		threadTaskList.initTaskList(nbCore, width, height);
-		
-		for(int i = 1; i < nbCore; i++)
-		{
-			TileThread thread = new TileThread(threadTaskList, rayTracerInstance, sceneRT);
-			thread.startThread();
-		}
-			
+		int nbCore = 16;
 		
 		long start = System.currentTimeMillis();
-		while(threadTaskList.getTotalTaskFinished() < threadTaskList.getTotalTaskCount())
+		for(int j = 0; j < 1; j++)
 		{
-			System.out.println(threadTaskList.getTotalTaskFinished());
-			rayTracerInstance.computeTask(sceneRT, threadTaskList, width);
+			ThreadsTaskList threadTaskList = new ThreadsTaskList();
+			threadTaskList.initTaskList(nbCore, width, height);
+			
+			for(int i = 1; i < nbCore; i++)
+			{
+				new Thread(new TileThread(threadTaskList, rayTracerInstance, sceneRT), String.format("Test boi %d", i)).start();
+			}
+				
+			while(threadTaskList.getTotalTaskFinished() < threadTaskList.getTotalTaskCount())
+				rayTracerInstance.computeTask(sceneRT, threadTaskList);
+			assert threadTaskList.getTotalTaskFinished() == threadTaskList.getTotalTaskCount() : "totalTaskFinished != totalTaskCount";
+			
 		}
 		long end = System.currentTimeMillis();
-		System.out.println(threadTaskList.getTotalTaskFinished());
-		System.out.println("here" + threadTaskList.getTotalTaskCount());
-		
 		System.out.println("Compute time: " + Long.toString(end - start) + "ms");
-		
+
 		doImage(rayTracerInstance.getRenderedPixels(), height, width, pw);
 	}
 
 	public void doImage(AtomicReferenceArray<Color> colorTab, int renderHeight, int renderWidth, PixelWriter pw) 
 	{
+		System.out.println("drawing");
 		for (int i = 0; i < renderHeight; i++)
 			for (int j = 0; j < renderWidth; j++)
 				pw.setColor(j, i, colorTab.get(i*renderWidth + j));

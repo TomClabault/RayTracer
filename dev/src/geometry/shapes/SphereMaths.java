@@ -113,8 +113,6 @@ public class SphereMaths implements ShapeMaths
 	{
 		Point intersection = null;
 
-		//System.out.println("Ray: " + ray);
-		
 		//Équation de sphère: (P-C)² - R² = 0 avec P un point sur la sphère, C le centre de la sphère et R le rayon
 		//Équation paramétrique d'un rayon: O + kD avec O l'origine du rayon, D la direction du rayon et k un réel
 		//En substituant on obtient (O + kD - C)² - R² = 0 <--> O² + (kD)² + C² + 2OkD + 2OC + 2kDC - R² = 0 <--> k²(D²) + k(2OD + 2DC) + (O² + C² + 2OC - R²) = 0
@@ -125,10 +123,6 @@ public class SphereMaths implements ShapeMaths
 		double a = Vector.dotProduct(ray.getDirection(), ray.getDirection());// = D²
 		double b = -2 * Vector.dotProduct(ray.getDirection(), OC);// = 2D(O-C)
 		double c = Vector.dotProduct(OC, OC) - radius*radius;
-		
-		assert a == 1.0 : String.format("a != 1 dans SphereMaths.intersect()\na = %.3f\n%s\n", a, ray);
-		
-		//System.out.println(String.format("a, b, c = %.3f, %.3f, %.3f", a, b, c));
 		
 		double b2 = b*b;
 		double ac4 = 4*a*c;
