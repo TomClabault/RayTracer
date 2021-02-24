@@ -26,8 +26,6 @@ public class RayTracer
 	private int renderHeight;
 	private int renderLength;
 	
-	private boolean imageRendered;
-	
 	Color[][] renderedPixels;
 	
 	public RayTracer(int renderLength, int renderHeight)
@@ -94,7 +92,7 @@ public class RayTracer
 			{
 				Point pixelWorldCoords = this.convPxCoToWorldCoords(FOV, x, y, ctwMatrix);
 				
-				Ray cameraRay = new Ray(ctwMatrix.mulPoint(new Point(0, 0, 0)), pixelWorldCoords);
+				Ray cameraRay = new Ray(MatrixD.mulPoint(new Point(0, 0, 0), ctwMatrix), pixelWorldCoords);
 				cameraRay.normalize();
 				
 				this.renderedPixels[y][x] = this.computePixel(renderScene, cameraRay);
@@ -218,7 +216,7 @@ public class RayTracer
 		yWorld *= demiHeightPlane;
 		
 		Point pixelWorld = new Point(xWorld, yWorld, -1);
-		Point pixelWorldConverted = ctwMatrix.mulPoint(pixelWorld);
+		Point pixelWorldConverted = MatrixD.mulPoint(pixelWorld, ctwMatrix);
 		
 		return pixelWorldConverted;
 	}
@@ -244,9 +242,6 @@ public class RayTracer
 	 */
 	public Color[][] getRenderedPixels()
 	{
-		if(this.imageRendered == false)
-			return null;
-		
 		return this.renderedPixels;
 	}
 }

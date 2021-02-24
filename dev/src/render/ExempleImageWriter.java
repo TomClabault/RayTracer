@@ -68,7 +68,24 @@ public class ExempleImageWriter extends Application
 
 		MyScene sceneRT = new MyScene(cameraRT, l, shapeList,Color.LIGHTSKYBLUE, 1);
 
-		doImage(rayTracerInstance.computeImage(sceneRT), pw);
+		
+		
+		
+		
+		
+		
+		int nbCore = 8;
+		int nbTilesX = width / nbCore;
+		int nbTilesY = height / nbCore;
+		int nbTotalTiles = nbTilesX * nbTilesY;
+		
+		long start = System.currentTimeMillis();
+		rayTracerInstance.computeImage(sceneRT);
+		long end = System.currentTimeMillis();
+		
+		System.out.println("Compute time: " + Long.toString(end - start) + "ms");
+		
+		doImage(rayTracerInstance.getRenderedPixels(), pw);
 	}
 
 	public void doImage(Color[][] colorTab, PixelWriter pw) 

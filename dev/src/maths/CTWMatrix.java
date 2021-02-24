@@ -7,7 +7,7 @@ public class CTWMatrix extends MatrixD
 {
 	public CTWMatrix(Point cameraOrigin, Point cameraDirection)
 	{
-		super(4, 3);
+		super(4, 4);
 		
 		//Point cameraDirectionNorm = Vector.v2p(Vector.normalize(Point.p2v(cameraDirection)));
 		
@@ -29,17 +29,21 @@ public class CTWMatrix extends MatrixD
 		super.matrix[0][0] = xAxis.getX();
 		super.matrix[0][1] = xAxis.getY();
 		super.matrix[0][2] = xAxis.getZ();
+		super.matrix[0][3] = 0;
 		
 		super.matrix[1][0] = yAxis.getX();
 		super.matrix[1][1] = yAxis.getY();
 		super.matrix[1][2] = yAxis.getZ();
+		super.matrix[1][3] = 0;
 		
 		super.matrix[2][0] = zAxis.getX();
 		super.matrix[2][1] = zAxis.getY();
 		super.matrix[2][2] = zAxis.getZ();
+		super.matrix[2][3] = 0;
 		
 		super.matrix[3][0] = cameraOrigin.getX();
 		super.matrix[3][1] = cameraOrigin.getY();
 		super.matrix[3][2] = cameraOrigin.getZ();
+		super.matrix[3][3] = 1;
 	}
 }

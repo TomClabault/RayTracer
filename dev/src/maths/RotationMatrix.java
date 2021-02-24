@@ -15,7 +15,7 @@ public class RotationMatrix extends MatrixD
 	 */
 	public RotationMatrix(int axis, double rotation)
 	{
-		super(3, 3);
+		super(4, 4);
 		
 		double rotationRad = Math.toRadians(rotation);
 		
@@ -69,5 +69,13 @@ public class RotationMatrix extends MatrixD
 		default:
 			throw new IllegalArgumentException("L'axe de rotation de la matrice est incorrect. Doit être RotationMatrix.xAxis, RotationMatrix.yAxis ou RotationMatrix.zAxis");
 		}
+		
+		super.matrix[0][3] = 0;
+		super.matrix[1][3] = 0;
+		super.matrix[2][3] = 0;
+		super.matrix[3][3] = 1;
+		super.matrix[3][0] = 0;
+		super.matrix[3][1] = 0;
+		super.matrix[3][2] = 0;
 	}
 }

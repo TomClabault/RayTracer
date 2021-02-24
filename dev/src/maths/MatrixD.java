@@ -98,17 +98,17 @@ public class MatrixD
 	 * 
 	 * @param Crée un nouveau point dont les coordoonnées (initialement de pointToConvert) sont exprimées selon l'orientation de la caméra 
 	 */
-	public Point mulPoint(Point pointToConvert)
+	public static Point mulPoint(Point pointToConvert, MatrixD transformMatrix)
 	{
-		double[] pointToConvertCoords = new double[] {pointToConvert.getX(), pointToConvert.getY(), pointToConvert.getZ()};
+		double[] pointToConvertCoords = new double[] {pointToConvert.getX(), pointToConvert.getY(), pointToConvert.getZ(), 1};
 		double[] convertedPointCoords = new double[] {0, 0, 0, 0};
 		
-		for(int i = 0; i < 3; i++)//< 3 car on convertit des points 3D. Cette fonction n'est pas flexible
-			for(int j = 0; j < 3; j++)
-				convertedPointCoords[i] += pointToConvertCoords[j] * this.matrix[j][i];
+		for(int i = 0; i < 4; i++)//< 3 car on convertit des points 3D. Cette fonction n'est pas flexible
+			for(int j = 0; j < 4; j++)
+				convertedPointCoords[i] += pointToConvertCoords[j] * transformMatrix.matrix[j][i];
 		
-		//On retourne le point de bonnes coordonnées + la translation qui se trouve à la 4ème ligne de la matrice 
-		return Point.add(new Point(convertedPointCoords[0], convertedPointCoords[1], convertedPointCoords[2]), new Point(this.matrix[3][0], this.matrix[3][1], this.matrix[3][2]));
+		//On retourne le point de coordoonées exprimées dans la base de la matrice passée en paramètre 
+		return new Point(convertedPointCoords[0], convertedPointCoords[1], convertedPointCoords[2]);
 	}
 	
 	public String toString()
