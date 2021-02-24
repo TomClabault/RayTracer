@@ -1,9 +1,6 @@
 package rayTracer;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
 import geometry.Shape;
@@ -12,10 +9,10 @@ import maths.CTWMatrix;
 import maths.MatrixD;
 import maths.Point;
 import maths.Ray;
-import maths.RotationMatrix;
 import maths.Vector;
 import multithreading.ThreadsTaskList;
 import multithreading.TileTask;
+import multithreading.TileThread;
 import scene.MyScene;
 
 /*
@@ -80,16 +77,16 @@ public class RayTracer
 	}
 	
 	/*
-	 * Calcule tous les pixels de la scène donnée en argument et retourne un tableau de couleur RGB correspondant aux pixels
+	 * Calcule un partie de la scène représentée par un pixel de départ X et Y et un pixel d'arrivée X et Y. Le rectangle de pixel définit par ces valeurs est alors calculé
 	 * 
 	 * @param renderScene La scène de rendu contenant les informations pour rendre l'image
-	 * 
-	 * @return Un tableau de Color.RGB(r, g, b) de dimension renderHeight*renderLength
+	 * @param startX Le pixel de départ horizontal de la zone de l'image qui doit être calculée. Entre 0 et renderWidth - 1 inclus
+	 * @param startY Le pixel de départ vertical de la zone de l'image qui doit être calculée. Entre 0 et renderHeight- 1 inclus
+	 * @param endX Le pixel de fin horizontal de la zone de l'image qui doit être calculée. Entre startX + 1 et renderWidth - 1 inclus
+	 * @param endY Le pixel de fin vertical de la zone de l'image qui doit être calculée. Entre endY + 1 et renderHeight - 1 inclus
 	 */
-	public void computeImage(MyScene renderScene, int startX, int startY, int endX, int endY)
+	public void computePartialImage(MyScene renderScene, int startX, int startY, int endX, int endY)
 	{
-		//System.out.println(String.format("Tiles info: %d-->%d | %d-->%d", startX, endX, startY, endY));
-		
 		CTWMatrix ctwMatrix = new CTWMatrix(renderScene.getCamera().getPosition(), renderScene.getCamera().getDirection());
 		//RotationMatrix rotMatrix = new RotationMatrix(RotationMatrix.yAxis, -30);
 		//MatrixD transformMatrix = MatrixD.mulMatrix(ctwMatrix, rotMatrix);
@@ -109,49 +106,12 @@ public class RayTracer
 				this.renderedPixels.set(y*renderWidth + x, pixelColor);
 			}
 		}
-		
-		//System.out.println("tile completed... writing image state...");
-//		FileWriter output= null;
-//		try {
-//			output = new FileWriter(String.format("Output %d_%d___%d_%d.txt", startX, endX, startY, endY));
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		for(int i = 0; i < renderHeight; i++)
-//		{
-//			for(int j = 0; j < renderWidth; j++) 
-//			{
-//				Color color = this.renderedPixels.get(i*renderHeight + j);
-//				
-//				double red = color.getRed();
-//				double green = color.getGreen();
-//				double blue = color.getBlue();
-//				
-//				try {
-//					output.write(String.format("(%.1f, %.1f, %.1f) | ", red, green, blue));
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}
-//			try {
-//				output.write('\n');
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//		try {
-//			output.close();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		System.out.println("done");
 	}
 	
-	public Color computePhongShading(MyScene renderScene, Ray ray, Vector shadowRayDir, Shape closestIntersectedObject, Vector normalAtIntersection)
+	/*
+	 * Calcule et renvoie la couleur et l'illumination d'un point à l'écran en fonction
+	 */
+	public Color computePhongShading(MyScene renderScene, Ray ray, Vector shadowRayDir, Shape intersectedObject, Vector normalAtIntersection)
 	{
 		double lightIntensity = renderScene.getLight().getIntensity();
 		
@@ -159,25 +119,25 @@ public class RayTracer
 		double ambientTerm = lightIntensity * renderScene.getAmbientLightIntensity();
 		
 		//Composante diffuse
-		double diffuseTerm = lightIntensity*closestIntersectedObject.getDiffuse()*Vector.dotProduct(shadowRayDir, normalAtIntersection);
+		double diffuseTerm = lightIntensity*intersectedObject.getDiffuse()*Vector.dotProduct(shadowRayDir, normalAtIntersection);
 		if(diffuseTerm < 0)
 			diffuseTerm = 0;
 		
 		//Composante spéculaire
 		Vector reflectVector = Vector.normalize(this.getReflectionVector(normalAtIntersection, shadowRayDir));
-		double spec2 = Math.pow(Math.max(Vector.dotProduct(reflectVector, ray.negate()), 0), closestIntersectedObject.getShininess());
+		double spec2 = Math.pow(Math.max(Vector.dotProduct(reflectVector, ray.negate()), 0), intersectedObject.getShininess());
 		double specularTerm = lightIntensity*spec2;
 		if(specularTerm < 0)
 			specularTerm = 0;
 		
-		double phongShadingCoeff = ambientTerm + diffuseTerm + specularTerm*closestIntersectedObject.getSpecularCoeff();
+		double phongShadingCoeff = ambientTerm + diffuseTerm + specularTerm*intersectedObject.getSpecularCoeff();
 		
 		
 		
 		//On calcule la couleur de chacune des composantes en fonction de la couleur de l'objet et de l'ombrage de Phong. On ramène les valeurs à 255 si elles sont supérieures à 255.
-		int pixelRed = (int)(closestIntersectedObject.getColor().getRed() * phongShadingCoeff * 255); pixelRed = pixelRed > 255 ? 255 : pixelRed;
-		int pixelGreen = (int)(closestIntersectedObject.getColor().getGreen() * phongShadingCoeff * 255); pixelGreen = pixelGreen > 255 ? 255 : pixelGreen;
-		int pixelBlue = (int)(closestIntersectedObject.getColor().getBlue() * phongShadingCoeff * 255); pixelBlue = pixelBlue > 255 ? 255 : pixelBlue;
+		int pixelRed = (int)(intersectedObject.getColor().getRed() * phongShadingCoeff * 255); pixelRed = pixelRed > 255 ? 255 : pixelRed;
+		int pixelGreen = (int)(intersectedObject.getColor().getGreen() * phongShadingCoeff * 255); pixelGreen = pixelGreen > 255 ? 255 : pixelGreen;
+		int pixelBlue = (int)(intersectedObject.getColor().getBlue() * phongShadingCoeff * 255); pixelBlue = pixelBlue > 255 ? 255 : pixelBlue;
 		
 		return Color.rgb(pixelRed, pixelGreen, pixelBlue);
 	}
@@ -242,6 +202,7 @@ public class RayTracer
 	{
 		Integer taskNumber = 0;
 		TileTask currentTileTask = null;
+		
 		synchronized(taskNumber)
 		{
 			taskNumber = taskList.getTotalTaskGiven();
@@ -251,7 +212,7 @@ public class RayTracer
 			currentTileTask = taskList.getTask(taskList.getTotalTaskGiven());
 			taskList.incrementTaskGiven();
 		}
-		this.computeImage(renderScene, currentTileTask.getStartX(), currentTileTask.getStartY(), currentTileTask.getEndX(), currentTileTask.getEndY());
+		this.computePartialImage(renderScene, currentTileTask.getStartX(), currentTileTask.getStartY(), currentTileTask.getEndX(), currentTileTask.getEndY());
 		
 		taskList.incrementTaskFinished();
 		return true;//Encore des tuiles à calculer
@@ -316,5 +277,19 @@ public class RayTracer
 	public AtomicReferenceArray<Color> getRenderedPixels()
 	{
 		return this.renderedPixels;
+	}
+	
+	public AtomicReferenceArray<Color> renderImage(MyScene renderScene, int nbCore)
+	{
+		ThreadsTaskList threadTaskList = new ThreadsTaskList();
+		threadTaskList.initTaskList(nbCore, this.renderWidth, this.renderHeight);
+		
+		for(int i = 1; i < nbCore; i++)//Création des threads sauf 1, le thread principal, qui est déjà créé
+			new Thread(new TileThread(threadTaskList, this, renderScene), String.format("Test boi %d", i)).start();
+			
+		while(threadTaskList.getTotalTaskFinished() < threadTaskList.getTotalTaskCount())
+			this.computeTask(renderScene, threadTaskList);
+			
+		return this.getRenderedPixels();
 	}
 }
