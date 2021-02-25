@@ -18,7 +18,8 @@ public class SphereMaths implements ShapeMaths
 	Color sphereColor;
 	int shininess;
 	double specularCoeff;
-	double diffuseComponent;
+	double ambientCoeff;
+	double diffuseCoeff;
 	double reflectiveCoeff;
 	
 	/*
@@ -29,18 +30,21 @@ public class SphereMaths implements ShapeMaths
 	 */
 	public SphereMaths(Point center, double radius)
 	{
-		this(center, radius, Color.rgb(255, 255, 255), 20, 1, 0.5, 0);
+		this(center, radius, Color.rgb(255, 255, 255), 20, 1, 1, 0.5, 0);
 	}
 	
 	/*
 	 * Crée une sphère blanche à partie de son centre et de son rayon
 	 * 
 	 * @param center Point représentant le centre de la sphère
-	 * @param radius Rayon de la sphère 
+	 * @param radius Rayon de la sphère
 	 * @param sphereColor Objet Color.RGB représentant la couleur de la sphère
-	 * @param specularComponent Caractéristique spéculaire de la sphère. Entier positif
+	 * @param shininess Détermine la brillance de la sphère. Plus ce nombre est haut et plus la tâche spéculaire sera petite
+	 * @param specularCoeff Coefficient d'intensité de la spécularité. Réeel entre 0 et 1. Plus ce nombre se rapproche de 1 et plus la spécularité sera blanche
+	 * @param diffuseComponent Coefficient d'intensité de la diffusion de la sphère. Réel entre 0 et 1. Plus ce nombre se rapproche de 1 et plus la sphère sera diffuse
+	 * @param reflectiveCoeff Coefficient d'intensité des réflexions de la sphère. Réel entre 0 et 1. 1 = miroir, 0 = pas de réflexion
 	 */
-	public SphereMaths(Point center, double radius, Color sphereColor, int shininess, double specularCoeff, double diffuseComponent, double reflectiveCoeff) 
+	public SphereMaths(Point center, double radius, Color sphereColor, int shininess, double ambientCoeff, double specularCoeff, double diffuseCoeff, double reflectiveCoeff) 
 	{
 		this.center = center;
 		this.radius = radius;
@@ -48,8 +52,19 @@ public class SphereMaths implements ShapeMaths
 		this.sphereColor = sphereColor;
 		this.shininess = shininess;
 		this.specularCoeff = specularCoeff;
-		this.diffuseComponent = diffuseComponent;
+		this.ambientCoeff = ambientCoeff;
+		this.diffuseCoeff = diffuseCoeff;
 		this.reflectiveCoeff = reflectiveCoeff;
+	}
+	
+	/*
+	 * Permet d'obtenir la quantité de lumière ambiante que la sphère renvoie
+	 * 
+	 *  @return Retourne un réel entre 0 et 1 représentant le pourcentage de luminosité ambiante qui la sphère réfléchira 
+	 */
+	public double getAmbientCoeff()
+	{
+		return this.ambientCoeff;
 	}
 	
 	/*
@@ -77,9 +92,9 @@ public class SphereMaths implements ShapeMaths
 	 * 
 	 * @return Retourne un réel entre 0 et 1 représentant le pourcentage de diffusion de la lumière par l'objet
 	 */
-	public double getDiffuse()
+	public double getDiffuseCoeff()
 	{
-		return this.diffuseComponent;
+		return this.diffuseCoeff;
 	}
 	
 	/*

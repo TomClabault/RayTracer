@@ -14,7 +14,8 @@ public class PlaneMaths implements ShapeMaths
 	
 	Color color;
 	int shininess;
-	double diffuse;
+	double ambientCoeff;
+	double diffuseCoeff;
 	double reflectiveCoeff;
 	
 	/*
@@ -25,7 +26,7 @@ public class PlaneMaths implements ShapeMaths
 	 */
 	public PlaneMaths(Vector normal, Point point)
 	{
-		this(normal, point, Color.rgb(128, 128, 128), 100, 1, 0);
+		this(normal, point, Color.rgb(128, 128, 128), 100, 1, 1, 0);
 	}
 	
 	/*
@@ -37,7 +38,7 @@ public class PlaneMaths implements ShapeMaths
 	 */
 	public PlaneMaths(Vector normal, Point point, Color color)
 	{
-		this(normal, point, color, 2, 0.5, 0);
+		this(normal, point, color, 100, 1, 0.5, 0);
 	}
 	
 	/*
@@ -49,15 +50,26 @@ public class PlaneMaths implements ShapeMaths
 	 * @param shininess Brillance du plan. Plus la valeur est petite pour le plan est brillant
 	 * @param diffuseCoeff Coefficient de diffusion de la lumière à l'impact du plan. Plus le coefficient est petit moins le plan est diffus
 	 */
-	public PlaneMaths(Vector normal, Point point, Color color, int shininess, double diffuseCoeff, double reflectiveCoeff)
+	public PlaneMaths(Vector normal, Point point, Color color, int shininess, double ambientCoeff, double diffuseCoeff, double reflectiveCoeff)
 	{
 		this.normal = normal;
 		this.point = point;
 
 		this.color = color;
 		this.shininess = shininess;
-		this.diffuse = diffuseCoeff;
+		this.ambientCoeff = ambientCoeff;
+		this.diffuseCoeff = diffuseCoeff;
 		this.reflectiveCoeff = reflectiveCoeff;
+	}
+	
+	/*
+	 * Permet d'obtenir la quantité de lumière ambiante que le plan renvoie
+	 * 
+	 *  @return Retourne un réel entre 0 et 1 représentant le pourcentage de luminosité ambiante qui le plan réfléchira 
+	 */
+	public double getAmbientCoeff()
+	{
+		return this.ambientCoeff;
 	}
 	
 	/*
@@ -77,9 +89,9 @@ public class PlaneMaths implements ShapeMaths
 	 * @return Un réel entre 0 et 1 représentant la caractéristique diffuse du plan
 	 */
 	@Override
-	public double getDiffuse() 
+	public double getDiffuseCoeff() 
 	{
-		return this.diffuse;
+		return this.diffuseCoeff;
 	}
 	
 	/*

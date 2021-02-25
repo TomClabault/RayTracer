@@ -7,6 +7,13 @@ import maths.Vector;
 
 public interface Shape
 {
+	/*
+	 * Permet d'obtenir la quantité de lumière ambiante que l'objet est capable de renvoyer.
+	 * 0 signifie que l'objet ne "reçevra" aucune luminosité ambiante, 1 qu'il "reçevra" 100% de la luminosité ambiante de la scène
+	 * 
+	 *  @return Retourne un réel entre 0 et 1 représentant le pourcentage de luminosité ambiante qui réfléchira l'objet 
+	 */
+	public abstract double getAmbientCoeff();
 	
 	/*
 	 * Retourne le couleur de l'objet sous la forme d'un objet Color.RGB(r, g, b)
@@ -20,7 +27,7 @@ public interface Shape
 	 * 
 	 * @return Retourne un réel entre 0 et 1 représentant le pourcentage de diffusion de la lumière par l'objet
 	 */
-	public abstract double getDiffuse();
+	public abstract double getDiffuseCoeff();
 	
 	/*
 	 * Permet d'obtenir la normale à un point donné de la forme

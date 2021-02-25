@@ -60,10 +60,10 @@ public class ExempleImageWriter extends Application
 
 		ArrayList<Shape> shapeList = new ArrayList<>();
 		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), Color.rgb(125, 125, 125)));
-		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.rgb(240, 0, 0), 128, 1, 0, 1));
-		shapeList.add(new SphereMaths(new Point(0.5, 0, -1), 0.25, Color.BLACK, 3, 0.6, 1, 0));
-		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.RED, 80, 1, 0.5, 0));
-		shapeList.add(new SphereMaths(new Point(-1.1, 0.5, -5.5), 0.2, Color.LIGHTSKYBLUE, 3, 0, 0.5, 0));
+		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.rgb(204, 0, 0), 128, 0.5, 1, 0.75, 0.25));
+		shapeList.add(new SphereMaths(new Point(0.5, 0, -1), 0.25, Color.BLACK, 3, 1, 0.6, 1, 0));
+		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.RED, 80, 1, 1, 0.5, 0.5));
+		shapeList.add(new SphereMaths(new Point(-1.1, 0.5, -5.5), 0.2, Color.LIGHTSKYBLUE, 3, 1, 0, 0.5, 0));
 
 		MyScene sceneRT = new MyScene(cameraRT, l, shapeList, Color.rgb(24, 24, 24), 0.55);
 
@@ -72,6 +72,7 @@ public class ExempleImageWriter extends Application
 		long startTimer = System.currentTimeMillis();
 		rayTracerInstance.renderImage(sceneRT, 1);
 		long endTimer = System.currentTimeMillis();
+		
 		System.out.println(String.format("Render time: %dms", endTimer-startTimer));
 		doImage(rayTracerInstance.getRenderedPixels(), height, width, pw);
 	}
