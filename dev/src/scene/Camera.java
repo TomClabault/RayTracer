@@ -1,5 +1,7 @@
 package scene;
 
+import maths.CTWMatrix;
+import maths.MatrixD;
 import maths.Point;
 
 /*
@@ -7,9 +9,10 @@ import maths.Point;
  */
 public class Camera 
 {
-	Point position;
-	
+	Point position;//Point depuis lequel regarde la caméra
 	Point pointDirection;//Point que regarde la caméra
+	
+	MatrixD CTWMatrix;//Matrice de changement de base entre les coordonnées d'origine du monde [(1, 0, 0), (0, 1, 0), (0, 0, 1)] et les coordoonées de la caméra
 	
 	double degreeFOV;//Champ de vision de la caméra
 	
@@ -54,6 +57,18 @@ public class Camera
 		this.position = position;
 		this.pointDirection = pointDirection;
 		this.degreeFOV = degreeFOV;
+		
+		this.CTWMatrix = new CTWMatrix(position, pointDirection);
+	}
+	
+	/*
+	 * Retourne la matrice de passage des coordonnées d'origine vers les coordonnées de la caméra
+	 * 
+	 * @return Une MatrixD contenant la base de l'espace vectoriel de la caméra et la translation des points à effectuer	
+	 */
+	public MatrixD getCTWMatrix()
+	{
+		return this.CTWMatrix;
 	}
 	
 	/*

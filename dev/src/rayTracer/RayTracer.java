@@ -87,14 +87,14 @@ public class RayTracer
 	 */
 	public void computePartialImage(MyScene renderScene, int startX, int startY, int endX, int endY)
 	{
-		CTWMatrix ctwMatrix = new CTWMatrix(renderScene.getCamera().getPosition(), renderScene.getCamera().getDirection());
 		//RotationMatrix rotMatrix = new RotationMatrix(RotationMatrix.yAxis, -30);
 		//MatrixD transformMatrix = MatrixD.mulMatrix(ctwMatrix, rotMatrix);
+		MatrixD ctwMatrix = renderScene.getCamera().getCTWMatrix();
 		
 		double FOV = renderScene.getCamera().getFOV();
 		
 		for(int y = startY; y < endY; y++)
-		{
+		{		
 			for(int x = startX; x < endX; x++)
 			{
 				Point pixelWorldCoords = this.convPxCoToWorldCoords(FOV, x, y, ctwMatrix);
@@ -285,11 +285,11 @@ public class RayTracer
 		threadTaskList.initTaskList(nbCore, this.renderWidth, this.renderHeight);
 		
 		for(int i = 1; i < nbCore; i++)//Création des threads sauf 1, le thread principal, qui est déjà créé
-			new Thread(new TileThread(threadTaskList, this, renderScene), String.format("Test boi %d", i)).start();
+			new Thread(new TileThread(threadTaskList, this, renderScene), String.format("RT-Thread %d", i)).start();
 			
 		while(threadTaskList.getTotalTaskFinished() < threadTaskList.getTotalTaskCount())
 			this.computeTask(renderScene, threadTaskList);
-			
+		
 		return this.getRenderedPixels();
 	}
 }

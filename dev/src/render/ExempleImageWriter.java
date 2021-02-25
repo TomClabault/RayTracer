@@ -77,7 +77,6 @@ public class ExempleImageWriter extends Application
 
 	public void doImage(AtomicReferenceArray<Color> colorTab, int renderHeight, int renderWidth, PixelWriter pw) 
 	{
-		System.out.println("drawing");
 		for (int i = 0; i < renderHeight; i++)
 			for (int j = 0; j < renderWidth; j++)
 				pw.setColor(j, i, colorTab.get(i*renderWidth + j));
