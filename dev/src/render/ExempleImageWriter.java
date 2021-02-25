@@ -56,23 +56,23 @@ public class ExempleImageWriter extends Application
 		
 		RayTracer rayTracerInstance = new RayTracer(width, height);
 
-		Camera cameraRT = new Camera(new Point(-2, 0, -3), new Point(0, 0, -6));
+		Camera cameraRT = new Camera(new Point(0, 0, -3), new Point(0, 0, -6));
 		cameraRT.setFOV(60);
-		Light l = new LightBulb(new Point(0, 3, -4), 1);
+		Light l = new LightBulb(new Point(0, 3, -4), 1.3);
 
 		ArrayList<Shape> shapeList = new ArrayList<>();
 		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), Color.rgb(125, 125, 125)));
-		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.CHOCOLATE, 128, 0.5, 0.5));
-		shapeList.add(new SphereMaths(new Point(0.5, 1, -5), 0.25, Color.DIMGREY, 80, 1, 0.5));
-		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.DARKCYAN, 80, 1, 0.5));
-		shapeList.add(new SphereMaths(new Point(5, -1, 0), 0.2, Color.ORANGERED, 80, 1, 0.5));
+		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.CHOCOLATE, 10, 1, 0.5, false));
+		shapeList.add(new SphereMaths(new Point(0.5, 1, -5), 0.25, Color.DIMGREY, 80, 1, 0.5, false));
+		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.DARKCYAN, 80, 1, 0.5, false));
+		shapeList.add(new SphereMaths(new Point(5, -1, 0), 0.2, Color.ORANGERED, 80, 1, 0.5, false));
 
 		MyScene sceneRT = new MyScene(cameraRT, l, shapeList,Color.LIGHTSKYBLUE, 1);
 
 		
 	
 
-		doImage(rayTracerInstance.renderImage(sceneRT, 8), height, width, pw);
+		doImage(rayTracerInstance.renderImage(sceneRT, 1), height, width, pw);
 	}
 
 	public void doImage(AtomicReferenceArray<Color> colorTab, int renderHeight, int renderWidth, PixelWriter pw) 

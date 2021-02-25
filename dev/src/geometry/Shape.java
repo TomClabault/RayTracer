@@ -23,6 +23,13 @@ public interface Shape
 	public abstract double getDiffuse();
 	
 	/*
+	 * Permet de savoir si l'objet réfléchi la lumière ou non
+	 * 
+	 * @return Retourne true si l'objet est réfléchissant, false sinon
+	 */
+	public abstract boolean getIsReflective();
+	
+	/*
 	 * Permet d'obtenir la normale à un point donné de la forme
 	 * 
 	 * @param point Le point par rapport auquel on souhaite la normale

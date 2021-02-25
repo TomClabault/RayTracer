@@ -19,6 +19,7 @@ public class SphereMaths implements ShapeMaths
 	int shininess;
 	double specularCoeff;
 	double diffuseComponent;
+	boolean isReflective;
 	
 	/*
 	 * Crée une sphère blanche à partie de son centre et de son rayon
@@ -28,7 +29,7 @@ public class SphereMaths implements ShapeMaths
 	 */
 	public SphereMaths(Point center, double radius)
 	{
-		this(center, radius, Color.rgb(255, 255, 255), 20, 1, 0.5);
+		this(center, radius, Color.rgb(255, 255, 255), 20, 1, 0.5, false);
 	}
 	
 	/*
@@ -39,7 +40,7 @@ public class SphereMaths implements ShapeMaths
 	 * @param sphereColor Objet Color.RGB représentant la couleur de la sphère
 	 * @param specularComponent Caractéristique spéculaire de la sphère. Entier positif
 	 */
-	public SphereMaths(Point center, double radius, Color sphereColor, int shininess, double specularCoeff, double diffuseComponent) 
+	public SphereMaths(Point center, double radius, Color sphereColor, int shininess, double specularCoeff, double diffuseComponent, boolean isReflective) 
 	{
 		this.center = center;
 		this.radius = radius;
@@ -48,6 +49,7 @@ public class SphereMaths implements ShapeMaths
 		this.shininess = shininess;
 		this.specularCoeff = specularCoeff;
 		this.diffuseComponent = diffuseComponent;
+		this.isReflective = isReflective;
 	}
 	
 	/*
@@ -70,9 +72,24 @@ public class SphereMaths implements ShapeMaths
 		return this.sphereColor;
 	}
 	
+	/*
+	 * Permet d'obtenir la composante diffuse d'un objet
+	 * 
+	 * @return Retourne un réel entre 0 et 1 représentant le pourcentage de diffusion de la lumière par l'objet
+	 */
 	public double getDiffuse()
 	{
 		return this.diffuseComponent;
+	}
+	
+	/*
+	 * Permet de savoir si la sphère réfléchi la lumière ou non
+	 * 
+	 * @return Retourne true si l'objet est réfléchissant, false sinon
+	 */
+	public boolean getIsReflective()
+	{
+		return this.isReflective;
 	}
 	
 	/*
