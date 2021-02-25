@@ -119,16 +119,18 @@ public class RayTracer
 		double ambientTerm = lightIntensity * renderScene.getAmbientLightIntensity();
 		
 		//Composante diffuse
-		double diffuseTerm = lightIntensity*intersectedObject.getDiffuse()*Vector.dotProduct(shadowRayDir, normalAtIntersection);
-		if(diffuseTerm < 0)
-			diffuseTerm = 0;
-		
+		double dotProdDiffuse = Vector.dotProduct(shadowRayDir, normalAtIntersection);
+		double diffuseTerm = dotProdDiffuse < 0 ? 0 : lightIntensity*intersectedObject.getDiffuse()*dotProdDiffuse;//Si le dotProduct est négatif, on n'inclus pas le terme diffus dans le calcul, on le met donc à 0
+
 		//Composante spéculaire
-		Vector reflectVector = Vector.normalize(this.getReflectionVector(normalAtIntersection, shadowRayDir));
-		double spec2 = Math.pow(Math.max(Vector.dotProduct(reflectVector, ray.negate()), 0), intersectedObject.getShininess());
-		double specularTerm = lightIntensity*spec2;
-		if(specularTerm < 0)
-			specularTerm = 0;
+		double specularTerm = 0;
+		if(dotProdDiffuse >= 0)//On ne calcule la specular que si le dotProduct du diffus n'est pas négatif
+		{
+			Vector reflectVector = Vector.normalize(this.getReflectionVector(normalAtIntersection, shadowRayDir));
+			
+			double dotProdSpecular = Vector.dotProduct(reflectVector, ray.negate());
+			specularTerm = lightIntensity*Math.pow(Math.max(dotProdSpecular, 0), intersectedObject.getShininess());
+		}
 		
 		double phongShadingCoeff = ambientTerm + diffuseTerm + specularTerm*intersectedObject.getSpecularCoeff();
 		
