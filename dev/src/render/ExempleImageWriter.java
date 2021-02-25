@@ -66,7 +66,7 @@ public class ExempleImageWriter extends Application
 		shapeList.add(new SphereMaths(new Point(0.5, 1, -5), 0.25, Color.DIMGREY, 80, 1, 0.5, false));
 		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.DARKCYAN, 80, 1, 0.5, false));
 
-		MyScene sceneRT = new MyScene(cameraRT, l, shapeList,Color.LIGHTSKYBLUE, 1);
+		MyScene sceneRT = new MyScene(cameraRT, l, shapeList,Color.LIGHTSKYBLUE, 0.55);
 
 		
 	

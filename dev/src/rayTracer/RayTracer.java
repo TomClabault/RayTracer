@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
 
 import geometry.Shape;
 import javafx.scene.paint.Color;
-import maths.CTWMatrix;
 import maths.MatrixD;
 import maths.Point;
 import maths.Ray;
@@ -120,7 +119,7 @@ public class RayTracer
 		
 		//Composante diffuse
 		double dotProdDiffuse = Vector.dotProduct(shadowRayDir, normalAtIntersection);
-		double diffuseTerm = dotProdDiffuse < 0 ? 0 : lightIntensity*intersectedObject.getDiffuse()*dotProdDiffuse;//Si le dotProduct est négatif, on n'inclus pas le terme diffus dans le calcul, on le met donc à 0
+		double diffuseTerm = dotProdDiffuse < 0 ? 0 : lightIntensity*dotProdDiffuse;//Si le dotProduct est négatif, on n'inclus pas le terme diffus dans le calcul, on le met donc à 0
 
 		//Composante spéculaire
 		double specularTerm = 0;
@@ -132,14 +131,24 @@ public class RayTracer
 			specularTerm = lightIntensity*Math.pow(Math.max(dotProdSpecular, 0), intersectedObject.getShininess());
 		}
 		
-		double phongShadingCoeff = ambientTerm + diffuseTerm + specularTerm*intersectedObject.getSpecularCoeff();
 		
+		double objectRed = intersectedObject.getColor().getRed();
+		double objectGreen = intersectedObject.getColor().getGreen();
+		double objectBlue = intersectedObject.getColor().getBlue();
+		double diffuseCoeff = intersectedObject.getDiffuse();
+		double specularCoeff = intersectedObject.getSpecularCoeff();
 		
-		
+//		Color = ambientTerm * objectColor +
+//	               Kd * lambertian * diffuseColor +
+//	               Ks * specular * specularColor
 		//On calcule la couleur de chacune des composantes en fonction de la couleur de l'objet et de l'ombrage de Phong. On ramène les valeurs à 255 si elles sont supérieures à 255.
-		int pixelRed = (int)(intersectedObject.getColor().getRed() * phongShadingCoeff * 255); pixelRed = pixelRed > 255 ? 255 : pixelRed;
-		int pixelGreen = (int)(intersectedObject.getColor().getGreen() * phongShadingCoeff * 255); pixelGreen = pixelGreen > 255 ? 255 : pixelGreen;
-		int pixelBlue = (int)(intersectedObject.getColor().getBlue() * phongShadingCoeff * 255); pixelBlue = pixelBlue > 255 ? 255 : pixelBlue;
+//		int pixelRed = (int)((ambientTerm*intersectedObject.getColor().getRed() + intersectedObject.getColor().getRed()*0 * diffuseTerm*0 + specularTerm*0) * 255); pixelRed = pixelRed > 255 ? 255 : pixelRed;
+//		int pixelGreen = (int)((ambientTerm + intersectedObject.getColor().getGreen()*0 * diffuseTerm*0 + specularTerm*0) * 255); pixelGreen = pixelGreen > 255 ? 255 : pixelGreen;
+//		int pixelBlue = (int)((ambientTerm + intersectedObject.getColor().getBlue()*0 * diffuseTerm*0 + specularTerm*0) * 255); pixelBlue = pixelBlue > 255 ? 255 : pixelBlue;
+	               
+	    int pixelRed = (int)((ambientTerm * objectRed + diffuseCoeff * diffuseTerm * objectRed + specularTerm * specularCoeff)*255); pixelRed = pixelRed > 255 ? 255 : pixelRed;
+	    int pixelGreen = (int)((ambientTerm * objectGreen + diffuseCoeff * diffuseTerm * objectGreen + specularTerm * specularCoeff)*255); pixelGreen = pixelGreen > 255 ? 255 : pixelGreen;
+	    int pixelBlue = (int)((ambientTerm * objectBlue + diffuseCoeff * diffuseTerm * objectBlue + specularTerm * specularCoeff)*255); pixelBlue = pixelBlue > 255 ? 255 : pixelBlue;
 		
 		return Color.rgb(pixelRed, pixelGreen, pixelBlue);
 	}
