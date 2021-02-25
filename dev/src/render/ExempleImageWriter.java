@@ -70,7 +70,7 @@ public class ExempleImageWriter extends Application
 		shapeList.add(new SphereMaths(new Point(0.5, 0, -1), 0.25, Color.BLACK, 3, 1, 0.6, 1, 0));
 		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.RED, 80, 1, 1, 0.5, 0.5));
 		shapeList.add(new SphereMaths(new Point(-1.5, 0.5, -5.5), 0.2, Color.LIGHTSKYBLUE, 3, 1, 0, 0, 0.5));
-		shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, Color.LIGHTCORAL, 3, 1, 0, 1, 0));
+		shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, Color.ORANGERED, 1, 0.8, 0.05, 0.8, 0));
 		shapeList.add(new SphereMaths(new Point(1, -0.65, -5), 0.35, Color.rgb(64, 64, 64), 3, 0, 0, 0.2, 0.8));//Mirror boi
 
 		MyScene sceneRT = new MyScene(cameraRT, l, shapeList, Color.rgb(24, 24, 24), 0.55);
