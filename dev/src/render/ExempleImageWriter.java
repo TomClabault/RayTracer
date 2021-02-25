@@ -62,12 +62,12 @@ public class ExempleImageWriter extends Application
 
 		ArrayList<Shape> shapeList = new ArrayList<>();
 		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), Color.rgb(125, 125, 125)));
-		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.RED, 128, 0.5, 0.5));
+		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.CHOCOLATE, 128, 1, 0.5));
 		shapeList.add(new SphereMaths(new Point(0.5, 1, -5), 0.25, Color.DIMGREY, 80, 1, 0.5));
 		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.DARKCYAN, 80, 1, 0.5));
 		shapeList.add(new SphereMaths(new Point(5, -1, 0), 0.2, Color.ORANGERED, 80, 1, 0.5));
 
-		MyScene sceneRT = new MyScene(cameraRT, l, shapeList,Color.LIGHTSKYBLUE, 0.4);
+		MyScene sceneRT = new MyScene(cameraRT, l, shapeList,Color.LIGHTSKYBLUE, 0.55);
 
 		
 	

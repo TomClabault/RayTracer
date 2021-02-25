@@ -146,9 +146,9 @@ public class RayTracer
 //		int pixelGreen = (int)((ambientTerm + intersectedObject.getColor().getGreen()*0 * diffuseTerm*0 + specularTerm*0) * 255); pixelGreen = pixelGreen > 255 ? 255 : pixelGreen;
 //		int pixelBlue = (int)((ambientTerm + intersectedObject.getColor().getBlue()*0 * diffuseTerm*0 + specularTerm*0) * 255); pixelBlue = pixelBlue > 255 ? 255 : pixelBlue;
 	               
-	    int pixelRed = (int)((ambientTerm * objectRed + diffuseCoeff * diffuseTerm * objectRed + specularTerm)*255); pixelRed = pixelRed > 255 ? 255 : pixelRed;
-	    int pixelGreen = (int)((ambientTerm * objectGreen + diffuseCoeff * diffuseTerm * objectGreen + specularTerm)*255); pixelGreen = pixelGreen > 255 ? 255 : pixelGreen;
-	    int pixelBlue = (int)((ambientTerm * objectBlue + diffuseCoeff * diffuseTerm * objectBlue + specularTerm)*255); pixelBlue = pixelBlue > 255 ? 255 : pixelBlue;
+	    int pixelRed = (int)((ambientTerm * objectRed + diffuseCoeff * diffuseTerm * objectRed + specularTerm * specularCoeff)*255); pixelRed = pixelRed > 255 ? 255 : pixelRed;
+	    int pixelGreen = (int)((ambientTerm * objectGreen + diffuseCoeff * diffuseTerm * objectGreen + specularTerm * specularCoeff)*255); pixelGreen = pixelGreen > 255 ? 255 : pixelGreen;
+	    int pixelBlue = (int)((ambientTerm * objectBlue + diffuseCoeff * diffuseTerm * objectBlue + specularTerm * specularCoeff)*255); pixelBlue = pixelBlue > 255 ? 255 : pixelBlue;
 		
 		return Color.rgb(pixelRed, pixelGreen, pixelBlue);
 	}
