@@ -102,7 +102,7 @@ public class RayTracer
 				Ray cameraRay = new Ray(MatrixD.mulPoint(new Point(0, 0, 0), ctwMatrix), pixelWorldCoords);
 				cameraRay.normalize();
 				
-				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay);
+				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay, 35);
 				this.renderedPixels.set(y*renderWidth + x, pixelColor);
 			}
 		}
@@ -149,8 +149,11 @@ public class RayTracer
 	 * 
 	 * @return Une instance de Color.RGB(r, g, b)
 	 */
-	public Color computePixel(int x, int y, MyScene renderScene, Ray ray)
+	public Color computePixel(int x, int y, MyScene renderScene, Ray ray, int maxBounceCount)
 	{
+		if(maxBounceCount == 0)
+			return renderScene.getBackgroundColor();
+		
 		ArrayList<Shape> objectList = renderScene.getSceneObjects();
 		
 		Point rayInterPoint = new Point(0, 0, 0);
@@ -158,58 +161,57 @@ public class RayTracer
 		
 		if(rayInterObject != null)//Il y a un point d'intersection
 		{
-			Point interPointShift = Point.add(rayInterPoint, Point.scalarMul(0.0001d, Vector.v2p(ray.negate())));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
-			if(rayInterObject.getIsReflective())
+			Vector reflectionVector = getReflectionVector(rayInterObject.getNormal(rayInterPoint), new Vector(rayInterPoint, renderScene.getLight().getCenter()));
+
+			Point interPointShift = Point.add(rayInterPoint, Point.scalarMul(0.0001d, Vector.v2p(reflectionVector)));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
+			
+			Vector shadowRayDir = new Vector(interPointShift, renderScene.getLight().getCenter());//On calcule la direction du rayon secondaire qui va droit dans la source de lumière
+			Ray shadowRay = new Ray(interPointShift, shadowRayDir);//Création du rayon secondaire avec pour origine le premier point d'intersection décalé et avec comme direction le centre de la lampe
+			double interToLightDist = shadowRayDir.length();//Distance qui sépare le point d'intersection du centre de la lumière
+			shadowRay.normalize();
+			shadowRayDir.normalize();
+			
+			//On cherche une intersection avec un objet qui se trouverait entre la lampe et l'origine du shadow ray
+			Point shadowInterPoint = new Point(0, 0, 0);
+			Shape shadowInterObject = computeClosestInterPoint(objectList, shadowRay, shadowInterPoint);
+
+			double interToShadowInterDist = 0;
+			if(shadowInterObject != null)
+				interToShadowInterDist = Point.distance(rayInterPoint, shadowInterPoint);
+
+			
+			Color phongShadingColor = null;
+			if(shadowInterObject == null || interToShadowInterDist > interToLightDist)//Aucune intersection trouvée pour aller jusqu'à la lumière, on peut calculer l'intensité avec Phong
 			{
-				try
-				{
-					Vector reflectionVector = getReflectionVector(rayInterObject.getNormal(rayInterPoint), new Vector(rayInterPoint, renderScene.getLight().getCenter()));
+				Vector normalAtIntersection = rayInterObject.getNormal(rayInterPoint);//Normale au point d'intersection avec la forme
 				
-					Color pixelColor = computePixel(x, y, renderScene, new Ray(interPointShift, reflectionVector));
-					return Color.rgb((int)(pixelColor.getRed()*0.8*255), (int)(pixelColor.getGreen()*0.8*255), (int)(pixelColor.getBlue()*0.8*255));
-				}
-				catch(StackOverflowError e)
-				{
-					System.out.println("here");
-					
-					return Color.rgb(0, 0, 0);
-				}
+				phongShadingColor = computePhongShading(renderScene, ray, shadowRayDir, rayInterObject, normalAtIntersection);
 			}
-			else
+			else//Une intersection a été trouvée et l'objet intersecté est entre la lumière et le départ du shadow ray, le pixel est dans l'ombre. On retourne la couleur * la luminosité ambiante
 			{
-				Vector shadowRayDir = new Vector(interPointShift, renderScene.getLight().getCenter());//On calcule la direction du rayon secondaire qui va droit dans la source de lumière
-				Ray shadowRay = new Ray(interPointShift, shadowRayDir);//Création du rayon secondaire avec pour origine le premier point d'intersection décalé et avec comme direction le centre de la lampe
-				double interToLightDist = shadowRayDir.length();//Distance qui sépare le point d'intersection du centre de la lumière
-				shadowRay.normalize();
-				shadowRayDir.normalize();
+				double ambientTerm = renderScene.getLight().getIntensity() * renderScene.getAmbientLightIntensity();
 				
-				//On cherche une intersection avec un objet qui se trouverait entre la lampe et l'origine du shadow ray
-				Point shadowInterPoint = new Point(0, 0, 0);
-				Shape shadowInterObject = computeClosestInterPoint(objectList, shadowRay, shadowInterPoint);
-	
-				double interToShadowInterDist = 0;
-				if(shadowInterObject != null)
-					interToShadowInterDist = Point.distance(rayInterPoint, shadowInterPoint);
-	
+				int pixelRed = (int)(rayInterObject.getColor().getRed() * ambientTerm * 255); pixelRed = pixelRed > 255 ? 255 : pixelRed;
+				int pixelGreen = (int)(rayInterObject.getColor().getGreen() * ambientTerm * 255); pixelGreen = pixelGreen > 255 ? 255 : pixelGreen;
+				int pixelBlue = (int)(rayInterObject.getColor().getBlue() * ambientTerm * 255); pixelBlue = pixelBlue > 255 ? 255 : pixelBlue;
 				
-				if(shadowInterObject == null || interToShadowInterDist > interToLightDist)//Aucune intersection trouvée pour aller jusqu'à la lumière, on peut calculer l'intensité avec Phong
-				{
-					Vector normalAtIntersection = rayInterObject.getNormal(rayInterPoint);//Normale au point d'intersection avec la forme
-					Color phongShadingColor = computePhongShading(renderScene, ray, shadowRayDir, rayInterObject, normalAtIntersection);
-					
-					return phongShadingColor;
-				}
-				else//Une intersection a été trouvée et l'objet intersecté est entre la lumière et le départ du shadow ray, le pixel est dans l'ombre. On retourne la couleur * la luminosité ambiante
-				{
-					double ambientTerm = renderScene.getLight().getIntensity() * renderScene.getAmbientLightIntensity();
-					
-					int pixelRed = (int)(rayInterObject.getColor().getRed() * ambientTerm * 255); pixelRed = pixelRed > 255 ? 255 : pixelRed;
-					int pixelGreen = (int)(rayInterObject.getColor().getGreen() * ambientTerm * 255); pixelGreen = pixelGreen > 255 ? 255 : pixelGreen;
-					int pixelBlue = (int)(rayInterObject.getColor().getBlue() * ambientTerm * 255); pixelBlue = pixelBlue > 255 ? 255 : pixelBlue;
-	
-					return Color.rgb(pixelRed, pixelGreen, pixelBlue);
-				}
+				phongShadingColor = Color.rgb(pixelRed, pixelGreen, pixelBlue);//L'objet n'est pas réfléxif, on ne renvoie que la partie ambiante
 			}
+			
+			if(rayInterObject.getIsReflective())//Si l'objet réfléchi la lumière
+			{
+				Color reflectionColor = computePixel(x, y, renderScene, new Ray(interPointShift, reflectionVector), maxBounceCount - 1);
+				
+				double reflectionCoeff = 0.4;
+				
+				int refleAmbMixRed = (int)((phongShadingColor.getRed()*(1-reflectionCoeff) + reflectionColor.getRed()*reflectionCoeff)*255);
+				int refleAmbMixGreen = (int)((phongShadingColor.getGreen()*(1-reflectionCoeff) + reflectionColor.getGreen()*reflectionCoeff)*255);
+				int refleAmbMixBlue = (int)((phongShadingColor.getBlue()*(1-reflectionCoeff) + reflectionColor.getBlue()*reflectionCoeff)*255);
+				
+				phongShadingColor = Color.rgb(refleAmbMixRed, refleAmbMixGreen, refleAmbMixBlue);
+			}
+			
+			return phongShadingColor;
 		}
 		else//Le rayon n'a rien intersecté --> noir
 			return renderScene.getBackgroundColor();//Couleur du fond, noir si on a pas de fond
