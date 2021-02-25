@@ -15,7 +15,7 @@ public class PlaneMaths implements ShapeMaths
 	Color color;
 	int shininess;
 	double diffuse;
-	boolean isReflective;
+	double reflectiveCoeff;
 	
 	/*
 	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan
@@ -25,7 +25,7 @@ public class PlaneMaths implements ShapeMaths
 	 */
 	public PlaneMaths(Vector normal, Point point)
 	{
-		this(normal, point, Color.rgb(128, 128, 128), 100, 1, false);
+		this(normal, point, Color.rgb(128, 128, 128), 100, 1, 0);
 	}
 	
 	/*
@@ -37,7 +37,7 @@ public class PlaneMaths implements ShapeMaths
 	 */
 	public PlaneMaths(Vector normal, Point point, Color color)
 	{
-		this(normal, point, color, 2, 0.5, false);
+		this(normal, point, color, 2, 0.5, 0);
 	}
 	
 	/*
@@ -49,7 +49,7 @@ public class PlaneMaths implements ShapeMaths
 	 * @param shininess Brillance du plan. Plus la valeur est petite pour le plan est brillant
 	 * @param diffuseCoeff Coefficient de diffusion de la lumière à l'impact du plan. Plus le coefficient est petit moins le plan est diffus
 	 */
-	public PlaneMaths(Vector normal, Point point, Color color, int shininess, double diffuseCoeff, boolean isReflective)
+	public PlaneMaths(Vector normal, Point point, Color color, int shininess, double diffuseCoeff, double reflectiveCoeff)
 	{
 		this.normal = normal;
 		this.point = point;
@@ -57,7 +57,7 @@ public class PlaneMaths implements ShapeMaths
 		this.color = color;
 		this.shininess = shininess;
 		this.diffuse = diffuseCoeff;
-		this.isReflective = isReflective;
+		this.reflectiveCoeff = reflectiveCoeff;
 	}
 	
 	/*
@@ -83,16 +83,6 @@ public class PlaneMaths implements ShapeMaths
 	}
 	
 	/*
-	 * Retourne un booléeen selon si le plan est réfléchissant ou non
-	 * 
-	 * @return True si le plan est réfléchissant, false sinon
-	 */
-	public boolean getIsReflective()
-	{
-		return this.isReflective;
-	}
-	
-	/*
 	 * Permet d'obtenir la normal du plan
 	 * 
 	 * @param point Paramètre ignoré
@@ -103,6 +93,16 @@ public class PlaneMaths implements ShapeMaths
 	public Vector getNormal(Point point) 
 	{
 		return this.normal;
+	}
+	
+	/*
+	 * Retourne le coefficient de réflectivité du plan
+	 * 
+	 * @return Réel entre 0 et 1 représentant la réflectivité du plan
+	 */
+	public double getReflectiveCoeff()
+	{
+		return this.reflectiveCoeff;
 	}
 	
 	/*

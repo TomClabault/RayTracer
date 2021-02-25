@@ -23,18 +23,18 @@ public interface Shape
 	public abstract double getDiffuse();
 	
 	/*
-	 * Permet de savoir si l'objet réfléchi la lumière ou non
-	 * 
-	 * @return Retourne true si l'objet est réfléchissant, false sinon
-	 */
-	public abstract boolean getIsReflective();
-	
-	/*
 	 * Permet d'obtenir la normale à un point donné de la forme
 	 * 
 	 * @param point Le point par rapport auquel on souhaite la normale
 	 */
 	public abstract Vector getNormal(Point point);
+	
+	/*
+	 * Permet d'obtenir la proportion de lumière que réfléchit l'objet
+	 * 
+	 * @return Retourne la proportion de lumière que réfélchit l'objet. Réel entre 0 et 1
+	 */
+	public abstract double getReflectiveCoeff();
 	
 	/*
 	 * Permet d'obtenir la brillance de l'objet

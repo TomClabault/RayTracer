@@ -77,21 +77,51 @@ public class RayTracer
 	}
 	
 	/*
-	 * Calcul l'intensité lumineuse diffuse en un point donné de l'image 
+	 * Calcule la luminosité ambiante de la scène à partir de l'intensité de la source de lumière et de l'intensité de la lumière ambiante
+	 * 
+	 * @param ambientLightIntensity Intensité de la luminosité ambiante de la scène
+	 * @param lightIntensity Intensité de la source de lumière
+	 * 
+	 * @return Retourne la composante ambiante de l'illumination de la scène. Réel entre 0 et 1
 	 */
-	public double computeDiffuse(Vector shadowRayDir, Vector normalAtIntersection, double lightIntensity)
+	public double computeAmbient(double ambientLightIntensity, double lightIntensity) 
 	{
-		double dotProdDiffuse = Vector.dotProduct(shadowRayDir, normalAtIntersection);
+		return ambientLightIntensity * lightIntensity; 
+	}
+	
+	/*
+	 * Calcule l'intensité lumineuse diffuse en un point donné de l'image à la surface d'un objet
+	 * 
+	 *  @param toLightDirection Vecteur indiquant la direction de la source de lumière
+	 *  @param normalAtIntersection Vecteur normal à la surface de l'objet
+	 *  @param lightIntensity Intensité lumineuse de la source de lumière
+	 *  
+	 *  @return La composante diffuse en un point donné de la scène vis à vis de la surface d'un objet. Réel entre 0 et 1
+	 */
+	public double computeDiffuse(Vector toLightDirection, Vector normalAtIntersection, double lightIntensity)
+	{
+		double dotProdDiffuse = Vector.dotProduct(toLightDirection, normalAtIntersection);
 		double diffuseTerm = dotProdDiffuse < 0 ? 0 : lightIntensity*dotProdDiffuse;//Si le dotProduct est négatif, on ne calcule pas le terme diffus --> = 0
 		
 		return diffuseTerm;
 	}
 	
-	public double computeSpecular(Ray incidentRay, Vector shadowRayDir, Vector normalAtIntersection, double lightIntensity, double objectShininess)
+	/*
+	 * Calcule l'intensité lumineuse spéculaire en un point donné de l'image à la surface d'un objet
+	 * 
+	 *  @param incidentRay Ray incident au point dont on souhaite l'intensité spéculaire
+	 *  @param toLightDirection Vecteur indiquant la direction de la source de lumière
+	 *  @param normalAtIntersection Vecteur normal à la surface de l'objet
+	 *  @param lightIntensity Intensité lumineuse de la source de lumière
+	 *  @param objectShininess Brillance de l'objet obtenable avec Shape.getShininess()
+	 *  
+	 *  @return La composante spéculaire en un point donné de la scène vis à vis de la surface d'un objet. Réel entre 0 et 1.
+	 */
+	public double computeSpecular(Ray incidentRay, Vector toLightDirection, Vector normalAtIntersection, double lightIntensity, double objectShininess)
 	{
 		//Composante spéculaire
 		double specularTerm = 0;
-		Vector reflectVector = Vector.normalize(this.getReflectionVector(normalAtIntersection, shadowRayDir));
+		Vector reflectVector = Vector.normalize(this.getReflectionVector(normalAtIntersection, toLightDirection.negate()));
 		
 		double dotProdSpecular = Vector.dotProduct(reflectVector, incidentRay.negate());
 		specularTerm = lightIntensity*Math.pow(Math.max(dotProdSpecular, 0), objectShininess);
@@ -125,44 +155,11 @@ public class RayTracer
 				Ray cameraRay = new Ray(MatrixD.mulPoint(new Point(0, 0, 0), ctwMatrix), pixelWorldCoords);
 				cameraRay.normalize();
 				
-				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay, 35);
+				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay, 10);
 				this.renderedPixels.set(y*renderWidth + x, pixelColor);
 			}
 		}
 	}
-	
-//	/*
-//	 * Calcule et renvoie la couleur et l'illumination d'un point à l'écran en fonction
-//	 */
-//	public Color computePhongShading(MyScene renderScene, Ray ray, Vector shadowRayDir, Shape intersectedObject, Vector normalAtIntersection)
-//	{
-//		double lightIntensity = renderScene.getLight().getIntensity();
-//		
-//		//Composante ambiante
-//		double ambientTerm = lightIntensity * renderScene.getAmbientLightIntensity();
-//
-//		//Composante spéculaire
-//		double specularTerm = 0;
-//		if(dotProdDiffuse >= 0)//On ne calcule la specular que si le dotProduct du diffus n'est pas négatif
-//		{
-//			Vector reflectVector = Vector.normalize(this.getReflectionVector(normalAtIntersection, shadowRayDir));
-//			
-//			double dotProdSpecular = Vector.dotProduct(reflectVector, ray.negate());
-//			specularTerm = lightIntensity*Math.pow(Math.max(dotProdSpecular, 0), intersectedObject.getShininess());
-//		}
-//		
-//		double diffuseCoeff = intersectedObject.getDiffuse();
-//		double specularCoeff = intersectedObject.getSpecularCoeff();
-//		
-//		Color initialColor = intersectedObject.getColor();
-//		Color finalColor = intersectedObject.getColor();
-//		
-//		finalColor = ColorOperations.mulColor(finalColor, ambientTerm);
-//		finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(initialColor, diffuseCoeff * diffuseTerm));
-//		finalColor = ColorOperations.addToColor(finalColor, specularTerm * specularCoeff);
-//		
-//		return finalColor;
-//	}
 	
 	/*
 	 * Calcule la couleur d'un pixel grâce à un rayon
@@ -171,9 +168,9 @@ public class RayTracer
 	 * 
 	 * @return Une instance de Color.RGB(r, g, b)
 	 */
-	public Color computePixel(int x, int y, MyScene renderScene, Ray ray, int maxBounceCount)
+	public Color computePixel(int x, int y, MyScene renderScene, Ray ray, int depth)
 	{
-		if(maxBounceCount == 0)
+		if(depth == 0)
 			return renderScene.getBackgroundColor();
 		
 		ArrayList<Shape> objectList = renderScene.getSceneObjects();
@@ -184,16 +181,18 @@ public class RayTracer
 		if(rayInterObject != null)//Il y a un point d'intersection
 		{
 			double lightIntensity = renderScene.getLight().getIntensity();
-			double ambientLighting = renderScene.getAmbientLightIntensity() * lightIntensity;
+			double ambientLighting = computeAmbient(renderScene.getAmbientLightIntensity(), lightIntensity);
 			
 			Color finalColor = Color.rgb(0, 0, 0);
 			finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(rayInterObject.getColor(), ambientLighting));
 			
 			
 
-			Vector reflectionVector = getReflectionVector(rayInterObject.getNormal(rayInterPoint), new Vector(rayInterPoint, renderScene.getLight().getCenter()));
+			Vector normalAtIntersection = rayInterObject.getNormal(rayInterPoint);
+			//Vector reflectionVector = getReflectionVector(normalAtIntersection, new Vector(rayInterPoint, renderScene.getLight().getCenter()));
+			Vector reflectionVector = getReflectionVector(normalAtIntersection, ray.getDirection());
 
-			Point interPointShift = Point.add(rayInterPoint, Point.scalarMul(0.0001d, Vector.v2p(reflectionVector)));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
+			Point interPointShift = Point.add(rayInterPoint, Point.scalarMul(0.0001d, Vector.v2p(Vector.normalize(reflectionVector))));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
 			
 			Vector shadowRayDir = new Vector(interPointShift, renderScene.getLight().getCenter());//On calcule la direction du rayon secondaire qui va droit dans la source de lumière
 			Ray shadowRay = new Ray(interPointShift, shadowRayDir);//Création du rayon secondaire avec pour origine le premier point d'intersection décalé et avec comme direction le centre de la lampe
@@ -212,8 +211,6 @@ public class RayTracer
 			
 			if(shadowInterObject == null || interToShadowInterDist > interToLightDist)//Aucune intersection trouvée pour aller jusqu'à la lumière, on peut calculer la couleur directe de l'objet
 			{
-				Vector normalAtIntersection = rayInterObject.getNormal(rayInterPoint);//Normale au point d'intersection avec l'objet
-				
 				if(rayInterObject.getDiffuse() > 0)//Si le matériau est diffus
 				{
 					double diffuseComponent = computeDiffuse(shadowRayDir, normalAtIntersection, lightIntensity);
@@ -226,56 +223,30 @@ public class RayTracer
 					finalColor = ColorOperations.addToColor(finalColor, specularTerm * rayInterObject.getSpecularCoeff());
 				}
 				
-				//finalColor = computePhongShading(renderScene, ray, shadowRayDir, rayInterObject, normalAtIntersection);
+				if(rayInterObject.getReflectiveCoeff() > 0)
+				{
+					Color reflectionColor = computePixel(x, y, renderScene, new Ray(interPointShift, Vector.normalize(getReflectionVector(normalAtIntersection, ray.getDirection()))), depth - 1);
+					
+					//finalColor = ColorOperations.mulColor(reflectionColor, rayInterObject.getReflectiveCoeff());
+					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(reflectionColor, rayInterObject.getReflectiveCoeff()));
+				}
 			}
-			else//Une intersection a été trouvée et l'objet intersecté est entre la lumière et le départ du shadow ray, le pixel est dans l'ombre. On retourne la couleur * la luminosité ambiante
+			else//Une intersection a été trouvée et l'objet intersecté est entre la lumière et le départ du shadow ray
 			{
-				double ambientTerm = renderScene.getLight().getIntensity() * renderScene.getAmbientLightIntensity();
-				
-				int pixelRed = (int)(rayInterObject.getColor().getRed() * ambientTerm * 255); pixelRed = pixelRed > 255 ? 255 : pixelRed;
-				int pixelGreen = (int)(rayInterObject.getColor().getGreen() * ambientTerm * 255); pixelGreen = pixelGreen > 255 ? 255 : pixelGreen;
-				int pixelBlue = (int)(rayInterObject.getColor().getBlue() * ambientTerm * 255); pixelBlue = pixelBlue > 255 ? 255 : pixelBlue;
-				
-				finalColor = Color.rgb(pixelRed, pixelGreen, pixelBlue);//L'objet n'est pas réfléxif, on ne renvoie que la partie ambiante
+				if(rayInterObject.getReflectiveCoeff() > 0)//Si l'objet est réflectif, on va calculer le reflet de l'objet qui bloque le chemin à la lumière plutôt que de l'ombre
+				{
+					Color reflectionColor = computePixel(x, y, renderScene, new Ray(interPointShift, Vector.normalize(getReflectionVector(normalAtIntersection, ray.getDirection()))), depth - 1);
+					
+					finalColor = ColorOperations.mulColor(reflectionColor, rayInterObject.getReflectiveCoeff());
+					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(rayInterObject.getColor(), ambientLighting));
+				}
+				else
+					finalColor = ColorOperations.mulColor(rayInterObject.getColor(), ambientLighting);//L'objet n'est pas réfléxif, on ne renvoie que la partie ambiante
 			}
-			
-//			if(rayInterObject.getIsReflective())//Si l'objet réfléchi la lumière
-//			{
-//				Color reflectionColor = computePixel(x, y, renderScene, new Ray(interPointShift, reflectionVector), maxBounceCount - 1);
-//				
-//				double reflectionCoeff = 0.5;
-//				
-//				double lightIntensity = renderScene.getLight().getIntensity();
-//				
-//				//Composante diffuse
-//				double dotProdDiffuse = Vector.dotProduct(shadowRayDir, rayInterObject.getNormal(rayInterPoint));
-//				double diffuseTerm = dotProdDiffuse < 0 ? 0 : lightIntensity*dotProdDiffuse;//Si le dotProduct est négatif, on n'inclus pas le terme diffus dans le calcul, on le met donc à 0
-//				
-//				//Composante spéculaire
-//				double specularTerm = 0;
-//				if(dotProdDiffuse >= 0)//On ne calcule la specular que si le dotProduct du diffus n'est pas négatif
-//				{
-//					Vector reflectVector = Vector.normalize(this.getReflectionVector(rayInterObject.getNormal(rayInterPoint), shadowRayDir));
-//					
-//					double dotProdSpecular = Vector.dotProduct(reflectVector, ray.negate());
-//					specularTerm = lightIntensity*Math.pow(Math.max(dotProdSpecular, 0), rayInterObject.getShininess());
-//				}
-//				
-//				double objectRed = rayInterObject.getColor().getRed();
-//				double objectGreen = rayInterObject.getColor().getGreen();
-//				double objectBlue = rayInterObject.getColor().getBlue();
-//				double diffuseCoeff = rayInterObject.getDiffuse();
-//				
-//				int refleAmbMixRed = (int)((objectRed*diffuseTerm*diffuseCoeff*(1-reflectionCoeff) + reflectionColor.getRed()*reflectionCoeff + lightIntensity*renderScene.getAmbientLightIntensity() * objectRed + specularTerm * rayInterObject.getSpecularCoeff())*255); refleAmbMixRed = refleAmbMixRed > 255 ? 255 : refleAmbMixRed; 
-//				int refleAmbMixGreen = (int)((objectGreen*diffuseTerm*diffuseCoeff*(1-reflectionCoeff) + reflectionColor.getGreen()*reflectionCoeff + lightIntensity*renderScene.getAmbientLightIntensity() * objectGreen + specularTerm * rayInterObject.getSpecularCoeff())*255); refleAmbMixGreen = refleAmbMixGreen > 255 ? 255 : refleAmbMixGreen;
-//				int refleAmbMixBlue = (int)((objectBlue*diffuseTerm*diffuseCoeff*(1-reflectionCoeff) + reflectionColor.getBlue()*reflectionCoeff + lightIntensity*renderScene.getAmbientLightIntensity() * objectBlue + specularTerm * rayInterObject.getSpecularCoeff())*255); refleAmbMixBlue = refleAmbMixBlue > 255 ? 255 : refleAmbMixBlue;
-//				
-//				finalColor = Color.rgb(refleAmbMixRed, refleAmbMixGreen, refleAmbMixBlue);
-//			}
 			
 			return finalColor;
 		}
-		else//Le rayon n'a rien intersecté --> noir
+		else//Le rayon n'a rien intersecté --> couleur du background
 			return renderScene.getBackgroundColor();//Couleur du fond, noir si on a pas de fond
 	}
 	
@@ -341,7 +312,8 @@ public class RayTracer
 	 */
 	public Vector getReflectionVector(Vector normalToSurface, Vector intersectToLightVec)
 	{
-		return Vector.sub(Vector.scalarMul(normalToSurface, 2*Vector.dotProduct(intersectToLightVec, normalToSurface)), intersectToLightVec);//2*(L.N)*N-L
+		//return Vector.sub(Vector.scalarMul(normalToSurface, 2*Vector.dotProduct(intersectToLightVec, normalToSurface)), intersectToLightVec);//2*(L.N)*N-L
+		return Vector.sub(intersectToLightVec, Vector.scalarMul(normalToSurface, Vector.dotProduct(normalToSurface, intersectToLightVec)*2));
 	}
 	
 	/*

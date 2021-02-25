@@ -19,7 +19,7 @@ public class SphereMaths implements ShapeMaths
 	int shininess;
 	double specularCoeff;
 	double diffuseComponent;
-	boolean isReflective;
+	double reflectiveCoeff;
 	
 	/*
 	 * Crée une sphère blanche à partie de son centre et de son rayon
@@ -29,7 +29,7 @@ public class SphereMaths implements ShapeMaths
 	 */
 	public SphereMaths(Point center, double radius)
 	{
-		this(center, radius, Color.rgb(255, 255, 255), 20, 1, 0.5, false);
+		this(center, radius, Color.rgb(255, 255, 255), 20, 1, 0.5, 0);
 	}
 	
 	/*
@@ -40,7 +40,7 @@ public class SphereMaths implements ShapeMaths
 	 * @param sphereColor Objet Color.RGB représentant la couleur de la sphère
 	 * @param specularComponent Caractéristique spéculaire de la sphère. Entier positif
 	 */
-	public SphereMaths(Point center, double radius, Color sphereColor, int shininess, double specularCoeff, double diffuseComponent, boolean isReflective) 
+	public SphereMaths(Point center, double radius, Color sphereColor, int shininess, double specularCoeff, double diffuseComponent, double reflectiveCoeff) 
 	{
 		this.center = center;
 		this.radius = radius;
@@ -49,7 +49,7 @@ public class SphereMaths implements ShapeMaths
 		this.shininess = shininess;
 		this.specularCoeff = specularCoeff;
 		this.diffuseComponent = diffuseComponent;
-		this.isReflective = isReflective;
+		this.reflectiveCoeff = reflectiveCoeff;
 	}
 	
 	/*
@@ -83,16 +83,6 @@ public class SphereMaths implements ShapeMaths
 	}
 	
 	/*
-	 * Permet de savoir si la sphère réfléchi la lumière ou non
-	 * 
-	 * @return Retourne true si l'objet est réfléchissant, false sinon
-	 */
-	public boolean getIsReflective()
-	{
-		return this.isReflective;
-	}
-	
-	/*
 	 * Retourne le vecteur normal à la sphère à un point donné
 	 * 
 	 * @param point Le point définissant la direction du vecteur normal de la sphère
@@ -102,6 +92,16 @@ public class SphereMaths implements ShapeMaths
 	public Vector getNormal(Point point)
 	{
 		return Vector.normalize(Point.p2v(Point.sub(point, center)));
+	}
+	
+	/*
+	 * Retourne le coefficient de réflectivité de la sphère
+	 * 
+	 * @return Réel entre 0 et 1 représentant la réflectivité de la sphère
+	 */
+	public double getReflectiveCoeff()
+	{
+		return this.reflectiveCoeff;
 	}
 	
 	/*
