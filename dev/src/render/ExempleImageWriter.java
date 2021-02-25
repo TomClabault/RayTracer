@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import maths.ColorOperations;
 import maths.Point;
 import maths.Vector;
 import multithreading.ThreadsTaskList;
@@ -56,17 +57,18 @@ public class ExempleImageWriter extends Application
 		
 		RayTracer rayTracerInstance = new RayTracer(width, height);
 
-		Camera cameraRT = new Camera(new Point(0, 1, -3), new Point(0, 0, -6));
+		Camera cameraRT = new Camera(new Point(-1, 1, -3), new Point(0, 0, -6));
 		cameraRT.setFOV(60);
 		Light l = new LightBulb(new Point(0, 3, -4), 1.25);
 
 		ArrayList<Shape> shapeList = new ArrayList<>();
 		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), Color.rgb(125, 125, 125)));
-		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.RED, 80, 0.5, 0.5, false));
-		shapeList.add(new SphereMaths(new Point(0.5, 1, -5), 0.25, Color.DIMGREY, 80, 1, 0.5, false));
-		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.DARKCYAN, 80, 1, 0.5, false));
+		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.WHITE, 80, 1, 0.5, true));
+		shapeList.add(new SphereMaths(new Point(0.5, 1, -5), 0.25, Color.BLACK, 3, 0.6, 1, false));
+		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.RED, 80, 1, 0.5, false));
+		shapeList.add(new SphereMaths(new Point(-1.1, 0.5, -5.5), 0.2, Color.LIGHTSKYBLUE, 3, 0, 0.5, false));
 
-		MyScene sceneRT = new MyScene(cameraRT, l, shapeList,Color.LIGHTSKYBLUE, 0.55);
+		MyScene sceneRT = new MyScene(cameraRT, l, shapeList,Color.rgb(24, 24, 24), 0.55);
 
 		
 	
