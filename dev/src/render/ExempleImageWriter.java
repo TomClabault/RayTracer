@@ -61,19 +61,19 @@ public class ExempleImageWriter extends Application
 
 		Camera cameraRT = new Camera(new Point(1, 1, -2), new Point(0, 0, -6));
 		cameraRT.setFOV(60);
-		Light l = new LightBulb(new Point(0, 1.2, -4), 1.25);
+		Light l = new LightBulb(new Point(0, 1, -4), 1.25);
 
 		ArrayList<Shape> shapeList = new ArrayList<>();
-		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), Color.rgb(125, 125, 125)));
+		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), Color.rgb(64, 64, 64)));
 		
 		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, Color.rgb(204, 0, 0), 10, 0.5, 0.3, 0.75, 0.25));
 		shapeList.add(new SphereMaths(new Point(0.5, 0, -1), 0.25, Color.BLACK, 3, 1, 0.6, 1, 0));
-		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.RED, 80, 1, 1, 0.5, 0.5));
-		shapeList.add(new SphereMaths(new Point(-1.5, 0.5, -5.5), 0.2, Color.LIGHTSKYBLUE, 3, 1, 0, 0, 0.5));
+		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.RED, 80, 0.75, 1, 0.9, 0.5));
+		shapeList.add(new SphereMaths(new Point(-1.5, 0.5, -5.5), 0.2, Color.LIGHTSKYBLUE, 80, 0.5, 0.3, 0.75, 0.25));
 		shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, Color.ORANGERED, 1, 0.8, 0.05, 0.8, 0));
-		shapeList.add(new SphereMaths(new Point(1, -0.65, -5), 0.35, Color.rgb(64, 64, 64), 3, 0, 0, 0.2, 0.8));//Mirror boi
+		shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, Color.rgb(64, 64, 64), 128, 0.5, 1, 1, 0.65));//Mirror boi
 
-		MyScene sceneRT = new MyScene(cameraRT, l, shapeList, Color.rgb(24, 24, 24), 0.55);
+		MyScene sceneRT = new MyScene(cameraRT, l, shapeList, Color.SKYBLUE, 0.55);
 
 		
 	

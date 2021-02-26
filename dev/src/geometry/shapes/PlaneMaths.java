@@ -26,7 +26,7 @@ public class PlaneMaths implements ShapeMaths
 	 */
 	public PlaneMaths(Vector normal, Point point)
 	{
-		this(normal, point, Color.rgb(128, 128, 128), 100, 1, 1, 0);
+		this(normal, point, Color.rgb(128, 128, 128), 100, 1, 1, 1);
 	}
 	
 	/*
