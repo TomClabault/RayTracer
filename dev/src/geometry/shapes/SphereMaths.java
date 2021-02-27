@@ -1,6 +1,8 @@
 package geometry.shapes;
 
 import geometry.ShapeMaths;
+import geometry.materials.Material;
+import geometry.materials.MatteMaterial;
 import javafx.scene.paint.Color;
 import maths.Point;
 import maths.Ray;
@@ -15,12 +17,7 @@ public class SphereMaths implements ShapeMaths
 	Point center;
 	double radius;
 
-	Color sphereColor;
-	int shininess;
-	double specularCoeff;
-	double ambientCoeff;
-	double diffuseCoeff;
-	double reflectiveCoeff;
+	Material material;
 	
 	/*
 	 * Crée une sphère blanche à partie de son centre et de son rayon
@@ -30,41 +27,22 @@ public class SphereMaths implements ShapeMaths
 	 */
 	public SphereMaths(Point center, double radius)
 	{
-		this(center, radius, Color.rgb(255, 255, 255), 20, 1, 1, 0.5, 0);
+		this(center, radius, new MatteMaterial(Color.rgb(255, 255, 255)));
 	}
 	
 	/*
-	 * Crée une sphère blanche à partie de son centre et de son rayon
+	 * Crée une sphère blanche à partie de son centre, de son rayon et de son matériau
 	 * 
 	 * @param center Point représentant le centre de la sphère
-	 * @param radius Rayon de la sphère
-	 * @param sphereColor Objet Color.RGB représentant la couleur de la sphère
-	 * @param shininess Détermine la brillance de la sphère. Plus ce nombre est haut et plus la tâche spéculaire sera petite
-	 * @param specularCoeff Coefficient d'intensité de la spécularité. Réeel entre 0 et 1. Plus ce nombre se rapproche de 1 et plus la spécularité sera blanche
-	 * @param diffuseComponent Coefficient d'intensité de la diffusion de la sphère. Réel entre 0 et 1. Plus ce nombre se rapproche de 1 et plus la sphère sera diffuse
-	 * @param reflectiveCoeff Coefficient d'intensité des réflexions de la sphère. Réel entre 0 et 1. 1 = miroir, 0 = pas de réflexion
+	 * @param radius Rayon de la sphère 
+	 * @param material Matériau utilisé pour le rendu de la sphère
 	 */
-	public SphereMaths(Point center, double radius, Color sphereColor, int shininess, double ambientCoeff, double specularCoeff, double diffuseCoeff, double reflectiveCoeff) 
+	public SphereMaths(Point center, double radius, Material material)
 	{
 		this.center = center;
 		this.radius = radius;
-
-		this.sphereColor = sphereColor;
-		this.shininess = shininess;
-		this.specularCoeff = specularCoeff;
-		this.ambientCoeff = ambientCoeff;
-		this.diffuseCoeff = diffuseCoeff;
-		this.reflectiveCoeff = reflectiveCoeff;
-	}
-	
-	/*
-	 * Permet d'obtenir la quantité de lumière ambiante que la sphère renvoie
-	 * 
-	 *  @return Retourne un réel entre 0 et 1 représentant le pourcentage de luminosité ambiante qui la sphère réfléchira 
-	 */
-	public double getAmbientCoeff()
-	{
-		return this.ambientCoeff;
+		
+		this.material = material;
 	}
 	
 	/*
@@ -78,23 +56,14 @@ public class SphereMaths implements ShapeMaths
 	}
 	
 	/*
-	 * Permet d'obtenir la couleur de la sphère
+	 * Permet d'obtenir le matériau de la sphère
 	 * 
-	 * @return Objet Color.RGB contenant la couleur de la sphère
+	 * @return Matériau de la sphère
 	 */
-	public Color getColor()
+	@Override
+	public Material getMaterial() 
 	{
-		return this.sphereColor;
-	}
-	
-	/*
-	 * Permet d'obtenir la composante diffuse d'un objet
-	 * 
-	 * @return Retourne un réel entre 0 et 1 représentant le pourcentage de diffusion de la lumière par l'objet
-	 */
-	public double getDiffuseCoeff()
-	{
-		return this.diffuseCoeff;
+		return this.material;
 	}
 	
 	/*
@@ -107,31 +76,6 @@ public class SphereMaths implements ShapeMaths
 	public Vector getNormal(Point point)
 	{
 		return Vector.normalize(Point.p2v(Point.sub(point, center)));
-	}
-	
-	/*
-	 * Retourne le coefficient de réflectivité de la sphère
-	 * 
-	 * @return Réel entre 0 et 1 représentant la réflectivité de la sphère
-	 */
-	public double getReflectiveCoeff()
-	{
-		return this.reflectiveCoeff;
-	}
-	
-	/*
-	 * Retourne la composante spéculaire de l'objet
-	 * 
-	 * @return Un entier positif représentant la composante spéculaire de l'objet
-	 */
-	public int getShininess()
-	{
-		return this.shininess;
-	}
-	
-	public double getSpecularCoeff()
-	{
-		return this.specularCoeff;
 	}
 	
 	/*

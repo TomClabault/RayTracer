@@ -35,11 +35,6 @@ public class Triangle implements Shape
 		this.specularCoeff = specularCoeff;
 	}
 	
-	public Color getColor()
-	{
-		return this.color;
-	}
-	
 	public Vector getNormal(Point point)
 	{
 		return this.planeNormal;
@@ -115,23 +110,5 @@ public class Triangle implements Shape
 			return intersection;//On le retourne
 		else//Cela veut dire que le rayon intersecte le plan formé par le triangle mais pas le triangle lui même
 			return null;
-	}
-
-	@Override
-	public double getDiffuse() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getShininess() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getSpecularCoeff() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 }

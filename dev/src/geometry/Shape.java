@@ -1,11 +1,14 @@
 package geometry;
 
+import geometry.materials.Material;
 import maths.Point;
 import maths.Ray;
 import maths.Vector;
 
 public interface Shape
 {
+	public abstract Material getMaterial();
+	
 	/*
 	 * Permet d'obtenir la normale à un point donné de la forme
 	 * 
