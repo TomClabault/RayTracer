@@ -69,7 +69,7 @@ public class ExempleImageWriter extends Application
 		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, new MetallicMaterial(Color.rgb(240, 0, 0))));
 		//shapeList.add(new SphereMaths(new Point(0.5, 0, -1), 0.25, Color.BLACK, 3, 1, 0.6, 1, 0));
 		//shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.RED, 80, 0.75, 1, 0.9, 0.5));
-		//shapeList.add(new SphereMaths(new Point(-1.5, 0.5, -5.5), 0.2, Color.LIGHTSKYBLUE, 80, 0.5, 0.3, 0.75, 0.25));
+		shapeList.add(new SphereMaths(new Point(1.25, -0.8, -6.5), 0.2, new MetallicMaterial(Color.LIGHTSKYBLUE)));
 		shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
 		shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
 
