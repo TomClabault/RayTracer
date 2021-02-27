@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
  */
 public class Material 
 {	
-	Color color;
+	private Color color;
 	
 	private double ambientCoeff;
 	private double diffuseCoeff;

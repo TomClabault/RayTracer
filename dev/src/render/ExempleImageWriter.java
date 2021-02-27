@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import geometry.shapes.*;
 import geometry.*;
 import geometry.materials.MatteMaterial;
+import geometry.materials.MetallicMaterial;
 import geometry.materials.MirrorMaterial;
 import scene.*;
 import scene.MyScene;
@@ -60,16 +61,16 @@ public class ExempleImageWriter extends Application
 
 		Camera cameraRT = new Camera(new Point(1, 1, -2), new Point(0, 0, -6));
 		cameraRT.setFOV(60);
-		Light l = new LightBulb(new Point(0, 0, -4), 1.25);
+		Light l = new LightBulb(new Point(-0.5, 0.5, -4), 1.25);
 
 		ArrayList<Shape> shapeList = new ArrayList<>();
 		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128))));
 		
-		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, new MetalicMaterial(Color.rgb(240, 0, 0))));
+		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, new MetallicMaterial(Color.rgb(240, 0, 0))));
 		//shapeList.add(new SphereMaths(new Point(0.5, 0, -1), 0.25, Color.BLACK, 3, 1, 0.6, 1, 0));
 		//shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, Color.RED, 80, 0.75, 1, 0.9, 0.5));
 		//shapeList.add(new SphereMaths(new Point(-1.5, 0.5, -5.5), 0.2, Color.LIGHTSKYBLUE, 80, 0.5, 0.3, 0.75, 0.25));
-		shapeList.add(new SphereMaths(new Point(-1, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
+		shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
 		shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
 
 		MyScene sceneRT = new MyScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.55);
