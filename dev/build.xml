@@ -10,9 +10,7 @@
         <fileset dir="${projet.lib.dir}">
             <include name="*.jar"/>
         </fileset>
-        <fileset dir="${build}">
-            <include name="**/*.class"/>
-        </fileset>
+        <pathelement location="${build}" />
     </path>
 
     <target name="init">
@@ -31,12 +29,17 @@
         </javac>
     </target>
 
-    <!--<target name="run" description="execution" depends="compile">
+    <target name="run" description="execution" depends="compile">
         <java classname="render.ExempleImageWriter">
-            <classpath refid="./build/render/classes"/>
+            <classpath refid="projet.classpath"/>
         </java>
-    </target>-->
-    <target name="packaging" depends="compile">
+    </target>
+
+    <target name = "clean" description="delete jar">
+      <delete file="test.jar"/>
+    </target>
+
+    <target name="packaging" depends="compile,clean">
         <jar jarfile="test.jar" basedir="${build}" manifest="${basedir}/Manifest.txt"/>
     </target>
 
