@@ -15,8 +15,11 @@ public class MainApp extends Application {
     }
     public void start(Stage stage) {
 
+        ChoiceWindow choiceWindow = new ChoiceWindow();
         choiceWindow.choiceWindowMain();
-        ImageWriter.ImageWriterMain(HEIGHT, WIDTH);
+
+        ImageWriter imageWriter = new ImageWriter();
+        imageWriter.ImageWriterMain(HEIGHT, WIDTH);
     }
 
 }

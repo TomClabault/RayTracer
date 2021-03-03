@@ -1,38 +1,26 @@
 package render;
 
 import javafx.util.Pair;
-import javafx.scene.control.Alert;
 import java.util.Optional;
-import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
-import javafx.scene.Node;
 
-public class choiceWindow {
+public class ChoiceWindow {
 
-    public static void choiceWindowMain() {
+    public void choiceWindowMain() {
 
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Taille du rendu");
-        dialog.setHeaderText("Choisissez la taille du rendu");
 
         ButtonType validateButton = new ButtonType("Valider", ButtonData.OK_DONE);
         ButtonType cancelButton = new ButtonType("Annuler", ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().addAll(validateButton, cancelButton);
 
-        // Create the hauteur and largeur labels and fields.
         GridPane grid = new GridPane();
-        //grid.setHgap(10);
-        //grid.setVgap(10);
-        //grid.setPadding(new Insets(20, 150, 10, 10));
 
         TextField hauteur = new TextField();
         hauteur.setPromptText("hauteur");
@@ -43,15 +31,6 @@ public class choiceWindow {
         grid.add(hauteur, 1, 0);
         grid.add(new Label("largeur:"), 0, 1);
         grid.add(largeur, 1, 1);
-
-        // Enable/Disable login button depending on whether a hauteur was entered.
-        Node loginButton = dialog.getDialogPane().lookupButton(validateButton);
-        loginButton.setDisable(true);
-
-        // Do some validation (using the Java 8 lambda syntax).
-        hauteur.textProperty().addListener((observable, oldValue, newValue) -> {
-            loginButton.setDisable(newValue.trim().isEmpty());
-        });
 
         dialog.getDialogPane().setContent(grid);
 

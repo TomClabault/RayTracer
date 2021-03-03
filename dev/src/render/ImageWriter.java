@@ -21,7 +21,7 @@ public class ImageWriter {
 
 
 
-public static void ImageWriterMain(int height, int width) {
+public void ImageWriterMain(int height, int width) {
 
     Stage stage = new Stage();
 
@@ -51,7 +51,6 @@ public static void ImageWriterMain(int height, int width) {
        pw.setColor(3,3,Color.web("0xFF0000"));*/
     //RayTracer rayTracer = new RayTracer(800,600);
     //computeImage = rayTracer.computeImage();
-    //doImage(colorTab, pw);/*TODO trouver un moyen d'executer cette foction en récupérant le tableau ici*/
 
     RayTracer r = new RayTracer(height, width);
 
