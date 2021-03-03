@@ -16,10 +16,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.scene.Node;
 
-public class choiceWindow extends Application {
+public class choiceWindow {
 
-    @Override
-    public void start(Stage stage) {
+    public static void choiceWindowMain() {
 
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Taille du rendu");
@@ -74,17 +73,14 @@ public class choiceWindow extends Application {
             String[] args = new String[2];
             args[0] = hauteurlargeur.getKey();
             args[1] = hauteurlargeur.getValue();
-            ExempleImageWriter.main(args);
+            MainApp.HEIGHT = Integer.parseInt(args[0]);
+            MainApp.WIDTH = Integer.parseInt(args[1]);
 
         });
 
 
 
 
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 
 }
