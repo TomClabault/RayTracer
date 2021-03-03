@@ -1,3 +1,4 @@
 Manifest-Version: 1.0
 Created-By: Me
 Main-Class: render.ExempleImageWriter
+Class-Path: lib/
