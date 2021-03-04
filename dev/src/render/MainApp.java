@@ -2,11 +2,30 @@ package render;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import java.util.ArrayList;
+
+import geometry.shapes.*;
+import geometry.*;
+
+import scene.*;
+import scene.MyScene;
+import scene.lights.*;
+import rayTracer.*;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.scene.image.WritableImage;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+
+import java.awt.event.*;
 
 public class MainApp extends Application {
 
-    public static int HEIGHT;
+    public static int HEIGHT;/*Définie par choiceWindowMain*/
     public static int WIDTH;
+    public volatile MyScene scene = addObjectsToScene();
 
     public static void main(String[] args) {
 
@@ -18,8 +37,20 @@ public class MainApp extends Application {
         ChoiceWindow choiceWindow = new ChoiceWindow();
         choiceWindow.choiceWindowMain();
 
+        WritableImage writableImage = new WritableImage(800,600);
+        PixelWriter pw = writableImage.getPixelWriter();
+
         ImageWriter imageWriter = new ImageWriter();
-        imageWriter.ImageWriterMain(HEIGHT, WIDTH);
+        imageWriter.ImageWriterMain(HEIGHT, WIDTH, writableImage);
+
+
+
+        updateWindow(pw, scene);
+
+
+
+    }
+
     public MyScene addObjectsToScene() {
 
         Camera c = new Camera(); c.setFOV(100);
@@ -30,6 +61,8 @@ public class MainApp extends Application {
         MyScene s = new MyScene(c, l, shapeList, 0.5);
         return s;
     }
+
+
     public void updateWindow(final PixelWriter pw, final MyScene scene) {
         new Thread(new Runnable() {
         @Override
