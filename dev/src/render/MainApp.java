@@ -2,30 +2,13 @@ package render;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import java.util.ArrayList;
-
-import geometry.shapes.*;
-import geometry.*;
-
-import scene.*;
-import scene.MyScene;
-import scene.lights.*;
-import rayTracer.*;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.scene.image.WritableImage;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
-
-import java.awt.event.*;
 
 public class MainApp extends Application {
 
     public static int HEIGHT;/*Définie par choiceWindowMain*/
     public static int WIDTH;
-    public volatile MyScene scene = addObjectsToScene();
+    //public static final Double DELTA_MOVE = 0.1;
+    //public volatile MyScene globalScene = addObjectsToScene();
 
     public static void main(String[] args) {
 
@@ -37,21 +20,19 @@ public class MainApp extends Application {
         ChoiceWindow choiceWindow = new ChoiceWindow();
         choiceWindow.choiceWindowMain();
 
-        WritableImage writableImage = new WritableImage(800,600);
-        PixelWriter pw = writableImage.getPixelWriter();
+        //WritableImage writableImage = new WritableImage(800,600);
+        //PixelWriter pw = writableImage.getPixelWriter();
 
         ImageWriter imageWriter = new ImageWriter();
-        imageWriter.ImageWriterMain(HEIGHT, WIDTH, writableImage);
-
-
-
-        updateWindow(pw, scene);
+        imageWriter.ImageWriterMain(HEIGHT, WIDTH);
+        imageWriter.updateWindow();
+        imageWriter.updateCamera();
 
 
 
     }
 
-    public MyScene addObjectsToScene() {
+    /*public MyScene addObjectsToScene() {/*utilisé dans le constructeur*//*
 
         Camera c = new Camera(); c.setFOV(100);
         Light l = new LightBulb(Point.add(c.getPosition(), new Point(-1, 1, 0)), 1);
@@ -63,30 +44,54 @@ public class MainApp extends Application {
     }
 
 
-    public void updateWindow(final PixelWriter pw, final MyScene scene) {
+    public void updateWindow(final PixelWriter pw) {
         new Thread(new Runnable() {
         @Override
             public void run() {
                 while(true){
                     RayTracer r = new RayTracer(MainApp.HEIGHT, MainApp.WIDTH);
-                    ImageWriter.doImage(r.computeImage(scene),pw);
+                    ImageWriter.doImage(r.computeImage(globalScene),pw);
                 }
 
             }
         }).start();
     }
 
-    /*public void updateCamera(final PixelWriter pw, final MyScene scene) {
+    public void updateCamera(final PixelWriter pw, final Scene scene) {
         new Thread(new Runnable() {
         @Override
             public void run() {
+                scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                    @Override
+                    public void handle(KeyEvent event) {
+                        switch (event.getCode()) {
+                            case UP:    upGlobalCamera();
+                            case DOWN:  downGlobalCamera();
+                            //case LEFT:  goWest  = true; break;
+                            //case RIGHT: goEast  = true; break;
+                            //case SHIFT: running = true; break;
+                        }
+                    }
+                });
+
                 while(true){
-                    RayTracer r = new RayTracer(MainApp.HEIGHT, MainApp.WIDTH);
-                    ImageWriter.doImage(r.computeImage(scene),pw);
+                    Point cameraPosition = globalScene.getCamera().getPosition();
+
+
                 }
 
             }
         }).start();
+    }
+
+    public void upGlobalCamera() {
+        globalScene.getCamera().getPosition().setY(globalScene.getCamera().getPosition().getY() + DELTA_MOVE);
+    }
+
+    public void downGlobalCamera() {
+        globalScene.getCamera().getPosition().setY(globalScene.getCamera().getPosition().getY() - DELTA_MOVE);
     }*/
+
+
 
 }
