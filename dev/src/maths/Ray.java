@@ -1,4 +1,4 @@
-package geometry;
+package maths;
 
 public class Ray
 {
@@ -6,25 +6,25 @@ public class Ray
 	
 	private Point origin;
 	
-	public Ray(Vector direction, Point origin)
+	public Ray(Point origin, Vector direction)
 	{
-		this.direction = direction;
 		this.origin = origin;
+		this.direction = new Vector(direction);
 	}
 	
-	public Ray(Point direction, Point origin)
+	public Ray(Point origin, Point direction)
 	{
 		this.origin = origin;
-		this.direction = new Vector(direction, origin);
+		this.direction = new Vector(origin, direction);
 	}
 	
 	public Point determinePoint(double coefficient)
 	{
-		return Point.add(this.getOrigin(), Point.scalarMul(coefficient, this.getDirectionP()));
+		return Point.add(Point.scalarMul(coefficient, this.getDirectionP()), this.getOrigin());
 	}
 	
 	/*
-	 * Permet d'obtenir la direction du rayon
+	 * Permet d'obtenir la direction du rayon	
 	 * 
 	 * @return Vecteur représentant la direction du rayon
 	 */
@@ -61,6 +61,16 @@ public class Ray
 	public Vector getOriginV()
 	{
 		return new Vector(this.origin);
+	}
+	
+	/*
+	 * Retourne l'opposé du vecteur de direction du rayon. Ne modifie pas l'instance appelante 
+	 * 
+	 * @return Si d = (x, y, z) le vecteur de direction du rayon, retourne v = (-x, -y, -z)
+	 */
+	public Vector negate()
+	{
+		return this.direction.negate();
 	}
 	
 	/*

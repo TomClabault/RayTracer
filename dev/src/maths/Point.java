@@ -1,4 +1,4 @@
-package geometry;
+package maths;
 
 /*
  * Classe permettant de représenter un point de l'espace en coordonnées réelles
@@ -14,27 +14,33 @@ public class Point
         this.z = z;
     }
 
-    public double getX(){
+    public double getX()
+    {
         return this.x;
     }
 
-    public double getY(){
+    public double getY()
+    {
         return this.y;
     }
 
-    public double getZ(){
+    public double getZ()
+    {
         return this.z;
     }
 
-    public void setX(double newX){
+    public void setX(double newX)
+    {
         this.x = newX;
     }
 
-    public void setY(double newY){
+    public void setY(double newY)
+    {
         this.y = newY;
     }
 
-    public void setZ(double newZ){
+    public void setZ(double newZ)
+    {
         this.z = newZ;
     }
 
@@ -49,6 +55,65 @@ public class Point
     public static Point add(Point a, Point b)
     {
     	return new Point(a.getX() + b.getX(), a.getY() + b.getY(), a.getZ() + b.getZ());
+    }
+    
+    /*
+     * Permet de copier un point passé en argument dans l'instance du point appelante
+     * 
+     * @param pointToCopy Point dont les coordonnées vont être copiées dans l'instance actuelle
+     */
+    public void copyIn(Point pointToCopy)
+    {
+    	this.x = pointToCopy.getX();
+    	this.y = pointToCopy.getY();
+    	this.z = pointToCopy.getZ();
+    }
+    
+    /*
+     * Calcule et retourne la distance entre deux points
+     * 
+     * @param p1 Le premier point
+     * @param p2 Le deuxième point
+     * 
+     * @return La distance entre les deux points
+     */
+    public static double distance(Point p1, Point p2)
+    {
+    	Point pSub = Point.sub(p2,  p1);
+    	return Math.sqrt(pSub.getX()*pSub.getX() + pSub.getY()*pSub.getY() + pSub.getZ()*pSub.getZ());
+    }
+    
+    /*
+     * Permet de comparer deux instances de la classe Point entre elles
+     * 
+     * @param o Un point de coordonnées (x, y, z)
+     * 
+     * @return Avec le point de l'instance appelante de coordonnées (x1, y1, z1), retourne true si x1 == x && y1 == y && z1 == 1. False sinon
+     */
+    @Override
+    public boolean equals(Object o)
+    {
+    	if(! (o instanceof Point))
+    		return false;
+    	else
+    	{
+    		Point oPoint = (Point)o;
+    		if(oPoint.getX() != this.getX() || oPoint.getY() != this.getY() || oPoint.getZ() != this.getZ())
+    			return false;
+    	}
+    	
+    	return true;
+    }
+    
+    /*
+     * Redéfinition de la méthode hashCode pour qu'elle retourne le hash du point en fonction de ses coordonnées
+     * 
+     * @return Un hash basé sur les coordonnées du point
+     */
+    @Override
+    public int hashCode() 
+    {
+    	return java.util.Objects.hash(this.getX(), this.getY(), this.getZ());
     }
     
     /*

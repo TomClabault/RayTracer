@@ -1,4 +1,4 @@
-package geometry;
+package maths;
 
 /*
  * Classe permettant de représenter un vecteur en coordonnées réelles dans l'espace
@@ -39,9 +39,9 @@ public class Vector
 	 * @param a Point A
 	 * @param b Point B
 	 */
-	public Vector(Point a, Point b)
+	public Vector(Point originPoint, Point directionPoint)
 	{
-		Point vectorPoint = Point.sub(b, a);
+		Point vectorPoint = Point.sub(directionPoint, originPoint);
 		
 		this.x = vectorPoint.getX();
 		this.y = vectorPoint.getY();
@@ -84,6 +84,38 @@ public class Vector
 	}
 	
 	/*
+	 * Vérifie si deux vecteurs sont colinéaires ou non
+	 * *
+	 * @param u Premier vecteur
+	 * @param v Deuxième vecteur
+	 * 
+	 * @return True si les deux vecteurs passés en argument sont coliénaires. False sinon
+	 */
+	public static boolean areColinear(Vector u, Vector v)
+	{
+		double xy = u.x*v.y - u.y*v.x;
+		double xz = u.x*v.z - u.z*v.x;
+		double yz = u.y*v.z - u.z*v.y;
+		
+		if(Math.abs(xy + xz) < 0.00001d && Math.abs(xy + yz) < 0.00001d && Math.abs(xz + yz) < 0.0001d)
+			return true;
+		else
+			return false;
+	}
+	
+	/*
+     * Permet de copier un vecteur passé en argument dans l'instance du vecteur appelante
+     * 
+     * @param vectorToCopy Vecteur dont les coordonnées vont être copiées dans l'instance actuelle
+     */
+    public void copyIn(Vector vectorToCopy)
+    {
+    	this.x = vectorToCopy.x;
+    	this.y = vectorToCopy.y;
+    	this.z = vectorToCopy.z;
+    }
+	
+	/*
 	 * @param u Premier vecteur
 	 * @param v Deuxième vecteur
 	 * 
@@ -104,7 +136,7 @@ public class Vector
 	 */
 	public static double dotProduct(Vector u, Vector v)
 	{
-		return u.x*u.x + u.y*v.y + u.z*v.z;
+		return u.x*v.x + u.y*v.y + u.z*v.z;
 	}
 	
 	/*
@@ -115,6 +147,16 @@ public class Vector
 	public double length()
 	{
 		return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z);
+	}
+	
+	/*
+	 * Calcule et retourne l'opposé du vecteur de l'instance appelante. Ne modifie pas l'instance appelante
+	 * 
+	 * @return Si le vecteur de l'instance appelante est de coordonnée (x, y, z), retourne un vecteur de coordoonnées (-x, -y, -z)
+	 */
+	public Vector negate()
+	{
+		return new Vector(-this.x, -this.y, -this.z);
 	}
 	
 	/*
@@ -135,6 +177,11 @@ public class Vector
 		normalized.normalize();
 		
 		return normalized; 
+	}
+	
+	public static Vector scalarMul(Vector u, double scalar)
+	{
+		return new Vector(u.getX()*scalar, u.getY()*scalar, u.getZ()*scalar);
 	}
 	
 	/*
@@ -170,5 +217,20 @@ public class Vector
 	public static Point v2p(Vector u)
 	{
 		return new Point(u.x, u.y, u.z);
+	}
+
+	public double getX() 
+	{
+		return this.x;
+	}
+	
+	public double getY() 
+	{
+		return this.y;
+	}
+	
+	public double getZ() 
+	{
+		return this.z;
 	}
 }
