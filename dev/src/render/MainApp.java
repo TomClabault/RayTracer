@@ -30,6 +30,17 @@ public class MainApp extends Application {
         MyScene s = new MyScene(c, l, shapeList, 0.5);
         return s;
     }
+    public void updateWindow(final PixelWriter pw, final MyScene scene) {
+        new Thread(new Runnable() {
+        @Override
+            public void run() {
+                while(true){
+                    RayTracer r = new RayTracer(MainApp.HEIGHT, MainApp.WIDTH);
+                    ImageWriter.doImage(r.computeImage(scene),pw);
+                }
+
+            }
+        }).start();
     }
 
 }
