@@ -16,18 +16,20 @@ import javafx.stage.Stage;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
-//from ww  w  . j  av  a2s  . c  om
+
+import java.awt.event.*;
+
 public class ImageWriter {
 
 
 
-public void ImageWriterMain(int height, int width) {
+public void ImageWriterMain(int height, int width, WritableImage writableImage) {
 
     Stage stage = new Stage();
 
-    WritableImage writableImage = new WritableImage(800,600);
+    //WritableImage writableImage = new WritableImage(800,600);
 
-    PixelWriter pw = writableImage.getPixelWriter();
+    //PixelWriter pw = writableImage.getPixelWriter();
 
     /*pw.setColor(2,2,Color.web("0x0000FF"));
        pw.setColor(2,3,Color.web("0x0000FF"));
@@ -52,7 +54,7 @@ public void ImageWriterMain(int height, int width) {
     //RayTracer rayTracer = new RayTracer(800,600);
     //computeImage = rayTracer.computeImage();
 
-    RayTracer r = new RayTracer(height, width);
+    /*RayTracer r = new RayTracer(height, width);
 
     Camera c = new Camera(); c.setFOV(100);
     Light l = new LightBulb(Point.add(c.getPosition(), new Point(-1, 1, 0)), 1);
@@ -65,11 +67,11 @@ public void ImageWriterMain(int height, int width) {
     MyScene s = new MyScene(c, l, shapeList, 0.5);
 
 
-    doImage(r.computeImage(s),pw);
+    doImage(r.computeImage(s),pw);*/
 
-}
+    }
 
-public static void doImage(Color[][] colorTab, PixelWriter pw) {
+    public static void doImage(Color[][] colorTab, PixelWriter pw) {
         System.out.println("colorTab.length = " + colorTab.length);
         System.out.println("colorTab[0].length = " + colorTab[0].length);
         int width = colorTab[0].length;
@@ -84,5 +86,6 @@ public static void doImage(Color[][] colorTab, PixelWriter pw) {
         }
         System.out.println("finish");
 
-}
+    }
+
 }
