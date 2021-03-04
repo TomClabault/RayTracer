@@ -43,4 +43,17 @@ public class MainApp extends Application {
         }).start();
     }
 
+    /*public void updateCamera(final PixelWriter pw, final MyScene scene) {
+        new Thread(new Runnable() {
+        @Override
+            public void run() {
+                while(true){
+                    RayTracer r = new RayTracer(MainApp.HEIGHT, MainApp.WIDTH);
+                    ImageWriter.doImage(r.computeImage(scene),pw);
+                }
+
+            }
+        }).start();
+    }*/
+
 }
