@@ -3,6 +3,7 @@ package geometry.shapes;
 import geometry.Shape;
 import geometry.ShapeTriangle;
 import geometry.materials.Material;
+import geometry.materials.MatteMaterial;
 import javafx.scene.paint.Color;
 import maths.Point;
 import maths.Ray;
@@ -115,6 +116,6 @@ public class Triangle implements Shape
 
 	public Material getMaterial()
 	{
-		return null;
+		return new MatteMaterial(Color.rgb(200, 200, 200));
 	}
 }
