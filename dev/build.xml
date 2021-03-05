@@ -25,6 +25,8 @@
         <javac includeantruntime="false" srcdir="${src}" destdir="${build}">
             <exclude name="**/choiceWindow.java"/>
             <exclude name="**/Rectangle.java"/>
+            <exclude name="**/Triangle.java"/>
+            <exclude name="**/MatricesTests.java"/>
             <classpath refid="projet.classpath"/>
         </javac>
     </target>
