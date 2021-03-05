@@ -1,0 +1,174 @@
+package geometry.shapes;
+
+import geometry.ShapeTriangle;
+import geometry.materials.Material;
+import geometry.shapes.Triangle;
+import maths.Point;
+import geometry.Shape;
+import maths.Ray;
+import maths.Vector;
+
+import java.util.ArrayList;
+import java.lang.Math;
+
+
+public class Pyramide implements ShapeTriangle
+{
+    /*Imagine une pyramide ABCDE
+
+
+                        E
+                        /\
+                       /  \
+                      /    \
+                     /      \
+                    /        \
+                   /          \
+                  /            \
+                 /              \
+                /                \
+             D / ________________ \ C
+              / /                \ \
+             /______________________\
+            A                        B
+
+    Cette pyramide sera construite avec 6 Triangles.
+
+     */
+
+    protected Point A,B,C,D,E;
+    protected double height,width;
+    protected ArrayList<Triangle> listeTriangle;
+    private Material material;
+
+    public Pyramide(Point A, Point B, Point C, Point D, Point E, Material material)
+    {
+        this.A = A;
+        this.B = B;
+        this.C = C;
+        this.D = D;
+        this.E = E;
+
+        this.material = material;
+
+        buildPyramide();
+    }
+
+    // Constructeur pour creer une pyramide equilaterale
+    public Pyramide(Point depart, double height, double width, Material material)
+    {
+        this.A = depart;
+
+        this.B.setX(this.A.getX() + width);
+        this.B.setY(this.A.getY() + width);
+        this.B.setZ(this.A.getZ());
+
+        this.C.setX(this.A.getX());
+        this.C.setY(this.A.getY() + width);
+        this.C.setZ(this.A.getZ());
+
+        this.D.setX(this.A.getX() + width);
+        this.D.setY(this.A.getY());
+        this.D.setZ(this.A.getZ());
+
+        this.E.setX(this.A.getX() + width/2);
+        this.E.setY(this.A.getY() + width/2);
+        this.E.setZ(this.A.getZ() + height);
+
+        this.material = material;
+
+        buildPyramide();
+
+
+    }
+
+
+    protected void buildPyramide()
+    {
+        /*on va construire les 6 triangles*/
+        Triangle tr1 = new Triangle(E,D,A);
+        Triangle tr2 = new Triangle(E,A,B);
+        Triangle tr3 = new Triangle(E,B,C);
+        Triangle tr4 = new Triangle(E,C,D);
+        Triangle tr5 = new Triangle(A,D,C);
+        Triangle tr6 = new Triangle(A,B,C);
+
+        /*on va ajouter les triangles dans la listeTriangle*/
+        this.listeTriangle.add(tr1);
+        this.listeTriangle.add(tr2);
+        this.listeTriangle.add(tr3);
+        this.listeTriangle.add(tr4);
+        this.listeTriangle.add(tr5);
+        this.listeTriangle.add(tr6);
+
+    }
+
+
+
+
+
+
+    @Override
+    public ArrayList<Triangle> getTriangleList()
+    {
+        return listeTriangle;
+    }
+
+    @Override
+    public Material getMaterial()
+    {
+        return material;
+    }
+
+    @Override
+    public Vector getNormal(Point point)
+    {
+        for (int i = 0 ; i < listeTriangle.size() ;i++)
+        {
+            if (listeTriangle.get(i).insideOutsideTest(point) == true)
+            {
+                return listeTriangle.get(i).getNormal(point);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Point intersect(Ray ray) {
+        ArrayList<Point> banque = new ArrayList<Point>();
+        for (int i = 0; i < listeTriangle.size(); i++) {
+            Point intersection = listeTriangle.get(i).intersect(ray);
+            if(intersection != null)
+            {
+                banque.add(intersection);
+            }
+
+        }
+
+        if(banque.size() == 0)
+        {
+            return null;
+        }
+
+        else if (banque.size() == 1)
+        {
+            return banque.get(0);
+        }
+
+        else
+        {
+
+            if (Point.distance(banque.get(0),ray.getOrigin()) < Point.distance(banque.get(1),ray.getOrigin()))
+            {
+                return banque.get(0);
+            }
+            else
+            {
+                return banque.get(1);
+            }
+
+        }
+    }
+
+
+}

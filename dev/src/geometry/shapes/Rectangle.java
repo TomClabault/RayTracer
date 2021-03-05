@@ -42,7 +42,7 @@ public class Rectangle implements ShapeTriangle
 
 	 */
 
-	public Rectangle(Point coin1, Point coin2)
+	public Rectangle(Point coin1, Point coin2, Material material)
 	{
 		this.A = coin1;
 		this.G = coin2;
@@ -50,7 +50,7 @@ public class Rectangle implements ShapeTriangle
 		this.length = this.G.getX() - this.A.getX();
 		this.height = this.G.getZ() - this.A.getZ();
 		this.width = this.G.getY() - this.A.getY();
-
+		this.material = material;
 		this.buildRectangle();
 	}
 
@@ -145,9 +145,7 @@ public class Rectangle implements ShapeTriangle
 
 			else
 			{
-				ray.getOrigin();
-				banque.get(0);
-				banque.get(1);
+
 				if (Point.distance(banque.get(0),ray.getOrigin()) < Point.distance(banque.get(1),ray.getOrigin()))
 				{
 					return banque.get(0);
