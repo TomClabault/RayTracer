@@ -1,14 +1,19 @@
 package render;
 
+import rayTracer.RayTracer;
+import geometry.materials.MirrorMaterial;
+import geometry.materials.MetallicMaterial;
+import geometry.materials.MatteMaterial;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.util.ArrayList;
 
 import geometry.shapes.*;
 import geometry.*;
+import maths.*;
 
 import scene.*;
 import scene.MyScene;
 import scene.lights.*;
-import rayTracer.*;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -16,13 +21,9 @@ import javafx.stage.Stage;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
-import javafx.event.EventHandler;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.KeyCode;
 
 public class ImageWriter {
 
-    public static final Double DELTA_MOVE = 0.1;
     public volatile MyScene MyGlobalScene = addObjectsToScene();
     WritableImage writableImage;
     PixelWriter pw;
@@ -30,7 +31,7 @@ public class ImageWriter {
 
 
     public ImageWriter(){
-        this.writableImage = new WritableImage(800,600);
+        this.writableImage = new WritableImage(MainApp.WIDTH,MainApp.HEIGHT);
 
         this.pw = writableImage.getPixelWriter();
 
@@ -40,51 +41,22 @@ public class ImageWriter {
         Pane root = new Pane();
         root.getChildren().add(imageView);
         this.scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("");
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void ImageWriterMain(int height, int width) {
 
-        Stage stage = new Stage();
-
-
-
-        /*pw.setColor(2,2,Color.web("0x0000FF"));
-           pw.setColor(2,3,Color.web("0x0000FF"));
-           pw.setColor(3,2,Color.web("0x0000FF"));
-           pw.setColor(3,3,Color.web("0x0000FF"));/*Color.rgb(0,0,255)*/
-        /*Prend en argument un tableau de couleur*/
-
-        /*ImageView imageView = new ImageView();
-        imageView.setImage(writableImage);
-
-        Pane root = new Pane();
-        root.getChildren().add(imageView);
-        Scene scene = new Scene(root);
-        stage.setScene(scene);*/
-        stage.setTitle("");
-        stage.show();
-
-        /*pw.setColor(2,2,Color.web("0xFF0000"));
-           pw.setColor(3,2,Color.web("0xFF0000"));
-           pw.setColor(2,3,Color.web("0xFF0000"));
-           pw.setColor(3,3,Color.web("0xFF0000"));*/
-        //RayTracer rayTracer = new RayTracer(800,600);
-        //computeImage = rayTracer.computeImage();
-
-        /*RayTracer r = new RayTracer(height, width);
-
-        Camera c = new Camera(); c.setFOV(100);
-        Light l = new LightBulb(Point.add(c.getPosition(), new Point(-1, 1, 0)), 1);
-
-        ArrayList<Shape> shapeList = new ArrayList<>();
-        shapeList.add(new SphereMaths(new Point(0, 0, -4), 1));
-        shapeList.add(new Triangle(new Point(-1,-1,-1.5),new Point(1,-1,-1.5),new Point(0,2,-1.5)));
-
-
-        MyScene s = new MyScene(c, l, shapeList, 0.5);
-
-
-        doImage(r.computeImage(s),pw);*/
+        //UpdateCamera updateCamera = new UpdateCamera(MyGlobalScene, scene);
+        //updateCamera.run();
+        /*UpdateWindow updateWindow = new UpdateWindow(new RayTracer(MainApp.WIDTH, MainApp.HEIGHT), this.MyGlobalScene, this.pw);
+        updateWindow.run();*/
+        //while(true){
+            RayTracer r = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT);
+            ImageWriter.doImage(r.renderImage(MyGlobalScene,8),this.pw);
+        //}
 
     }
 
@@ -92,74 +64,30 @@ public class ImageWriter {
 
 
 
-    public static void doImage(Color[][] colorTab, PixelWriter pw) {
-        System.out.println("colorTab.length = " + colorTab.length);
-        System.out.println("colorTab[0].length = " + colorTab[0].length);
-        int width = colorTab[0].length;
-        int height = colorTab.length;
-
-        for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                        //System.out.println(height);
-                        //System.out.println(String.format("%d %d",i,j));
-                        pw.setColor(j,i,colorTab[i][j]);
-                }
-        }
-        System.out.println("finish");
-
+    public static void doImage(AtomicReferenceArray<Color> colorTab, PixelWriter pw)
+    {
+        for (int i = 0; i < MainApp.HEIGHT; i++)
+            for (int j = 0; j < MainApp.WIDTH; j++)
+                pw.setColor(j, i, colorTab.get(i*MainApp.WIDTH + j));
     }
 
     public MyScene addObjectsToScene() {/*utilisé dans le constructeur*/
 
-        Camera c = new Camera(); c.setFOV(100);
-        Light l = new LightBulb(Point.add(c.getPosition(), new Point(-1, 1, 0)), 1);
+        Camera cameraRT = new Camera(new Point(1, 1, -2), new Point(0, 0, -6));
+        cameraRT.setFOV(60);
+        Light l = new LightBulb(new Point(-0.5, 0.5, -4), 1.25);
+
         ArrayList<Shape> shapeList = new ArrayList<>();
-        shapeList.add(new SphereMaths(new Point(0, 0, -4), 1));
-        shapeList.add(new Triangle(new Point(-1,-1,-1.5),new Point(1,-1,-1.5),new Point(0,2,-1.5)));
-        MyScene s = new MyScene(c, l, shapeList, 0.5);
-        return s;
+        shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128))));
+
+        shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, new MetallicMaterial(Color.rgb(240, 0, 0))));
+        shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, new MetallicMaterial(Color.rgb(255, 211, 0))));
+        shapeList.add(new SphereMaths(new Point(-1.25, 1, -6.5), 0.2, new MetallicMaterial(Color.LIGHTSKYBLUE)));
+        shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
+        shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
+
+        MyScene sceneRT = new MyScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.55);
+
+        return  sceneRT;
     }
-
-
-    public void updateWindow() {
-        new Thread(new Runnable() {
-        @Override
-            public void run() {
-                while(true){
-                    RayTracer r = new RayTracer(MainApp.HEIGHT, MainApp.WIDTH);
-                    ImageWriter.doImage(r.computeImage(MyGlobalScene),pw);
-                }
-
-            }
-        }).start();
-    }
-
-    public void updateCamera() {
-        new Thread(new Runnable() {
-        @Override
-            public void run() {
-                while(true) {
-                    scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                        @Override
-                        public void handle(KeyEvent event) {
-                            if (event.getCode() == KeyCode.UP) {
-                                upGlobalCamera();
-                            }else if (event.getCode() == KeyCode.DOWN) {
-                                downGlobalCamera();
-                            }
-                        }
-                    });
-                }
-            }
-        }).start();
-    }
-
-    public void upGlobalCamera() {
-        MyGlobalScene.getCamera().getPosition().setY(MyGlobalScene.getCamera().getPosition().getY() + DELTA_MOVE);
-    }
-
-    public void downGlobalCamera() {
-        MyGlobalScene.getCamera().getPosition().setY(MyGlobalScene.getCamera().getPosition().getY() - DELTA_MOVE);
-    }
-
 }
