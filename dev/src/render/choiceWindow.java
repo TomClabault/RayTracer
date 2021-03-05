@@ -10,7 +10,7 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.TextField;
 
 public class ChoiceWindow {
-
+/*TODO changer dialog en window normal*/
     public void choiceWindowMain() {
 
         Dialog<Pair<String, String>> dialog = new Dialog<>();
@@ -40,7 +40,7 @@ public class ChoiceWindow {
         // Convert the result to a hauteur-largeur-pair when the login button is clicked.
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == validateButton) {
-                return new Pair<>(hauteur.getText(), largeur.getText());
+                return new Pair<>(hauteur.getText(), largeur.getText());/*TODO modifier Pair<> en tableau de String*/
             }
             return null;
         });
@@ -52,8 +52,8 @@ public class ChoiceWindow {
             String[] args = new String[2];
             args[0] = hauteurlargeur.getKey();
             args[1] = hauteurlargeur.getValue();
-            MainApp.HEIGHT = Integer.parseInt(args[0]);
-            MainApp.WIDTH = Integer.parseInt(args[1]);
+            MainApp.HEIGHT = Integer.parseInt(hauteur.getText());
+            MainApp.WIDTH = Integer.parseInt(largeur.getText());
 
         });
 
