@@ -29,5 +29,6 @@
         <jarDirectory url="file://C:/Program Files/javafx-sdk-15.0.1" recursive="false" />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
