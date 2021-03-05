@@ -2,6 +2,7 @@ package geometry.shapes;
 
 import geometry.Shape;
 import geometry.ShapeTriangle;
+import geometry.materials.Material;
 import javafx.scene.paint.Color;
 import maths.Point;
 import maths.Ray;
@@ -110,5 +111,10 @@ public class Triangle implements Shape
 			return intersection;//On le retourne
 		else//Cela veut dire que le rayon intersecte le plan formé par le triangle mais pas le triangle lui même
 			return null;
+	}
+
+	public Material getMaterial()
+	{
+		return null;
 	}
 }

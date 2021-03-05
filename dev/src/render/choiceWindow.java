@@ -72,7 +72,7 @@ public class choiceWindow extends Application {
         result.ifPresent(hauteurlargeur -> {
             System.out.println("hauteur=" + hauteurlargeur.getKey() + ", largeur=" + hauteurlargeur.getValue());
             ExempleImageWriter exampleWriter = new ExempleImageWriter();
-            exampleWriter.doImage(colorTab);/*TODO finir l'appel de la fonction*/
+            /*exampleWriter.doImage(colorTab);/*TODO finir l'appel de la fonction*/
         });
     }
 

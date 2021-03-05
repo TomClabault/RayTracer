@@ -1,9 +1,12 @@
 package geometry.shapes;
 
+import geometry.materials.Material;
 import geometry.shapes.Triangle;
 import maths.Point;
 import geometry.Shape;
 import geometry.ShapeTriangle;
+import maths.Ray;
+import maths.Vector;
 
 import java.util.ArrayList;
 import java.lang.Math;
@@ -15,6 +18,7 @@ public class Rectangle implements ShapeTriangle
 	protected double height,width,length,volume;
 	protected Point A,B,C,D,E,F,G,H;
 	protected ArrayList<Triangle> listeTriangle;
+	private Material material;
 
 	/*
 
@@ -115,5 +119,61 @@ public class Rectangle implements ShapeTriangle
 	public ArrayList<Triangle> getTriangleList()
 	{
 		return listeTriangle;
+	}
+
+	public Point intersect(Ray ray)
+	{
+			ArrayList<Point> banque = new ArrayList<Point>();
+			for (int i = 0; i < listeTriangle.size(); i++) {
+				Point intersection = listeTriangle.get(i).intersect(ray);
+				if(intersection != null)
+				{
+					banque.add(intersection);
+				}
+
+			}
+
+			if(banque.size() == 0)
+			{
+				return null;
+			}
+
+			else if (banque.size() == 1)
+			{
+				return banque.get(0);
+			}
+
+			else
+			{
+				ray.getOrigin();
+				banque.get(0);
+				banque.get(1);
+				if (Point.distance(banque.get(0),ray.getOrigin()) < Point.distance(banque.get(1),ray.getOrigin()))
+				{
+					return banque.get(0);
+				}
+				else
+				{
+					return banque.get(1);
+				}
+
+			}
+
+	}
+	public Vector getNormal(Point point)
+	{
+		for (int i = 0 ; i < listeTriangle.size() ;i++)
+		{
+			if (listeTriangle.get(i).insideOutsideTest(point) == true)
+			{
+				return listeTriangle.get(i).getNormal(point);
+			}
+		}
+		return null;
+	}
+
+	public Material getMaterial()
+	{
+		return material;
 	}
 }

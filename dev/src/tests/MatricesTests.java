@@ -9,9 +9,9 @@ public class MatricesTests
 	public static void testRotate(int axis, double angle, Point toRotate, Point expected)
 	{
 		RotationMatrix rotM = new RotationMatrix(axis, angle);
-		Point rotatedPoint = rotM.mulPoint(toRotate);
+		//Point rotatedPoint = rotM.mulPoint(toRotate);
 		
-		System.out.println("Point rotaté: " + rotatedPoint + " | Attendu: " + expected);
+		//System.out.println("Point rotaté: " + rotatedPoint + " | Attendu: " + expected);
 	}
 	
 	public static void main(String[] args)
