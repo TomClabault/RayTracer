@@ -59,7 +59,7 @@ public class ExempleImageWriter extends Application
 		
 		RayTracer rayTracerInstance = new RayTracer(width, height);
 
-		Camera cameraRT = new Camera(new Point(0, 1, 0), new Point(0, 0, -6));
+		Camera cameraRT = new Camera(new Point(-5, 1, 0), new Point(0, 0, -6));
 		cameraRT.setFOV(60);
 		Light l = new LightBulb(new Point(-0.5, 0.5, -4), 1.25);
 
@@ -73,8 +73,10 @@ public class ExempleImageWriter extends Application
 		shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
 		shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
 		//shapeList.add(new Triangle(new Point(-1.5, -0.65, -5.5), new Point(+0.5, 0, -4), new Point(0, 0.5, -4)));
-		shapeList.add(new Rectangle(new Point(-1.5, -0.65, -5.5), new Point(1.1, 0.5, -5.5), new MatteMaterial(Color.rgb(255, 0, 0))));
+		//shapeList.add(new Rectangle(new Point(-1.5, -0.65, -5.5), new Point(1.1, 0.5, -5.5), new MatteMaterial(Color.rgb(255, 0, 0))));
 		//shapeList.add(new Triangle());
+		shapeList.add(new Rectangle(new Point(-1.5, -0.65, -8), new Point(0, 3, -9), new MetallicMaterial(Color.rgb(183, 21, 64))));
+
 		
 		
 		

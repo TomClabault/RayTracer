@@ -59,7 +59,7 @@ public class Rectangle implements ShapeTriangle
 		this.buildRectangle();
 	}
 
-	public Rectangle(Point A, double height, double length, double width)
+	public Rectangle(Point A, double height, double length, double width, Material material)
 	{	/*ici coin1 peut etre considere comme le point de depart*/
 		this.A = A;
 		this.height = height;
@@ -67,12 +67,11 @@ public class Rectangle implements ShapeTriangle
 		this.width = width;
 		/*car le coin2 est inconnu*/
 		this.G.setX(this.A.getX() + this.length);
-		this.G.setZ(this.A.getY() + this.width);
-		this.G.setY(this.A.getZ() + this.height);
+		this.G.setZ(this.A.getZ() + this.width);
+		this.G.setY(this.A.getY() + this.height);
 		this.volume = this.length * this.height * this.width;
 
 		this.material = new MatteMaterial(Color.rgb(200, 200, 200));
-		this.listeTriangle = new ArrayList<Triangle>();
 		this.buildRectangle();
 	}
 
@@ -85,11 +84,11 @@ public class Rectangle implements ShapeTriangle
 
 		/*on localise les points selon les coordonnees de depart */
 		this.B = new Point(A.getX() + length, A.getY(), A.getZ());
-		this.C = new Point(A.getX()+ length, A.getY() + width, A.getZ());
-		this.D = new Point(A.getX(),A.getY() + width,A.getZ());
-		this.E = new Point(A.getX(),A.getY(), A.getZ() + height);
-		this.F = new Point(A.getX() + length,A.getY(),A.getZ() + height);
-		this.H = new Point(A.getX(), A.getY() + width, A.getZ() + height);
+		this.C = new Point(A.getX()+ length, A.getY(), A.getZ() + width);
+		this.D = new Point(A.getX(),A.getY(), A.getZ() + width);
+		this.E = new Point(A.getX(),A.getY() + height, A.getZ());
+		this.F = new Point(A.getX() + length,A.getY() + height, A.getZ());
+		this.H = new Point(A.getX(), A.getY() + height, A.getZ() + width);
 
 		/*on va construire les 12 triangles*/
 		Triangle tr1 = new Triangle(E,A,B);
