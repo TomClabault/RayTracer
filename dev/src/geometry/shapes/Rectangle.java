@@ -106,6 +106,7 @@ public class Rectangle implements ShapeTriangle
 		Triangle tr12 = new Triangle(H,F,G);
 
 		/*on ajoute dans le array des triangles*/
+		listeTriangle = new ArrayList<Triangle>();
 		this.listeTriangle.add(tr1);
 		this.listeTriangle.add(tr2);
 		this.listeTriangle.add(tr3);
