@@ -1,7 +1,9 @@
 package geometry.shapes;
 
 import geometry.materials.Material;
+import geometry.materials.MatteMaterial;
 import geometry.shapes.Triangle;
+import javafx.scene.paint.Color;
 import maths.Point;
 import geometry.Shape;
 import geometry.ShapeTriangle;
@@ -78,25 +80,33 @@ public class Prism implements ShapeTriangle
     {
         this.A = depart;
 
+        this.B = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ());
+        this.C = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ() + width);
+        this.D = new Point(this.A.getX(), this.A.getY(), this.A.getZ() + width);
+        this.E = new Point(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ());
+        this.F = new Point(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ() + width);
+
+        /*
         this.B.setX(this.A.getX() + width);
         this.B.setY(this.A.getY());
         this.B.setZ(this.A.getZ());
 
         this.C.setX(this.A.getX() + width);
-        this.C.setY(this.A.getY() + width);
-        this.C.setZ(this.A.getZ());
+        this.C.setY(this.A.getY());
+        this.C.setZ(this.A.getZ() + width);
 
         this.D.setX(this.A.getX());
-        this.D.setY(this.A.getY() + width);
-        this.D.setZ(this.A.getZ());
+        this.D.setY(this.A.getY());
+        this.D.setZ(this.A.getZ() + width);
 
         this.E.setX(this.A.getX() + width/2);
-        this.E.setY(this.A.getY());
-        this.E.setZ(this.A.getZ() + height);
+        this.E.setY(this.A.getY() + height);
+        this.E.setZ(this.A.getZ());
 
         this.F.setX(this.A.getX() + width/2);
-        this.F.setY(this.A.getY() + width);
-        this.F.setZ(this.A.getZ() + height);
+        this.F.setY(this.A.getY() + height);
+        this.F.setZ(this.A.getZ() + width);
+         */
 
         this.material = material;
 
@@ -110,16 +120,17 @@ public class Prism implements ShapeTriangle
     {
 
         /*on va construire les 8 triangles*/
-        Triangle tr1 = new Triangle(A,B,E);
-        Triangle tr2 = new Triangle(D,C,F);
-        Triangle tr3 = new Triangle(A,D,C);
-        Triangle tr4 = new Triangle(A,B,C);
-        Triangle tr5 = new Triangle(E,F,D);
-        Triangle tr6 = new Triangle(E,A,D);
-        Triangle tr7 = new Triangle(E,F,C);
-        Triangle tr8 = new Triangle(E,B,C);
+        Triangle tr1 = new Triangle(D,A,B);
+        Triangle tr2 = new Triangle(D,B,C);
+        Triangle tr3 = new Triangle(C,B,E);
+        Triangle tr4 = new Triangle(C,E,F);
+        Triangle tr5 = new Triangle(D,A,E);
+        Triangle tr6 = new Triangle(D,E,F);
+        Triangle tr7 = new Triangle(F,D,C);
+        Triangle tr8 = new Triangle(E,B,A);
 
         /*on ajoute dans le array des triangles*/
+        listeTriangle = new ArrayList<Triangle>();
         this.listeTriangle.add(tr1);
         this.listeTriangle.add(tr2);
         this.listeTriangle.add(tr3);

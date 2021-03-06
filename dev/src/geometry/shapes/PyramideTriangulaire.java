@@ -1,10 +1,12 @@
 package geometry.shapes;
 
-import geometry.ShapeTriangle;
 import geometry.materials.Material;
+import geometry.materials.MatteMaterial;
 import geometry.shapes.Triangle;
+import javafx.scene.paint.Color;
 import maths.Point;
 import geometry.Shape;
+import geometry.ShapeTriangle;
 import maths.Ray;
 import maths.Vector;
 
@@ -66,19 +68,24 @@ public class PyramideTriangulaire implements ShapeTriangle
     {
         this.A = depart;
 
+        this.D = new Point(this.A.getX() + width/4, this.A.getY() + height, this.A.getZ() + width*3/4);
+        this.B = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ() + width);
+        this.C = new Point(this.A.getX(), this.A.getY(), this.A.getZ() + width);
+
+        /*
         this.D.setX(this.A.getX() + width/4);
-        this.D.setY(this.A.getY() + width*3/4);
-        this.D.setZ(this.A.getZ() + height);
+        this.D.setY(this.A.getY() + height);
+        this.D.setZ(this.A.getZ() + width*3/4);
 
 
         this.B.setX(this.A.getX() + width);
-        this.B.setY(this.A.getY() + width);
-        this.B.setZ(this.A.getZ());
+        this.B.setY(this.A.getY());
+        this.B.setZ(this.A.getZ() + width);
 
         this.C.setX(this.A.getX());
-        this.C.setY(this.A.getY() + width);
-        this.C.setZ(this.A.getZ());
-
+        this.C.setY(this.A.getY());
+        this.C.setZ(this.A.getZ() + width);
+        */
 
         this.material = material;
 
@@ -89,12 +96,13 @@ public class PyramideTriangulaire implements ShapeTriangle
     protected void buildPyramide()
     {
         /*on va construire les 4 triangles*/
-        Triangle tr1 = new Triangle(D,A,B);
-        Triangle tr2 = new Triangle(D,C,B);
-        Triangle tr3 = new Triangle(D,A,C);
-        Triangle tr4 = new Triangle(A,B,C); //ceci est le sol
+        Triangle tr1 = new Triangle(A,B,D);
+        Triangle tr2 = new Triangle(D,B,C);
+        Triangle tr3 = new Triangle(D,C,A);
+        Triangle tr4 = new Triangle(A,C,B); //ceci est le sol
 
         /*on va ajouter les triangles dans la liste des triangle*/
+        listeTriangle = new ArrayList<Triangle>();
         this.listeTriangle.add(tr1);
         this.listeTriangle.add(tr2);
         this.listeTriangle.add(tr3);

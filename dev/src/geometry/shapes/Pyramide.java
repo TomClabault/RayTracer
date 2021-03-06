@@ -1,10 +1,12 @@
 package geometry.shapes;
 
-import geometry.ShapeTriangle;
 import geometry.materials.Material;
+import geometry.materials.MatteMaterial;
 import geometry.shapes.Triangle;
+import javafx.scene.paint.Color;
 import maths.Point;
 import geometry.Shape;
+import geometry.ShapeTriangle;
 import maths.Ray;
 import maths.Vector;
 
@@ -59,21 +61,30 @@ public class Pyramide implements ShapeTriangle
     {
         this.A = depart;
 
+        this.C = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ() + width);
+        this.D = new Point(this.A.getX(), this.A.getY(), this.A.getZ() + width);
+        this.B = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ());
+        this.E = new Point(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ() + width/2);
+
+        // b --> c , c --> d , d --> b
+
+        /*
         this.B.setX(this.A.getX() + width);
-        this.B.setY(this.A.getY() + width);
-        this.B.setZ(this.A.getZ());
+        this.B.setY(this.A.getY());
+        this.B.setZ(this.A.getZ() + width);
 
         this.C.setX(this.A.getX());
-        this.C.setY(this.A.getY() + width);
-        this.C.setZ(this.A.getZ());
+        this.C.setY(this.A.getY());
+        this.C.setZ(this.A.getZ() + width);
 
         this.D.setX(this.A.getX() + width);
         this.D.setY(this.A.getY());
         this.D.setZ(this.A.getZ());
 
         this.E.setX(this.A.getX() + width/2);
-        this.E.setY(this.A.getY() + width/2);
-        this.E.setZ(this.A.getZ() + height);
+        this.E.setY(this.A.getY() + height);
+        this.E.setZ(this.A.getZ() + width/2);
+        */
 
         this.material = material;
 
@@ -94,6 +105,7 @@ public class Pyramide implements ShapeTriangle
         Triangle tr6 = new Triangle(A,B,C);
 
         /*on va ajouter les triangles dans la listeTriangle*/
+        listeTriangle = new ArrayList<Triangle>();
         this.listeTriangle.add(tr1);
         this.listeTriangle.add(tr2);
         this.listeTriangle.add(tr3);
