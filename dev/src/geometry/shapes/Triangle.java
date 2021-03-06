@@ -3,6 +3,7 @@ package geometry.shapes;
 import geometry.Shape;
 import geometry.ShapeTriangle;
 import geometry.materials.Material;
+import geometry.materials.MatteMaterial;
 import javafx.scene.paint.Color;
 import maths.Point;
 import maths.Ray;
@@ -97,9 +98,9 @@ public class Triangle implements Shape
 		
 		planeD = Vector.dotProduct(this.planeNormal, new Vector(this.A.getX(), this.A.getY(), this.A.getZ()));
 		
-		//Le point d'intersection est sur le rayon. On peut trouver ses coordonnées avec l'équation P = ray.origin + k*ray.direction. Cette coeffVectorPoint = k
-		double coeffVectorPoint = (Vector.dotProduct(this.planeNormal, ray.getOriginV()) + planeD)
-								  /Vector.dotProduct(this.planeNormal, ray.getDirection());
+		double sup = Vector.dotProduct(Point.p2v(Point.sub(ray.getOrigin(), this.A)), planeNormal);//(Vector.dotProduct(this.planeNormal, ray.getOriginV()) + planeD);
+		double down =  -Vector.dotProduct(this.planeNormal, ray.getDirection());
+		double coeffVectorPoint = sup/down;
 		
 		if(coeffVectorPoint < 0)//L'intersection est dans la direction opposée du rayon, c'est à dire derrière la caméra
 			return null;
@@ -115,6 +116,6 @@ public class Triangle implements Shape
 
 	public Material getMaterial()
 	{
-		return null;
+		return new MatteMaterial(Color.rgb(200, 200, 200));
 	}
 }

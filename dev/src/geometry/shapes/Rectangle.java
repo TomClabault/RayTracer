@@ -1,7 +1,9 @@
 package geometry.shapes;
 
 import geometry.materials.Material;
+import geometry.materials.MatteMaterial;
 import geometry.shapes.Triangle;
+import javafx.scene.paint.Color;
 import maths.Point;
 import geometry.Shape;
 import geometry.ShapeTriangle;
@@ -51,6 +53,7 @@ public class Rectangle implements ShapeTriangle
 		this.height = this.G.getZ() - this.A.getZ();
 		this.width = this.G.getY() - this.A.getY();
 		this.material = material;
+		
 		this.buildRectangle();
 	}
 
@@ -66,6 +69,8 @@ public class Rectangle implements ShapeTriangle
 		this.G.setY(this.A.getZ() + this.height);
 		this.volume = this.length * this.height * this.width;
 
+		this.material = new MatteMaterial(Color.rgb(200, 200, 200));
+		this.listeTriangle = new ArrayList<Triangle>();
 		this.buildRectangle();
 	}
 
