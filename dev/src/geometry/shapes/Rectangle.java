@@ -37,9 +37,11 @@ public class Rectangle implements ShapeTriangle
 					    A 				B
 					( coin1 )
 
-
-		A = coin1
-		G = coin2
+														   y
+		A = coin1                                          |
+		G = coin2										   |____ x
+														  /
+														 z			( coordonnees x,y,z )
 
 
 	 */
@@ -50,8 +52,8 @@ public class Rectangle implements ShapeTriangle
 		this.G = coin2;
 		/*car les longeurs sont inconnus*/
 		this.length = this.G.getX() - this.A.getX();
-		this.height = this.G.getZ() - this.A.getZ();
-		this.width = this.G.getY() - this.A.getY();
+		this.width = this.G.getZ() - this.A.getZ();
+		this.height = this.G.getY() - this.A.getY();
 		this.material = material;
 		
 		this.buildRectangle();
@@ -65,7 +67,7 @@ public class Rectangle implements ShapeTriangle
 		this.width = width;
 		/*car le coin2 est inconnu*/
 		this.G.setX(this.A.getX() + this.length);
-		this.G.setY(this.A.getY() + this.width);
+		this.G.setZ(this.A.getY() + this.width);
 		this.G.setY(this.A.getZ() + this.height);
 		this.volume = this.length * this.height * this.width;
 
@@ -81,7 +83,7 @@ public class Rectangle implements ShapeTriangle
 	protected void buildRectangle()
 	{
 
-		/*on localise les points selon les */
+		/*on localise les points selon les coordonnees de depart */
 		this.B = new Point(A.getX() + length, A.getY(), A.getZ());
 		this.C = new Point(A.getX()+ length, A.getY() + width, A.getZ());
 		this.D = new Point(A.getX(),A.getY() + width,A.getZ());
@@ -91,17 +93,17 @@ public class Rectangle implements ShapeTriangle
 
 		/*on va construire les 12 triangles*/
 		Triangle tr1 = new Triangle(E,A,B);
-		Triangle tr2 = new Triangle(E,F,B);
+		Triangle tr2 = new Triangle(E,B,F);
 		Triangle tr3 = new Triangle(F,B,C);
-		Triangle tr4 = new Triangle(F,G,C);
+		Triangle tr4 = new Triangle(F,C,G);
 		Triangle tr5 = new Triangle(G,C,D);
-		Triangle tr6 = new Triangle(G,H,D);
+		Triangle tr6 = new Triangle(G,D,H);
 		Triangle tr7 = new Triangle(H,D,A);
-		Triangle tr8 = new Triangle(H,E,A);
+		Triangle tr8 = new Triangle(H,A,E);
 		Triangle tr9 = new Triangle(D,A,B);
-		Triangle tr10 = new Triangle(D,C,B);
+		Triangle tr10 = new Triangle(D,B,C);
 		Triangle tr11 = new Triangle(H,E,F);
-		Triangle tr12 = new Triangle(H,G,F);
+		Triangle tr12 = new Triangle(H,F,G);
 
 		/*on ajoute dans le array des triangles*/
 		this.listeTriangle.add(tr1);
