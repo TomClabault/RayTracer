@@ -15,26 +15,16 @@ public class Triangle implements Shape
 	
 	Vector planeNormal;//Vecteur normal du plan formé par les 3 points du triangle
 	
-	Color color;
-	int shininess;
-	double specularCoeff;
+	Material material;
 	
-	public Triangle(Point A, Point B, Point C)
-	{
-		this(A, B, C, Color.rgb(255, 255, 255), 10, 1);
-	}
-	
-	public Triangle(Point A, Point B, Point C, Color triangleColor, int shininess, double specularCoeff)
+	public Triangle(Point A, Point B, Point C, Material material)
 	{
 		this.A = A;
 		this.B = B;
 		this.C = C;
-		
 		this.planeNormal = Vector.crossProduct(new Vector(A, B), new Vector(A, C));
 		
-		this.color = Color.rgb(255, 255, 255);
-		this.shininess = shininess;
-		this.specularCoeff = specularCoeff;
+		this.material = material;
 	}
 	
 	public Vector getNormal(Point point)
@@ -92,15 +82,15 @@ public class Triangle implements Shape
 	{
 		Point intersection = null;
 		double planeD;//Composante D du plan formé par les 3 points du triangle dans l'équation de plan Ax + By + Cz + D = 0
+		double denom =  -Vector.dotProduct(this.planeNormal, ray.getDirection());
 		
-		if(Math.abs(Vector.dotProduct(this.planeNormal, ray.getDirection())) < 0.0000001d)//Si la normale du plan et la direction du rayon sont perpendiculaires, le plan et le rayon sont parallèles, pas d'intersection
+		if(Math.abs(denom) < 0.0000001d)//Si la normale du plan et la direction du rayon sont perpendiculaires, le plan et le rayon sont parallèles, pas d'intersection
 			return null;
 		
 		planeD = Vector.dotProduct(this.planeNormal, new Vector(this.A.getX(), this.A.getY(), this.A.getZ()));
 		
 		double sup = Vector.dotProduct(Point.p2v(Point.sub(ray.getOrigin(), this.A)), planeNormal);//(Vector.dotProduct(this.planeNormal, ray.getOriginV()) + planeD);
-		double down =  -Vector.dotProduct(this.planeNormal, ray.getDirection());
-		double coeffVectorPoint = sup/down;
+		double coeffVectorPoint = sup/denom;
 		
 		if(coeffVectorPoint < 0)//L'intersection est dans la direction opposée du rayon, c'est à dire derrière la caméra
 			return null;

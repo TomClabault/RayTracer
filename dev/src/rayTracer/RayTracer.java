@@ -47,11 +47,12 @@ public class RayTracer
 	 * 
 	 * @param objectList Liste des objets de la scène. Obtenable avec MyScene.getSceneObjects()
 	 * @param ray Rayon duquel chercher les points d'intersection avec les objets de la scène
-	 * @param outClosestInterPoint
+	 * @param outClosestInterPoint Ce paramètre reçoit les coordonnées du point d'intersection le plus proche de la caméra trouvé. Il est inchangé si aucun point d'intersection n'est trouvé
+	 * @param outNormalAtInter 	   Ce paramètre reçoit la normale au point d'intersection trouvé. Inchangé si aucun point d'intersection n'a été trouvé. Si ce paramètre est null, la normale au point d'intersection ne sera pas automatiquement calculée
 	 * 
 	 * @return Retourne l'objet avec lequel le rayon a fait son intersection. 'outClosestInterPoint' est un point de l'objet retourné 
 	 */
-	public Shape computeClosestInterPoint(ArrayList<Shape> objectList, Ray ray, Point outClosestInterPoint)
+	public Shape computeClosestInterPoint(ArrayList<Shape> objectList, Ray ray, Point outClosestInterPoint, Vector outNormalAtInter)
 	{
 		Shape closestObjectIntersected = null;
 		Double distanceMin = null;
@@ -59,7 +60,7 @@ public class RayTracer
 		for(Shape object : objectList)
 		{
 			double distRayOriInter = -1;
-			Point intersection = object.intersect(ray);
+			Point intersection = object.intersect(ray, outNormalAtInter);
 			if(intersection != null)
 			{
 				distRayOriInter = Point.distance(ray.getOrigin(), intersection);
@@ -177,7 +178,8 @@ public class RayTracer
 		ArrayList<Shape> objectList = renderScene.getSceneObjects();
 		
 		Point rayInterPoint = new Point(0, 0, 0);
-		Shape rayInterObject = computeClosestInterPoint(objectList, ray, rayInterPoint);
+		Vector normalAtIntersection = new Vector(0, 0, 0);
+		Shape rayInterObject = computeClosestInterPoint(objectList, ray, rayInterPoint, normalAtIntersection);
 		
 		if(rayInterObject != null)//Il y a un point d'intersection
 		{
@@ -191,7 +193,6 @@ public class RayTracer
 			
 			
 
-			Vector normalAtIntersection = rayInterObject.getNormal(rayInterPoint);
 			//Vector reflectionVector = getReflectionVector(normalAtIntersection, new Vector(rayInterPoint, renderScene.getLight().getCenter()));
 			Vector reflectionVector = getReflectionVector(normalAtIntersection, ray.getDirection());
 
@@ -205,7 +206,7 @@ public class RayTracer
 			
 			//On cherche une intersection avec un objet qui se trouverait entre la lampe et l'origine du shadow ray
 			Point shadowInterPoint = new Point(0, 0, 0);
-			Shape shadowInterObject = computeClosestInterPoint(objectList, shadowRay, shadowInterPoint);
+			Shape shadowInterObject = computeClosestInterPoint(objectList, shadowRay, shadowInterPoint, null);
 
 			double interToShadowInterDist = 0;
 			if(shadowInterObject != null)

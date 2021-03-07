@@ -7,11 +7,9 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
 
 import javax.imageio.ImageIO;
 
-import geometry.shapes.*;
 import geometry.*;
-import geometry.materials.MatteMaterial;
-import geometry.materials.MetallicMaterial;
-import geometry.materials.MirrorMaterial;
+import geometry.shapes.*;
+import geometry.materials.*;
 import scene.*;
 import scene.MyScene;
 import scene.lights.*;
@@ -40,8 +38,8 @@ public class ExempleImageWriter extends Application
 	@Override
 	public void start(Stage stage) 
 	{
-		int width = 1920;
-		int height = 1080;
+		int width = 1920/2;
+		int height = 1080/2;
 
 		WritableImage writableImage = new WritableImage(width, height);
 
@@ -57,9 +55,10 @@ public class ExempleImageWriter extends Application
 		stage.setTitle("");
 		stage.show();
 		
+		
 		RayTracer rayTracerInstance = new RayTracer(width, height);
 
-		Camera cameraRT = new Camera(new Point(0, 1, -1), new Point(0, 0, -6));
+		Camera cameraRT = new Camera(new Point(1, 1, -2), new Point(0, 0, -6));
 		cameraRT.setFOV(60);
 		Light l = new LightBulb(new Point(-0.5, 0.5, -4), 1.25);
 
@@ -67,19 +66,15 @@ public class ExempleImageWriter extends Application
 		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128))));
 		
 		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, new MetallicMaterial(Color.rgb(240, 0, 0))));
-		//shapeList.add(new SphereMaths(new Point(0.5, 0, -1), 0.25, Color.BLACK, 3, 1, 0.6, 1, 0));
 		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, new MetallicMaterial(Color.rgb(255, 211, 0))));
 		shapeList.add(new SphereMaths(new Point(-1.25, 1, -6.5), 0.2, new MetallicMaterial(Color.LIGHTSKYBLUE)));
 		shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
 		shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
-		//shapeList.add(new Triangle(new Point(-1.5, -0.65, -5.5), new Point(+0.5, 0, -4), new Point(0, 0.5, -4)));
-		//shapeList.add(new Rectangle(new Point(-1.5, -0.65, -5.5), new Point(1.1, 0.5, -5.5), new MatteMaterial(Color.rgb(255, 0, 0))));
-		//shapeList.add(new Triangle());
-		shapeList.add(new Rectangle(new Point(-1.5, -0.65, -8), new Point(0, 2, -9), new MetallicMaterial(Color.rgb(250, 211, 144))));
+
+		shapeList.add(new Rectangle(new Point(0, 0, 0), new Point(1, 1, -1), new MatteMaterial(Color.rgb(150, 185, 144))));
 		shapeList.add(new PyramideTriangulaire(new Point(-1.85, -0.65, -5),2,1 , new MetallicMaterial(Color.rgb(0, 21, 64))));
 		shapeList.add(new Pyramide(new Point(-1.5,2,-9.5),1,1.5,new MatteMaterial(Color.rgb(183, 21, 64))));
 		shapeList.add(new Prism(new Point(1.5,-0.65,-7),2,2,new MetallicMaterial(Color.DARKORANGE)));
-		
 		
 		
 		MyScene sceneRT = new MyScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.55);
