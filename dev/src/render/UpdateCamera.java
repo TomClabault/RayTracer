@@ -6,8 +6,8 @@ import scene.MyScene;
 
 public class UpdateCamera implements Runnable {
 
-    Scene scene;
-    MyScene myScene;
+    private Scene scene;
+    private MyScene myScene;
 
     public UpdateCamera(MyScene myScene, Scene scene) {
         this.myScene = myScene;

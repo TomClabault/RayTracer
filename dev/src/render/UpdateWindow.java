@@ -6,9 +6,9 @@ import scene.MyScene;
 import rayTracer.RayTracer;
 
 public class UpdateWindow implements Runnable {
-    RayTracer rayTracer;
-    MyScene myScene;
-    PixelWriter pixelWriter;
+    private RayTracer rayTracer;
+    private MyScene myScene;
+    private PixelWriter pixelWriter;
 
     public UpdateWindow(RayTracer rayTracer, MyScene myScene, PixelWriter pixelWriter) {
         this.rayTracer = rayTracer;

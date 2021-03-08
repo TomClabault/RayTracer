@@ -8,9 +8,10 @@ import rayTracer.RayTracer;
 
 public class WindowTimer extends AnimationTimer {
 
-    MyScene myScene;
-    PixelWriter pixelWriter;
-    RayTracer rayTracer;
+    private MyScene myScene;
+    private PixelWriter pixelWriter;
+    private RayTracer rayTracer;
+
     public WindowTimer(MyScene myScene, PixelWriter pixelWriter, RayTracer rayTracer) {
         this.myScene = myScene;
         this.pixelWriter = pixelWriter;

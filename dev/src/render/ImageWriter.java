@@ -24,10 +24,10 @@ import scene.lights.*;
 
 public class ImageWriter {
 
-    public volatile MyScene MyGlobalScene = addObjectsToScene();
-    WritableImage writableImage;
-    PixelWriter pw;
-    Scene scene;
+    public volatile MyScene MyGlobalScene = addObjectsToScene();/*TODO pertinance du public et du volatile ?*/
+    private WritableImage writableImage;
+    private PixelWriter pw;
+    private Scene scene;
 
 
     public ImageWriter(){

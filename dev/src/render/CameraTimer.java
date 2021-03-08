@@ -10,10 +10,10 @@ import javafx.scene.input.KeyCode;
 
 public class CameraTimer extends AnimationTimer {
 
-    public static final Double DELTA_MOVE = 0.1;
+    private static final Double DELTA_MOVE = 0.1;
 
-    Scene scene;
-    MyScene myScene;
+    private Scene scene;
+    private MyScene myScene;
 
     public CameraTimer(Scene scene, MyScene myScene) {
         this.scene = scene;
