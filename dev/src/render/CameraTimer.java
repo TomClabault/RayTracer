@@ -1,12 +1,12 @@
 package render;
 
+import scene.MyScene;
+
 import javafx.scene.input.KeyEvent;
 import javafx.scene.Scene;
 import javafx.event.EventHandler;
-import scene.MyScene;
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
-import maths.Point;
 
 public class CameraTimer extends AnimationTimer {
 

@@ -1,7 +1,8 @@
 package render;
 
-import javafx.util.Pair;
 import java.util.Optional;
+
+import javafx.util.Pair;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Dialog;

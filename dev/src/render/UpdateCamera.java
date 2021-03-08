@@ -1,7 +1,8 @@
 package render;
 
-import scene.MyScene;
 import javafx.scene.Scene;
+
+import scene.MyScene;
 
 public class UpdateCamera implements Runnable {
 

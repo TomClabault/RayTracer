@@ -1,26 +1,26 @@
 package render;
 
+import java.util.concurrent.atomic.AtomicReferenceArray;
+import java.util.ArrayList;
+
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.image.WritableImage;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.stage.Stage;
+
 import rayTracer.RayTracer;
 import geometry.materials.MirrorMaterial;
 import geometry.materials.MetallicMaterial;
 import geometry.materials.MatteMaterial;
-import java.util.concurrent.atomic.AtomicReferenceArray;
-import java.util.ArrayList;
-
 import geometry.shapes.*;
 import geometry.*;
 import maths.*;
-
 import scene.*;
 import scene.MyScene;
 import scene.lights.*;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.scene.image.WritableImage;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
 
 public class ImageWriter {
 

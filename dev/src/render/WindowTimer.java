@@ -1,9 +1,10 @@
 package render;
 
-import scene.MyScene;
-import rayTracer.RayTracer;
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.PixelWriter;
+
+import scene.MyScene;
+import rayTracer.RayTracer;
 
 public class WindowTimer extends AnimationTimer {
 

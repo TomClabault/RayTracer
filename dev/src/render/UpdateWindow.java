@@ -1,8 +1,9 @@
 package render;
 
+import javafx.scene.image.PixelWriter;
+
 import scene.MyScene;
 import rayTracer.RayTracer;
-import javafx.scene.image.PixelWriter;
 
 public class UpdateWindow implements Runnable {
     RayTracer rayTracer;
