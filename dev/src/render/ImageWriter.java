@@ -47,15 +47,19 @@ public class ImageWriter {
         stage.show();
     }
 
+    public void setMyScene(MyScene myScene) {
+        this.MyGlobalScene = myScene;
+    }
+
     public void ImageWriterMain(int height, int width) {
 
-        //UpdateCamera updateCamera = new UpdateCamera(MyGlobalScene, scene);
-        //updateCamera.run();
-        /*UpdateWindow updateWindow = new UpdateWindow(new RayTracer(MainApp.WIDTH, MainApp.HEIGHT), this.MyGlobalScene, this.pw);
-        updateWindow.run();*/
+        UpdateCamera updateCamera = new UpdateCamera(MyGlobalScene, scene);
+        updateCamera.run();
+        UpdateWindow updateWindow = new UpdateWindow(new RayTracer(MainApp.WIDTH, MainApp.HEIGHT), this.MyGlobalScene, this.pw);
+        updateWindow.run();
         //while(true){
-            RayTracer r = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT);
-            ImageWriter.doImage(r.renderImage(MyGlobalScene,8),this.pw);
+            //RayTracer r = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT);
+            //ImageWriter.doImage(r.renderImage(MyGlobalScene,8),this.pw);
         //}
 
     }
