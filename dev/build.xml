@@ -27,6 +27,7 @@
             <exclude name="**/Rectangle.java"/>
             <exclude name="**/Triangle.java"/>
             <exclude name="**/MatricesTests.java"/>
+            <exclude name="**/SetSizeWindow.java"/>
             <classpath refid="projet.classpath"/>
         </javac>
     </target>
