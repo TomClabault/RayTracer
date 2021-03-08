@@ -102,13 +102,15 @@ public class Camera
 	}
 	
 	/*
-	 * Redéfinit la direction de la caméra
+	 * Redéfinit la direction de la caméra. Cette méthode recalcule également la matrice de passage CTXMatrix
 	 * 
 	 * @param newDirection Un vecteur pour redéfinir la direction de la caméra
 	 */
 	public void setDirection(Point newPointDirection)
 	{
 		this.pointDirection = newPointDirection;
+		
+		this.CTWMatrix = new CTWMatrix(this.position, this.pointDirection);
 	}
 	
 	/*
@@ -122,12 +124,14 @@ public class Camera
 	}
 	
 	/*
-	 * Définit la nouvelle position de la caméra
+	 * Définit la nouvelle position de la caméra. Cette méthode recalcule également la matrice de passage CTXMatrix
 	 * 
 	 * @param newPosition Un point de coordonnées (x, y, z) pour définir les nouvelles coordonnées de la caméra
 	 */
 	public void setPosition(Point newPosition)
 	{
 		this.position = newPosition;
+		
+		this.CTWMatrix = new CTWMatrix(this.position, this.pointDirection);
 	}
 }
