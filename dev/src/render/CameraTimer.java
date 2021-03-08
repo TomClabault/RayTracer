@@ -1,6 +1,7 @@
 package render;
 
 import scene.MyScene;
+import maths.Point;
 
 import javafx.scene.input.KeyEvent;
 import javafx.scene.Scene;
@@ -35,16 +36,19 @@ public class CameraTimer extends AnimationTimer {
         });
 
     }
-
+    /*TODO zqsd change la position, fleche change l'orientation de la caméra, space et shift pour changer la hauteur*/
     public void upGlobalCamera() {
-        this.myScene.getCamera().getPosition().setY(this.myScene.getCamera().getPosition().getY() + DELTA_MOVE);
-        //System.out.println(this.myScene.getCamera().getPosition());
-        //Point tempPoint = this.myScene.getCamera().getPosition();
-        //tempPoint.setY(tempPoint.getY() + DELTA_MOVE);
-        //this.myScene.getCamera().setPosition(tempPoint);
+        Point new_position = Point.add(this.myScene.getCamera().getPosition(),new Point(0, DELTA_MOVE,0));
+        Point new_direction = Point.add(this.myScene.getCamera().getDirection(),new Point(0, DELTA_MOVE,0));
+        this.myScene.getCamera().setPosition(new_position);
+        this.myScene.getCamera().setDirection(new_direction);
     }
 
     public void downGlobalCamera() {
-        this.myScene.getCamera().getPosition().setY(this.myScene.getCamera().getPosition().getY() - DELTA_MOVE);
+        Point new_position = Point.add(this.myScene.getCamera().getPosition(),new Point(0,- DELTA_MOVE,0));
+        Point new_direction = Point.add(this.myScene.getCamera().getDirection(),new Point(0,- DELTA_MOVE,0));
+        this.myScene.getCamera().setPosition(new_position);
+        this.myScene.getCamera().setDirection(new_direction);
+
     }
 }
