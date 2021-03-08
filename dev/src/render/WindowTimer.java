@@ -20,8 +20,8 @@ public class WindowTimer extends AnimationTimer {
 
     public void handle(long nanoTime){
         ImageWriter.doImage(rayTracer.renderImage(this.myScene,8),this.pixelWriter);
-        System.out.println("A Image is printed");
-        System.out.println(myScene.getCamera().getPosition());
+        //System.out.println("A Image is printed");
+        //System.out.println(myScene.getCamera().getPosition());
 
     }
 }
