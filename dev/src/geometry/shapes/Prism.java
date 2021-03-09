@@ -158,7 +158,7 @@ public class Prism implements ShapeTriangle
         Triangle intersectedTriangle = null;
         for (int i = 0; i < listeTriangle.size(); i++)
         {
-            intersection = listeTriangle.get(i).intersect(ray);
+            intersection = listeTriangle.get(i).intersect(ray, null);
             if(intersection != null)
             {
                 double distance = Point.distance(intersection, ray.getOrigin());
