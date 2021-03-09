@@ -24,7 +24,7 @@ import scene.lights.*;
 
 public class ImageWriter {
 
-    public volatile MyScene MyGlobalScene = addObjectsToScene();/*TODO pertinance du public et du volatile ?*/
+    private MyScene MyGlobalScene = addObjectsToScene();/*TODO pertinance du public et du volatile ?*/
     private WritableImage writableImage;
     private PixelWriter pw;
     //private Scene scene;
@@ -50,7 +50,7 @@ public class ImageWriter {
         UpdateWindow updateWindow = new UpdateWindow(new RayTracer(MainApp.WIDTH, MainApp.HEIGHT), this.MyGlobalScene, this.pw);
         this.updateWindow = updateWindow;
 
-        UpdateCamera updateCamera = new UpdateCamera(MyGlobalScene, mainAppScene);
+        UpdateCamera updateCamera = new UpdateCamera(MyGlobalScene, this.mainAppScene);
         this.updateCamera = updateCamera;
     }
 
