@@ -32,15 +32,13 @@ public class CameraTimer extends AnimationTimer {
     }
 
     public void handle(long nanoTime){
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {/*TODO code sale à revoir*/
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.E) {
                     upCamera();
-                    //System.out.println("Camera up");
                 } else if (event.getCode() == KeyCode.A) {
                     downCamera();
-                    //System.out.println("Camera down");
                 } else if (event.getCode() == KeyCode.UP) {
                     turnUpCamera();
                 } else if (event.getCode() == KeyCode.DOWN) {
@@ -62,7 +60,7 @@ public class CameraTimer extends AnimationTimer {
         });
 
     }
-    /*TODO zqsd change la position, fleche change l'orientation de la caméra, space et shift pour changer la hauteur*/
+
     public void upCamera() {
         Point new_position = Point.add(this.myScene.getCamera().getPosition(),new Point(0, DELTA_MOVE_Y,0));
         Point new_direction = Point.add(this.myScene.getCamera().getDirection(),new Point(0, DELTA_MOVE_Y,0));

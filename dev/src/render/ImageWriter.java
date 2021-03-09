@@ -50,7 +50,7 @@ public class ImageWriter {
         UpdateWindow updateWindow = new UpdateWindow(new RayTracer(MainApp.WIDTH, MainApp.HEIGHT), this.MyGlobalScene, this.pw);
         this.updateWindow = updateWindow;
 
-        UpdateCamera updateCamera = new UpdateCamera(MyGlobalScene, mainAppScene);/*TODO supprimer scene en argument*/
+        UpdateCamera updateCamera = new UpdateCamera(MyGlobalScene, mainAppScene);
         this.updateCamera = updateCamera;
     }
 
