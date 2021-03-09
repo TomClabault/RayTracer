@@ -138,7 +138,8 @@ public class Pyramide implements ShapeTriangle {
         Point intersection = null;
         Triangle intersectedTriangle = null;
         for (int i = 0; i < listeTriangle.size(); i++) {
-            intersection = listeTriangle.get(i).intersect(ray, null);
+        	Triangle triangle = listeTriangle.get(i);
+            intersection = triangle.intersect(ray, null);
             if (intersection != null) {
                 double distance = Point.distance(intersection, ray.getOrigin());
                 if (distancemin == null || distance < distancemin) {

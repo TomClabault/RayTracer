@@ -114,6 +114,6 @@ public class Triangle implements Shape
 
 	public Material getMaterial()
 	{
-		return new MatteMaterial(Color.rgb(200, 200, 200));
+		return this.material;
 	}
 }

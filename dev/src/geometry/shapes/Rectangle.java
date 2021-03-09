@@ -133,6 +133,7 @@ public class Rectangle implements ShapeTriangle
 			Double distancemin = null;
 			Point intersection = null;
 			Triangle intersectedTriangle = null;
+			
 			for (int i = 0; i < listeTriangle.size(); i++)
 			{
 				intersection = listeTriangle.get(i).intersect(ray, null);

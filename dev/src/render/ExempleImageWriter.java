@@ -38,8 +38,8 @@ public class ExempleImageWriter extends Application
 	@Override
 	public void start(Stage stage) 
 	{
-		int width = 1920/2;
-		int height = 1080/2;
+		int width = 1777;
+		int height = 1000;
 
 		WritableImage writableImage = new WritableImage(width, height);
 
@@ -58,23 +58,34 @@ public class ExempleImageWriter extends Application
 		
 		RayTracer rayTracerInstance = new RayTracer(width, height);
 
-		Camera cameraRT = new Camera(new Point(1, 1, -2), new Point(0, 0, -6));
+		Camera cameraRT = new Camera(new Point(1, 1, -4), new Point(0, 0, -6));
 		cameraRT.setFOV(60);
 		Light l = new LightBulb(new Point(-0.5, 0.5, -4), 1.25);
 
 		ArrayList<Shape> shapeList = new ArrayList<>();
 		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128))));
 		
-		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, new MetallicMaterial(Color.rgb(240, 0, 0))));
-		shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, new MetallicMaterial(Color.rgb(255, 211, 0))));
-		shapeList.add(new SphereMaths(new Point(-1.25, 1, -6.5), 0.2, new MetallicMaterial(Color.LIGHTSKYBLUE)));
-		shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
-		shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
+		//shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, new MetallicMaterial(Color.rgb(240, 0, 0))));
+		//shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, new MetallicMaterial(Color.rgb(255, 211, 0))));
+		//shapeList.add(new SphereMaths(new Point(-1.25, 1, -6.5), 0.2, new MetallicMaterial(Color.LIGHTSKYBLUE)));
+		//shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
+		//shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
 
-		shapeList.add(new Rectangle(new Point(0, 0, 0), new Point(1, 1, -1), new MatteMaterial(Color.rgb(150, 185, 144))));
-		shapeList.add(new PyramideTriangulaire(new Point(-1.85, -0.65, -5),2,1 , new MetallicMaterial(Color.rgb(0, 21, 64))));
-		shapeList.add(new Pyramide(new Point(-1.5,2,-9.5),1,1.5,new MatteMaterial(Color.rgb(183, 21, 64))));
-		shapeList.add(new Prism(new Point(1.5,-0.65,-7),2,2,new MetallicMaterial(Color.DARKORANGE)));
+		//shapeList.add(new Rectangle(new Point(0, 0, 0), new Point(1, 1, -1), new MatteMaterial(Color.rgb(150, 185, 144))));
+		//shapeList.add(new PyramideTriangulaire(new Point(-1.85, -0.65, -5),2,1 , new MetallicMaterial(Color.rgb(0, 21, 64))));
+		
+		double heightT = 1;
+		double widthT = 1;
+		shapeList.add(new Pyramide(new Point(0,0,-6),1,1,new MatteMaterial(Color.rgb(183, 21, 64))));
+		
+//		Point A = new Point(-2, 1, -6);
+//		Point B = new Point(-1, 1, -6);
+//		Point C = new Point(-1, 1, -7);
+//		Point E = new Point(-1.5, 2, -6.5);
+//		
+//		shapeList.add(new Triangle(A, B, E, new MatteMaterial(Color.rgb(255, 0, 0))));
+//		shapeList.add(new Triangle(E, B, C, new MatteMaterial(Color.rgb(255, 0, 0))));
+		//shapeList.add(new Prism(new Point(1.5,-0.65,-7),2,2,new MetallicMaterial(Color.DARKORANGE)));
 		
 		
 		MyScene sceneRT = new MyScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.55);
@@ -82,7 +93,7 @@ public class ExempleImageWriter extends Application
 		
 	
 		long startTimer = System.currentTimeMillis();
-		rayTracerInstance.renderImage(sceneRT, 8);
+		rayTracerInstance.renderImage(sceneRT, 1);
 		long endTimer = System.currentTimeMillis();
 		
 		System.out.println(String.format("Render time: %dms", endTimer-startTimer));
