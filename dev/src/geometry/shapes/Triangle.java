@@ -78,7 +78,7 @@ public class Triangle implements Shape
 	 * @return Le point d'intersection du rayon et du triangle. Null s'il n'y a pas d'intersection
 	 */
 	@Override
-	public Point intersect(Ray ray)
+	public Point intersect(Ray ray, Vector outNormalAtInter)
 	{
 		Point intersection = null;
 		double planeD;//Composante D du plan formé par les 3 points du triangle dans l'équation de plan Ax + By + Cz + D = 0
@@ -99,7 +99,12 @@ public class Triangle implements Shape
 		intersection = ray.determinePoint(coeffVectorPoint);
 		
 		if(this.insideOutsideTest(intersection))//Si le point d'intersection du rayon et du plan est dans le triangle, on a trouve notre point d'intersection
+		{
+			if(outNormalAtInter != null)
+				outNormalAtInter.copyIn(this.planeNormal);
+			
 			return intersection;//On le retourne
+		}
 		else//Cela veut dire que le rayon intersecte le plan formé par le triangle mais pas le triangle lui même
 			return null;
 	}
