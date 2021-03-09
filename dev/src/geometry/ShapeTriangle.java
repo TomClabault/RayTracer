@@ -32,16 +32,21 @@ public abstract class ShapeTriangle implements Shape
 	{
 		Double distancemin = null;
 		Point intersection = null;
+		Point closestInterPoint = null;
 		Triangle intersectedTriangle = null;
+		
 		for (int i = 0; i < listeTriangle.size(); i++)
 		{
-			intersection = listeTriangle.get(i).intersect(ray, null);
+			Triangle triangle = listeTriangle.get(i);
+			intersection = triangle.intersect(ray, null);
 			if(intersection != null)
 			{
 				double distance = Point.distance(intersection, ray.getOrigin());
 				if(distancemin == null || distance < distancemin )
 				{
-					distancemin = distance ;
+					distancemin = distance;
+					
+					closestInterPoint = intersection;
 					intersectedTriangle = listeTriangle.get(i);
 				}
 			}
@@ -55,7 +60,8 @@ public abstract class ShapeTriangle implements Shape
 				outNormalAtInter.copyIn(intersectedTriangle.getNormal(null));
 			}
 		}
-		return intersection;
+		
+		return closestInterPoint;
 
 	}
 	public Vector getNormal(Point point)
