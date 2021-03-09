@@ -13,7 +13,7 @@ import geometry.materials.MatteMaterial;
 import geometry.materials.MetallicMaterial;
 import geometry.materials.MirrorMaterial;
 import scene.*;
-import scene.MyScene;
+import scene.RayTracingScene;
 import scene.lights.*;
 import rayTracer.*;
 import javafx.application.Application;
@@ -73,7 +73,7 @@ public class ExempleImageWriter extends Application
 		shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
 		shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
 
-		MyScene sceneRT = new MyScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.55);
+		RayTracingScene sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.55);
 
 		
 	

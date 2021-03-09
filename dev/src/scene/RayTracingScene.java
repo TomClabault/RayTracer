@@ -10,7 +10,7 @@ import scene.lights.Light;
 /*
  * Permet de représenter une scène de rendu contenant une caméra, une lumière et une liste de formes
  */
-public class MyScene
+public class RayTracingScene
 {
 	Camera camera;
 	Light light;
@@ -29,7 +29,7 @@ public class MyScene
 	 * 
 	 * @param shapes Liste de forme qui seront rendues
 	 */
-	public MyScene(Camera camera, Light light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity) 
+	public RayTracingScene(Camera camera, Light light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity) 
 	{
 		this.camera = camera;
 		this.light = light;

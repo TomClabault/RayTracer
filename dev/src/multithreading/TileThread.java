@@ -1,16 +1,16 @@
 package multithreading;
 
 import rayTracer.RayTracer;
-import scene.MyScene;
+import scene.RayTracingScene;
 
 public class TileThread implements Runnable
 {
 	ThreadsTaskList taskList;
 	
 	RayTracer rayTracerInstance;
-	MyScene renderScene;
+	RayTracingScene renderScene;
 	
-	public TileThread(ThreadsTaskList taskList, RayTracer rayTracerInstance, MyScene renderScene) 
+	public TileThread(ThreadsTaskList taskList, RayTracer rayTracerInstance, RayTracingScene renderScene) 
 	{
 		this.taskList = taskList;
 		
