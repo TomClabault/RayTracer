@@ -23,7 +23,7 @@ public class WindowTimer extends AnimationTimer {
         this.pixelWriter = pixelWriter;
         this.rayTracer = rayTracer;
 
-        Pane root = new Pane();
+        Pane root = new Pane();/*TODO a remplacer par une stackpane*/
         Label fpsString = new Label("this is text");
         fpsString.setStyle("-fx-font: 128 arial;");
         this.fpsString = fpsString;
