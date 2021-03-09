@@ -28,7 +28,9 @@ public class ImageWriter {
     private WritableImage writableImage;
     private PixelWriter pw;
     private Scene scene;
-
+    private UpdateWindow updateWindow;
+    private UpdateCamera updateCamera;
+    private Pane pane;
 
     public ImageWriter(){
         this.writableImage = new WritableImage(MainApp.WIDTH,MainApp.HEIGHT);
@@ -38,25 +40,48 @@ public class ImageWriter {
         ImageView imageView = new ImageView();
         imageView.setImage(writableImage);
 
-        Pane root = new Pane();
-        root.getChildren().add(imageView);
-        this.scene = new Scene(root);
-        Stage stage = new Stage();
-        stage.setTitle("");
-        stage.setScene(scene);
-        stage.show();
+        Pane pane = new Pane();
+        pane.getChildren().add(imageView);
+        this.pane = pane;
+        this.scene = new Scene(pane);
+
+        UpdateWindow updateWindow = new UpdateWindow(new RayTracer(MainApp.WIDTH, MainApp.HEIGHT), this.MyGlobalScene, this.pw);
+        this.updateWindow = updateWindow;
+
+        UpdateCamera updateCamera = new UpdateCamera(MyGlobalScene, scene);/*TODO supprimer scene en argument*/
+        this.updateCamera = updateCamera;
     }
 
     public void setMyScene(MyScene myScene) {
         this.MyGlobalScene = myScene;
     }
 
+    public MyScene getMyScene() {
+        return this.MyGlobalScene;
+    }
+
+    public Scene getScene() {
+        return this.scene;
+    }
+
+    /**
+     * @return the updateWindow
+     */
+    public UpdateWindow getUpdateWindow() {
+    	return this.updateWindow;
+    }
+
+    /**
+     * @return the pane
+     */
+    public Pane getPane() {
+    	return pane;
+    }
+
     public void ImageWriterMain(int height, int width) {
 
-        UpdateCamera updateCamera = new UpdateCamera(MyGlobalScene, scene);
-        updateCamera.run();
-        UpdateWindow updateWindow = new UpdateWindow(new RayTracer(MainApp.WIDTH, MainApp.HEIGHT), this.MyGlobalScene, this.pw);
-        updateWindow.run();
+        this.updateCamera.run();
+        this.updateWindow.run();
         //while(true){
             //RayTracer r = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT);
             //ImageWriter.doImage(r.renderImage(MyGlobalScene,8),this.pw);
