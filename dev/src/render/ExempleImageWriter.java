@@ -13,7 +13,7 @@ import geometry.materials.MatteMaterial;
 import geometry.materials.MetallicMaterial;
 import geometry.materials.MirrorMaterial;
 import scene.*;
-import scene.MyScene;
+import scene.RayTracingScene;
 import scene.lights.*;
 import rayTracer.*;
 import javafx.application.Application;
@@ -40,8 +40,8 @@ public class ExempleImageWriter extends Application
 	@Override
 	public void start(Stage stage) 
 	{
-		int width = 1920;
-		int height = 1080;
+		int width = 1920/2;
+		int height = 1080/2;
 
 		WritableImage writableImage = new WritableImage(width, height);
 
@@ -73,12 +73,12 @@ public class ExempleImageWriter extends Application
 		shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
 		shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
 
-		MyScene sceneRT = new MyScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.55);
+		RayTracingScene sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.55);
 
 		
 	
 		long startTimer = System.currentTimeMillis();
-		rayTracerInstance.renderImage(sceneRT, 8);
+		rayTracerInstance.renderImage(sceneRT, 1);
 		long endTimer = System.currentTimeMillis();
 		
 		System.out.println(String.format("Render time: %dms", endTimer-startTimer));

@@ -14,7 +14,7 @@ import maths.Vector;
 import multithreading.ThreadsTaskList;
 import multithreading.TileTask;
 import multithreading.TileThread;
-import scene.MyScene;
+import scene.RayTracingScene;
 
 /*
  * Lumière dans la sphère: traverse
@@ -139,7 +139,7 @@ public class RayTracer
 	 * @param endX Le pixel de fin horizontal de la zone de l'image qui doit être calculée. Entre startX + 1 et renderWidth - 1 inclus
 	 * @param endY Le pixel de fin vertical de la zone de l'image qui doit être calculée. Entre endY + 1 et renderHeight - 1 inclus
 	 */
-	public void computePartialImage(MyScene renderScene, int startX, int startY, int endX, int endY)
+	public void computePartialImage(RayTracingScene renderScene, int startX, int startY, int endX, int endY)
 	{
 		//RotationMatrix rotMatrix = new RotationMatrix(RotationMatrix.yAxis, -30);
 		//MatrixD transformMatrix = MatrixD.mulMatrix(ctwMatrix, rotMatrix);
@@ -169,7 +169,7 @@ public class RayTracer
 	 * 
 	 * @return Une instance de Color.RGB(r, g, b)
 	 */
-	public Color computePixel(int x, int y, MyScene renderScene, Ray ray, int depth)
+	public Color computePixel(int x, int y, RayTracingScene renderScene, Ray ray, int depth)
 	{
 		if(depth == 0)
 			return renderScene.getBackgroundColor();
@@ -253,7 +253,7 @@ public class RayTracer
 			return renderScene.getBackgroundColor();//Couleur du fond, noir si on a pas de fond
 	}
 	
-	public boolean computeTask(MyScene renderScene, ThreadsTaskList taskList)
+	public boolean computeTask(RayTracingScene renderScene, ThreadsTaskList taskList)
 	{
 		Integer taskNumber = 0;
 		TileTask currentTileTask = null;
@@ -330,7 +330,7 @@ public class RayTracer
 		return this.renderedPixels;
 	}
 	
-	public AtomicReferenceArray<Color> renderImage(MyScene renderScene, int nbCore)
+	public AtomicReferenceArray<Color> renderImage(RayTracingScene renderScene, int nbCore)
 	{
 		ThreadsTaskList threadTaskList = new ThreadsTaskList();
 		threadTaskList.initTaskList(nbCore, this.renderWidth, this.renderHeight);
