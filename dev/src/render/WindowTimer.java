@@ -16,31 +16,30 @@ public class WindowTimer extends AnimationTimer {
     private PixelWriter pixelWriter;
     private RayTracer rayTracer;
     private long oldFrameTime;
-    private Label fpsString;
+    private Label fpsLabel;
 
     public WindowTimer(MyScene myScene, PixelWriter pixelWriter, RayTracer rayTracer) {
         this.myScene = myScene;
         this.pixelWriter = pixelWriter;
         this.rayTracer = rayTracer;
-
-        Pane root = new Pane();/*TODO a remplacer par une stackpane*/
-        Label fpsString = new Label("this is text");
-        fpsString.setStyle("-fx-font: 128 arial;");
-        this.fpsString = fpsString;
-        root.getChildren().add(fpsString);
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        stage.setTitle("Number of fps");
-        stage.setScene(scene);
-        stage.show();
+        Label fpsLabel = new Label("");
+        this.fpsLabel = fpsLabel;
     }
+
+    /**
+     * @return the fpsLabel
+     */
+    public Label getfpsLabel() {
+    	return fpsLabel;
+    }
+
 
     public void handle(long actualFrameTime){
         long dif = actualFrameTime - oldFrameTime;
         dif  = (long)1000000000.0 / dif;
         this.oldFrameTime = actualFrameTime;
         ImageWriter.doImage(rayTracer.renderImage(this.myScene,8),this.pixelWriter);
-        fpsString.setText(String.format("FPS : %d", dif));
+        fpsLabel.setText(String.format("FPS : %d", dif));
         //System.out.println("A Image is printed");
         //System.out.println(myScene.getCamera().getPosition());
 
