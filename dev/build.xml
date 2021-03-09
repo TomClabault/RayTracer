@@ -5,6 +5,7 @@
     <property name="build" value="build"/>
     <property name="modulepath" value="javafx.controls"/>
     <property name="projet.lib.dir" value="lib"/>
+    <property name="doc.dir" value="javadoc"/>
 
     <path id="projet.classpath">
         <fileset dir="${projet.lib.dir}">
@@ -18,6 +19,7 @@
       <tstamp/>
       <!-- Create the build directory structure used by compile -->
       <mkdir dir="${build}"/>
+      <mkdir dir="${doc.dir}"/>
     </target>
 
     <target name="compile" depends="init" description="compile the source">
@@ -45,5 +47,11 @@
     <target name="packaging" depends="compile,clean">
         <jar jarfile="test.jar" basedir="${build}" manifest="${basedir}/Manifest.txt"/>
     </target>
+
+    <target name="doc" description="generate javadoc">
+    <javadoc encoding="UTF-8" charset="UTF-8" docencoding="UTF-8" sourcepath="${src}" destdir="${doc.dir}">
+        <classpath refid="projet.classpath"/>
+    </javadoc>
+  </target>
 
 </project>
