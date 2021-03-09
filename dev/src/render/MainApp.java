@@ -6,9 +6,18 @@ import javafx.scene.layout.StackPane;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * La classe contenant le Main qui gère la totalité de l'application
+*/
 public class MainApp extends Application {
 
-    public static int HEIGHT;/*Définie par choiceWindowMain*/
+    /**
+     * Définie par la fenètre du choix de taille de rendu
+    */
+    public static int HEIGHT;
+    /**
+     * Définie par la fenètre du choix de taille de rendu
+    */
     public static int WIDTH;
 
     public static void main(String[] args) {

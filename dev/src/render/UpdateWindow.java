@@ -11,6 +11,9 @@ public class UpdateWindow implements Runnable {
     private PixelWriter pixelWriter;
     private WindowTimer windowTimer;
 
+    /**
+    * Un thread qui gère l'actualisation de la fenètre
+    */
     public UpdateWindow(RayTracer rayTracer, MyScene myScene, PixelWriter pixelWriter) {
         this.rayTracer = rayTracer;
         this.myScene = myScene;
@@ -20,9 +23,6 @@ public class UpdateWindow implements Runnable {
         this.windowTimer = windowTimer;
     }
 
-    /**
-     * @return the windowTimer
-     */
     public WindowTimer getWindowTimer() {
     	return this.windowTimer;
     }

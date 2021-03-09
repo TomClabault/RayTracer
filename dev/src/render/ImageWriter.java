@@ -9,7 +9,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
-import javafx.stage.Stage;
 
 import rayTracer.RayTracer;
 import geometry.materials.MirrorMaterial;
@@ -22,17 +21,23 @@ import scene.*;
 import scene.MyScene;
 import scene.lights.*;
 
+/**
+* Gère le Pane qui contient le rendu
+*/
 public class ImageWriter {
 
-    public volatile MyScene MyGlobalScene = addObjectsToScene();/*TODO pertinance du public et du volatile ?*/
+    private MyScene MyGlobalScene = addObjectsToScene();
     private WritableImage writableImage;
     private PixelWriter pw;
-    //private Scene scene;
     private UpdateWindow updateWindow;
     private UpdateCamera updateCamera;
     private Pane pane;
     private Scene mainAppScene;
 
+    /**
+     *
+     * @param mainAppScene la Scene javafx, nécéssite d'être passée en argument pour {@link UpdateCamera}
+    */
     public ImageWriter(Scene mainAppScene){
         this.mainAppScene = mainAppScene;
         this.writableImage = new WritableImage(MainApp.WIDTH,MainApp.HEIGHT);
@@ -50,7 +55,7 @@ public class ImageWriter {
         UpdateWindow updateWindow = new UpdateWindow(new RayTracer(MainApp.WIDTH, MainApp.HEIGHT), this.MyGlobalScene, this.pw);
         this.updateWindow = updateWindow;
 
-        UpdateCamera updateCamera = new UpdateCamera(MyGlobalScene, mainAppScene);
+        UpdateCamera updateCamera = new UpdateCamera(MyGlobalScene, this.mainAppScene);
         this.updateCamera = updateCamera;
     }
 
@@ -62,20 +67,10 @@ public class ImageWriter {
         return this.MyGlobalScene;
     }
 
-    /*public Scene getScene() {
-        return this.scene;
-    }*/
-
-    /**
-     * @return the updateWindow
-     */
     public UpdateWindow getUpdateWindow() {
     	return this.updateWindow;
     }
 
-    /**
-     * @return the pane
-     */
     public Pane getPane() {
     	return pane;
     }
@@ -84,16 +79,7 @@ public class ImageWriter {
 
         this.updateCamera.run();
         this.updateWindow.run();
-        //while(true){
-            //RayTracer r = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT);
-            //ImageWriter.doImage(r.renderImage(MyGlobalScene,8),this.pw);
-        //}
-
     }
-
-
-
-
 
     public static void doImage(AtomicReferenceArray<Color> colorTab, PixelWriter pw)
     {

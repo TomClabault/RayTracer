@@ -12,10 +12,22 @@ import javafx.event.EventHandler;
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
 
+/**
+* Déplace la caméra en fonction des touches pressées
+*/
 public class CameraTimer extends AnimationTimer {
 
+    /**
+    * Sensibilité du déplacement droite/gauche de la caméra
+    */
     private static final Double DELTA_MOVE = 0.02;
+    /**
+    * Sensibilité du déplacement haut/bas de la caméra
+    */
     private static final Double DELTA_MOVE_Y = 0.1;
+    /**
+    * Sensibilité de la rotation de la caméra
+    */
     private static final Double DELTA_ANGLE = 1.0;
 
     private final RotationMatrix PLUS_Y_ANGLE = new RotationMatrix(1, DELTA_ANGLE);
@@ -26,6 +38,10 @@ public class CameraTimer extends AnimationTimer {
     private Scene scene;
     private MyScene myScene;
 
+    /**
+    * @param scene scene javafx
+    * @param myScene scene {@link MyScene}
+    */
     public CameraTimer(Scene scene, MyScene myScene) {
         this.scene = scene;
         this.myScene = myScene;
@@ -61,6 +77,9 @@ public class CameraTimer extends AnimationTimer {
 
     }
 
+    /**
+    * Permet de déplacer la caméra verticalement vers le haut
+    */
     public void upCamera() {
         Point new_position = Point.add(this.myScene.getCamera().getPosition(),new Point(0, DELTA_MOVE_Y,0));
         Point new_direction = Point.add(this.myScene.getCamera().getDirection(),new Point(0, DELTA_MOVE_Y,0));
@@ -68,6 +87,9 @@ public class CameraTimer extends AnimationTimer {
         this.myScene.getCamera().setDirection(new_direction);
     }
 
+    /**
+    * Permet de déplacer la caméra verticalement vers le bas
+    */
     public void downCamera() {
         Point new_position = Point.add(this.myScene.getCamera().getPosition(),new Point(0,- DELTA_MOVE_Y,0));
         Point new_direction = Point.add(this.myScene.getCamera().getDirection(),new Point(0,- DELTA_MOVE_Y,0));
@@ -75,26 +97,41 @@ public class CameraTimer extends AnimationTimer {
         this.myScene.getCamera().setDirection(new_direction);
     }
 
+    /**
+    * Permet de pivoter la caméra vers le haut
+    */
     public void turnUpCamera() {/*0 pour l'axe x, 1 pour y et 2 pour z*/
         Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), PLUS_X_ANGLE);
         this.myScene.getCamera().setDirection(new_direction);
     }
 
+    /**
+    * Permet de pivoter la caméra vers le bas
+    */
     public void turnDownCamera() {/*0 pour l'axe x, 1 pour y et 2 pour z*/
         Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), MINUS_X_ANGLE);
         this.myScene.getCamera().setDirection(new_direction);
     }
 
+    /**
+    * Permet de pivoter la caméra vers la droite
+    */
     public void turnRightCamera() {/*0 pour l'axe x, 1 pour y et 2 pour z*/
         Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), MINUS_Y_ANGLE);
         this.myScene.getCamera().setDirection(new_direction);
     }
 
+    /**
+    * Permet de pivoter la caméra vers le gauche
+    */
     public void turnLeftCamera() {/*0 pour l'axe x, 1 pour y et 2 pour z*/
         Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), PLUS_Y_ANGLE);
         this.myScene.getCamera().setDirection(new_direction);
     }
 
+    /**
+    * Permet de déplacer la caméra vers l'avant
+    */
     public void goForwardCamera() {
         Vector dir = new Vector(this.myScene.getCamera().getPosition(), this.myScene.getCamera().getDirection());
         dir = Vector.scalarMul(dir, DELTA_MOVE);
@@ -102,6 +139,9 @@ public class CameraTimer extends AnimationTimer {
         this.myScene.getCamera().setPosition(Point.add(this.myScene.getCamera().getPosition(), Vector.v2p(dir)));
     }
 
+    /**
+    * Permet de déplacer la caméra verticalement vers l'arrière
+    */
     public void goBackwardCamera() {
         Vector dir = new Vector(this.myScene.getCamera().getDirection() , this.myScene.getCamera().getPosition());/*Inversion des deux points pour aller en arrière*/
         dir = Vector.scalarMul(dir, DELTA_MOVE);
@@ -109,6 +149,9 @@ public class CameraTimer extends AnimationTimer {
         this.myScene.getCamera().setPosition(Point.add(this.myScene.getCamera().getPosition(), Vector.v2p(dir)));
     }
 
+    /**
+    * Permet de déplacer la caméra verticalement vers la gauche
+    */
     public void goLeftCamera() {
         Vector dir = new Vector(this.myScene.getCamera().getPosition(), this.myScene.getCamera().getDirection());
         dir = Vector.scalarMul(dir, DELTA_MOVE);
@@ -122,6 +165,9 @@ public class CameraTimer extends AnimationTimer {
         this.myScene.getCamera().setPosition(Point.add(new_position, point_dir));
     }
 
+    /**
+    * Permet de déplacer la caméra verticalement vers la droite
+    */
     public void goRightCamera() {
         Vector dir = new Vector(this.myScene.getCamera().getPosition(), this.myScene.getCamera().getDirection());
         dir = Vector.scalarMul(dir, DELTA_MOVE);

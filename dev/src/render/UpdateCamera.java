@@ -4,6 +4,9 @@ import javafx.scene.Scene;
 
 import scene.MyScene;
 
+/**
+ * Un thread qui gère les déplacements de la caméra
+*/
 public class UpdateCamera implements Runnable {
 
     private Scene scene;
