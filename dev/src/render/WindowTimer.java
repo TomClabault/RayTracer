@@ -1,11 +1,8 @@
 package render;
 
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 
 import scene.MyScene;
 import rayTracer.RayTracer;
@@ -27,9 +24,6 @@ public class WindowTimer extends AnimationTimer {
         fpsLabel.setId("fpsLabel");
     }
 
-    /**
-     * @return the fpsLabel
-     */
     public Label getfpsLabel() {
     	return fpsLabel;
     }
@@ -41,9 +35,6 @@ public class WindowTimer extends AnimationTimer {
         this.oldFrameTime = actualFrameTime;
         ImageWriter.doImage(rayTracer.renderImage(this.myScene,8),this.pixelWriter);
         fpsLabel.setText(String.format("FPS : %d", dif));
-        //System.out.println("A Image is printed");
-        //System.out.println(myScene.getCamera().getPosition());
-
     }
 
 }
