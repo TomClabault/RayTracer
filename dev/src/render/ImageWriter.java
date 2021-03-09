@@ -27,12 +27,14 @@ public class ImageWriter {
     public volatile MyScene MyGlobalScene = addObjectsToScene();/*TODO pertinance du public et du volatile ?*/
     private WritableImage writableImage;
     private PixelWriter pw;
-    private Scene scene;
+    //private Scene scene;
     private UpdateWindow updateWindow;
     private UpdateCamera updateCamera;
     private Pane pane;
+    private Scene mainAppScene;
 
-    public ImageWriter(){
+    public ImageWriter(Scene mainAppScene){
+        this.mainAppScene = mainAppScene;
         this.writableImage = new WritableImage(MainApp.WIDTH,MainApp.HEIGHT);
 
         this.pw = writableImage.getPixelWriter();
@@ -43,12 +45,12 @@ public class ImageWriter {
         Pane pane = new Pane();
         pane.getChildren().add(imageView);
         this.pane = pane;
-        this.scene = new Scene(pane);
+        //this.scene = new Scene(pane);
 
         UpdateWindow updateWindow = new UpdateWindow(new RayTracer(MainApp.WIDTH, MainApp.HEIGHT), this.MyGlobalScene, this.pw);
         this.updateWindow = updateWindow;
 
-        UpdateCamera updateCamera = new UpdateCamera(MyGlobalScene, scene);/*TODO supprimer scene en argument*/
+        UpdateCamera updateCamera = new UpdateCamera(MyGlobalScene, mainAppScene);/*TODO supprimer scene en argument*/
         this.updateCamera = updateCamera;
     }
 
@@ -60,9 +62,9 @@ public class ImageWriter {
         return this.MyGlobalScene;
     }
 
-    public Scene getScene() {
+    /*public Scene getScene() {
         return this.scene;
-    }
+    }*/
 
     /**
      * @return the updateWindow

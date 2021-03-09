@@ -20,14 +20,17 @@ public class MainApp extends Application {
         ChoiceWindow choiceWindow = new ChoiceWindow();
         choiceWindow.choiceWindowMain();
 
-        ImageWriter imageWriter = new ImageWriter();
+        StackPane stackPane = new StackPane();
+
+        Scene scene = new Scene(stackPane);
+
+        ImageWriter imageWriter = new ImageWriter(scene);
         imageWriter.ImageWriterMain(HEIGHT, WIDTH);
 
         CounterFPS counterFPS = new CounterFPS(imageWriter.getUpdateWindow().getWindowTimer().getfpsLabel());
 
-        StackPane stackPane = new StackPane(imageWriter.getPane());
+        stackPane.getChildren().add(imageWriter.getPane());
         stackPane.getChildren().add(counterFPS.getPane());
-        Scene scene = new Scene(stackPane);
 
         stage.setTitle("Rendu");
         stage.setScene(scene);
