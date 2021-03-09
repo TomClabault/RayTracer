@@ -1,6 +1,7 @@
 package geometry.shapes;
 
 import geometry.materials.Material;
+import geometry.materials.*;
 import geometry.materials.MatteMaterial;
 import geometry.shapes.Triangle;
 import javafx.scene.paint.Color;
@@ -120,14 +121,14 @@ public class Prism implements ShapeTriangle
     {
 
         /*on va construire les 8 triangles*/
-        Triangle tr1 = new Triangle(D,A,B);
-        Triangle tr2 = new Triangle(D,B,C);
-        Triangle tr3 = new Triangle(C,B,E);
-        Triangle tr4 = new Triangle(C,E,F);
-        Triangle tr5 = new Triangle(D,A,E);
-        Triangle tr6 = new Triangle(D,E,F);
-        Triangle tr7 = new Triangle(F,D,C);
-        Triangle tr8 = new Triangle(E,B,A);
+        Triangle tr1 = new Triangle(D,A,B, material);
+        Triangle tr2 = new Triangle(D,B,C, material);
+        Triangle tr3 = new Triangle(C,B,E, material);
+        Triangle tr4 = new Triangle(C,E,F, material);
+        Triangle tr5 = new Triangle(D,A,E, material);
+        Triangle tr6 = new Triangle(D,E,F, material);
+        Triangle tr7 = new Triangle(F,D,C, material);
+        Triangle tr8 = new Triangle(E,B,A, material);
 
         /*on ajoute dans le array des triangles*/
         listeTriangle = new ArrayList<Triangle>();
@@ -150,41 +151,34 @@ public class Prism implements ShapeTriangle
         return listeTriangle;
     }
 
-    public Point intersect(Ray ray)
+    public Point intersect(Ray ray, Vector outNormalAtInter)
     {
-        ArrayList<Point> banque = new ArrayList<Point>();
-        for (int i = 0; i < listeTriangle.size(); i++) {
-            Point intersection = listeTriangle.get(i).intersect(ray);
+        Double distancemin = null;
+        Point intersection = null;
+        Triangle intersectedTriangle = null;
+        for (int i = 0; i < listeTriangle.size(); i++)
+        {
+            intersection = listeTriangle.get(i).intersect(ray);
             if(intersection != null)
             {
-                banque.add(intersection);
+                double distance = Point.distance(intersection, ray.getOrigin());
+                if(distancemin == null || distance < distancemin )
+                {
+                    distancemin = distance ;
+                    intersectedTriangle = listeTriangle.get(i);
+                }
             }
 
+
         }
-
-        if(banque.size() == 0)
+        if (outNormalAtInter != null)
         {
-            return null;
-        }
-
-        else if (banque.size() == 1)
-        {
-            return banque.get(0);
-        }
-
-        else
-        {
-
-            if (Point.distance(banque.get(0),ray.getOrigin()) < Point.distance(banque.get(1),ray.getOrigin()))
+            if (intersectedTriangle != null)
             {
-                return banque.get(0);
+                outNormalAtInter.copyIn(intersectedTriangle.getNormal(null));
             }
-            else
-            {
-                return banque.get(1);
-            }
-
         }
+        return intersection;
 
     }
     public Vector getNormal(Point point)
@@ -208,3 +202,4 @@ public class Prism implements ShapeTriangle
 
 
 }
+

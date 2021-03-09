@@ -91,18 +91,18 @@ public class Rectangle implements ShapeTriangle
 		this.H = new Point(A.getX(), A.getY() + height, A.getZ() + width);
 
 		/*on va construire les 12 triangles*/
-		Triangle tr1 = new Triangle(E,A,B);
-		Triangle tr2 = new Triangle(E,B,F);
-		Triangle tr3 = new Triangle(F,B,C);
-		Triangle tr4 = new Triangle(F,C,G);
-		Triangle tr5 = new Triangle(G,C,D);
-		Triangle tr6 = new Triangle(G,D,H);
-		Triangle tr7 = new Triangle(H,D,A);
-		Triangle tr8 = new Triangle(H,A,E);
-		Triangle tr9 = new Triangle(D,A,B);
-		Triangle tr10 = new Triangle(D,B,C);
-		Triangle tr11 = new Triangle(H,E,F);
-		Triangle tr12 = new Triangle(H,F,G);
+		Triangle tr1 = new Triangle(E,A,B, material);
+		Triangle tr2 = new Triangle(E,B,F, material);
+		Triangle tr3 = new Triangle(F,B,C, material);
+		Triangle tr4 = new Triangle(F,C,G, material);
+		Triangle tr5 = new Triangle(G,C,D, material);
+		Triangle tr6 = new Triangle(G,D,H, material);
+		Triangle tr7 = new Triangle(H,D,A, material);
+		Triangle tr8 = new Triangle(H,A,E, material);
+		Triangle tr9 = new Triangle(D,A,B, material);
+		Triangle tr10 = new Triangle(D,B,C, material);
+		Triangle tr11 = new Triangle(H,E,F, material);
+		Triangle tr12 = new Triangle(H,F,G, material);
 
 		/*on ajoute dans le array des triangles*/
 		listeTriangle = new ArrayList<Triangle>();
@@ -128,41 +128,34 @@ public class Rectangle implements ShapeTriangle
 		return listeTriangle;
 	}
 
-	public Point intersect(Ray ray)
+	public Point intersect(Ray ray, Vector outNormalAtInter)
 	{
-			ArrayList<Point> banque = new ArrayList<Point>();
-			for (int i = 0; i < listeTriangle.size(); i++) {
-				Point intersection = listeTriangle.get(i).intersect(ray);
+			Double distancemin = null;
+			Point intersection = null;
+			Triangle intersectedTriangle = null;
+			for (int i = 0; i < listeTriangle.size(); i++)
+			{
+				intersection = listeTriangle.get(i).intersect(ray);
 				if(intersection != null)
 				{
-					banque.add(intersection);
+					double distance = Point.distance(intersection, ray.getOrigin());
+					if(distancemin == null || distance < distancemin )
+					{
+						distancemin = distance ;
+						intersectedTriangle = listeTriangle.get(i);
+					}
 				}
 
+
 			}
-
-			if(banque.size() == 0)
+			if (outNormalAtInter != null)
 			{
-				return null;
-			}
-
-			else if (banque.size() == 1)
-			{
-				return banque.get(0);
-			}
-
-			else
-			{
-
-				if (Point.distance(banque.get(0),ray.getOrigin()) < Point.distance(banque.get(1),ray.getOrigin()))
+				if (intersectedTriangle != null)
 				{
-					return banque.get(0);
+					outNormalAtInter.copyIn(intersectedTriangle.getNormal(null));
 				}
-				else
-				{
-					return banque.get(1);
-				}
-
 			}
+			return intersection;
 
 	}
 	public Vector getNormal(Point point)

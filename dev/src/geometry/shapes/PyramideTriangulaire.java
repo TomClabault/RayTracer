@@ -96,10 +96,10 @@ public class PyramideTriangulaire implements ShapeTriangle
     protected void buildPyramide()
     {
         /*on va construire les 4 triangles*/
-        Triangle tr1 = new Triangle(A,B,D);
-        Triangle tr2 = new Triangle(D,B,C);
-        Triangle tr3 = new Triangle(D,C,A);
-        Triangle tr4 = new Triangle(A,C,B); //ceci est le sol
+        Triangle tr1 = new Triangle(A,B,D, material);
+        Triangle tr2 = new Triangle(D,B,C, material);
+        Triangle tr3 = new Triangle(D,C,A, material);
+        Triangle tr4 = new Triangle(A,C,B, material); //ceci est le sol
 
         /*on va ajouter les triangles dans la liste des triangle*/
         listeTriangle = new ArrayList<Triangle>();
@@ -137,40 +137,35 @@ public class PyramideTriangulaire implements ShapeTriangle
     }
 
     @Override
-    public Point intersect(Ray ray)
+    public Point intersect(Ray ray, Vector outNormalAtInter)
     {
-        ArrayList<Point> banque = new ArrayList<Point>();
-        for (int i = 0; i < listeTriangle.size(); i++) {
-            Point intersection = listeTriangle.get(i).intersect(ray);
+        Double distancemin = null;
+        Point intersection = null;
+        Triangle intersectedTriangle = null;
+        for (int i = 0; i < listeTriangle.size(); i++)
+        {
+            intersection = listeTriangle.get(i).intersect(ray);
             if(intersection != null)
             {
-                banque.add(intersection);
+                double distance = Point.distance(intersection, ray.getOrigin());
+                if(distancemin == null || distance < distancemin )
+                {
+                    distancemin = distance ;
+                    intersectedTriangle = listeTriangle.get(i);
+                }
             }
 
-        }
 
-        if(banque.size() == 0)
-        {
-            return null;
         }
-
-        else if (banque.size() == 1)
+        if (outNormalAtInter != null)
         {
-            return banque.get(0);
-        }
-
-        else
-        {
-            if (Point.distance(banque.get(0),ray.getOrigin()) < Point.distance(banque.get(1),ray.getOrigin()))
+            if (intersectedTriangle != null)
             {
-                return banque.get(0);
+                outNormalAtInter.copyIn(intersectedTriangle.getNormal(null));
             }
-            else
-            {
-                return banque.get(1);
-            }
-
         }
+        return intersection;
+
     }
-}
 
+}

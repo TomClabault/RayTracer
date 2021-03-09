@@ -14,8 +14,7 @@ import java.util.ArrayList;
 import java.lang.Math;
 
 
-public class Pyramide implements ShapeTriangle
-{
+public class Pyramide implements ShapeTriangle {
     /*Imagine une pyramide ABCDE
 
 
@@ -38,13 +37,12 @@ public class Pyramide implements ShapeTriangle
 
      */
 
-    protected Point A,B,C,D,E;
-    protected double height,width;
+    protected Point A, B, C, D, E;
+    protected double height, width;
     protected ArrayList<Triangle> listeTriangle;
     private Material material;
 
-    public Pyramide(Point A, Point B, Point C, Point D, Point E, Material material)
-    {
+    public Pyramide(Point A, Point B, Point C, Point D, Point E, Material material) {
         this.A = A;
         this.B = B;
         this.C = C;
@@ -57,14 +55,13 @@ public class Pyramide implements ShapeTriangle
     }
 
     // Constructeur pour creer une pyramide equilaterale
-    public Pyramide(Point depart, double height, double width, Material material)
-    {
+    public Pyramide(Point depart, double height, double width, Material material) {
         this.A = depart;
 
         this.C = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ() + width);
         this.D = new Point(this.A.getX(), this.A.getY(), this.A.getZ() + width);
         this.B = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ());
-        this.E = new Point(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ() + width/2);
+        this.E = new Point(this.A.getX() + width / 2, this.A.getY() + height, this.A.getZ() + width / 2);
 
         // b --> c , c --> d , d --> b
 
@@ -94,15 +91,14 @@ public class Pyramide implements ShapeTriangle
     }
 
 
-    protected void buildPyramide()
-    {
+    protected void buildPyramide() {
         /*on va construire les 6 triangles*/
-        Triangle tr1 = new Triangle(E,D,A);
-        Triangle tr2 = new Triangle(E,A,B);
-        Triangle tr3 = new Triangle(E,B,C);
-        Triangle tr4 = new Triangle(E,C,D);
-        Triangle tr5 = new Triangle(A,D,C);
-        Triangle tr6 = new Triangle(A,B,C);
+        Triangle tr1 = new Triangle(E, D, A, material);
+        Triangle tr2 = new Triangle(E, A, B, material);
+        Triangle tr3 = new Triangle(E, B, C, material);
+        Triangle tr4 = new Triangle(E, C, D, material);
+        Triangle tr5 = new Triangle(A, D, C, material);
+        Triangle tr6 = new Triangle(A, B, C, material);
 
         /*on va ajouter les triangles dans la listeTriangle*/
         listeTriangle = new ArrayList<Triangle>();
@@ -116,29 +112,20 @@ public class Pyramide implements ShapeTriangle
     }
 
 
-
-
-
-
     @Override
-    public ArrayList<Triangle> getTriangleList()
-    {
+    public ArrayList<Triangle> getTriangleList() {
         return listeTriangle;
     }
 
     @Override
-    public Material getMaterial()
-    {
+    public Material getMaterial() {
         return material;
     }
 
     @Override
-    public Vector getNormal(Point point)
-    {
-        for (int i = 0 ; i < listeTriangle.size() ;i++)
-        {
-            if (listeTriangle.get(i).insideOutsideTest(point) == true)
-            {
+    public Vector getNormal(Point point) {
+        for (int i = 0; i < listeTriangle.size(); i++) {
+            if (listeTriangle.get(i).insideOutsideTest(point) == true) {
                 return listeTriangle.get(i).getNormal(point);
             }
         }
@@ -146,41 +133,28 @@ public class Pyramide implements ShapeTriangle
     }
 
     @Override
-    public Point intersect(Ray ray) {
-        ArrayList<Point> banque = new ArrayList<Point>();
+    public Point intersect(Ray ray, Vector outNormalAtInter) {
+        Double distancemin = null;
+        Point intersection = null;
+        Triangle intersectedTriangle = null;
         for (int i = 0; i < listeTriangle.size(); i++) {
-            Point intersection = listeTriangle.get(i).intersect(ray);
-            if(intersection != null)
-            {
-                banque.add(intersection);
+            intersection = listeTriangle.get(i).intersect(ray);
+            if (intersection != null) {
+                double distance = Point.distance(intersection, ray.getOrigin());
+                if (distancemin == null || distance < distancemin) {
+                    distancemin = distance;
+                    intersectedTriangle = listeTriangle.get(i);
+                }
             }
 
+
         }
-
-        if(banque.size() == 0)
-        {
-            return null;
-        }
-
-        else if (banque.size() == 1)
-        {
-            return banque.get(0);
-        }
-
-        else
-        {
-
-            if (Point.distance(banque.get(0),ray.getOrigin()) < Point.distance(banque.get(1),ray.getOrigin()))
-            {
-                return banque.get(0);
+        if (outNormalAtInter != null) {
+            if (intersectedTriangle != null) {
+                outNormalAtInter.copyIn(intersectedTriangle.getNormal(null));
             }
-            else
-            {
-                return banque.get(1);
-            }
-
         }
+        return intersection;
+
     }
-
-
 }
