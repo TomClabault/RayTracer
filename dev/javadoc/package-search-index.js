@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"exceptions"},{"l":"geometry"},{"l":"geometry.materials"},{"l":"geometry.shapes"},{"l":"maths"},{"l":"multithreading"},{"l":"povParser"},{"l":"rayTracer"},{"l":"render"},{"l":"scene"},{"l":"scene.lights"},{"l":"tests"}];updateSearchResults();
