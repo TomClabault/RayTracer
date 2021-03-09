@@ -58,9 +58,9 @@ public class ExempleImageWriter extends Application
 		
 		RayTracer rayTracerInstance = new RayTracer(width, height);
 
-		Camera cameraRT = new Camera(new Point(-1, 2, 0), new Point(0, 0, -6));
+		Camera cameraRT = new Camera(new Point(0, 1, 0), new Point(0, 0, -6));
 		cameraRT.setFOV(60);
-		Light l = new LightBulb(new Point(-0.5, 0.5, -4), 1.25);
+		Light l = new LightBulb(new Point(2,1.5,-1), 1.25);
 
 		ArrayList<Shape> shapeList = new ArrayList<>();
 		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128))));
@@ -73,7 +73,7 @@ public class ExempleImageWriter extends Application
 
 		shapeList.add(new Rectangle(new Point(2.5, 0, -5), new Point(3.5, 1, -6), new MetallicMaterial(Color.rgb(150, 185, 144))));
 		//shapeList.add(new PyramideTriangulaire(new Point(-1.85, -0.65, -5),2,1 , new MetallicMaterial(Color.rgb(0, 21, 64))));
-		shapeList.add(new Pyramide(new Point(0,0,-6),1.5,1,new MetallicMaterial(Color.rgb(183, 21, 64))));
+		shapeList.add(new Pyramide(new Point(0,0,-4),1.5,1,new MetallicMaterial(Color.rgb(183, 21, 64))));
 		
 //		Point A = new Point(-2, 1, -6);
 //		Point B = new Point(-1, 1, -6);
@@ -90,7 +90,7 @@ public class ExempleImageWriter extends Application
 		
 	
 		long startTimer = System.currentTimeMillis();
-		rayTracerInstance.renderImage(sceneRT, 1);
+		rayTracerInstance.renderImage(sceneRT, 8);
 		long endTimer = System.currentTimeMillis();
 		
 		System.out.println(String.format("Render time: %dms", endTimer-startTimer));

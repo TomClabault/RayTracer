@@ -60,16 +60,20 @@ public class RayTracer
 		for(Shape object : objectList)
 		{
 			double distRayOriInter = -1;
-			Point intersection = object.intersect(ray, outNormalAtInter);
+			
+			Vector newNormalAtInter = new Vector(0, 0, 0);//Ce vecteur va temporairement stocker la normale au point d'intersection trouvé (s'il existe). Si le point d'intersection trouvé et plus proche que les autres, c'est alors cette normale que l'on gardera
+			Point intersection = object.intersect(ray, newNormalAtInter);
 			if(intersection != null)
 			{
 				distRayOriInter = Point.distance(ray.getOrigin(), intersection);
 			
-				if(distanceMin == null || distRayOriInter < distanceMin)
+				if(distanceMin == null || distRayOriInter < distanceMin)//Si c'est le premier point d'intersection qu'on trouve ou si on a trouvé un point d'intersection plus proche que celui qu'on avait avant
 				{
 					distanceMin = distRayOriInter;
 					
-					outClosestInterPoint.copyIn(intersection);
+					outClosestInterPoint.copyIn(intersection);//On copie le point d'intersection le plus proché trouvé dans outClosestInterPoint
+					if(outNormalAtInter != null)//Si le paramètre outNormalAtInter != null, i.e on souhaite récupérer la normale au point d'intersection le plus proche
+						outNormalAtInter.copyIn(newNormalAtInter);//On a trouvé un point plus proche donc on peut actualiser la normale avec la normale correpondant au point le plus proche
 					closestObjectIntersected = object;
 				}
 			}
