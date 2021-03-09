@@ -13,7 +13,7 @@ import maths.Vector;
 import java.util.ArrayList;
 import java.lang.Math;
 
-public class PyramideTriangulaire implements ShapeTriangle
+public class PyramideTriangulaire extends ShapeTriangle
 {
 
     /*
@@ -42,8 +42,6 @@ public class PyramideTriangulaire implements ShapeTriangle
 
     protected double height,width;
     protected Point A,B,C,D;
-    protected ArrayList<Triangle> listeTriangle;
-    private Material material;
 
 
     /* Le constructeur prendra 4 parametres sous la forme de Point; Point A, Point B, Point C, Point D
@@ -102,70 +100,14 @@ public class PyramideTriangulaire implements ShapeTriangle
         Triangle tr4 = new Triangle(A,C,B, material); //ceci est le sol
 
         /*on va ajouter les triangles dans la liste des triangle*/
-        listeTriangle = new ArrayList<Triangle>();
-        this.listeTriangle.add(tr1);
-        this.listeTriangle.add(tr2);
-        this.listeTriangle.add(tr3);
-        this.listeTriangle.add(tr4);
+        super.listeTriangle = new ArrayList<Triangle>();
+        super.listeTriangle.add(tr1);
+        super.listeTriangle.add(tr2);
+        super.listeTriangle.add(tr3);
+        super.listeTriangle.add(tr4);
 
     }
 
 
-    @Override
-    public ArrayList<Triangle> getTriangleList()
-    {
-        return listeTriangle;
-    }
-
-    @Override
-    public Material getMaterial()
-    {
-        return material;
-    }
-
-    @Override
-    public Vector getNormal(Point point)
-    {
-        for (int i = 0 ; i < listeTriangle.size() ;i++)
-        {
-            if (listeTriangle.get(i).insideOutsideTest(point) == true)
-            {
-                return listeTriangle.get(i).getNormal(point);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Point intersect(Ray ray, Vector outNormalAtInter)
-    {
-        Double distancemin = null;
-        Point intersection = null;
-        Triangle intersectedTriangle = null;
-        for (int i = 0; i < listeTriangle.size(); i++)
-        {
-            intersection = listeTriangle.get(i).intersect(ray, null);
-            if(intersection != null)
-            {
-                double distance = Point.distance(intersection, ray.getOrigin());
-                if(distancemin == null || distance < distancemin )
-                {
-                    distancemin = distance ;
-                    intersectedTriangle = listeTriangle.get(i);
-                }
-            }
-
-
-        }
-        if (outNormalAtInter != null)
-        {
-            if (intersectedTriangle != null)
-            {
-                outNormalAtInter.copyIn(intersectedTriangle.getNormal(null));
-            }
-        }
-        return intersection;
-
-    }
 
 }

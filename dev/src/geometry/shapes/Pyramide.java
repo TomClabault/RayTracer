@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.lang.Math;
 
 
-public class Pyramide implements ShapeTriangle {
+public class Pyramide extends ShapeTriangle {
     /*Imagine une pyramide ABCDE
 
 
@@ -39,8 +39,6 @@ public class Pyramide implements ShapeTriangle {
 
     protected Point A, B, C, D, E;
     protected double height, width;
-    protected ArrayList<Triangle> listeTriangle;
-    private Material material;
 
     public Pyramide(Point A, Point B, Point C, Point D, Point E, Material material) {
         this.A = A;
@@ -97,65 +95,19 @@ public class Pyramide implements ShapeTriangle {
         Triangle tr2 = new Triangle(E, A, B, material);
         Triangle tr3 = new Triangle(E, B, C, material);
         Triangle tr4 = new Triangle(E, C, D, material);
-        Triangle tr5 = new Triangle(A, D, C, material);
-        Triangle tr6 = new Triangle(A, B, C, material);
+        Triangle tr5 = new Triangle(D, A, B, material);
+        Triangle tr6 = new Triangle(D, B, C, material);
 
         /*on va ajouter les triangles dans la listeTriangle*/
-        listeTriangle = new ArrayList<Triangle>();
-        this.listeTriangle.add(tr1);
-        this.listeTriangle.add(tr2);
-        this.listeTriangle.add(tr3);
-        this.listeTriangle.add(tr4);
-        this.listeTriangle.add(tr5);
-        this.listeTriangle.add(tr6);
+        super.listeTriangle = new ArrayList<Triangle>();
+        super.listeTriangle.add(tr1);
+        super.listeTriangle.add(tr2);
+        super.listeTriangle.add(tr3);
+        super.listeTriangle.add(tr4);
+        super.listeTriangle.add(tr5);
+        super.listeTriangle.add(tr6);
 
     }
 
 
-    @Override
-    public ArrayList<Triangle> getTriangleList() {
-        return listeTriangle;
-    }
-
-    @Override
-    public Material getMaterial() {
-        return material;
-    }
-
-    @Override
-    public Vector getNormal(Point point) {
-        for (int i = 0; i < listeTriangle.size(); i++) {
-            if (listeTriangle.get(i).insideOutsideTest(point) == true) {
-                return listeTriangle.get(i).getNormal(point);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Point intersect(Ray ray, Vector outNormalAtInter) {
-        Double distancemin = null;
-        Point intersection = null;
-        Triangle intersectedTriangle = null;
-        for (int i = 0; i < listeTriangle.size(); i++) {
-        	Triangle triangle = listeTriangle.get(i);
-            intersection = triangle.intersect(ray, null);
-            if (intersection != null) {
-                double distance = Point.distance(intersection, ray.getOrigin());
-                if (distancemin == null || distance < distancemin) {
-                    distancemin = distance;
-                    intersectedTriangle = listeTriangle.get(i);
-                }
-            }
-
-
-        }
-        if (outNormalAtInter != null) {
-            if (intersectedTriangle != null) {
-                outNormalAtInter.copyIn(intersectedTriangle.getNormal(null));
-            }
-        }
-        return intersection;
-
-    }
 }
