@@ -30,10 +30,10 @@ public class CameraTimer extends AnimationTimer {
     */
     private static final Double DELTA_ANGLE = 1.0;
 
-    private final RotationMatrix PLUS_Y_ANGLE = new RotationMatrix(1, DELTA_ANGLE);
-    private final RotationMatrix MINUS_Y_ANGLE = new RotationMatrix(1, - DELTA_ANGLE);
-    private final RotationMatrix PLUS_X_ANGLE = new RotationMatrix(0, DELTA_ANGLE);
-    private final RotationMatrix MINUS_X_ANGLE = new RotationMatrix(0, - DELTA_ANGLE);
+    private static final RotationMatrix PLUS_Y_ANGLE = new RotationMatrix(1, DELTA_ANGLE);
+    private static final RotationMatrix MINUS_Y_ANGLE = new RotationMatrix(1, - DELTA_ANGLE);
+    private static final RotationMatrix PLUS_X_ANGLE = new RotationMatrix(0, DELTA_ANGLE);
+    private static final RotationMatrix MINUS_X_ANGLE = new RotationMatrix(0, - DELTA_ANGLE);
 
     private Scene scene;
     private MyScene myScene;
