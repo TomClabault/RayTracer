@@ -20,7 +20,9 @@ public class CTWMatrix extends MatrixD
 			magicVector = new Vector(1, 1, 0);
 			
 		Vector zAxis = Vector.normalize(new Vector(cameraDirection, cameraOrigin));
-		Vector xAxis = Vector.normalize(Vector.crossProduct(magicVector, zAxis));
+		
+		//System.out.println(magicVector.toString() + zAxis.toString());
+		Vector xAxis = Vector.normalize(Vector.crossProduct(Vector.normalize(magicVector), zAxis));
 		Vector yAxis = Vector.crossProduct(zAxis, xAxis);
 
 		

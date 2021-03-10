@@ -168,7 +168,8 @@ public class CameraTimer extends AnimationTimer {
     /**
     * Permet de déplacer la caméra verticalement vers la droite
     */
-    public void goRightCamera() {
+    public void goRightCamera() 
+    {
         Vector dir = new Vector(this.myScene.getCamera().getPosition(), this.myScene.getCamera().getDirection());
         dir = Vector.scalarMul(dir, DELTA_MOVE);
         dir = new Vector(new Point(dir.getX(),0, dir.getZ()));
@@ -176,8 +177,13 @@ public class CameraTimer extends AnimationTimer {
 
         Point new_position = this.myScene.getCamera().getPosition();
         Point new_direction = this.myScene.getCamera().getDirection();
-
+    	
         this.myScene.getCamera().setDirection(Point.add(new_direction, point_dir));
         this.myScene.getCamera().setPosition(Point.add(new_position, point_dir));
-    }
+    	
+//    	Vector axeX = this.myScene.getCamera().getXAxis();
+//    	
+//    	Point newPosition = Point.add(a, b)
+//    	this.myScene.getCamera().setPosition(newPosition);
+   }
 }

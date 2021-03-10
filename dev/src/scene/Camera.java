@@ -3,6 +3,7 @@ package scene;
 import maths.CTWMatrix;
 import maths.MatrixD;
 import maths.Point;
+import maths.Vector;
 
 /*
  * Class permettant de représenter une caméra définie par sa position dans l'espace, la direction dans laquelle elle regarde ainsi que son champ de vision
@@ -82,6 +83,16 @@ public class Camera
 	}
 	
 	/*
+	 * Retourne le champ de vision (FOV) de la caméra. Ce FOV est donné en degré entre 0 et 180
+	 * 
+	 * @return Un réel pour le champ de vision de la caméra en degré entre 0 et 180
+	 */
+	public double getFOV()
+	{
+		return this.degreeFOV;
+	}
+	
+	/*
 	 * Permet d'obtenir la position actuelle de la caméra
 	 * 
 	 * @return Un point de coordonnées (x, y, z) représentant les coordoonées actuelle de la caméra
@@ -92,13 +103,43 @@ public class Camera
 	}
 	
 	/*
-	 * Retourne le champ de vision (FOV) de la caméra. Ce FOV est donné en degré entre 0 et 180
+	 * Méthode permettant de factoriser le code de getXAxis, getYAxis et getZAxis
 	 * 
-	 * @return Un réel pour le champ de vision de la caméra en degré entre 0 et 180
+	 * @param axisIndex Entier entre 0 et 2 représentant l'axe que l'on souhaite obtenir. 0 pour l'axe x, 1 pour l'axe y et 2 pour l'axe z
 	 */
-	public double getFOV()
+	protected Vector getWAxis(int axisIndex)
 	{
-		return this.degreeFOV;
+		return new Vector(this.CTWMatrix.get(axisIndex, 0), this.CTWMatrix.get(axisIndex, 1), this.CTWMatrix.get(axisIndex, 2));
+	}
+	
+	/*
+	 * Retourne les coordonnées de l'axe X de la caméra par rapport à l'origine du monde i.e. les coordonnées du vecteur (1, 0, 0) dans la base de l'espace vectoriel du monde
+	 * 
+	 * @return Un vecteur de coordoonées (x, y, z) où x, y et z représentent les coordonnées du vecteur de l'axe x de la caméra exprmimées dans la base de l'espace vectoriel de la scène i.e. {(1, 0, 0), (0, 1, 0), (0, 0, 1)}
+	 */
+	public Vector getXAxis()
+	{
+		return getWAxis(0);
+	}
+	
+	/*
+	 * Retourne les coordonnées de l'axe Y de la caméra par rapport à l'origine du monde i.e. les coordonnées du vecteur (0, 1, 0) dans la base de l'espace vectoriel du monde
+	 * 
+	 * @return Un vecteur de coordoonées (x, y, z) où x, y et z représentent les coordonnées du vecteur de l'axe y de la caméra exprmimées dans la base de l'espace vectoriel de la scène i.e. {(1, 0, 0), (0, 1, 0), (0, 0, 1)}
+	 */
+	public Vector getYAxis()
+	{
+		return getWAxis(1);
+	}
+	
+	/*
+	 * Retourne les coordonnées de l'axe Z de la caméra par rapport à l'origine du monde i.e. les coordonnées du vecteur (0, 0, 1) dans la base de l'espace vectoriel du monde
+	 * 
+	 * @return Un vecteur de coordoonées (x, y, z) où x, y et z représentent les coordonnées du vecteur de l'axe z de la caméra exprmimées dans la base de l'espace vectoriel de la scène i.e. {(1, 0, 0), (0, 1, 0), (0, 0, 1)}
+	 */
+	public Vector getZAxis()
+	{
+		return getWAxis(2);
 	}
 	
 	/*
