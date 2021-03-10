@@ -34,9 +34,10 @@ public class WindowTimer extends AnimationTimer {
         long dif = actualFrameTime - oldFrameTime;
         dif  = (long)1000000000.0 / dif;
         this.oldFrameTime = actualFrameTime;
+        System.out.println(myScene.getCamera().getXAxis().toString() + " " + myScene.getCamera().getYAxis().toString() + " "+ myScene.getCamera().getZAxis().toString());
+        System.out.println(myScene.getCamera().getPosition().toString() + " " + myScene.getCamera().getDirection().toString());
         System.out.println(Point.distance(myScene.getCamera().getPosition(), myScene.getCamera().getDirection()));
         System.out.println(myScene.getCamera().getCTWMatrix().toString());
-        System.out.println(myScene.getCamera().getPosition().toString() + " " + myScene.getCamera().getDirection().toString());
         ImageWriter.doImage(rayTracer.renderImage(this.myScene,8),this.pixelWriter);
         fpsLabel.setText(String.format("FPS : %d", dif));
     }
