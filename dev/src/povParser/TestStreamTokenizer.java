@@ -57,6 +57,6 @@ public class TestStreamTokenizer
     {
         TestStreamTokenizer testStreamTokenizer = new TestStreamTokenizer("src/povParser/subsurface.pov");
         File witoutComments = testStreamTokenizer.removeComments();
-        FileUtility.printFileStdout(witoutComments.getAbsolutePath());
+        System.out.println(FileUtility.isFileEmpty(witoutComments.getPath()));
     }
 }
