@@ -5,11 +5,11 @@ package maths;
  */
 public class CTWMatrix extends MatrixD
 {
-	public CTWMatrix(Point cameraOrigin, Point cameraDirection)
+	public CTWMatrix(Point cameraOrigin, double angleX, double angleY)
 	{
 		super(4, 4);
 		
-		//Point cameraDirectionNorm = Vector.v2p(Vector.normalize(Point.p2v(cameraDirection)));
+		Point cameraDirectionPoint = new Point(0, 0, -1);
 		
 		Vector magicVector = new Vector(0, 1, 0);
 		

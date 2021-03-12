@@ -11,7 +11,15 @@ import maths.Vector;
 public class Camera 
 {
 	Point position;//Point depuis lequel regarde la caméra
-	Point pointDirection;//Point que regarde la caméra
+	
+	double angleX;/* Angle de rotation de caméra sur le plan x, z en degré */
+	double angleY;/* Angle de rotation de caméra sur le plan x, y en degré */
+	/*
+	 * Deux angles horizontal et vertical
+	 * 
+	 * Faire deux constructeurs avec le point de direction et un autre avec les deux angles
+	 * Uné méthode pour faire regarder la caméra sur un certain point et calculer les deux angles à partir de ce point. En deux temps, horizontal et vertical après
+	 */
 	
 	MatrixD CTWMatrix;//Matrice de changement de base entre les coordonnées d'origine du monde [(1, 0, 0), (0, 1, 0), (0, 0, 1)] et les coordoonées de la caméra
 	
@@ -41,10 +49,12 @@ public class Camera
 	 *  @param position Le point d'origine de la caméra
 	 *  @param pointDirection Le point que regarde la caméra. Utilisé pour calculer la direction de la caméra
 	 */
-	public Camera(Point position, Point pointDirection)
-	{
-		this(position, pointDirection, 90);
-	}
+//	public Camera(Point position, Point pointDirection)
+//	{
+//		this(position, pointDirection, 90);
+//	}
+	
+	
 	
 	/*
 	 * Crée une caméra à partir de sa position, de sa direction et de son champ de vision
@@ -53,14 +63,14 @@ public class Camera
 	 * @param direction Vector de coordoonnées (x, y, z) pour définir la direction de la caméra
 	 * @param degreeFOV Réel 
 	 */
-	public Camera(Point position, Point pointDirection, float degreeFOV)
-	{
-		this.position = position;
-		this.pointDirection = pointDirection;
-		this.degreeFOV = degreeFOV;
-		
-		this.CTWMatrix = new CTWMatrix(position, pointDirection);
-	}
+//	public Camera(Point position, Point pointDirection, float degreeFOV)
+//	{
+//		this.position = position;
+//		this.pointDirection = pointDirection;
+//		this.degreeFOV = degreeFOV;
+//		
+//		this.CTWMatrix = new CTWMatrix(position, pointDirection);
+//	}
 	
 	/*
 	 * Retourne la matrice de passage des coordonnées d'origine vers les coordonnées de la caméra
@@ -147,12 +157,12 @@ public class Camera
 	 * 
 	 * @param newDirection Un vecteur pour redéfinir la direction de la caméra
 	 */
-	public void setDirection(Point newPointDirection)
-	{
-		this.pointDirection = newPointDirection;
-		
-		this.CTWMatrix = new CTWMatrix(this.position, this.pointDirection);
-	}
+//	public void setDirection(Point newPointDirection)
+//	{
+//		this.pointDirection = newPointDirection;
+//		
+//		this.CTWMatrix = new CTWMatrix(this.position, this.pointDirection);
+//	}
 	
 	/*
 	 * Redéfinit le FOV (champ de vision) de la caméra.
@@ -173,6 +183,6 @@ public class Camera
 	{
 		this.position = newPosition;
 		
-		this.CTWMatrix = new CTWMatrix(this.position, this.pointDirection);
+		this.CTWMatrix = new CTWMatrix(this.position, this.angleX, this.angleY);
 	}
 }

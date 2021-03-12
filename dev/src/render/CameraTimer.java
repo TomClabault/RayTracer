@@ -101,8 +101,9 @@ public class CameraTimer extends AnimationTimer {
     * Permet de pivoter la caméra vers le haut
     */
     public void turnUpCamera() {/*0 pour l'axe x, 1 pour y et 2 pour z*/
-    	Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), new RotationMatrix(myScene.getCamera().getXAxis(), -DELTA_ANGLE));
-        //Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), PLUS_X_ANGLE);//Ancienne ligne
+    	System.out.println("here" + myScene.getCamera().getYAxis());
+    	//Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), new RotationMatrix(myScene.getCamera().getXAxis(), -DELTA_ANGLE));
+        Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), PLUS_X_ANGLE);//Ancienne ligne
         this.myScene.getCamera().setDirection(new_direction);
     }
 
@@ -110,8 +111,8 @@ public class CameraTimer extends AnimationTimer {
     * Permet de pivoter la caméra vers le bas
     */
     public void turnDownCamera() {/*0 pour l'axe x, 1 pour y et 2 pour z*/
-        //Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), MINUS_X_ANGLE);//Ancienne ligne
-    	Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), new RotationMatrix(myScene.getCamera().getXAxis(), DELTA_ANGLE));
+        Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), MINUS_X_ANGLE);//Ancienne ligne
+    	//Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), new RotationMatrix(myScene.getCamera().getXAxis(), DELTA_ANGLE));
         this.myScene.getCamera().setDirection(new_direction);
     }
 
@@ -119,8 +120,8 @@ public class CameraTimer extends AnimationTimer {
     * Permet de pivoter la caméra vers la droite
     */
     public void turnRightCamera() {/*0 pour l'axe x, 1 pour y et 2 pour z*/
-    	//Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), MINUS_Y_ANGLE);//Ancienne ligne
-    	Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), new RotationMatrix(myScene.getCamera().getYAxis(), DELTA_ANGLE));
+    	Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), MINUS_Y_ANGLE);//Ancienne ligne
+    	//Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), new RotationMatrix(myScene.getCamera().getYAxis(), DELTA_ANGLE));
         this.myScene.getCamera().setDirection(new_direction);
     }
 
@@ -128,8 +129,8 @@ public class CameraTimer extends AnimationTimer {
     * Permet de pivoter la caméra vers le gauche
     */
     public void turnLeftCamera() {/*0 pour l'axe x, 1 pour y et 2 pour z*/
-    	Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), new RotationMatrix(myScene.getCamera().getYAxis(), -DELTA_ANGLE));
-        //Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), PLUS_Y_ANGLE);//Ancienne ligne
+    	//Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), new RotationMatrix(myScene.getCamera().getYAxis(), -DELTA_ANGLE));
+        Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), PLUS_Y_ANGLE);//Ancienne ligne
         this.myScene.getCamera().setDirection(new_direction);
     }
 
