@@ -91,17 +91,14 @@ public class ImageWriter {
 
     public MyScene addObjectsToScene() {/*utilisé dans le constructeur*/
 
-    	//(1.820, 1,820, 1.280) (2.720, 0.820, 0.820)
-        Camera cameraRT = new Camera(new Point(0, 0, 0), 45, 0);
-    	//Camera cameraRT = new Camera(new Point(1.820, 1.820, 1.280), new Point(2.720, 0.820, 0.820));
+        Camera cameraRT = new Camera(new Point(0, 0, 0), 0, 0);
         cameraRT.setFOV(60);
-        //Light l = new LightBulb(new Point(-0.5, 0.5, -4), 1.25);
         Light l = new LightBulb(new Point(0, 2, 0), 1.25);
 
         ArrayList<Shape> shapeList = new ArrayList<>();
         shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128))));
 
-        shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, new MetallicMaterial(Color.rgb(240, 0, 0))));
+        shapeList.add(new SphereMaths(new Point(0, 0.5, -6), 1, new MetallicMaterial(Color.rgb(240, 0, 0))));
         shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, new MetallicMaterial(Color.rgb(255, 211, 0))));
         shapeList.add(new SphereMaths(new Point(-1.25, 1, -6.5), 0.2, new MetallicMaterial(Color.LIGHTSKYBLUE)));
         shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));

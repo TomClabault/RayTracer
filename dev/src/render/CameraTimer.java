@@ -20,7 +20,7 @@ public class CameraTimer extends AnimationTimer {
     /**
     * Sensibilité du déplacement droite/gauche de la caméra
     */
-    private static final Double DELTA_MOVE = 0.08;
+    private static final Double DELTA_MOVE = 0.16;
     /**
     * Sensibilité du déplacement haut/bas de la caméra
     */
@@ -28,7 +28,7 @@ public class CameraTimer extends AnimationTimer {
     /**
     * Sensibilité de la rotation de la caméra
     */
-    private static final Double DELTA_ANGLE = 1.0;
+    private static final Double DELTA_ANGLE = 1.5;
 
     private static final RotationMatrix PLUS_Y_ANGLE = new RotationMatrix(1, DELTA_ANGLE);
     private static final RotationMatrix MINUS_Y_ANGLE = new RotationMatrix(1, - DELTA_ANGLE);
