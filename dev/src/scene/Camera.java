@@ -43,12 +43,20 @@ public class Camera
 		this(position, 0, 0);
 	}
 	
+	/*
+	 * Crée une caméra avec un point d'ancrage donné et l'angle de rotation horizontal et vertical de la caméra
+	 * 
+	 * @param position 		Le point d'ancrage/d'origine de la caméra
+	 * @param angleHori 	L'angle de rotation horizontal en degré de la caméra
+	 * @param angleVerti	L'angle de rotation vertical en degré de la caméra. Un angle de plus de 90° ou de moins de -90° sera ramené à 900 ou -90° repsectivement
+	 */
 	public Camera(Point position, double angleHori, double angleVerti)
 	{
 		this.position = position;
 		
 		this.angleHori = angleHori;
 		this.angleVerti = angleVerti;
+		this.angleVerti = this.angleVerti > 90 ? 90 : this.angleVerti < -90 ? -90 : this.angleVerti;//On ramène l'angle à 900 / -90° s'il dépassait
 		
 		this.CTWMatrix = new CTWMatrix(this, angleHori, angleVerti);
 	}
