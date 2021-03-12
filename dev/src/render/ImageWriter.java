@@ -75,7 +75,8 @@ public class ImageWriter {
     	return pane;
     }
 
-    public void ImageWriterMain(int height, int width) {
+    public void ImageWriterMain(int height, int width) 
+    {
 
         this.updateCamera.run();
         this.updateWindow.run();
@@ -91,7 +92,7 @@ public class ImageWriter {
     public MyScene addObjectsToScene() {/*utilisé dans le constructeur*/
 
     	//(1.820, 1,820, 1.280) (2.720, 0.820, 0.820)
-        Camera cameraRT = new Camera(new Point(1, 1, -2), new Point(0, 0, -6));
+        Camera cameraRT = new Camera(new Point(0, 0, 0), 0, 0);
     	//Camera cameraRT = new Camera(new Point(1.820, 1.820, 1.280), new Point(2.720, 0.820, 0.820));
         cameraRT.setFOV(60);
         Light l = new LightBulb(new Point(-0.5, 0.5, -4), 1.25);

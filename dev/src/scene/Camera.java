@@ -12,8 +12,8 @@ public class Camera
 {
 	Point position;//Point depuis lequel regarde la caméra
 	
-	double angleX;/* Angle de rotation de caméra sur le plan x, z en degré */
-	double angleY;/* Angle de rotation de caméra sur le plan x, y en degré */
+	double angleHori;/* Angle de rotation de caméra sur le plan x, z en degré */
+	double angleVerti;/* Angle de rotation de caméra sur le plan x, y en degré */
 	/*
 	 * Deux angles horizontal et vertical
 	 * 
@@ -30,7 +30,7 @@ public class Camera
 	 */
 	public Camera()
 	{
-		this(new Point(0, 0, 0), new Point(0, 0, -1), 90);
+		this(new Point(0, 0, 0), 0, 0);
 	}
 	
 	/*
@@ -40,7 +40,17 @@ public class Camera
 	 */
 	public Camera(Point position)
 	{
-		this(position, new Point(0, 0, -1), 90);
+		this(position, 0, 0);
+	}
+	
+	public Camera(Point position, double angleHori, double angleVerti)
+	{
+		this.position = position;
+		
+		this.angleHori = angleHori;
+		this.angleVerti = angleVerti;
+		
+		this.CTWMatrix = new CTWMatrix(this, angleHori, angleVerti);
 	}
 	
 	/*
@@ -73,6 +83,50 @@ public class Camera
 //	}
 	
 	/*
+	 * Ajoute un certain degré de rotation horizontal à la caméra
+	 * 
+	 * @param deltaAngle L'angle de rotation horizontal en degré que l'on veut ajouter
+	 */
+	public void addAngleHori(double deltaAngle)
+	{
+		this.angleHori += deltaAngle;
+		
+		this.CTWMatrix = new CTWMatrix(this, this.angleHori, this.angleVerti);//On a changé l'état de la caméra, il faut donc recalculer la matrice de passage qui lui est associée
+	}
+	
+	/*
+	 * Ajoute un certain degré de rotation vertical à la caméra
+	 * 
+	 * @param deltaAngle L'angle de rotation vertical en degré que l'on veut ajouter
+	 */
+	public void addAngleVerti(double deltaAngle)
+	{
+		this.angleVerti += deltaAngle;
+		
+		this.CTWMatrix = new CTWMatrix(this, this.angleHori, this.angleVerti);//On a changé l'état de la caméra, il faut donc recalculer la matrice de passage qui lui est associée
+	}
+	
+	/*
+	 * Retourne l'angle de rotation horizontal (selon le plan (x, z)) de la caméra
+	 * 
+	 * @return Retourne l'angle de rotation horizontal de la caméra en degré
+	 */
+	public double getAngleHori()
+	{
+		return this.angleHori;
+	}
+	
+	/*
+	 * Retourne l'angle de rotation vertical (selon le plan (x, z)) de la caméra
+	 * 
+	 * @return Retourne l'angle de rotation vertical de la caméra en degré
+	 */
+	public double getAngleVerti()
+	{
+		return this.angleVerti;
+	}
+	
+	/*
 	 * Retourne la matrice de passage des coordonnées d'origine vers les coordonnées de la caméra
 	 * 
 	 * @return Une MatrixD contenant la base de l'espace vectoriel de la caméra et la translation des points à effectuer	
@@ -87,9 +141,9 @@ public class Camera
 	 * 
 	 * @return Un vecteur de coordonnées (x, y, z) définissant la direction dans laquelle regarde la caméra 
 	 */
-	public Point getDirection()
+	public Vector getDirection()
 	{
-		return this.pointDirection;
+		return this.getZAxis();
 	}
 	
 	/*
@@ -165,6 +219,30 @@ public class Camera
 //	}
 	
 	/*
+	 * Redéfini l'angle de rotation horizontal de la caméra
+	 * 
+	 * @param angle Nouvel angle de rotation horizontal de la caméra en degré
+	 */
+	public void setAngleHori(double angle)
+	{
+		this.angleHori = angle;
+		
+		this.CTWMatrix = new CTWMatrix(this, this.angleHori, this.angleVerti);//On a changé l'état de la caméra, il faut donc recalculer la matrice de passage qui lui est associée
+	}
+	
+	/*
+	 * Redéfini l'angle de rotation vertical de la caméra
+	 * 
+	 * @param angle Nouvel angle de rotation vertical  de la caméra en degré
+	 */
+	public void setAngleVerti(double angle)
+	{
+		this.angleHori = angle;
+		
+		this.CTWMatrix = new CTWMatrix(this, this.angleHori, this.angleVerti);//On a changé l'état de la caméra, il faut donc recalculer la matrice de passage qui lui est associée
+	}
+	
+	/*
 	 * Redéfinit le FOV (champ de vision) de la caméra.
 	 * 
 	 * @param angle Un réel entre 0 et 180 représentant le champ de vision de la caméra en degré
@@ -183,6 +261,6 @@ public class Camera
 	{
 		this.position = newPosition;
 		
-		this.CTWMatrix = new CTWMatrix(this.position, this.angleX, this.angleY);
+		this.CTWMatrix = new CTWMatrix(this, this.angleHori, this.angleVerti);
 	}
 }

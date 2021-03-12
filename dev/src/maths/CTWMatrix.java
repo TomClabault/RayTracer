@@ -1,25 +1,32 @@
 package maths;
 
+import maths.Point;
+import maths.Vector;
+import scene.Camera;
+
 /*
- * Cette classe représente la matrice permettant le changement de base des coordonnées des pixels en fonction de la position de la caméra et de sa direction
+ * Cette classe représente la matrice permettant le changement de base des coordonnées des pixels en fonction de la position de la caméra et de ses angles de rotation
  */
 public class CTWMatrix extends MatrixD
 {
-	public CTWMatrix(Point cameraOrigin, double angleX, double angleY)
+	public CTWMatrix(Camera camera, double angleHori, double angleVerti)
 	{
 		super(4, 4);
 		
-		Point cameraDirectionPoint = new Point(0, 0, -1);
+		Point cameraPosition = camera.getPosition();
+		Point cameraDirectionPoint = Point.add(cameraPosition, new Point(0, 0, -1));
+		cameraDirectionPoint = MatrixD.mulPoint(cameraDirectionPoint, new RotationMatrix(1, angleHori));
+		cameraDirectionPoint = MatrixD.mulPoint(cameraDirectionPoint, new RotationMatrix(0, angleVerti));
 		
 		Vector magicVector = new Vector(0, 1, 0);
-		
+
 		//Si jamais l'axe z de la caméra est colinéaire au magic vector, on ne va pas 
 		//pouvoir déterminer un vecteur perpendiculaire au deux qui nous donnerait l'axe x.
 		//Il faut donc qu'on modifie le magicVector en le rendant non colinéaire à l'axe de regard de la caméra
-		if(Vector.areColinear(magicVector, new Vector(cameraDirection, cameraOrigin))) 
+		if(Vector.areColinear(magicVector, new Vector(cameraDirectionPoint, cameraPosition))) 
 			magicVector = new Vector(1, 1, 0);
 			
-		Vector zAxis = Vector.normalize(new Vector(cameraDirection, cameraOrigin));
+		Vector zAxis = Vector.normalize(new Vector(cameraDirectionPoint, cameraPosition));
 		
 		//System.out.println(magicVector.toString() + zAxis.toString());
 		Vector xAxis = Vector.normalize(Vector.crossProduct(Vector.normalize(magicVector), zAxis));
@@ -43,9 +50,9 @@ public class CTWMatrix extends MatrixD
 		super.matrix[2][2] = zAxis.getZ();
 		super.matrix[2][3] = 0;
 		
-		super.matrix[3][0] = cameraOrigin.getX();
-		super.matrix[3][1] = cameraOrigin.getY();
-		super.matrix[3][2] = cameraOrigin.getZ();
+		super.matrix[3][0] = cameraPosition.getX();
+		super.matrix[3][1] = cameraPosition.getY();
+		super.matrix[3][2] = cameraPosition.getZ();
 		super.matrix[3][3] = 1;
 	}
 }
