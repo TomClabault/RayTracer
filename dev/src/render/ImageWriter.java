@@ -29,10 +29,10 @@ public class ImageWriter {
     private MyScene MyGlobalScene = addObjectsToScene();
     private WritableImage writableImage;
     private PixelWriter pw;
-    private UpdateWindow updateWindow;
-    private UpdateCamera updateCamera;
     private Pane pane;
     private Scene mainAppScene;
+    private CameraTimer cameraTimer;
+    private WindowTimer windowTimer;
 
     /**
      *
@@ -50,13 +50,12 @@ public class ImageWriter {
         Pane pane = new Pane();
         pane.getChildren().add(imageView);
         this.pane = pane;
-        //this.scene = new Scene(pane);
 
-        UpdateWindow updateWindow = new UpdateWindow(new RayTracer(MainApp.WIDTH, MainApp.HEIGHT), this.MyGlobalScene, this.pw);
-        this.updateWindow = updateWindow;
+        WindowTimer windowTimer = new WindowTimer(this.MyGlobalScene, this.pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT));
+        this.windowTimer = windowTimer;
 
-        UpdateCamera updateCamera = new UpdateCamera(MyGlobalScene, this.mainAppScene);
-        this.updateCamera = updateCamera;
+        CameraTimer cameraTimer = new CameraTimer(this.mainAppScene, this.MyGlobalScene);
+        this.cameraTimer = cameraTimer;
     }
 
     public void setMyScene(MyScene myScene) {
@@ -67,19 +66,19 @@ public class ImageWriter {
         return this.MyGlobalScene;
     }
 
-    public UpdateWindow getUpdateWindow() {
-    	return this.updateWindow;
+    public WindowTimer getWindowTimer() {
+        return this.windowTimer;
     }
 
     public Pane getPane() {
     	return pane;
     }
 
-    public void ImageWriterMain(int height, int width) 
-    {
-
-        this.updateCamera.run();
-        this.updateWindow.run();
+    public void ImageWriterMain(int height, int width) {
+        windowTimer.start();
+        cameraTimer.start();
+        //this.updateCamera.run();
+        //this.updateWindow.run();
     }
 
     public static void doImage(AtomicReferenceArray<Color> colorTab, PixelWriter pw)
