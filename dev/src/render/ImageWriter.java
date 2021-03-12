@@ -33,6 +33,9 @@ public class ImageWriter {
     private UpdateCamera updateCamera;
     private Pane pane;
     private Scene mainAppScene;
+    private CameraTimer cameraTimer;
+    private WindowTimer windowTimer;
+    private GlobalTimer globalTimer;
 
     /**
      *
@@ -52,11 +55,25 @@ public class ImageWriter {
         this.pane = pane;
         //this.scene = new Scene(pane);
 
-        UpdateWindow updateWindow = new UpdateWindow(new RayTracer(MainApp.WIDTH, MainApp.HEIGHT), this.MyGlobalScene, this.pw);
-        this.updateWindow = updateWindow;
+        /*UpdateWindow updateWindow = new UpdateWindow(new RayTracer(MainApp.WIDTH, MainApp.HEIGHT), this.MyGlobalScene, this.pw);
+        this.updateWindow = updateWindow;*/
 
-        UpdateCamera updateCamera = new UpdateCamera(MyGlobalScene, this.mainAppScene);
-        this.updateCamera = updateCamera;
+        /*UpdateCamera updateCamera = new UpdateCamera(MyGlobalScene, this.mainAppScene);
+        this.updateCamera = updateCamera;*/
+
+        //WindowTimer windowTimer = new WindowTimer(this.MyGlobalScene, this.pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT));
+        //this.windowTimer = windowTimer;
+
+
+
+        //CameraTimer cameraTimer = new CameraTimer(this.mainAppScene, this.MyGlobalScene);
+        //this.cameraTimer = cameraTimer;
+
+        GlobalTimer globalTimer = new GlobalTimer(this.MyGlobalScene, this.mainAppScene, pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT));
+        this.globalTimer = globalTimer;
+
+
+
     }
 
     public void setMyScene(MyScene myScene) {
@@ -67,8 +84,11 @@ public class ImageWriter {
         return this.MyGlobalScene;
     }
 
-    public UpdateWindow getUpdateWindow() {
+    /*public UpdateWindow getUpdateWindow() {
     	return this.updateWindow;
+    }*/
+    public WindowTimer getWindowTimer() {
+        return this.windowTimer;
     }
 
     public Pane getPane() {
@@ -76,9 +96,15 @@ public class ImageWriter {
     }
 
     public void ImageWriterMain(int height, int width) {
+        //windowTimer.start();
+        //cameraTimer.start();
+        globalTimer.start();
+        //this.updateCamera.run();
+        //this.updateWindow.run();
+    }
 
-        this.updateCamera.run();
-        this.updateWindow.run();
+    public GlobalTimer getGlobalTimer() {
+        return this.globalTimer;
     }
 
     public static void doImage(AtomicReferenceArray<Color> colorTab, PixelWriter pw)

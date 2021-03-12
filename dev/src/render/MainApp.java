@@ -39,7 +39,8 @@ public class MainApp extends Application {
         ImageWriter imageWriter = new ImageWriter(scene);
         imageWriter.ImageWriterMain(HEIGHT, WIDTH);
 
-        CounterFPS counterFPS = new CounterFPS(imageWriter.getUpdateWindow().getWindowTimer().getfpsLabel());
+        //CounterFPS counterFPS = new CounterFPS(imageWriter.getUpdateWindow().getWindowTimer().getfpsLabel());
+        CounterFPS counterFPS = new CounterFPS(imageWriter.getGlobalTimer().getfpsLabel());
 
         stackPane.getChildren().add(imageWriter.getPane());
         stackPane.getChildren().add(counterFPS.getPane());
