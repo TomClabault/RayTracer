@@ -20,7 +20,7 @@ public class CameraTimer extends AnimationTimer {
     /**
     * Sensibilité du déplacement droite/gauche de la caméra
     */
-    private static final Double DELTA_MOVE = 0.02;
+    private static final Double DELTA_MOVE = 0.08;
     /**
     * Sensibilité du déplacement haut/bas de la caméra
     */
@@ -103,10 +103,9 @@ public class CameraTimer extends AnimationTimer {
     * Permet de pivoter la caméra vers le haut
     */
     public void turnUpCamera() {/*0 pour l'axe x, 1 pour y et 2 pour z*/
-    	System.out.println("here" + myScene.getCamera().getYAxis());
     	//Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), new RotationMatrix(myScene.getCamera().getXAxis(), -DELTA_ANGLE));
     	
-    	myScene.getCamera().addAngleVerti(DELTA_ANGLE);
+    	this.myScene.getCamera().addAngleVerti(DELTA_ANGLE);
 //      Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), PLUS_X_ANGLE);//Ancienne ligne
 //      this.myScene.getCamera().setDirection(new_direction);
     }
@@ -116,7 +115,7 @@ public class CameraTimer extends AnimationTimer {
     */
     public void turnDownCamera() 
     {/*0 pour l'axe x, 1 pour y et 2 pour z*/
-    	myScene.getCamera().addAngleVerti(-DELTA_ANGLE);
+    	this.myScene.getCamera().addAngleVerti(-DELTA_ANGLE);
 //        Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), MINUS_X_ANGLE);//Ancienne ligne
 //    	//Point new_direction = MatrixD.mulPoint(this.myScene.getCamera().getDirection(), new RotationMatrix(myScene.getCamera().getXAxis(), DELTA_ANGLE));
 //        this.myScene.getCamera().setDirection(new_direction);
