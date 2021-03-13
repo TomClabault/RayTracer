@@ -58,7 +58,7 @@ public class ExempleImageWriter extends Application
 		
 		RayTracer rayTracerInstance = new RayTracer(width, height);
 
-		Camera cameraRT = new Camera(new Point(0, -0.8, -4), new Point(0,-1,-5));
+		Camera cameraRT = new Camera(new Point(-1, 1, -2), new Point(0, 0, -6));
 		cameraRT.setFOV(60);
 		Light l = new LightBulb(new Point(-1,0.75,-1), 1.25);
 
@@ -71,16 +71,7 @@ public class ExempleImageWriter extends Application
 		shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
 		shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
 
-		shapeList.add(new Pyramide(new Point(0,-0.95,-5),0.2,0.1,new MetallicMaterial(Color.rgb(128, 128, 128))));
-		
-//		Point A = new Point(-2, 1, -6);
-//		Point B = new Point(-1, 1, -6);
-//		Point C = new Point(-1, 1, -7);
-//		Point E = new Point(-1.5, 2, -6.5);
-//		
-//		shapeList.add(new Triangle(A, B, E, new MatteMaterial(Color.rgb(255, 0, 0))));
-//		shapeList.add(new Triangle(E, B, C, new MatteMaterial(Color.rgb(255, 0, 0))));
-		//shapeList.add(new Prism(new Point(1.5,-0.65,-7),2,2,new MetallicMaterial(Color.DARKORANGE)));
+		shapeList.add(new Pyramide(new Point(0,-1,-5),0.2,0.1,new MetallicMaterial(Color.rgb(128, 128, 128))));
 		
 		
 		MyScene sceneRT = new MyScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.55);
@@ -88,7 +79,7 @@ public class ExempleImageWriter extends Application
 		
 	
 		long startTimer = System.currentTimeMillis();
-		rayTracerInstance.renderImage(sceneRT, 8);
+		rayTracerInstance.renderImage(sceneRT, 1);
 		long endTimer = System.currentTimeMillis();
 		
 		System.out.println(String.format("Render time: %dms", endTimer-startTimer));

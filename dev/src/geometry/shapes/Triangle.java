@@ -22,7 +22,7 @@ public class Triangle implements Shape
 		this.A = A;
 		this.B = B;
 		this.C = C;
-		this.planeNormal = Vector.crossProduct(new Vector(A, B), new Vector(A, C));
+		this.planeNormal = Vector.normalize(Vector.crossProduct(new Vector(A, B), new Vector(A, C)));
 		
 		this.material = material;
 	}
