@@ -5,6 +5,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import maths.Point;
+import maths.Vector;
 
 /**
  * La classe contenant le Main qui gère la totalité de l'application
@@ -25,9 +27,9 @@ public class MainApp extends Application {
         Application.launch(args);
 
     }
-    public void start(Stage stage) {
-
-        ChoiceWindow choiceWindow = new ChoiceWindow();
+    public void start(Stage stage) 
+    {
+    	ChoiceWindow choiceWindow = new ChoiceWindow();
         choiceWindow.choiceWindowMain();
 
         StackPane stackPane = new StackPane();

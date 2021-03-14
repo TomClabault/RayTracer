@@ -43,6 +43,7 @@ public class WindowTimer extends AnimationTimer {
         long dif = actualFrameTime - oldFrameTime;
         dif  = (long)1000000000.0 / dif;
         this.oldFrameTime = actualFrameTime;
+        
         ImageWriter.doImage(rayTracer.renderImage(this.myScene,8), this.pixelWriter, this.pixelFormat);
         fpsLabel.setText(String.format("FPS : %d", dif));
     }

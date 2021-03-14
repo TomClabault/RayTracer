@@ -88,9 +88,10 @@ public class ImageWriter {
     	pw.setPixels(0, 0, MainApp.WIDTH, MainApp.HEIGHT, pixelFormat, pixelBuffer, MainApp.WIDTH);
     }
 
-    public MyScene addObjectsToScene() {/*utilisé dans le constructeur*/
-
-        Camera cameraRT = new Camera(new Point(0, 0, 0), 0, 0);
+    public MyScene addObjectsToScene() 
+    {/*utilisé dans le constructeur*/
+        //Camera cameraRT = new Camera(new Point(0, 0, 0), 25, 0);
+    	Camera cameraRT = new Camera(new Point(1, 1, -2), new Point(0, -10, -6));
         cameraRT.setFOV(60);
         Light l = new LightBulb(new Point(0, 2, 0), 1.25);
 
