@@ -1,12 +1,14 @@
 package render;
 
 import java.util.concurrent.atomic.AtomicReferenceArray;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.image.WritableImage;
+import javafx.scene.image.WritablePixelFormat;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 
@@ -81,11 +83,9 @@ public class ImageWriter {
         //this.updateWindow.run();
     }
 
-    public static void doImage(AtomicReferenceArray<Color> colorTab, PixelWriter pw)
+    public static void doImage(IntBuffer pixelBuffer, PixelWriter pw, WritablePixelFormat<IntBuffer> pixelFormat)
     {
-        for (int i = 0; i < MainApp.HEIGHT; i++)
-            for (int j = 0; j < MainApp.WIDTH; j++)
-                pw.setColor(j, i, colorTab.get(i*MainApp.WIDTH + j));
+    	pw.setPixels(0, 0, MainApp.WIDTH, MainApp.HEIGHT, pixelFormat, pixelBuffer, MainApp.WIDTH);
     }
 
     public MyScene addObjectsToScene() {/*utilisé dans le constructeur*/

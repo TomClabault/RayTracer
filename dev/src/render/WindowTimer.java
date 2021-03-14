@@ -1,7 +1,11 @@
 package render;
 
+import java.nio.IntBuffer;
+
 import javafx.animation.AnimationTimer;
+import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritablePixelFormat;
 import maths.Point;
 import maths.Vector;
 import javafx.scene.control.Label;
@@ -16,6 +20,8 @@ public class WindowTimer extends AnimationTimer {
     private RayTracer rayTracer;
     private long oldFrameTime;
     private Label fpsLabel;
+    
+    private WritablePixelFormat<IntBuffer> pixelFormat;
 
     public WindowTimer(MyScene myScene, PixelWriter pixelWriter, RayTracer rayTracer) {
         this.myScene = myScene;
@@ -24,6 +30,8 @@ public class WindowTimer extends AnimationTimer {
         Label fpsLabel = new Label("");
         this.fpsLabel = fpsLabel;
         fpsLabel.setId("fpsLabel");
+        
+        this.pixelFormat = PixelFormat.getIntArgbPreInstance();
     }
 
     public Label getfpsLabel() {
@@ -35,7 +43,7 @@ public class WindowTimer extends AnimationTimer {
         long dif = actualFrameTime - oldFrameTime;
         dif  = (long)1000000000.0 / dif;
         this.oldFrameTime = actualFrameTime;
-        ImageWriter.doImage(rayTracer.renderImage(this.myScene,8),this.pixelWriter);
+        ImageWriter.doImage(rayTracer.renderImage(this.myScene,8), this.pixelWriter, this.pixelFormat);
         fpsLabel.setText(String.format("FPS : %d", dif));
     }
 

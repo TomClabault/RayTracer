@@ -1,5 +1,6 @@
 package rayTracer;
 
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
@@ -30,16 +31,16 @@ public class RayTracer
 	private int renderHeight;
 	private int renderWidth;
 
-	AtomicReferenceArray<Color> renderedPixels;
+	IntBuffer renderedPixels;
 
 	public RayTracer(int renderWidth, int renderHeight)
 	{
 		this.renderWidth = renderWidth;
 		this.renderHeight = renderHeight;
 
-		this.renderedPixels = new AtomicReferenceArray<>(renderWidth*renderHeight);
+		this.renderedPixels = IntBuffer.allocate(renderWidth*renderHeight);
 		for(int i = 0; i < renderWidth*renderHeight; i++)
-			this.renderedPixels.set(i, Color.rgb(255, 0, 0));
+			this.renderedPixels.put(i, ColorOperations.aRGB2Int(Color.rgb(255, 0, 0)));
 	}
 
 	/*
@@ -157,7 +158,7 @@ public class RayTracer
 				cameraRay.normalize();
 
 				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay, 3);
-				this.renderedPixels.set(y*renderWidth + x, pixelColor);
+				this.renderedPixels.put(y*renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
 			}
 		}
 	}
@@ -325,12 +326,12 @@ public class RayTracer
 	 *
 	 * @param Un tableau de Color.RGB(r, g, b) de dimension renderHeight*renderLength. Renvoie null si encore aucune image n'a été rendue
 	 */
-	public AtomicReferenceArray<Color> getRenderedPixels()
+	public IntBuffer getRenderedPixels()
 	{
 		return this.renderedPixels;
 	}
 
-	public AtomicReferenceArray<Color> renderImage(MyScene renderScene, int nbCore)
+	public IntBuffer renderImage(MyScene renderScene, int nbCore)
 	{
 		ThreadsTaskList threadTaskList = new ThreadsTaskList();
 		threadTaskList.initTaskList(nbCore, this.renderWidth, this.renderHeight);
