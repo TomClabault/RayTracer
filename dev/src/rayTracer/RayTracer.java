@@ -1,7 +1,7 @@
 package rayTracer;
 
+import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReferenceArray;
 
 import geometry.Shape;
 import geometry.materials.Material;
@@ -30,16 +30,16 @@ public class RayTracer
 	private int renderHeight;
 	private int renderWidth;
 
-	AtomicReferenceArray<Color> renderedPixels;
+	IntBuffer renderedPixels;
 
 	public RayTracer(int renderWidth, int renderHeight)
 	{
 		this.renderWidth = renderWidth;
 		this.renderHeight = renderHeight;
 
-		this.renderedPixels = new AtomicReferenceArray<>(renderWidth*renderHeight);
+		this.renderedPixels = IntBuffer.allocate(renderWidth*renderHeight);
 		for(int i = 0; i < renderWidth*renderHeight; i++)
-			this.renderedPixels.set(i, Color.rgb(255, 0, 0));
+			this.renderedPixels.put(i, ColorOperations.aRGB2Int(Color.rgb(255, 0, 0)));
 	}
 
 	/*
@@ -156,8 +156,8 @@ public class RayTracer
 				Ray cameraRay = new Ray(MatrixD.mulPoint(new Point(0, 0, 0), ctwMatrix), pixelWorldCoords);
 				cameraRay.normalize();
 
-				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay, 1, 10);
-				this.renderedPixels.set(y*renderWidth + x, pixelColor);
+				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay, 3);
+				this.renderedPixels.put(y*renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
 			}
 		}
 	}
@@ -188,6 +188,7 @@ public class RayTracer
 
 			Color finalColor = Color.rgb(0, 0, 0);
 			finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting*rayIntObjMaterial.getAmbientCoeff()));
+
 
 
 			Vector normalAtIntersection = rayInterObject.getNormal(rayInterPoint);
@@ -338,12 +339,12 @@ public class RayTracer
 	 *
 	 * @param Un tableau de Color.RGB(r, g, b) de dimension renderHeight*renderLength. Renvoie null si encore aucune image n'a été rendue
 	 */
-	public AtomicReferenceArray<Color> getRenderedPixels()
+	public IntBuffer getRenderedPixels()
 	{
 		return this.renderedPixels;
 	}
 
-	public AtomicReferenceArray<Color> renderImage(RayTracingScene renderScene, int nbCore)
+	public IntBuffer renderImage(RayTracingScene renderScene, int nbCore)
 	{
 		ThreadsTaskList threadTaskList = new ThreadsTaskList();
 		threadTaskList.initTaskList(nbCore, this.renderWidth, this.renderHeight);

@@ -4,12 +4,12 @@ import maths.MatrixD;
 import maths.Point;
 import maths.RotationMatrix;
 
-public class MatricesTests 
+public class RotationMatricesTests 
 {
 	public static void testRotate(int axis, double angle, Point toRotate, Point expected)
 	{
 		RotationMatrix rotM = new RotationMatrix(axis, angle);
-		Point rotatedPoint = rotM.mulPoint(toRotate);
+		Point rotatedPoint = MatrixD.mulPoint(toRotate, rotM);
 		
 		System.out.println("Point rotaté: " + rotatedPoint + " | Attendu: " + expected);
 	}
