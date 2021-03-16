@@ -1,6 +1,5 @@
 package render;
 
-import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
@@ -20,7 +19,7 @@ import geometry.shapes.*;
 import geometry.*;
 import maths.*;
 import scene.*;
-import scene.MyScene;
+import scene.RayTracingScene;
 import scene.lights.*;
 
 /**
@@ -28,7 +27,7 @@ import scene.lights.*;
 */
 public class ImageWriter {
 
-    private MyScene MyGlobalScene = addObjectsToScene();
+    private RayTracingScene MyGlobalScene = addObjectsToScene();
     private WritableImage writableImage;
     private PixelWriter pw;
     private Pane pane;
@@ -60,11 +59,11 @@ public class ImageWriter {
         this.cameraTimer = cameraTimer;
     }
 
-    public void setMyScene(MyScene myScene) {
-        this.MyGlobalScene = myScene;
+    public void setRayTracingScene(RayTracingScene rayTracingScene) {
+        this.MyGlobalScene = rayTracingScene;
     }
 
-    public MyScene getMyScene() {
+    public RayTracingScene getRayTracingScene() {
         return this.MyGlobalScene;
     }
 
@@ -88,7 +87,7 @@ public class ImageWriter {
     	pw.setPixels(0, 0, MainApp.WIDTH, MainApp.HEIGHT, pixelFormat, pixelBuffer, MainApp.WIDTH);
     }
 
-    public MyScene addObjectsToScene() {/*utilisé dans le constructeur*/
+    public RayTracingScene addObjectsToScene() {/*utilisé dans le constructeur*/
 
         Camera cameraRT = new Camera(new Point(0, 0, 0), 0, 0);
         cameraRT.setFOV(60);
@@ -103,7 +102,7 @@ public class ImageWriter {
         shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
         shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
 
-        MyScene sceneRT = new MyScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.55);
+        RayTracingScene sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.55);
 
         return  sceneRT;
     }

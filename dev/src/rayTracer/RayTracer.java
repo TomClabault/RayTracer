@@ -2,7 +2,6 @@ package rayTracer;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReferenceArray;
 
 import geometry.Shape;
 import geometry.materials.Material;
@@ -331,7 +330,7 @@ public class RayTracer
 		return this.renderedPixels;
 	}
 
-	public AtomicReferenceArray<Color> renderImage(RayTracingScene renderScene, int nbCore)
+	public IntBuffer renderImage(RayTracingScene renderScene, int nbCore)
 	{
 		ThreadsTaskList threadTaskList = new ThreadsTaskList();
 		threadTaskList.initTaskList(nbCore, this.renderWidth, this.renderHeight);

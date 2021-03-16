@@ -1,10 +1,8 @@
 package render;
 
 import maths.Vector;
-import maths.MatrixD;
-import scene.MyScene;
+import scene.RayTracingScene;
 import maths.Point;
-import maths.RotationMatrix;
 
 import javafx.scene.input.KeyEvent;
 import javafx.scene.Scene;
@@ -31,15 +29,15 @@ public class CameraTimer extends AnimationTimer {
     private static final Double DELTA_ANGLE = 1.5;
 
     private Scene scene;
-    private MyScene myScene;
+    private RayTracingScene rayTracingScene;
 
     /**
     * @param scene scene javafx
-    * @param myScene scene {@link MyScene}
+    * @param rayTracingScene scene {@link RayTracingScene}
     */
-    public CameraTimer(Scene scene, MyScene myScene) {
+    public CameraTimer(Scene scene, RayTracingScene rayTracingScene) {
         this.scene = scene;
-        this.myScene = myScene;
+        this.rayTracingScene = rayTracingScene;
     }
 
     public void handle(long nanoTime){
@@ -75,95 +73,95 @@ public class CameraTimer extends AnimationTimer {
     /**
     * Permet de déplacer la caméra verticalement vers le haut
     */
-    public void upCamera() 
+    public void upCamera()
     {
-        Point new_position = Point.add(this.myScene.getCamera().getPosition(),new Point(0, DELTA_MOVE_Y,0));
+        Point new_position = Point.add(this.rayTracingScene.getCamera().getPosition(),new Point(0, DELTA_MOVE_Y,0));
 
-        this.myScene.getCamera().setPosition(new_position);
+        this.rayTracingScene.getCamera().setPosition(new_position);
     }
 
     /**
     * Permet de déplacer la caméra verticalement vers le bas
     */
-    public void downCamera() 
+    public void downCamera()
     {
-        Point new_position = Point.add(this.myScene.getCamera().getPosition(),new Point(0,- DELTA_MOVE_Y,0));
+        Point new_position = Point.add(this.rayTracingScene.getCamera().getPosition(),new Point(0,- DELTA_MOVE_Y,0));
 
-        this.myScene.getCamera().setPosition(new_position);
+        this.rayTracingScene.getCamera().setPosition(new_position);
     }
 
     /**
     * Permet de pivoter la caméra vers le haut
     */
-    public void turnUpCamera() 
+    public void turnUpCamera()
     {
-    	this.myScene.getCamera().addAngleVerti(DELTA_ANGLE);
+    	this.rayTracingScene.getCamera().addAngleVerti(DELTA_ANGLE);
     }
 
     /**
     * Permet de pivoter la caméra vers le bas
     */
-    public void turnDownCamera() 
+    public void turnDownCamera()
     {
-    	this.myScene.getCamera().addAngleVerti(-DELTA_ANGLE);
+    	this.rayTracingScene.getCamera().addAngleVerti(-DELTA_ANGLE);
     }
 
     /**
     * Permet de pivoter la caméra vers la droite
     */
-    public void turnRightCamera() 
+    public void turnRightCamera()
     {
-    	this.myScene.getCamera().addAngleHori(-DELTA_ANGLE);
+    	this.rayTracingScene.getCamera().addAngleHori(-DELTA_ANGLE);
     }
 
     /**
     * Permet de pivoter la caméra vers le gauche
     */
-    public void turnLeftCamera() 
+    public void turnLeftCamera()
     {
-    	this.myScene.getCamera().addAngleHori(DELTA_ANGLE);
+    	this.rayTracingScene.getCamera().addAngleHori(DELTA_ANGLE);
     }
 
     /**
     * Permet de déplacer la caméra vers l'avant
     */
-    public void goForwardCamera() 
+    public void goForwardCamera()
     {
-    	Vector axeZ = this.myScene.getCamera().getZAxis();
-    	Point newPosition = Point.add(Vector.v2p(Vector.scalarMul(axeZ, -DELTA_MOVE)), myScene.getCamera().getPosition());
-    	
-    	this.myScene.getCamera().setPosition(newPosition);
+    	Vector axeZ = this.rayTracingScene.getCamera().getZAxis();
+    	Point newPosition = Point.add(Vector.v2p(Vector.scalarMul(axeZ, -DELTA_MOVE)), rayTracingScene.getCamera().getPosition());
+
+    	this.rayTracingScene.getCamera().setPosition(newPosition);
     }
 
     /**
     * Permet de déplacer la caméra verticalement vers l'arrière
     */
-    public void goBackwardCamera() 
+    public void goBackwardCamera()
     {
-    	Vector axeZ = this.myScene.getCamera().getZAxis();
-    	Point newPosition = Point.add(Vector.v2p(Vector.scalarMul(axeZ, DELTA_MOVE)), myScene.getCamera().getPosition());
-    	
-    	this.myScene.getCamera().setPosition(newPosition);
+    	Vector axeZ = this.rayTracingScene.getCamera().getZAxis();
+    	Point newPosition = Point.add(Vector.v2p(Vector.scalarMul(axeZ, DELTA_MOVE)), rayTracingScene.getCamera().getPosition());
+
+    	this.rayTracingScene.getCamera().setPosition(newPosition);
     }
 
     /**
     * Permet de déplacer la caméra verticalement vers la gauche
     */
-    public void goLeftCamera() 
+    public void goLeftCamera()
     {
-    	Vector axeX = this.myScene.getCamera().getXAxis();
-    	Point newPosition = Point.add(Vector.v2p(Vector.scalarMul(axeX, -DELTA_MOVE)), myScene.getCamera().getPosition());
-    	
-    	this.myScene.getCamera().setPosition(newPosition);
+    	Vector axeX = this.rayTracingScene.getCamera().getXAxis();
+    	Point newPosition = Point.add(Vector.v2p(Vector.scalarMul(axeX, -DELTA_MOVE)), rayTracingScene.getCamera().getPosition());
+
+    	this.rayTracingScene.getCamera().setPosition(newPosition);
     }
 
     /**
     * Permet de déplacer la caméra verticalement vers la droite
     */
-    public void goRightCamera() 
+    public void goRightCamera()
     {
-    	Vector axeX = this.myScene.getCamera().getXAxis();
-    	Point newPosition = Point.add(Vector.v2p(Vector.scalarMul(axeX, DELTA_MOVE)), myScene.getCamera().getPosition());
-    	this.myScene.getCamera().setPosition(newPosition);
+    	Vector axeX = this.rayTracingScene.getCamera().getXAxis();
+    	Point newPosition = Point.add(Vector.v2p(Vector.scalarMul(axeX, DELTA_MOVE)), rayTracingScene.getCamera().getPosition());
+    	this.rayTracingScene.getCamera().setPosition(newPosition);
    }
 }
