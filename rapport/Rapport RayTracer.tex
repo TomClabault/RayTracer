@@ -2,6 +2,13 @@
 \usepackage [french]{babel}
 \usepackage [T1]{fontenc}
 
+\usepackage[linesnumbered, ruled, french, onelanguage]{algorithm2e}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+
+
+
 \author{}
 \title{Ray-Tracer}
 \date{}
@@ -11,14 +18,31 @@
 
 \section{Détail des parties techniques}
 \subsection{Le Ray Tracer}
-Dans notre vie quotidienne, nous voyons ce qui nous entoure grâce aux photons émis par les différentes sources de lumières présentent autour de nous (le soleil ou nos lumières artificielles notamment). Chaque photon émit par cette source de lumière vient alors frapper un des objets qui fait notre environnement. Si l'on imagine par exemple une tasse en face de nous, avec une lampe au plafond, un photon partant de cette dernière viendra rebondir sur la tasse pour ensuite, éventuellement, être redirigé en direction de nos yeux. Si le photon arrive en effet jusqu'à nos yeux, c'est alors qu'on verra se dessiner la tasse devant nous. La tasse est éclairée. Bien sûr, ce phénomène est, à l'échelle de l'humain, instantané est c'est pour cela que nous ne voyons pas notre environnement apparaître progressivement devant nous chaque fois que nous allumons notre lumière. 
-L'objectif d'un algorithme de ray-tracing est de calculer le rendu d'une scène 3D d'une façon similaire à celle qui nous permet de voir tous les jours. En effet, nous pouvons faire un parallèle entre notre algorithme de ray-tracing et la vie à laquelle nous sommes habitués et ce, grâce à 3 composants principaux:
+Dans notre vie quotidienne, nous voyons ce qui nous entoure grâce aux photons émis par les différentes sources de lumières présentent autour de nous (le soleil ou nos lumières artificielles notamment). Chaque photon émit par cette source de lumière vient alors frapper un des objets qui fait notre environnement. Si l'on imagine par exemple une tasse en face de nous, avec une lampe au plafond, un photon partant de cette dernière viendra rebondir sur la tasse pour ensuite, éventuellement, être redirigé en direction de nos yeux. Si le photon arrive en effet jusqu'à nos yeux, c'est alors qu'on verra se dessiner la tasse devant nous. La tasse est éclairée. Bien sûr, ce phénomène est, à l'échelle de l'humain, instantané est c'est pour cela que nous ne voyons pas notre environnement apparaître progressivement devant nous chaque fois que nous allumons notre lumière. \\
+L'objectif d'un algorithme de ray-tracing est de calculer le rendu d'une scène 3D d'une façon similaire à celle qui nous permet de voir tous les jours. En effet, nous pouvons faire un parallèle entre notre algorithme de ray-tracing et la vie à laquelle nous sommes habitués grâce à 3 composants principaux:
 \begin{itemize}
 	\item{Une scène composée d'objets (sphères, plans, triangles, ...) que l'on peut comparer à notre environnement}
 	\item{Une (ou plusieurs sources de lumière) jouant le même rôle que nos sources de lumière habituelles}
 	\item{Une caméra représentant nos yeux}
 \end{itemize}
+Une différence notable avec ce qui nous permet de voir dans la vie de tous les jours est que nos rayons (ou photons) partiront de la caméra (nos yeux) plutôt que de la source de lumière. Nous faisons en quelque sorte le chemin inverse. En lançant un rayon au travers de chaque pixel de l'image que nous voulons calculer, nous pourrons ensuite vérifier si le rayon a rencontré un objet de la scène. Dans ce cas là, le pixel pourra alors être coloré de la couleur de l'objet, le rendant ainsi visible.
 
+\begin {algorithm}
+	\DontPrintSemicolon
+	\KwIn{\textit{height} la hauteur de l'image à rendre, \textit{width} la largeur de l'image, \textit{scene} la scène 3D à rendre}
+	\KwOut{P un ensemble de pixels $p_{i, j}$ $\{p_{0, 0}, p_{0, 1}, \ldots, p_{height-1, width-1}\}$, $i$, $j \in \mathbb{N}$, $0 \leqslant i \leqslant height-1$, $0 \leqslant j \leqslant width-1$}
+
+	\For {$y \gets 0$ \textbf{to} $height$} {
+		\For {$x \gets 0$ \textbf{to} $width$} {
+			$p_{y, x} =$ lancerRayon(x, y, scene)
+		}
+	}
+
+	\caption{La base du lancer de rayon : 1 rayon par pixel}
+	\label{rayonParPixel}
+\end {algorithm}
+
+A la fin de ce processus, nous obtenons notre première image 
 
 \section{Structuration du projet}
 \subsection{Les packages}
