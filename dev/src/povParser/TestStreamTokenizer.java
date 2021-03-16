@@ -1,5 +1,6 @@
 package povParser;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -15,9 +16,10 @@ public class TestStreamTokenizer
 
     private final char START_CURLY_BRACKET = '{';
     private final char END_CURLY_BRACKET = '}';
-
+    private final char CROISILLON = '#';
     private final char START_CHEVRON = '<';
     private final char END_CHEVRON = '>';
+    private final char UNDERSCORE = '_';
 
     public TestStreamTokenizer(String pathToPovFile)
     {
@@ -78,24 +80,19 @@ public class TestStreamTokenizer
             BufferedReader fileReader = new BufferedReader(inputStreamReader);
 
             StreamTokenizer streamTokenizer = new StreamTokenizer(fileReader);
+
+            streamTokenizer.wordChars(testFile.UNDERSCORE, testFile.UNDERSCORE); //parse a variable name that contains an underscore (do not split it)
+            streamTokenizer.commentChar(testFile.CROISILLON);
+
             int currentToken = streamTokenizer.nextToken();
             while(currentToken != StreamTokenizer.TT_EOF)
             {
-                streamTokenizer.quoteChar(testFile.START_CURLY_BRACKET);
-                streamTokenizer.quoteChar(testFile.START_CHEVRON);
+                if(streamTokenizer.ttype == testFile.START_CURLY_BRACKET)
+                {
+                    System.out.println("{ encountered");
+                }
 
-                if (currentToken == StreamTokenizer.TT_WORD)
-                {
-                    System.out.println("word");
-                }
-                else if (currentToken == StreamTokenizer.TT_NUMBER)
-                {
-                    System.out.println("number");
-                }
-                else
-                {
-                    System.out.println(streamTokenizer.sval);
-                }
+
                 currentToken = streamTokenizer.nextToken();
             }
         }
