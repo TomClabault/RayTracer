@@ -29,6 +29,7 @@ public class RayTracer
 {
 	private int renderHeight;
 	private int renderWidth;
+	public static final int DEPTH = 5;
 
 	IntBuffer renderedPixels;
 
@@ -156,7 +157,7 @@ public class RayTracer
 				Ray cameraRay = new Ray(MatrixD.mulPoint(new Point(0, 0, 0), ctwMatrix), pixelWorldCoords);
 				cameraRay.normalize();
 
-				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay, 3);
+				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay, 1, DEPTH);
 				this.renderedPixels.put(y*renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
 			}
 		}
@@ -238,13 +239,15 @@ public class RayTracer
 				if (rayIntObjMaterial.getIsTransparent()) {
 					double fr = Fresnel(ray, normalAtIntersection, incomingRefractionIndex, rayIntObjMaterial.getIndiceRef());
 					double ft = 1 - fr;
-					Vector refractedRayDir = computeRefractedRay(ray, normalAtIntersection, incomingRefractionIndex, rayIntObjMaterial.getIndiceRef());
+					Vector refractedRayDir = computeRefractedVector(ray, normalAtIntersection, incomingRefractionIndex, rayIntObjMaterial.getIndiceRef());
 					Ray refractedRay = new Ray(rayInterPoint, refractedRayDir);
-					Ray reflectionRay = new Ray(rayInterPoint, computeReflectionVector(normalAtIntersection, ray.getDirection()));
+					Ray reflectionRay = new Ray(interPointShift, computeReflectionVector(normalAtIntersection, ray.getDirection()));
 					Color refractedColor = computePixel(x, y, renderScene, refractedRay, rayIntObjMaterial.getIndiceRef(), depth -1);
 					Color reflectedColor = computePixel(x, y, renderScene, reflectionRay, rayIntObjMaterial.getIndiceRef(), depth -1);
 					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(refractedColor, ft));
 					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(reflectedColor, fr));
+					System.out.println(fr);
+					System.out.println(ft+"\n");
 				}
 
 			}
