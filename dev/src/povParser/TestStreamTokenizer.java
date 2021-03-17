@@ -5,6 +5,13 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+enum Figure
+{
+    SPHERE,
+    RECTANGLE
+}
+
+
 public class TestStreamTokenizer
 {
     ArrayList<String> figureList;
@@ -72,7 +79,7 @@ public class TestStreamTokenizer
     public static void main(String[] args)
     {
         String pathToTestFile = "src/povParser/test.pov";
-        TestStreamTokenizer testFile = new TestStreamTokenizer("src/povParser/subsurface.pov");
+        TestStreamTokenizer testFile = new TestStreamTokenizer("src/povParser/sphere.pov");
         testFile.removeComments();
 
         try {
@@ -86,13 +93,28 @@ public class TestStreamTokenizer
 
             int currentToken = streamTokenizer.nextToken();
             while(currentToken != StreamTokenizer.TT_EOF)
-            {
-                if(streamTokenizer.ttype == testFile.START_CURLY_BRACKET)
+            {           
+                Figure formeRencontre = null; 
+                if(streamTokenizer.ttype == StreamTokenizer.TT_WORD)
                 {
-                    System.out.println("{ encountered");
+                    if(streamTokenizer.sval.equals("sphere"))
+                    {
+                        System.err.println("sphere");
+                        formeRencontre = Figure.SPHERE;
+                    }
                 }
-
-
+                switch(formeRencontre)
+                {
+                    case SPHERE:
+                        System.out.println("parser encountered a sphere ");
+                        break;
+                    case RECTANGLE:
+                        System.out.println("parser encountered a rectangle");
+                        break;
+                    default:
+                        System.out.println("default");
+                        break; 
+                }
                 currentToken = streamTokenizer.nextToken();
             }
         }
