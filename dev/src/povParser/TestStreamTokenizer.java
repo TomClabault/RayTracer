@@ -11,6 +11,28 @@ enum Figure
     RECTANGLE
 }
 
+/*
+TODO:
+se mettre dans le répertoire dev pour:
+compilation: javac -d "./bin" src\povParser\TestStreamTokenizer.java
+éxécution: java -cp "./bin;" povParser.TestStreamTokenizer
+
+1) énumération des figures possibles et autres entités (caméra, light):
+	-dès que le token correspond à une figure dans son contexte:
+		faire un switch sur l'énum et récupérer la bonne forme
+	-comme ça on ne prend pas en compte les figures non voulues	
+
+2) énumération sur les symboles syntaxiques différents ('(', '{', '<' ...)
+	-
+
+
+3) mise en place du parser:
+	-parcours le fichier sous forme de BufferedReader (autre choix déprécié) avec
+	un streamTokenizer
+	-vérification de l'état actuelle du je
+
+4) Un thread qui parse le texte un autre qui assigne un token à une classe en particulier
+ */
 
 public class TestStreamTokenizer
 {
@@ -101,20 +123,21 @@ public class TestStreamTokenizer
                     {
                         System.err.println("sphere");
                         formeRencontre = Figure.SPHERE;
+                        switch(formeRencontre)
+                        {
+                            case SPHERE:
+                                System.out.println("parser encountered a sphere ");
+                                break;
+                            case RECTANGLE:
+                                System.out.println("parser encountered a rectangle");
+                                break;
+                            default:
+                                System.out.println("default");
+                                break; 
+                        }
                     }
                 }
-                switch(formeRencontre)
-                {
-                    case SPHERE:
-                        System.out.println("parser encountered a sphere ");
-                        break;
-                    case RECTANGLE:
-                        System.out.println("parser encountered a rectangle");
-                        break;
-                    default:
-                        System.out.println("default");
-                        break; 
-                }
+                
                 currentToken = streamTokenizer.nextToken();
             }
         }
