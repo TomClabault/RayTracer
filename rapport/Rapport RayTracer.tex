@@ -107,7 +107,7 @@ $P(x, y, z), x \in [0; 799], y \in [0; 599], z = -1$ :
 		Même raisonnement pour y à une inversion d'opération prêt.\\
 		\hfill\\
 	          	$P(x, y, z), x \in [-1; 1], y \in[-1; 1], z = -1$}
-	\item{\textbf{Etape 3} : Cette étape permet de prendre en compte le champ de vision de la caméra. Plus le champ de vision se rapproche de 180\degree, plus la caméra voit une grande partie de la scène et inversement. Le champ de vision peut alors donner une impression de "zoom". Voir plus bas la figure \ref{fovCam}\\\hfill\\
+	\item{\textbf{Etape 3} : Cette étape permet de prendre en compte le champ de vision de la caméra. Plus le champ de vision se rapproche de 180\degree, plus la caméra voit une grande partie de la scène et inversement. Le champ de vision peut alors donner une impression de "zoom". Voir plus bas la \figurename~\ref{fovCam}\\\hfill\\
 		$P(x,y , z), x \in [-1; 1]*FOV, y \in [-1; 1]*FOV, z = -1$.}\\
 	\item{\textbf{Etape 4} : Jusqu'alors, les coordonnées de nos pixels converties dans l'espace du monde formaient un plan de caméra carré. Comment faire si l'image que nous voulons rendre n'est pas elle-même carrée (ce qui est très fréquent) ? Il nous faut prendre en compte le format de l'image donné par $width/height$. En multipliant la coordonnée x par ce format, nous "étirons" l'image ou la rétrécissons selon sa largeur. Le plan de la caméra respecte maintenant le même format que l'image que nous voulons rendre.\\\hfill\\
 		$P(x,y , z), x \in [-1; 1]*FOV*aspectRatio, y \in [-1; 1]*FOV, z = -1$.}
@@ -116,8 +116,8 @@ $P(x, y, z), x \in [0; 799], y \in [0; 599], z = -1$ :
 \begin{figure}[h!]
 	\includegraphics{img/rt/fovCamera.png}
 
-	\label{fovCam}
 	\caption{En augmentant le FOV (champ de vision) de la caméra, l'angle $\alpha$ augmente. La hauteur du plan de la caméra, $BC$, est étirée. La caméra verra donc une plus grande partie de la scène.\break Source: scratchapixel.com}
+	\label{fovCam}
 \end{figure}
 \FloatBarrier
 
@@ -126,8 +126,8 @@ A l'issue de ces implémentations, nous obtenons alors l'image suivante (la scè
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=\textwidth]{img/rt/basicRender.png}}
 
-	\label{basicRender}
 	\caption{Rendu le plus simple. Une sphère sans aucun effet d'ombrage}
+	\label{basicRender}
 \end{figure}
 \FloatBarrier
 
@@ -136,21 +136,81 @@ Chaque rayon qui a été lancé et qui a intersecté la sphère a alors donné u
 \subsubsection{L'ombrage de Phong}
 
 Comme vu précédemment, la première image (fig. \ref{basicRender}) produite par notre algorithme n'est pas tout à fait satisfaisante. Il n'y a en effet aucun effet de profondeur ou de lumière. Difficile de savoir qu'on a une sphère devant nous et pas un simple disque plat. La prochaine étape est donc celle là de l'ombrage de Phong. Un tel ombrage se découpe en trois composantes/parties:
-\begin{itemize}
+\begin{enumerate}
 	\item{La composante ambiante. Elle est responsable de la quantité minimale de lumière que va reçevoir un objet}
 	\item{La composante diffuse. Cette composante est celle qui permet de donner à un objet son relief. Plus les rayons de la lumière arrivent perpendiculairement à la surface de l'objet, plus l'intensité lumineuse sur la surface de l'objet sera importante}
 	\item{La composante spéculaire. Elle permet d'ajouter un effet "brillant" aux objets en fonction de la direction qu'empruntent les rayons réfléchis par la surface de l'objet par rapport à la caméra.}
-\end{itemize}
+\end{enumerate}
 
-La composante ambiante permet de donner une illumination de base à l'objet. Elle est très simple à calculer:\\
+\hfill\\
+\indent La composante ambiante permet de donner une illumination de base à l'objet. Elle est très simple à calculer:\\
 
 \begin{center}
-	$Ambiante = I_L*C_A$
+	$Ambiante = I_A = I_L*C_A$
 \end{center}
 Avec $I_L\ \in\ [0;1]$ l'intensité de la source lumineuse,\\
 $C_A\ \in\ [0; 1]$ le coefficient de luminosité ambiante de l'objet.
 
+\begin{figure}[h!]
+	\adjustbox{center}{\includegraphics[width=0.75\textwidth]{img/rt/differentAmbient.png}}
+
+	\caption{Le rendu de la même sphère pour différentes intensités lumineuse $I_L$. $C_A = 1$ utilisé pour tous les rendus.}
+	\label{differentAmbient}
+\end{figure}
+\FloatBarrier
+
+La composante diffuse de l'ombrage de Phong permet d'ajouter un effet que l'on peut voir comme un dégradé d'intensité lumineuse. L'intensité est à son maximum lorsque les rayons de la source lumineuse frappent perpendiculaiurement la surface de l'objet. Au contraire, lorsque les rayons sont parallèles à la surface de l'objet, l'intensité lumineuse de la diffusion est très faible. Elle est calculée comme suit:\\
+
+\begin{center}
+	$Diffuse = I_D = C_D*(\overrightarrow{L}\cdot\overrightarrow{N})$
+\end{center}
+Avec $C_D$ le coefficient d'intensité diffuse de l'objet,\\
+$\overrightarrow{L}$ le vecteur en direction de la source lumineuse depuis le point d'intersection du rayon et de l'objet,\\
+$\overrightarrow{N}$ la normale de la surface de l'objet au point d'intersection avec le rayon\\
+et $\cdot$ dénotant le produit scalaire.\\
+On sait que le produit scalaire de deux vecteurs orthogonaux est égal à 0. De plus, le produit scalaire de deux vecteurs colinéaires normalisés (de longueur 1) vaut 1. Ainisi, deux vecteurs normalisés non-colinéaires et non-orthogonaux auront un produit scalaire compris entre 0 et 1. Plus les vecteurs sont similaires, plus le produit se rapprochera de 1 et à l'inverse, "plus les vecteurs sont orthogonaux" plus il tendra vers 0.\\
+Appliqué au cas de notre sphère et de notre source de lumière :\\
+\begin{itemize}
+	\item{Si le vecteur représentant la direction du rayon de lumière (le vecteur entre le point d'intersection sur l'objet et la source lumineuse) est colinéaire à la normale au point d'intersection de l'objet, l'intensité de la composante diffuse sera maximale car le produit scalaire des deux vecteurs vaudra alors 1.}
+	\item{Si au contraire, la lumière frappe l'objet de côté, la normale et le vecteur du rayon de lumière seront alors orthogonaux (ou presque), le produit scalaire vaudra 0. L'intensité de la composante diffuse sera minimale.}
+\end{itemize}
+
+
+\begin{figure}[h!]
+	\adjustbox{center}{\includegraphics[width=0.85\textwidth]{img/rt/differentDiffuse.png}}
+
+	\caption{Le rendu de la même sphère pour différents coefficients de diffusion $C_D$ de l'objet. On devine la position de la source lumineuse à gauche.}
+	\label{differentDiffuse}
+\end{figure}
+\FloatBarrier
+
+La dernière composante est la spéculaire. Elle est responsable des points de reflets qu'on peut voir dans la vraie vie sur des objets en plastique notamment. L'idée de son fonctionnement est la suivante:\\
+Plus le rayon de lumière qui frappe l'objet en un point donné est réfléchi droit sur la caméra, plus l'intensité spéculaire en ce point est importante. Le calcul de la spécularité:
+
+\begin{center}
+	$Specularite = I_S = C_S*(\overrightarrow{d_{ray}}\cdot\overrightarrow{R_{light}})^\alpha$
+\end{center}
+$C_S$ étant le coefficient d'intensité spéculaire de l'objet,\\
+$\overrightarrow{d_{ray}}$ la direction du rayon qui a intersecté l'objet,\\
+$\overrightarrow{R_{light}}$ la direction du rayon de lumière entre la source de lumière et le point d'intersection s'il est parfaitement réfléchi (voir la partie \ref{reflexions} sur les réflexions) par rapport à la surface de l'objet,\\
+$\alpha$ la "brillance" de l'objet. Plus ce paramètre est élevé plus les tâches spéculaires seront petites. L'objet paraîtra plus brillant.
+
+D'une façon analogue au fonctionnement de la composante diffuse, plus le produit scalaire des vecteurs $\overrightarrow{R_{light}}$ et $\overrightarrow{d_{ray}}$ se rapproche de 1, plus l'intensité de la spécularité sera forte.\\
+Le paramètre alpha permet quant à lui de jouer sur la taille des tâches spéculaires. En effet, on observe sur la \figurename~\ref{differentSpecular}, pour $C_S = 1$ et $\alpha = 10$, que la tâche spéculaire est moins intense sur ses bords qu'en son centre.\\
+On peut grossièrement estimer que l'intensité lumineuse de la spécularité $I_S$ aux bords de la tâche spéculaire est comprise entre 0.5 et 1: $0.5 \leqslant I_S \leqslant 1$.\\
+Ainsi $I_S$, décroîtra rapidement vers 0 lorsque élevée à la puissance $\alpha$. A contrario, $I_S$ se rapprochant de 1 au centre de la tâche lumineuse, la décroissance vers 0 sera plus lente, bien que tout à fait présente comme en témoigne la \figurename~\ref{differentSpecular} aux paramètres $C_S = 1$ et $\alpha = 512$.
+
+\begin{figure}[h!]
+	\adjustbox{center}{\includegraphics[width=1.2\textwidth]{img/rt/differentSpecular.png}}
+
+	\caption{Le rendu de la même sphère pour différents coefficients de spécularité $C_S$ de l'objet et différentes valeurs du paramètre $\alpha$. La source lumineuse est à gauche.}
+	\label{differentSpecular}
+\end{figure}
+\FloatBarrier
+
+\subsubsection{Les ombres}
 \subsubsection{Les réflexions}
+\label{reflexions}
 \subsubsection{Les réfractions}
 
 \section{Structuration du projet}
