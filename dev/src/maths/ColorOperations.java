@@ -72,6 +72,26 @@ public class ColorOperations
 	}
 	
 	/*
+	 * Cette méthode converti la couleur passée en argument en entier 32 bits. Chaque composante de aRGB est codée sur 8 bits. 
+	 * Du MSB au LSB: alpha ; red ; green ; blue
+	 * 
+	 * @param color La couleur que l'on souhaite convertir en entier
+	 * 
+	 * @return Retourne un entier 32 bits dont la signification des bits est (du MSB au LSB):
+	 * 0-8: alpha
+	 * 8-16: red
+	 * 16-24: green
+	 * 24-32: blue
+	 */
+	public static int aRGB2Int(Color color)
+	{
+		return  ((int)(color.getOpacity() * 255) << 24)  |
+				((int)(color.getRed()     * 255) << 16) |
+				((int)(color.getGreen()   * 255) << 8)  |
+				((int)(color.getBlue()    * 255));
+	}
+	
+	/*
 	 * Multiplie une couleur composante par composante par un scalaire
 	 * 
 	 * @param col Couleur à multiplier

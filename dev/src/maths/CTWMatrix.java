@@ -1,49 +1,53 @@
 package maths;
 
+import scene.Camera;
+
 /*
- * Cette classe représente la matrice permettant le changement de base des coordonnées des pixels en fonction de la position de la caméra et de sa direction
+ * Cette classe représente la matrice permettant le changement de base des coordonnées des pixels en fonction de la position de la caméra et de ses angles de rotation
  */
 public class CTWMatrix extends MatrixD
 {
-	public CTWMatrix(Point cameraOrigin, Point cameraDirection)
+	public CTWMatrix(Camera camera, double angleHori, double angleVerti)
 	{
 		super(4, 4);
 		
-		//Point cameraDirectionNorm = Vector.v2p(Vector.normalize(Point.p2v(cameraDirection)));
+		MatrixD rotateMatrix = new MatrixD(3, 3, 
+		new double[][] 
+		{
+			{1, 0, 0},
+			{0, 1, 0},
+			{0, 0, 1}		
+		});
 		
-		Vector magicVector = new Vector(0, 1, 0);
+		RotationMatrix rotateVerti = new RotationMatrix(0, angleVerti);//Création de la matrice de rotation pour l'axe vertical
+		RotationMatrix rotateHori = new RotationMatrix(1, angleHori);//Création de la matrice de rotation pour l'axe horizontal 
 		
-		//Si jamais l'axe z de la caméra est colinéaire au magic vector, on ne va pas 
-		//pouvoir déterminer un vecteur perpendiculaire au deux qui nous donnerait l'axe x.
-		//Il faut donc qu'on modifie le magicVector en le rendant non colinéaire à l'axe de regard de la caméra
-		if(Vector.areColinear(magicVector, new Vector(cameraDirection, cameraOrigin))) 
-			magicVector = new Vector(1, 1, 0);
-			
-		Vector zAxis = Vector.normalize(new Vector(cameraDirection, cameraOrigin));
-		Vector xAxis = Vector.normalize(Vector.crossProduct(magicVector, zAxis));
-		Vector yAxis = Vector.crossProduct(zAxis, xAxis);
-
+		double rotateHori3x3[][] = new double[3][3];
+		double rotateVerti3x3[][] = new double[3][3];
+		for(int line = 0; line < 3; line++)
+		{
+			for(int column = 0; column < 3; column++)
+			{
+				rotateHori3x3[line][column] = rotateHori.get(line, column);
+				rotateVerti3x3[line][column] = rotateVerti.get(line, column);
+			}
+		}
 		
 		
+		rotateMatrix = MatrixD.mulMatrix(rotateMatrix, new MatrixD(3, 3, rotateHori3x3));
+		rotateMatrix = MatrixD.mulMatrix(new MatrixD(3, 3, rotateVerti3x3), rotateMatrix);
 		
-		super.matrix[0][0] = xAxis.getX();
-		super.matrix[0][1] = xAxis.getY();
-		super.matrix[0][2] = xAxis.getZ();
-		super.matrix[0][3] = 0;
 		
-		super.matrix[1][0] = yAxis.getX();
-		super.matrix[1][1] = yAxis.getY();
-		super.matrix[1][2] = yAxis.getZ();
-		super.matrix[1][3] = 0;
+		for(int line = 0; line < 3; line++)
+		{
+			for(int column = 0; column < 3; column++)
+				super.matrix[line][column] = rotateMatrix.get(line, column);
+			super.matrix[line][3] = 0;
+		}
+		super.matrix[3][3] = 1;	
 		
-		super.matrix[2][0] = zAxis.getX();
-		super.matrix[2][1] = zAxis.getY();
-		super.matrix[2][2] = zAxis.getZ();
-		super.matrix[2][3] = 0;
-		
-		super.matrix[3][0] = cameraOrigin.getX();
-		super.matrix[3][1] = cameraOrigin.getY();
-		super.matrix[3][2] = cameraOrigin.getZ();
-		super.matrix[3][3] = 1;
+		super.matrix[3][0] = camera.getPosition().getX();
+		super.matrix[3][1] = camera.getPosition().getY();
+		super.matrix[3][2] = camera.getPosition().getZ();
 	}
 }
