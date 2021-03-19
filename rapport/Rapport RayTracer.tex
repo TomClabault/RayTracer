@@ -21,6 +21,7 @@
 
 \section{Détail des parties techniques}
 \subsection{Le Ray Tracer}
+\subsubsection{L'algorithme de base}
 Dans notre vie quotidienne, nous voyons ce qui nous entoure grâce aux photons émis par les différentes sources de lumière présentent autour de nous (le soleil ou nos lumières artificielles notamment). Chaque photon émit par ces sources vient alors frapper un des objets qui fait notre environnement. Si l'on imagine par exemple une tasse en face de nous, avec une lampe au plafond, un photon partant de cette dernière viendra rebondir sur la tasse pour ensuite, éventuellement, être redirigé en direction de nos yeux. Si le photon arrive en effet jusqu'à nos yeux, c'est alors qu'on verra se dessiner la tasse devant nous. La tasse est éclairée et nous la voyons. Bien sûr, ce phénomène est, à l'échelle de l'humain, instantané et c'est pour cela que nous ne voyons pas notre environnement apparaître progressivement devant nous chaque fois que nous allumons notre lumière. \\
 L'objectif d'un algorithme de ray-tracing est de calculer le rendu d'une scène 3D d'une façon similaire à celle qui nous permet de voir tous les jours. En effet, nous pouvons faire un parallèle entre notre algorithme de ray-tracing et la vie à laquelle nous sommes habitués grâce à 3 composants principaux:
 \begin{itemize}
@@ -120,12 +121,28 @@ $P(x, y, z), x \in [0; 799], y \in [0; 599], z = -1$ :
 \end{figure}
 \FloatBarrier
 
-A l'issue de ces implémentations, nous obtenons alors l'image suivante (la scène est composée d'une sphère et d'un plan représentant le sol):
+A l'issue de ces implémentations, nous obtenons alors l'image suivante (la scène est composée d'une unique sphère rouge et d'un fond gris foncé):
 
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=\textwidth]{img/rt/final/basicRender.png}}
+
+	\label{basicRender}
+	\caption{Rendu le plus simple. Une sphère sans aucun effet d'ombrage}
 \end{figure}
 \FloatBarrier
+
+Chaque rayon qui a été lancé et qui a intersecté la sphère a alors donné un pixel rouge. Les autres rayons, ceux qui n'ont pas intersecté la sphère, ont simplement renvoyé la couleur du fond de la scène. 
+
+\subsubsection{L'ombrage de Phong}
+
+Comme vu précédemment, la première image (fig. \ref{basicRender}) produite par notre algorithme n'est pas tout à fait satisfaisante. Il n'y a en effet aucun effet de profondeur ou de lumière. Difficile de savoir qu'on a une sphère devant nous et pas un simple disque plat. La prochaine étape est donc celle là de l'ombrage de Phong. Un tel ombrage se découpe en trois composantes/parties:
+\begin{itemize}
+	\item{La composante ambiante. Elle est responsable de la quantité minimale de lumière que va reçevoir un objet}
+	\item{La composante diffuse. Cette composante est celle qui permet de donner à un objet son relief. Plus les rayons de la lumière arrivent perpendiculairement à la surface de l'objet, plus l'intensité lumineuse sur la surface de l'objet sera importante}
+	\item{La composante spéculaire. Elle permet d'ajouter un effet "brillant" aux objets en fonction de la direction qu'empruntent les rayons réfléchis par la surface de l'objet par rapport à la caméra.}
+\end{itemize}
+
+
 
 --> enchaîner sur l'ombrage de Phong:
 	- Dire que l'image est pas ouf, en effet, pas de lumière tout ça tout ça
@@ -134,6 +151,9 @@ A l'issue de ces implémentations, nous obtenons alors l'image suivante (la scè
 	- Une image séparée pour chaque composante + l'image résultatn de toutes les composantes en même temps
 
 A la fin de ce processus, nous obtenons notre première image 
+
+\subsubsection{Les réflexions}
+\subsubsection{Les réfractions}
 
 \section{Structuration du projet}
 \subsection{Les packages}
