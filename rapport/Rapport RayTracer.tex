@@ -5,9 +5,10 @@
 \usepackage[linesnumbered, ruled, french, onelanguage]{algorithm2e}
 \usepackage{amssymb}
 \usepackage{amsmath}
-\usepackage{adjustbox}
+\usepackage{adjustbox}%Permet de centrer les figures dans la largeur de la page même si les figures sont plus larges que \textwidth
 \usepackage{graphicx}
-
+\usepackage{placeins}%pour utiliser FloatBarrier afin que les figure respectent bien leur position dans le code
+\usepackage{gensymb}%pour pouvoir écrire le signe °
 
 
 
@@ -57,24 +58,25 @@ Prenons l'exemple du rendu d'une image dans une résolution 800x600 pixels. Si l
 	\DontPrintSemicolon
 	\KwIn{$x, y \in \mathbb{N}, Pixel = (x, y)$ ;\\
 		$width, height$\ la\ largeur\ et\ la\ hauteur\ de\ l'image\ à\ rendre\\
-		$F \in ]0; 180[$\ le\ champ\ de\ vision\ de\ la\ caméra\ (FOV)}
+		$F \in ]0; 180[$\ le\ champ\ de\ vision\ de\ la\ caméra\ (FOV)\ en\ degré}
 	\KwOut{$P_{world}(x_{world}, y_{world}, -1)$\\les\ coordonnées\ du\ pixel\ exprimées\ dans\ l'espace\ de\ la\ scène\\\hfill\\}
 
 	$aspectRatio \gets width/height$\\
-	$demiPlaneHeight \gets tan(\frac{F}{2})$\\
+	$F_{rad} \gets \frac{F}{2}*\frac{\pi}{180}$\\
+	$demiPlaneHeight \gets tan(F_{rad})$\\
 	\hfill\\
 	$x_{world} \gets x$\\
 	$y_{world} \gets y$\\
 	\hfill\\
-	$x_{world} \gets (x_{world} +0.5) / width$\\
-	$x_{world} \gets x_{world} * 2 -1$\\
-	$x_{world} \gets x_{world} * aspectRatio$\\
-	$x_{world} \gets x_{world} * demiPlaneHeight$\\
+	$x_{world} \gets (x_{world} +0.5) / width$ 		\noindent\hspace{3cm}{\textbf{//Etape 1}}\\
+	$x_{world} \gets x_{world} * 2 -1$ 			\noindent\hspace{4.18cm}{\textbf{//Etape 2}}\\
+	$x_{world} \gets x_{world} * demiPlaneHeight$ 	\noindent\hspace{1.95cm}{\textbf{//Etape 3}}\\
+	$x_{world} \gets x_{world} * aspectRatio$		\noindent\hspace{3.05cm}{\textbf{//Etape 4}}\\
 
 	\hfill\\
-	$y_{world} \gets (y_{world} +0.5) / height$\\
-	$y_{world} \gets 1 - y_{world} * 2$\\
-	$y_{world} \gets y_{world} * demiPlaneHeight$\\
+	$y_{world} \gets (y_{world} +0.5) / height$ 		\noindent\hspace{3cm}{\textbf{//Etape 1}}\\
+	$y_{world} \gets 1 - y_{world} * 2$ 			\noindent\hspace{4.3cm}{\textbf{//Etape 2}}\\
+	$y_{world} \gets y_{world} * demiPlaneHeight$ 	\noindent\hspace{2.06cm}{\textbf{//Etape 3}}\\
 
 	\hfill\\
 	\Return{$(x_{world}, y_{world}, -1)$}
@@ -83,13 +85,41 @@ Prenons l'exemple du rendu d'une image dans une résolution 800x600 pixels. Si l
 	\label{conversionPixel}
 \end{algorithm}
 
-Il est important de remarquer que notre caméra se trouve initialement aux coordonnées $O = (0, 0, 0)$ et que sa direction de regard est $\overrightarrow{d_{cam}} = (0, 0, -1)$. Par convention, la grille de pixel virtuelle à travers laquelle nous faisons passer nos rayons se trouve à 1 unité de distance de la caméra, dans sa direction de regard. Ainsi, la coordonnée z des pixels sera toujours -1.\\
-\adjustbox{center}{\includegraphics[width=1.4\textwidth]{img/rt/final/repre_cam_rayon.png}}
-En reprenant l'exemple de notre image de rendu en 800x600 pixels:\\
-$P(x, y, z), x \in [0, 799], y \in [0, 599], z = -1$ :
+Il est important de remarquer que notre caméra se trouve initialement aux coordonnées $O = (0, 0, 0)$ et que sa direction de regard est $\overrightarrow{d_{cam}} = (0, 0, -1)$. Par convention, la grille de pixel virtuelle (le plan de la caméra) à travers laquelle nous faisons passer nos rayons se trouve à 1 unité de distance de la caméra, dans sa direction de regard. Ainsi, la coordonnée z des pixels sera toujours -1.\\
+\begin{figure}[h!]
+	\adjustbox{center}{\includegraphics[width=1.4\textwidth]{img/rt/final/repCamRayon.png}}
+
+	\caption{Représentation de la caméra, de son plan, de sa direction ainsi que d'une sphère représentant l'environnement. Un rayon est également tracé.}
+	\label{repreCamRayon}
+\end{figure}
+\FloatBarrier
+
+En reprenant l'exemple de notre image de rendu en 800x600 pixels et en suivant les étapes de l'algorithme label{conversionPixel}:\\
+$P(x, y, z), x \in [0; 799], y \in [0; 599], z = -1$ :
 \begin{enumerate}
-	\item{}
+	\item{\textbf{Etape 1} : On ajoute 0.5 à la valeur du pixel que l'on veut rendre. Les pixels étant des carrés de 1x1 unité sur l'image, ajouter 0.5 fera donc passer le rayon au centre du pixel. La division par la largeur et la hauteur de l'image (pour x et y respectivement) permet de ramener les coordonnées des pixels dans l'intervalle $[0; 1]$.\\
+		\hfill\\
+	         	$P(x, y, z), x \in [0; 1], y \in[0; 1], z = -1$}
+	\item{\textbf{Etape 2} : Le but de cette étape est de ramener les pixels dans l'intervalle $[-1; 1]$.\\
+		$x*2 \Rightarrow x \in [0; 2]$
+		$\\x - 1 \Rightarrow x \in [-1; 1]$\\
+		Même raisonnement pour y à une inversion d'opération prêt.\\
+		\hfill\\
+	          	$P(x, y, z), x \in [-1; 1], y \in[-1; 1], z = -1$}
+	\item{\textbf{Etape 3} : Cette étape permet de prendre en compte le champ de vision de la caméra. Plus le champ de vision se rapproche de 180\degree, plus la caméra voit une grande partie de la scène et inversement. Le champ de vision peut alors donner une impression de "zoom". Voir plus bas la figure \ref{fovCam}\\\hfill\\
+		$P(x,y , z), x \in [-1; 1]*FOV, y \in [-1; 1]*FOV, z = -1$.}\\
+	\item{\textbf{Etape 4} : Jusqu'alors, les coordonnées de nos pixels converties dans l'espace du monde formaient un plan de caméra carré. Comment faire si l'image que nous voulons rendre n'est pas elle-même carrée (ce qui est très fréquent) ? Il nous faut prendre en compte le format de l'image donné par $width/height$. En multipliant la coordonnée x par ce format, nous "étirons" l'image ou la rétrécissons selon sa largeur. Le plan de la caméra respecte maintenant le même format que l'image que nous voulons rendre.\\\hfill\\
+		$P(x,y , z), x \in [-1; 1]*FOV*aspectRatio, y \in [-1; 1]*FOV, z = -1$.}
 \end{enumerate}
+
+\begin{figure}[h!]
+	\includegraphics{img/rt/final/fovCamera.png}
+
+	\label{fovCam}
+	\caption{En augmentant le FOV (champ de vision) de la caméra, l'angle $\alpha$ augmente. La hauteur du plan de la caméra, $BC$, est étirée. La caméra voit une plus grande partie de la scène.\break Source: scratchapixel.com}
+\end{figure}
+\FloatBarrier
+
 Il faut cependant convertir les coordonnées des pixels en les coordonnées du monde, présenter un algo de la méthode et refaire l'algo 1 pour dire comment il a évolué (juste rajouter la ligne qui permet de convertir les co des pixels). 
 Maintenant qu'on a la conversion des pixels et le ray tracing basique de chaque pixel, présenter la méthode lancerRayon la plus simple, juste pour expliquer comment on obtient les couleurs et montrer que l'image obtenue est pas ouffissime, toute plate
 
