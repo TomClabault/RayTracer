@@ -1,0 +1,21 @@
+RayTracer:
+	- Ajouter une skybox
+	- Ajouter de l'anti-aliasing SSAA activable et désactivable avec choix du nombre de sample
+	- Optimiser l'intersection entre rayon et triangle avec l'algorithme de Möller–Trumbore
+	- Plus ambitieux: Implémenter des structures d'accélération pour que chaque rayon envoyé par le Ray Tracer ne calcule pas l'intersection avec tous les objets de la scène. Par exemple, si on envoie un rayon dans le haut de l'image, il va aller dans le ciel et il n'intersectera rien mais pourtant, il va quand même tester l'intersection avec tous les objets de la scène. On peut optimiser le nombre d'objets avec lequel on fait l'intersection en utilisant des structures d'accélération (voir BVH [Bounding Volume Hierarchy])
+	- ajouter differentes depth en fonction de si le materiaux est transparent/mat/metalique
+	
+RayTracer/Interface:
+	- Ajouter des points de caméra fixes dans le code pour qu'on puisse se "téléporter" dans la scène, à des points fixés. On utiliserait les numéros du pavé numérique
+	- Cliquer sur un objet avec la souris lance un rayon au point où on a cliqué et change la direction de regard de la caméra pour qu'elle regarde l'objet qui a été intersecté par le rayon
+	
+Interface: 
+	- Ajouter des try/catch pour éviter qu'en écrivant des lettres dans le choix de largeur/hauteur ça lève une exception
+	- Quand on quitte le MainApp avec la croix de la fenêtre sans avoir rien écrit dans largeur/hauteur, erreur dans le terminal
+	- Quand on lance un rendu dans une résolution qui ne remplit pas tout l'écran, aggrandir la fenêtre devrait aggrandir le rendu aussi (quitte à ce que le visuel soit flou / dégueulasse). parce que actuellement, si on aggrandi la fenêtre, le rendu ne change pas de taille et on obtient une fenêtre moitié blanche / moitié rendu
+	- Pouvoir se déplacer dans plusieurs directions en même temps. Si actuellement on fait Z+Q, il n'y a que la dernière touche enfoncée qui va prendre effet
+	- Ajouter un bouton pour renvoyer la caméra au point où elle était au lancement du rendu (pourquoi pas utiliser le pavé numérique 0 pour faire ça)
+	- Ajouter un bouton pour pouvoir exporter ce que l'on voit dans le rendu dans un fichier au format .png
+	- Ajouter des sliders pour pouvoir changer en temps réel la luminosité ambiante de la scène / la profondeur maximale de récursion du Ray Tracer, .... Ces sliders seraient dans une fenêtre séparée de celle du rendu. Pour pouvoir modifier les variables de la classe Ray Tracer alors qu'on est dans une fenêtre séparée, il faudra donc donner l'instance du RayTracer à la construction de la fenêtre des sliders
+	- Pour choisir le fichier à parser (et donc faire le rendu avec), plutôt que d'utiliser la commandline, utiliser un explorateur de fichier. Et même pourquoi pas, quand on sélectionne plusieurs fichiers, faire le rendu de toutes les scène décrites dans chaque fichier .pov mais de façon statique, on ne peut pas bouger la caméra. Juste faire le rendu de la scène et c'est tout. Parce que sinon on va avoir 50 rendus qui vont tourner en même temps ça va pas le faire
+	- ajouter dans setSizeWindow la possibilité d'un mode auto (plein écran avec résolution de l'écran = résolution du rendu)
