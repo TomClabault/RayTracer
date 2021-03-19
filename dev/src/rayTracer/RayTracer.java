@@ -29,7 +29,7 @@ public class RayTracer
 {
 	private int renderHeight;
 	private int renderWidth;
-	public static final int DEPTH = 5;
+	public static final int DEPTH = 4;
 
 	IntBuffer renderedPixels;
 
@@ -216,7 +216,7 @@ public class RayTracer
 				interToShadowInterDist = Point.distance(rayInterPoint, shadowInterPoint);
 
 
-			if(shadowInterObject == null || interToShadowInterDist > interToLightDist)//Aucune intersection trouvée pour aller jusqu'à la lumière, on peut calculer la couleur directe de l'objet
+			if(shadowInterObject == null || interToShadowInterDist > interToLightDist || shadowInterObject.getMaterial().getIsTransparent())//Aucune intersection trouvée pour aller jusqu'à la lumière, on peut calculer la couleur directe de l'objet
 			{
 				if(rayIntObjMaterial.getDiffuseCoeff() > 0)//Si le matériau est diffus
 				{
@@ -247,15 +247,15 @@ public class RayTracer
 					if (! refractedRayDir.equals(new Vector(0,0,0)) ) {
 						refractedColor = computePixel(x, y, renderScene, refractedRay, rayIntObjMaterial.getIndiceRef(), depth -1);
 					}
+					
 					Color reflectedColor = computePixel(x, y, renderScene, reflectionRay, rayIntObjMaterial.getIndiceRef(), depth -1);
+					
 					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(refractedColor, ft));
 					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(reflectedColor, fr));
-					//System.out.println(fr);
-					//System.out.println(ft+"\n");
 				}
 
 			}
-			else//Une intersection a été trouvée et l'objet intersecté est entre la lumière et le départ du shadow ray
+			else//Une intersection a été trouvée et l'objet intersecté est entre la lumière et le départ du shadow ray. De plus, l'objet bloquant la vue à la lumière n'est pas transparent
 			{
 				if(rayIntObjMaterial.getReflectiveCoeff() > 0)//Si l'objet est réflectif, on va calculer le reflet de l'objet qui bloque le chemin à la lumière plutôt que de l'ombre
 				{
@@ -367,9 +367,16 @@ public class RayTracer
 
 	public double Fresnel(Ray incomingRay, Vector normalAtIntersection, double incomingRefractionIndex, double actualRefractionIndex) {
 		double thetaIncident = Vector.dotProduct(incomingRay.getDirection(), normalAtIntersection);
-		double thetaRefracted = Math.asin((Math.sin(thetaIncident) * incomingRefractionIndex)/actualRefractionIndex);
-		double fpl = Math.pow((actualRefractionIndex*Math.cos(thetaIncident) - incomingRefractionIndex*Math.cos(thetaRefracted))/(actualRefractionIndex*Math.cos(thetaIncident) + incomingRefractionIndex*Math.cos(thetaRefracted)),2);
-		double fpr = Math.pow((incomingRefractionIndex*Math.cos(thetaRefracted) - actualRefractionIndex*Math.cos(thetaIncident))/(incomingRefractionIndex*Math.cos(thetaRefracted) + actualRefractionIndex*Math.cos(thetaIncident)),2);
+		double thetaRefracted = Math.asin((Math.sin(Math.acos(thetaIncident)) * incomingRefractionIndex)/actualRefractionIndex);
+		
+		double sup = (actualRefractionIndex*Math.cos(thetaIncident) - incomingRefractionIndex*Math.cos(thetaRefracted));
+		double down = (actualRefractionIndex*Math.cos(thetaIncident) + incomingRefractionIndex*Math.cos(thetaRefracted));
+		double fpl = Math.pow(sup/down, 2);
+		
+		sup = (incomingRefractionIndex*Math.cos(thetaRefracted) - actualRefractionIndex*Math.cos(thetaIncident));
+		down = (incomingRefractionIndex*Math.cos(thetaRefracted) + actualRefractionIndex*Math.cos(thetaIncident));
+		double fpr = Math.pow(sup/down, 2);
+		
 		return 0.5*(fpl+fpr);
 	}
 
