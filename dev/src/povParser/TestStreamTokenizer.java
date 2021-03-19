@@ -3,26 +3,26 @@ package povParser;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Stack;
 
 
 /*
 TODO:
-se mettre dans le répertoire dev pour:
-compilation: javac -d "./bin" src\povParser\TestStreamTokenizer.java
-éxécution: java -cp "./bin;" povParser.TestStreamTokenizer
 
-1) énumération des figures possibles et autres entités (caméra, light):
-	-dès que le token correspond à une figure dans son contexte:
-		faire un switch sur l'énum et récupérer la bonne forme
-	-comme ça on ne prend pas en compte les figures non voulues	
+1) énumération des figures possibles et autres entités (caméra, light): |
+	-dès que le token correspond à une figure dans son contexte:        |  ?
+		faire un switch sur l'énum et récupérer la bonne forme          |  ?
+	-comme ça on ne prend pas en compte les figures non voulues	        |
 
-2) énumération sur les symboles syntaxiques différents ('(', '{', '<' ...)
-	-
+2) énumération sur les symboles syntaxiques différents ('(', '{', '<' ...)  |  ?
 
 3) mise en place du parser:
 	-parcours le fichier sous forme de BufferedReader (autre choix déprécié) avec
 	un streamTokenizer
-	-vérification de l'état actuelle du jeton
+	-vérification de l'état actuelle du jeton:
+	    -si le jeton est un mot et qu'il correspond à une figure que l'on peut traiter (constantes prédéfinies)
+	        -alors on appelle le thread parser correspondant à la bonne figure
+	            -il parse jusqu'a la fermeture de la bonne accolade fermante qui termine le bloc de la figure (grâce à une stack)
 
 4) Un thread qui parse le texte un autre qui assigne un token à une classe en particulier
  */
@@ -116,27 +116,31 @@ public class TestStreamTokenizer
                 Figure currentFigure = null;
                 if(streamTokenizer.ttype == StreamTokenizer.TT_WORD)
                 {
-                    System.out.println(streamTokenizer);
+
                     if(streamTokenizer.sval.equals("sphere"))
                     {
-                        System.err.println("sphere");
+                        System.out.println(streamTokenizer);
+                        Stack<Character> bracketStack = new Stack<>();
+                        boolean endingBracket = false;
+                        String sphereContent = "";
+                        currentToken = streamTokenizer.nextToken();
+                        if((char) currentToken == '{')
+                        {
+                            System.out.println((char) currentToken);
+                            /*TODO
+                                appeler le thread SphereParser afin de parse la figure courante (sphere) sur place si possible
+                                (afin d'éviter de le relire une deuxième fois pour créer une chaîne)
+                             */
+
+                            /*while(!endingBracket)
+                            {
+                                sphereContent.concat()
+                            }*/
+                        }
+
                         currentFigure = Figure.SPHERE;                    
                     }
-                    else if(streamTokenizer.sval.equals("triangle"))                
-                    {
-                        System.err.println("triangle");
-                        currentFigure = Figure.TRIANGLE;
-                    }
 
-                    switch(currentFigure)
-                    {
-                        case SPHERE:
-                            System.out.println("sphere enum encountered");
-                            break;
-                        case TRIANGLE:
-                            System.out.println("triangle enum encountered");
-                            break;
-                    }
                 }
                 
                 currentToken = streamTokenizer.nextToken();
