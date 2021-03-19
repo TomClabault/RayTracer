@@ -199,6 +199,7 @@ public class RayTracer
 
 
 			Point interPointShift = Point.add(rayInterPoint, Point.scalarMul(0.0001d, Vector.v2p(Vector.normalize(reflectionVector))));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
+			Point inInterPointShift = Point.add(rayInterPoint, Point.scalarMul(0.0001d, Vector.v2p(Vector.normalize(ray.getDirection()))));//idem mais vers l'interieur de la sphère
 
 			Vector shadowRayDir = new Vector(interPointShift, renderScene.getLight().getCenter());//On calcule la direction du rayon secondaire qui va droit dans la source de lumière
 			Ray shadowRay = new Ray(interPointShift, shadowRayDir);//Création du rayon secondaire avec pour origine le premier point d'intersection décalé et avec comme direction le centre de la lampe
@@ -240,14 +241,17 @@ public class RayTracer
 					double fr = Fresnel(ray, normalAtIntersection, incomingRefractionIndex, rayIntObjMaterial.getIndiceRef());
 					double ft = 1 - fr;
 					Vector refractedRayDir = computeRefractedVector(ray, normalAtIntersection, incomingRefractionIndex, rayIntObjMaterial.getIndiceRef());
-					Ray refractedRay = new Ray(rayInterPoint, refractedRayDir);
+					Ray refractedRay = new Ray(inInterPointShift, refractedRayDir);
 					Ray reflectionRay = new Ray(interPointShift, computeReflectionVector(normalAtIntersection, ray.getDirection()));
-					Color refractedColor = computePixel(x, y, renderScene, refractedRay, rayIntObjMaterial.getIndiceRef(), depth -1);
+					Color refractedColor = Color.rgb(0,0,0);
+					if (! refractedRayDir.equals(new Vector(0,0,0)) ) {
+						refractedColor = computePixel(x, y, renderScene, refractedRay, rayIntObjMaterial.getIndiceRef(), depth -1);
+					}
 					Color reflectedColor = computePixel(x, y, renderScene, reflectionRay, rayIntObjMaterial.getIndiceRef(), depth -1);
 					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(refractedColor, ft));
 					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(reflectedColor, fr));
-					System.out.println(fr);
-					System.out.println(ft+"\n");
+					//System.out.println(fr);
+					//System.out.println(ft+"\n");
 				}
 
 			}
@@ -374,6 +378,9 @@ public class RayTracer
 		double thetaRefracted = Math.asin((Math.sin(thetaIncident) * incomingRefractionIndex)/actualRefractionIndex);
 		Vector A = Vector.scalarMul(Vector.scalarMul(Vector.add(incomingRay.getDirection(), Vector.scalarMul(normalAtIntersection, Math.cos(thetaIncident))), 1/Math.sin(thetaIncident)), Math.sin(thetaRefracted));
 		Vector B = Vector.scalarMul(normalAtIntersection, -Math.cos(thetaRefracted));
-		return Vector.add(A,B);
+		if (Math.sin(thetaRefracted)>1) {
+			return new Vector(0,0,0);
+		}
+		return Vector.normalize(Vector.add(A,B));
 	}
 }
