@@ -27,8 +27,10 @@ public class MainApp extends Application {
     }
     public void start(Stage stage) {
 
-        ChoiceWindow choiceWindow = new ChoiceWindow();
-        choiceWindow.choiceWindowMain();
+        //ChoiceWindow choiceWindow = new ChoiceWindow();
+        //choiceWindow.choiceWindowMain();
+        SetSizeWindow setSizeWindow = new SetSizeWindow();
+        setSizeWindow.execute();
 
         StackPane stackPane = new StackPane();
 
