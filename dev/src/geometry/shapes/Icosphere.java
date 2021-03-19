@@ -20,7 +20,7 @@ public class Icosphere extends ShapeTriangle
 {
     /*
     !!!!!!!! Merci de lire cette notice avant de lire les codes !!!!!!!!!!!!!!
-    !!! DISCLAIMER !!!
+    !!! DISCLAIMER / ATTENTION / AVERTISSEMENT !!!
     Les codes ci-dessous ne sont pas totalement le fruit de mon travail, une petite partie est issue de ces sites:
     La liste des points vient de: http://blog.coredumping.com/subdivision-of-icosahedrons/
     La construction initiale d'icoshpere vient de: http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
@@ -97,6 +97,31 @@ public class Icosphere extends ShapeTriangle
         Triangle tr18 = new Triangle(H,I,G, material);
         Triangle tr19 = new Triangle(I,D,G, material);
         Triangle tr20 = new Triangle(G,D,C, material);
+
+        /*on ajoute dans le array des triangles*/
+        super.listeTriangle = new ArrayList<Triangle>();
+        super.listeTriangle.add(tr1);
+        super.listeTriangle.add(tr2);
+        super.listeTriangle.add(tr3);
+        super.listeTriangle.add(tr4);
+        super.listeTriangle.add(tr5);
+        super.listeTriangle.add(tr6);
+        super.listeTriangle.add(tr7);
+        super.listeTriangle.add(tr8);
+        super.listeTriangle.add(tr9);
+        super.listeTriangle.add(tr10);
+        super.listeTriangle.add(tr11);
+        super.listeTriangle.add(tr12);
+        super.listeTriangle.add(tr13);
+        super.listeTriangle.add(tr14);
+        super.listeTriangle.add(tr15);
+        super.listeTriangle.add(tr16);
+        super.listeTriangle.add(tr17);
+        super.listeTriangle.add(tr18);
+        super.listeTriangle.add(tr19);
+        super.listeTriangle.add(tr20);
+
+
 
 
 
