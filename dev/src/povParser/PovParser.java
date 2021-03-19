@@ -6,10 +6,7 @@ import java.util.Scanner;
 public class PovParser
 {
     private String pathName;
-    private final char NEW_LINE = '\n';
-    private final String SINGLE_LINE_COMMENT = "//";
-    private final String START_MULTILINE_COMMENT = "/*";
-    private final String END_MULTILINE_COMMENT = "*/";
+    private StreamTokenizer streamTokenizer;    
 
     public PovParser(String pathName)
     {

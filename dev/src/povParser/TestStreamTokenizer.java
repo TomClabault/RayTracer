@@ -19,19 +19,20 @@ compilation: javac -d "./bin" src\povParser\TestStreamTokenizer.java
 2) énumération sur les symboles syntaxiques différents ('(', '{', '<' ...)
 	-
 
-
 3) mise en place du parser:
 	-parcours le fichier sous forme de BufferedReader (autre choix déprécié) avec
 	un streamTokenizer
-	-vérification de l'état actuelle du je
+	-vérification de l'état actuelle du jeton
 
 4) Un thread qui parse le texte un autre qui assigne un token à une classe en particulier
  */
 
 public class TestStreamTokenizer
-{
+{    
     ArrayList<String> figureList;
+
     private String pathToPovFile;
+
     private final char NEW_LINE = '\n';
     private final String SINGLE_LINE_COMMENT = "//";
     private final String START_MULTILINE_COMMENT = "/*";
@@ -108,27 +109,33 @@ public class TestStreamTokenizer
             streamTokenizer.commentChar(testFile.CROISILLON);
 
             int currentToken = streamTokenizer.nextToken();
+            
+
             while(currentToken != StreamTokenizer.TT_EOF)
             {           
-                Figure formeRencontre = null; 
+                Figure currentFigure = null;
                 if(streamTokenizer.ttype == StreamTokenizer.TT_WORD)
                 {
+                    System.out.println(streamTokenizer);
                     if(streamTokenizer.sval.equals("sphere"))
                     {
                         System.err.println("sphere");
-                        formeRencontre = Figure.SPHERE;
-                        switch(formeRencontre)
-                        {
-                            case SPHERE:
-                                System.out.println("parser encountered a sphere ");
-                                break;
-                            case RECTANGLE:
-                                System.out.println("parser encountered a rectangle");
-                                break;
-                            default:
-                                System.out.println("default");
-                                break; 
-                        }
+                        currentFigure = Figure.SPHERE;                    
+                    }
+                    else if(streamTokenizer.sval.equals("triangle"))                
+                    {
+                        System.err.println("triangle");
+                        currentFigure = Figure.TRIANGLE;
+                    }
+
+                    switch(currentFigure)
+                    {
+                        case SPHERE:
+                            System.out.println("sphere enum encountered");
+                            break;
+                        case TRIANGLE:
+                            System.out.println("triangle enum encountered");
+                            break;
                     }
                 }
                 

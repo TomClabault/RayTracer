@@ -4,5 +4,5 @@ public enum Figure
 {
     SPHERE,
     RECTANGLE,
-    TRIANGLE
+    TRIANGLE,    
 }
