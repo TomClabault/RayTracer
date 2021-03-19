@@ -30,7 +30,7 @@ public class SetSizeWindow {
         gridPane.add(validateButton, 0, 2);
         gridPane.add(cancelButton, 1, 2);
 
-        stage.
+        //stage.
 
         validateButton.setOnAction(new EventHandler<ActionEvent>() {
 
