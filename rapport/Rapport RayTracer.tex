@@ -142,15 +142,13 @@ Comme vu précédemment, la première image (fig. \ref{basicRender}) produite pa
 	\item{La composante spéculaire. Elle permet d'ajouter un effet "brillant" aux objets en fonction de la direction qu'empruntent les rayons réfléchis par la surface de l'objet par rapport à la caméra.}
 \end{itemize}
 
+La composante ambiante permet de donner une illumination de base à l'objet. Elle est très simple à calculer:\\
 
-
---> enchaîner sur l'ombrage de Phong:
-	- Dire que l'image est pas ouf, en effet, pas de lumière tout ça tout ça
-	- Dire en quoi consiste l'ombrage de phong
-	- PRésenter comment on calcule chaque composante
-	- Une image séparée pour chaque composante + l'image résultatn de toutes les composantes en même temps
-
-A la fin de ce processus, nous obtenons notre première image 
+\begin{center}
+	$Ambiante = I_L*C_A$
+\end{center}
+Avec $I_L\ \in\ [0;1]$ l'intensité de la source lumineuse,\\
+$C_A\ \in\ [0; 1]$ le coefficient ambiant de l'objet.
 
 \subsubsection{Les réflexions}
 \subsubsection{Les réfractions}
