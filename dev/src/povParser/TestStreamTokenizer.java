@@ -1,15 +1,9 @@
 package povParser;
 
-import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-enum Figure
-{
-    SPHERE,
-    RECTANGLE
-}
 
 /*
 TODO:
