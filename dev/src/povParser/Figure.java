@@ -2,7 +2,21 @@ package povParser;
 
 public enum Figure 
 {
-    SPHERE,
-    RECTANGLE,
-    TRIANGLE,    
+    //OBJECT_NAME in our code("object name in pov syntax")
+    SPHERE("sphere"),
+    RECTANGLE("box"),
+    TRIANGLE("triangle");
+
+    private String figure;
+
+    private Figure(String figure)
+    {
+        this.figure = figure;
+    }
+
+    public String getFigureName()
+    {
+        return this.figure;
+    }
+
 }
