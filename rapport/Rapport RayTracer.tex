@@ -88,7 +88,7 @@ Prenons l'exemple du rendu d'une image dans une résolution 800x600 pixels. Si l
 
 Il est important de remarquer que notre caméra se trouve initialement aux coordonnées $O = (0, 0, 0)$ et que sa direction de regard est $\overrightarrow{d_{cam}} = (0, 0, -1)$. Par convention, la grille de pixel virtuelle (le plan de la caméra) à travers laquelle nous faisons passer nos rayons se trouve à 1 unité de distance de la caméra, dans sa direction de regard. Ainsi, la coordonnée z des pixels sera toujours -1.\\
 \begin{figure}[h!]
-	\adjustbox{center}{\includegraphics[width=1.4\textwidth]{img/rt/final/repCam2Rayonsv2.png}}
+	\adjustbox{center}{\includegraphics[width=1.4\textwidth]{img/rt/repCam2Rayonsv2.png}}
 
 	\caption{Représentation de la caméra, de son plan, de sa direction ainsi que d'une sphère représentant l'environnement. Deux rayons sont également tracés.}
 	\label{repreCamRayon}
@@ -114,7 +114,7 @@ $P(x, y, z), x \in [0; 799], y \in [0; 599], z = -1$ :
 \end{enumerate}
 
 \begin{figure}[h!]
-	\includegraphics{img/rt/final/fovCamera.png}
+	\includegraphics{img/rt/fovCamera.png}
 
 	\label{fovCam}
 	\caption{En augmentant le FOV (champ de vision) de la caméra, l'angle $\alpha$ augmente. La hauteur du plan de la caméra, $BC$, est étirée. La caméra verra donc une plus grande partie de la scène.\break Source: scratchapixel.com}
@@ -124,7 +124,7 @@ $P(x, y, z), x \in [0; 799], y \in [0; 599], z = -1$ :
 A l'issue de ces implémentations, nous obtenons alors l'image suivante (la scène est composée d'une unique sphère rouge et d'un fond gris foncé):
 
 \begin{figure}[h!]
-	\adjustbox{center}{\includegraphics[width=\textwidth]{img/rt/final/basicRender.png}}
+	\adjustbox{center}{\includegraphics[width=\textwidth]{img/rt/basicRender.png}}
 
 	\label{basicRender}
 	\caption{Rendu le plus simple. Une sphère sans aucun effet d'ombrage}
@@ -148,7 +148,7 @@ La composante ambiante permet de donner une illumination de base à l'objet. Ell
 	$Ambiante = I_L*C_A$
 \end{center}
 Avec $I_L\ \in\ [0;1]$ l'intensité de la source lumineuse,\\
-$C_A\ \in\ [0; 1]$ le coefficient ambiant de l'objet.
+$C_A\ \in\ [0; 1]$ le coefficient de luminosité ambiante de l'objet.
 
 \subsubsection{Les réflexions}
 \subsubsection{Les réfractions}
