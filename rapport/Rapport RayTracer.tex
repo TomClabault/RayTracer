@@ -116,12 +116,16 @@ $P(x, y, z), x \in [0; 799], y \in [0; 599], z = -1$ :
 	\includegraphics{img/rt/final/fovCamera.png}
 
 	\label{fovCam}
-	\caption{En augmentant le FOV (champ de vision) de la caméra, l'angle $\alpha$ augmente. La hauteur du plan de la caméra, $BC$, est étirée. La caméra voit une plus grande partie de la scène.\break Source: scratchapixel.com}
+	\caption{En augmentant le FOV (champ de vision) de la caméra, l'angle $\alpha$ augmente. La hauteur du plan de la caméra, $BC$, est étirée. La caméra verra donc une plus grande partie de la scène.\break Source: scratchapixel.com}
 \end{figure}
 \FloatBarrier
 
-Il faut cependant convertir les coordonnées des pixels en les coordonnées du monde, présenter un algo de la méthode et refaire l'algo 1 pour dire comment il a évolué (juste rajouter la ligne qui permet de convertir les co des pixels). 
-Maintenant qu'on a la conversion des pixels et le ray tracing basique de chaque pixel, présenter la méthode lancerRayon la plus simple, juste pour expliquer comment on obtient les couleurs et montrer que l'image obtenue est pas ouffissime, toute plate
+A l'issue de ces implémentations, nous obtenons alors l'image suivante (la scène est composée d'une sphère et d'un plan représentant le sol):
+
+\begin{figure}[h!]
+	\adjustbox{center}{\includegraphics[width=\textwidth]{img/rt/final/basicRender.png}}
+\end{figure}
+\FloatBarrier
 
 --> enchaîner sur l'ombrage de Phong:
 	- Dire que l'image est pas ouf, en effet, pas de lumière tout ça tout ça
