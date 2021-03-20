@@ -2,7 +2,6 @@ package rayTracer;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReferenceArray;
 
 import geometry.Shape;
 import geometry.materials.Material;
@@ -15,7 +14,7 @@ import maths.Vector;
 import multithreading.ThreadsTaskList;
 import multithreading.TileTask;
 import multithreading.TileThread;
-import scene.MyScene;
+import scene.RayTracingScene;
 
 /*
  * Lumière dans la sphère: traverse
@@ -48,11 +47,12 @@ public class RayTracer
 	 *
 	 * @param objectList Liste des objets de la scène. Obtenable avec MyScene.getSceneObjects()
 	 * @param ray Rayon duquel chercher les points d'intersection avec les objets de la scène
-	 * @param outClosestInterPoint
+	 * @param outClosestInterPoint Ce paramètre reçoit les coordonnées du point d'intersection le plus proche de la caméra trouvé. Il est inchangé si aucun point d'intersection n'est trouvé
+	 * @param outNormalAtInter 	   Ce paramètre reçoit la normale au point d'intersection trouvé. Inchangé si aucun point d'intersection n'a été trouvé. Si ce paramètre est null, la normale au point d'intersection ne sera pas automatiquement calculée
 	 *
 	 * @return Retourne l'objet avec lequel le rayon a fait son intersection. 'outClosestInterPoint' est un point de l'objet retourné
 	 */
-	public Shape computeClosestInterPoint(ArrayList<Shape> objectList, Ray ray, Point outClosestInterPoint)
+	public Shape computeClosestInterPoint(ArrayList<Shape> objectList, Ray ray, Point outClosestInterPoint, Vector outNormalAtInter)
 	{
 		Shape closestObjectIntersected = null;
 		Double distanceMin = null;
@@ -60,16 +60,20 @@ public class RayTracer
 		for(Shape object : objectList)
 		{
 			double distRayOriInter = -1;
-			Point intersection = object.intersect(ray);
+
+			Vector newNormalAtInter = new Vector(0, 0, 0);//Ce vecteur va temporairement stocker la normale au point d'intersection trouvé (s'il existe). Si le point d'intersection trouvé et plus proche que les autres, c'est alors cette normale que l'on gardera
+			Point intersection = object.intersect(ray, newNormalAtInter);
 			if(intersection != null)
 			{
 				distRayOriInter = Point.distance(ray.getOrigin(), intersection);
 
-				if(distanceMin == null || distRayOriInter < distanceMin)
+				if(distanceMin == null || distRayOriInter < distanceMin)//Si c'est le premier point d'intersection qu'on trouve ou si on a trouvé un point d'intersection plus proche que celui qu'on avait avant
 				{
 					distanceMin = distRayOriInter;
 
-					outClosestInterPoint.copyIn(intersection);
+					outClosestInterPoint.copyIn(intersection);//On copie le point d'intersection le plus proché trouvé dans outClosestInterPoint
+					if(outNormalAtInter != null)//Si le paramètre outNormalAtInter != null, i.e on souhaite récupérer la normale au point d'intersection le plus proche
+						outNormalAtInter.copyIn(newNormalAtInter);//On a trouvé un point plus proche donc on peut actualiser la normale avec la normale correpondant au point le plus proche
 					closestObjectIntersected = object;
 				}
 			}
@@ -140,7 +144,7 @@ public class RayTracer
 	 * @param endX Le pixel de fin horizontal de la zone de l'image qui doit être calculée. Entre startX + 1 et renderWidth - 1 inclus
 	 * @param endY Le pixel de fin vertical de la zone de l'image qui doit être calculée. Entre endY + 1 et renderHeight - 1 inclus
 	 */
-	public void computePartialImage(MyScene renderScene, int startX, int startY, int endX, int endY)
+	public void computePartialImage(RayTracingScene renderScene, int startX, int startY, int endX, int endY)
 	{
 		//RotationMatrix rotMatrix = new RotationMatrix(RotationMatrix.yAxis, -30);
 		//MatrixD transformMatrix = MatrixD.mulMatrix(ctwMatrix, rotMatrix);
@@ -170,7 +174,7 @@ public class RayTracer
 	 *
 	 * @return Une instance de Color.RGB(r, g, b)
 	 */
-	public Color computePixel(int x, int y, MyScene renderScene, Ray ray, int depth)
+	public Color computePixel(int x, int y, RayTracingScene renderScene, Ray ray, int depth)
 	{
 		if(depth == 0)
 			return renderScene.getBackgroundColor();
@@ -178,7 +182,8 @@ public class RayTracer
 		ArrayList<Shape> objectList = renderScene.getSceneObjects();
 
 		Point rayInterPoint = new Point(0, 0, 0);
-		Shape rayInterObject = computeClosestInterPoint(objectList, ray, rayInterPoint);
+		Vector normalAtIntersection = new Vector(0, 0, 0);
+		Shape rayInterObject = computeClosestInterPoint(objectList, ray, rayInterPoint, normalAtIntersection);
 
 		if(rayInterObject != null)//Il y a un point d'intersection
 		{
@@ -188,11 +193,10 @@ public class RayTracer
 			double ambientLighting = computeAmbient(renderScene.getAmbientLightIntensity(), lightIntensity);
 
 			Color finalColor = Color.rgb(0, 0, 0);
-			finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting*rayIntObjMaterial.getAmbientCoeff()));
+			finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting));
 
 
 
-			Vector normalAtIntersection = rayInterObject.getNormal(rayInterPoint);
 			//Vector reflectionVector = getReflectionVector(normalAtIntersection, new Vector(rayInterPoint, renderScene.getLight().getCenter()));
 			Vector reflectionVector = getReflectionVector(normalAtIntersection, ray.getDirection());
 
@@ -206,7 +210,7 @@ public class RayTracer
 
 			//On cherche une intersection avec un objet qui se trouverait entre la lampe et l'origine du shadow ray
 			Point shadowInterPoint = new Point(0, 0, 0);
-			Shape shadowInterObject = computeClosestInterPoint(objectList, shadowRay, shadowInterPoint);
+			Shape shadowInterObject = computeClosestInterPoint(objectList, shadowRay, shadowInterPoint, null);
 
 			double interToShadowInterDist = 0;
 			if(shadowInterObject != null)
@@ -242,10 +246,10 @@ public class RayTracer
 					Color reflectionColor = computePixel(x, y, renderScene, new Ray(interPointShift, Vector.normalize(getReflectionVector(normalAtIntersection, ray.getDirection()))), depth - 1);
 
 					finalColor = ColorOperations.mulColor(reflectionColor, rayIntObjMaterial.getReflectiveCoeff());
-					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting*rayIntObjMaterial.getAmbientCoeff()));
+					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting));
 				}
 				else
-					finalColor = ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting*rayIntObjMaterial.getAmbientCoeff());//L'objet n'est pas réfléxif, on ne renvoie que la partie ambiante
+					finalColor = ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting);//L'objet n'est pas réfléxif, on ne renvoie que la partie ambiante
 			}
 
 			return finalColor;
@@ -254,7 +258,7 @@ public class RayTracer
 			return renderScene.getBackgroundColor();//Couleur du fond, noir si on a pas de fond
 	}
 
-	public boolean computeTask(MyScene renderScene, ThreadsTaskList taskList)
+	public boolean computeTask(RayTracingScene renderScene, ThreadsTaskList taskList)
 	{
 		Integer taskNumber = 0;
 		TileTask currentTileTask = null;
@@ -331,7 +335,7 @@ public class RayTracer
 		return this.renderedPixels;
 	}
 
-	public IntBuffer renderImage(MyScene renderScene, int nbCore)
+	public IntBuffer renderImage(RayTracingScene renderScene, int nbCore)
 	{
 		ThreadsTaskList threadTaskList = new ThreadsTaskList();
 		threadTaskList.initTaskList(nbCore, this.renderWidth, this.renderHeight);

@@ -35,8 +35,6 @@ public class SetSizeWindow {
         root.add(validateButton, 0, 2);
         root.add(cancelButton, 1, 2);
 
-
-
         validateButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override

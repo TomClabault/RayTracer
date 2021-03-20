@@ -6,9 +6,10 @@
     <property name="modulepath" value="javafx.controls"/>
     <property name="projet.lib.dir" value="lib"/>
     <property name="doc.dir" value="javadoc"/>
+	<property name="javafxlib.dir" value="lib/javafx-sdk-15.0.1/lib"/>
 
     <path id="projet.classpath">
-        <fileset dir="${projet.lib.dir}">
+        <fileset dir="${javafxlib.dir}">
             <include name="*.jar"/>
         </fileset>
         <pathelement location="${build}" />

@@ -65,21 +65,28 @@ public class PlaneMaths implements ShapeMaths
 	 * Calcule de façon analytique l'intersection d'un rayon et d'une sphère
 	 * 
 	 * @param ray Le rayon avec lequel l'intersection avec la sphère doit être calculée
+	 * @param outNormalAtInter 	Ce vecteur contiendra la normale du plan si un point d'intersection a été trouvé. Ce paramètre est inchangé sinon. 
+	 * 							Si ce paramètre est null, la normale au point d'intersection ne sera pas stockée dans outNormalAtInter, même si un point d'intersection a été trouvé
 	 * 
 	 * @return Retourne le point d'intersection avec la sphère s'il existe (s'il y a deux points d'intersection, ne retourne que le point le plus près de l'origine du rayon). Retourne null sinon.
 	 */
 	@Override
-	public Point intersect(Ray ray) 
+	public Point intersect(Ray ray, Vector outNormalAtInter) 
 	{
-		double NL = Vector.dotProduct(normal, ray.getDirection());
-		if(NL > 0.0000001d && NL < 0.0000001d)//Le rayon et le plan sont parallèles
+		double NDir = Vector.dotProduct(normal, ray.getDirection());
+		if(NDir > 0.0000001d && NDir < 0.0000001d)//Le rayon et le plan sont parallèles
 			return null;
 			
 		
 	    Vector p0l0 = Point.p2v(Point.sub(this.point, ray.getOrigin())); 
-	    double coeffVectorPoint = Vector.dotProduct(p0l0, this.normal) / NL;
+	    double coeffVectorPoint = Vector.dotProduct(p0l0, this.normal) / NDir;
 	    if(coeffVectorPoint > 0)
+	    {
+	    	if(outNormalAtInter != null)
+	    		outNormalAtInter.copyIn(this.getNormal(null));
+	    	
 			return ray.determinePoint(coeffVectorPoint);
+	    }
 	    else
 			return null;
 	}
