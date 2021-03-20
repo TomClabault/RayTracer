@@ -121,7 +121,7 @@ $P(x, y, z), x \in [0; 799], y \in [0; 599], z = -1$ :
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/fovCamera.png}}
 
-	\caption{En augmentant le FOV (champ de vision) de la caméra, l'angle $\alpha$ augmente. La hauteur du plan de la caméra, $BC$, est étirée. La caméra verra donc une plus grande partie de la scène.\break Source: scratchapixel.com}
+	\caption{En augmentant le FOV (champ de vision) de la caméra, l'angle $\alpha$ augmente. La hauteur du plan de la caméra, $BC$, est étirée. La caméra verra donc une plus grande partie de la scène. \textbf{Source: scratchapixel.com}}
 	\label{fovCam}
 \end{figure}
 \FloatBarrier
@@ -149,13 +149,13 @@ Comme vu précédemment, la première image (fig. \ref{basicRender}) produite pa
 \end{enumerate}
 
 \hfill\\
-\indent La composante ambiante permet de donner une illumination de base à l'objet. Elle est très simple à calculer:\\
+\indent La composante ambiante permet de donner une illumination de base à l'objet. En temps normal, même si un objet n'est pas directement éclairé par la source de lumière, il est tout de même visible dans la plupart des cas. C'est parce que la lumière de la source lumineuse rebondit dans la scène et les rayons arrivent indirectement éclairer l'objet. C'est ce que l'on appelle l'illumination globale. L'illumination globale est capable de génèrer des images fortes de réalisme mais est très coûteuse en temps de calcul. La composante ambiante de l'ombrage de Phong approxime très simplement cet effet en donnat une "luminosité mininale" à toute la scène. La composante ambiante est très simple à calculer:\\
 
 \begin{center}
-	$Ambiante = I_A = C_A*I_L$
+	$Ambiante = I_A = S_A*I_L$
 \end{center}
 Avec $I_L\ \in\ [0;1]$ l'intensité de la source lumineuse,\\
-$C_A\ \in\ [0; 1]$ le coefficient de luminosité ambiante de l'objet.
+$S_A\ \in\ [0; 1]$ l'intensité de la lumière ambiante dans la scène. Ce paramètre affecte donc tous les objets de la scène.
 
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/differentAmbient.png}}
@@ -225,7 +225,7 @@ $C_{P(x, y)} = C_O * IntensitePhong = C_O*(I_A + I_D + I_S)$
 $C_O$ étant la couleur de l'objet,\\
 $I_A, I_D, I_S$ sont les intensités ambiantes, diffuses et spéculaires présentées précédemment.
 
-Pour la même sphère et la même source de lumière, nous obtenos alors:
+Pour la même sphère et la même source de lumière, nous obtenons alors:
 
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=0.75\textwidth]{img/rt/phongAddition.png}}
@@ -237,7 +237,17 @@ Pour la même sphère et la même source de lumière, nous obtenos alors:
 
 \subsubsection{Les ombres}
 
-Afin de rajouter un degré de réalisme au rendu, nous nous proposons de rajouter des ombres. Le principe est simple: pour chaque rayon tiré depuis la caméra, on se place au point d'intersection trouvé par le rayon avec un objet de l'environnement. Depuis ce point, on tire un autre rayon directement en direction de la source de lumière. Si ce nouveau rayon vient à intersecter quelque chose sur son chemin à la lumière, cela veut dire que nous sommes dans l'ombre. Quelque chose bloque l'accès direct à la lumière. La couleur du pixel sera alors seulement la partie ambiante de l'objet premièrement intersecté. Si ce deuxième rayon n'intersecte rien, nous ne sommes pas dans l'ombre et nous pouvons calculer l'intensité lumineuse en utilisant l'ombrage de Phong vu en partie \ref{ombragePhong}. De part leur nature, on appelle ces rayons "secondaires" des "shadow ray".
+Afin de rajouter un degré de réalisme au rendu, nous nous proposons de rajouter des ombres. Le principe est simple: pour chaque rayon tiré depuis la caméra, on se place au point d'intersection trouvé par le rayon avec un objet de l'environnement. Depuis ce point, on tire un autre rayon directement en direction de la source de lumière. Si ce nouveau rayon vient à intersecter quelque chose sur son chemin à la lumière, cela veut dire que nous sommes dans l'ombre. Quelque chose bloque l'accès direct à la lumière. La couleur du pixel sera alors seulement la partie ambiante de l'objet premièrement intersecté. Si ce deuxième rayon n'intersecte rien, nous ne sommes pas dans l'ombre et nous pouvons calculer l'intensité lumineuse en utilisant l'ombrage de Phong vu en partie \ref{ombragePhong}. De part leur nature, on appelle ces rayons secondaires des "shadow ray".
+
+\begin{figure}[h!]
+	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/test.png}}
+
+	\caption{Les shadow-ray tirés depuis derrière la sphère ne peuvent pas accéder directement à la lumière. C'est une zone d'ombre.}
+	\label{ombresSchema}
+\end{figure}
+\FloatBarrier
+
+L'algorithme de calcul de la couleur de chacun des pixels peut donc être adapté pour tenir compte des ces nouvelles ombres:
 
 \begin{algorithm}[H]
 	\KwIn{$x, y$ les coordonnées du pixel dont on souhaite calculer la couleur}
