@@ -4,6 +4,8 @@ RayTracer:
 	- Optimiser l'intersection entre rayon et triangle avec l'algorithme de Möller–Trumbore
 	- Plus ambitieux: Implémenter des structures d'accélération pour que chaque rayon envoyé par le Ray Tracer ne calcule pas l'intersection avec tous les objets de la scène. Par exemple, si on envoie un rayon dans le haut de l'image, il va aller dans le ciel et il n'intersectera rien mais pourtant, il va quand même tester l'intersection avec tous les objets de la scène. On peut optimiser le nombre d'objets avec lequel on fait l'intersection en utilisant des structures d'accélération (voir BVH [Bounding Volume Hierarchy])
 	- ajouter differentes depth en fonction de si le materiaux est transparent/mat/metalique
+	- Ajouter le support pour plusieures sources de lumière
+	- Ajouter le support pour une lumière diffuse/ambiante/spéculaire non blanche i.e. le support pour des lumières colorées
 	
 RayTracer/Interface:
 	- Ajouter des points de caméra fixes dans le code pour qu'on puisse se "téléporter" dans la scène, à des points fixés. On utiliserait les numéros du pavé numérique
