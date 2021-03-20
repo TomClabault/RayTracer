@@ -146,7 +146,7 @@ Comme vu précédemment, la première image (fig. \ref{basicRender}) produite pa
 \indent La composante ambiante permet de donner une illumination de base à l'objet. Elle est très simple à calculer:\\
 
 \begin{center}
-	$Ambiante = I_A = I_L*C_A$
+	$Ambiante = I_A = C_A*I_L$
 \end{center}
 Avec $I_L\ \in\ [0;1]$ l'intensité de la source lumineuse,\\
 $C_A\ \in\ [0; 1]$ le coefficient de luminosité ambiante de l'objet.
@@ -208,7 +208,26 @@ Ainsi $I_S$, décroîtra rapidement vers 0 lorsque élevée à la puissance $\al
 \end{figure}
 \FloatBarrier
 
-Les trois composantes de l'ombrage de Phong étant maintenant calculées, nous pouvons calculer l'intensité lumineuse totale en un pixel donné de l'image
+Les trois composantes de l'ombrage de Phong étant maintenant calculées, nous pouvons calculer l'intensité lumineuse totale en un pixel $P_{(x, y)}$ donné de l'image:
+\begin{itemize}
+	\item{Si le rayon passant par ce pixel n'intersecte rien, la couleur renvoyée est celle du fond de la scène}
+	\item{Si le rayon intersecte un objet, la couleur renvoyée est:}
+\end{itemize}
+\begin{center}
+$C_{P(x, y)} = C_O * IntensitePhong = C_O*(I_A + I_D + I_S)$
+\end{center}
+$C_O$ étant la couleur de l'objet,\\
+$I_A, I_D, I_S$ sont les intensités ambiante, diffuse et spéculaire présentées précédemment.
+
+Pour la même sphère et la même source de lumière, nous obtenos alors:
+
+\begin{figure}[h!]
+	\adjustbox{center}{\includegraphics[width=\textwidth]{img/rt/phongAddition.png}}
+
+	\caption{Rendu final de la sphère en additionnant toutes les composantes de l'ombrage de Phong}
+	\label{finalPhong}
+\end{figure}
+\FloatBarrier
 
 \subsubsection{Les ombres}
 \subsubsection{Les réflexions}
