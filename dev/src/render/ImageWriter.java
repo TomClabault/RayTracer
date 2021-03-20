@@ -91,7 +91,7 @@ public class ImageWriter {
 
         Camera cameraRT = new Camera(new Point(0, 0, 0), 0, 0);
         cameraRT.setFOV(60);
-        Light l = new LightBulb(new Point(0, 2, 0), 1.25);
+        Light l = new LightBulb(new Point(0, 2, 0), 1);
 
         ArrayList<Shape> shapeList = new ArrayList<>();
         shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128))));
@@ -102,7 +102,7 @@ public class ImageWriter {
         shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
         shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
         
-        RayTracingScene sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.55);
+        RayTracingScene sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.4);
 
         return  sceneRT;
     }

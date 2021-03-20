@@ -11,7 +11,6 @@ public class Material
 {	
 	private Color color;
 	
-	private double ambientCoeff;
 	private double diffuseCoeff;
 	private double reflectiveCoeff;
 	private int shininess;
@@ -21,33 +20,19 @@ public class Material
 	 * Crée un matériau de A à Z
 	 * 
 	 * @param color Couleur du matériau
-	 * @param ambientCoeff Réel entre 0 et 1. Coefficient modulant la quantité de lumière ambiante que réfléchira le matériau
 	 * @param diffuseCoeff Réel entre 0 et 1. Coefficient modulant la diffusion de lumière du matériau
 	 * @param reflectiveCoeff Réel entre 0 et 1. Coefficient qui gère la réflectivité du matériau. Plus ce coefficient se rapproche de 1 et plus le matériau se rapprochera d'un matériau "mirroir"
 	 * @param specularCoeff Réel entre 0 et 1. Coefficient permettant de jouer sur l'intensité des tâches spéculaires du matériau. Plus ce coefficient se rapproche de 1 plus les tâches spéculaires seront marquées. A 0, le matériau n'est pas spéculaire
 	 * @param shininess Entier positif non nul. Permet de jouer sur la taille des tâches spéculaires du matériau. Plus ce nombre est grand plus les tâches seront petites
 	 */
-	public Material(Color color, double ambientCoeff, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess)
+	public Material(Color color, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess)
 	{
 		this.color = color;
 		
-		this.ambientCoeff = ambientCoeff;
 		this.diffuseCoeff = diffuseCoeff;
 		this.reflectiveCoeff = reflectiveCoeff;
 		this.specularCoeff = specularCoeff;
 		this.shininess = shininess;
-	}
-	
-	
-	/*
-	 * Permet d'obtenir la quantité de lumière ambiante que le matériau est capable de renvoyer.
-	 * 0 signifie que l'objet portant le matériau ne sera pas illuminé par la luminosité ambiante, 1 signifie qu'il "reçevra" 100% de la luminosité ambiante de la scène
-	 * 
-	 *  @return Retourne un réel entre 0 et 1 représentant le pourcentage de luminosité ambiante qui réfléchira l'objet 
-	 */
-	public double getAmbientCoeff()
-	{
-		return this.ambientCoeff;
 	}
 	
 	/*

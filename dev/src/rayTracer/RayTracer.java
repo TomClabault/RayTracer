@@ -193,7 +193,7 @@ public class RayTracer
 			double ambientLighting = computeAmbient(renderScene.getAmbientLightIntensity(), lightIntensity);
 
 			Color finalColor = Color.rgb(0, 0, 0);
-			finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting*rayIntObjMaterial.getAmbientCoeff()));
+			finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting));
 
 
 
@@ -246,10 +246,10 @@ public class RayTracer
 					Color reflectionColor = computePixel(x, y, renderScene, new Ray(interPointShift, Vector.normalize(getReflectionVector(normalAtIntersection, ray.getDirection()))), depth - 1);
 
 					finalColor = ColorOperations.mulColor(reflectionColor, rayIntObjMaterial.getReflectiveCoeff());
-					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting*rayIntObjMaterial.getAmbientCoeff()));
+					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting));
 				}
 				else
-					finalColor = ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting*rayIntObjMaterial.getAmbientCoeff());//L'objet n'est pas réfléxif, on ne renvoie que la partie ambiante
+					finalColor = ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting);//L'objet n'est pas réfléxif, on ne renvoie que la partie ambiante
 			}
 
 			return finalColor;
