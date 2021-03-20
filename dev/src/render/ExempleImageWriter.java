@@ -60,12 +60,12 @@ public class ExempleImageWriter extends Application
 		
 		RayTracer rayTracerInstance = new RayTracer(width, height);
 
-		Camera cameraRT = new Camera(new Point(4, 0, -3), new Point(0, 0, -6));
-		cameraRT.setFOV(30);
-		Light l = new LightBulb(new Point(0, 0, 0), 1);
+		Camera cameraRT = new Camera(new Point(0, 0, -2), new Point(0, 0, -6));
+		cameraRT.setFOV(60);
+		Light l = new LightBulb(new Point(-2, 2, -6), 1);
 
 		ArrayList<Shape> shapeList = new ArrayList<>();
-		//shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128))));
+		shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128))));
 		
 		shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, new Material(Color.rgb(255, 0, 0), 0.4, 1, 0, 1, 256)));
 		//shapeList.add(new SphereMaths(new Point(0, 0, -6), 1, new MetallicMaterial(Color.RED)));

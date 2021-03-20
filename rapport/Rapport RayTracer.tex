@@ -7,6 +7,7 @@
 \usepackage{amsmath}
 \usepackage{adjustbox}%Permet de centrer les figures dans la largeur de la page même si les figures sont plus larges que \textwidth
 \usepackage{graphicx}
+\usepackage{geometry}%Pour changer la largeur des marges du document notamment
 \usepackage{placeins}%pour utiliser FloatBarrier afin que les figure respectent bien leur position dans le code
 \usepackage{gensymb}%pour pouvoir écrire le signe °
 
@@ -15,6 +16,7 @@
 \author{}
 \title{Ray-Tracer}
 \date{}
+\geometry{hmargin=3cm, vmargin=2cm}
 
 \begin{document}
 \maketitle
@@ -26,7 +28,7 @@ Dans notre vie quotidienne, nous voyons ce qui nous entoure grâce aux photons �
 L'objectif d'un algorithme de ray-tracing est de calculer le rendu d'une scène 3D d'une façon similaire à celle qui nous permet de voir tous les jours. En effet, nous pouvons faire un parallèle entre notre algorithme de ray-tracing et la vie à laquelle nous sommes habitués grâce à 3 composants principaux:
 \begin{itemize}
 	\item{Une scène composée d'objets (sphères, plans, triangles, ...) que l'on peut comparer à notre environnement}
-	\item{Une (ou plusieures sources de lumière) jouant le même rôle que nos sources de lumière habituelles}
+	\item{Une (ou plusieures) sources de lumière jouant le même rôle que nos sources de lumière habituelles}
 	\item{Une caméra représentant nos yeux}
 \end{itemize}
 Une différence notable avec ce qui nous permet de voir dans la vie de tous les jours est que nos rayons (ou photons) partiront de la caméra (nos yeux) plutôt que de la source de lumière. Nous faisons en quelque sorte le chemin inverse. En lançant un rayon au travers de chaque pixel de l'image que nous voulons calculer, nous pourrons ensuite vérifier si le rayon a rencontré un objet de la scène. Dans ce cas, le pixel pourra alors être coloré de la couleur de l'objet, le rendant ainsi visible.
@@ -36,7 +38,7 @@ Une différence notable avec ce qui nous permet de voir dans la vie de tous les 
 	\KwIn{\textit{height} la hauteur de l'image à rendre,\\\textit{width} la largeur de l'image,\\\textit{scene} la scène 3D à rendre}
 	\KwOut{P un ensemble de pixels $p_{i, j}$ $\{p_{0, 0}, p_{0, 1}, \ldots, p_{height-1, width-1}\}$, $i$, $j \in \mathbb{N}$, $0 \leqslant i \leqslant height-1$, $0 \leqslant j \leqslant width-1$\\\hfill\\}
 
-	$O \gets Origine\ de\ la\ caméra$\\
+	$O \gets Origine\ de\ la\ camera$\\
 	\For {$y \gets 0$ \textbf{to} $height$} 
 	{
 		\For {$x \gets 0$ \textbf{to} $width$} 
@@ -52,7 +54,10 @@ Une différence notable avec ce qui nous permet de voir dans la vie de tous les 
 	\label{lancerRayons}
 \end {algorithm}
 
-Comme le montre l'algorithme \ref{lancerRayons}, parcourir chaque pixel ne suffit pas. Si l'on souhaite lancer un rayon depuis la caméra à travers le pixel que l'on chercher à colorer, il nous faut les coordoonnées de ce pixel exprimées dans l'espace 3D de la scène.\\
+\subsubsection{Conversion camera-scène}
+\label{conversionCamera}
+
+Comme le montre l'algorithme \ref{lancerRayons}, parcourir chaque pixel ne suffit pas. Si l'on souhaite lancer un rayon depuis la caméra à travers le pixel que l'on cherche à colorer, il nous faut les coordoonnées de ce pixel exprimées dans l'espace 3D de la scène.\\
 Prenons l'exemple du rendu d'une image dans une résolution 800x600 pixels. Si l'on veut calculer la couleur du pixel de coordonnées $P = (430, 256)$ sur l'image, construire un rayon d'origine $O$ la caméra et de direction le vecteur $\overrightarrow{d} = \overrightarrow{OP}$, n'est pas une solution viable. En effet, le point $P$ n'est pas exprimé dans les coordonnées de notre scène où se trouvent nos objets. Il est exprimé dans les coordonnées de l'image. Nous avons donc besoin de faire correspondre les coordoonnées d'un pixel de l'image à ses coordoonnées dans le monde:
 
 \begin {algorithm}[H]
@@ -69,15 +74,15 @@ Prenons l'exemple du rendu d'une image dans une résolution 800x600 pixels. Si l
 	$x_{world} \gets x$\\
 	$y_{world} \gets y$\\
 	\hfill\\
-	$x_{world} \gets (x_{world} +0.5) / width$ 		\noindent\hspace{3cm}{\textbf{//Etape 1}}\\
-	$x_{world} \gets x_{world} * 2 -1$ 			\noindent\hspace{4.18cm}{\textbf{//Etape 2}}\\
-	$x_{world} \gets x_{world} * demiPlaneHeight$ 	\noindent\hspace{1.95cm}{\textbf{//Etape 3}}\\
-	$x_{world} \gets x_{world} * aspectRatio$		\noindent\hspace{3.05cm}{\textbf{//Etape 4}}\\
+	$x_{world} \gets (x_{world} +0.5) / width$		{\tcp*[f]{Etape 1}}\\
+	$x_{world} \gets x_{world} * 2 -1$ 			{\tcp*[f]{Etape 2}}\\
+	$x_{world} \gets x_{world} * demiPlaneHeight$ 	{\tcp*[f]{Etape 3}}\\
+	$x_{world} \gets x_{world} * aspectRatio$		{\tcp*[f]{Etape 4}}\\
 
 	\hfill\\
-	$y_{world} \gets (y_{world} +0.5) / height$ 		\noindent\hspace{3cm}{\textbf{//Etape 1}}\\
-	$y_{world} \gets 1 - y_{world} * 2$ 			\noindent\hspace{4.3cm}{\textbf{//Etape 2}}\\
-	$y_{world} \gets y_{world} * demiPlaneHeight$ 	\noindent\hspace{2.06cm}{\textbf{//Etape 3}}\\
+	$y_{world} \gets (y_{world} +0.5) / height$ 		{\tcp*[f]{Etape 1}}\\
+	$y_{world} \gets 1 - y_{world} * 2$ 			{\tcp*[f]{Etape 2}}\\
+	$y_{world} \gets y_{world} * demiPlaneHeight$ 	{\tcp*[f]{Etape 3}}\\
 
 	\hfill\\
 	\Return{$(x_{world}, y_{world}, -1)$}
@@ -88,7 +93,7 @@ Prenons l'exemple du rendu d'une image dans une résolution 800x600 pixels. Si l
 
 Il est important de remarquer que notre caméra se trouve initialement aux coordonnées $O = (0, 0, 0)$ et que sa direction de regard est $\overrightarrow{d_{cam}} = (0, 0, -1)$. Par convention, la grille de pixel virtuelle (le plan de la caméra) à travers laquelle nous faisons passer nos rayons se trouve à 1 unité de distance de la caméra, dans sa direction de regard. Ainsi, la coordonnée z des pixels sera toujours -1.\\
 \begin{figure}[h!]
-	\adjustbox{center}{\includegraphics[width=1.4\textwidth]{img/rt/repCam2Rayonsv2.png}}
+	\adjustbox{center}{\includegraphics[width=1.1\textwidth]{img/rt/repCam2Rayonsv2.png}}
 
 	\caption{Représentation de la caméra, de son plan, de sa direction ainsi que d'une sphère représentant l'environnement. Deux rayons sont également tracés.}
 	\label{repreCamRayon}
@@ -114,7 +119,7 @@ $P(x, y, z), x \in [0; 799], y \in [0; 599], z = -1$ :
 \end{enumerate}
 
 \begin{figure}[h!]
-	\includegraphics{img/rt/fovCamera.png}
+	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/fovCamera.png}}
 
 	\caption{En augmentant le FOV (champ de vision) de la caméra, l'angle $\alpha$ augmente. La hauteur du plan de la caméra, $BC$, est étirée. La caméra verra donc une plus grande partie de la scène.\break Source: scratchapixel.com}
 	\label{fovCam}
@@ -124,7 +129,7 @@ $P(x, y, z), x \in [0; 799], y \in [0; 599], z = -1$ :
 A l'issue de ces implémentations, nous obtenons alors l'image suivante (la scène est composée d'une unique sphère rouge et d'un fond gris foncé):
 
 \begin{figure}[h!]
-	\adjustbox{center}{\includegraphics[width=\textwidth]{img/rt/basicRender.png}}
+	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/basicRender.png}}
 
 	\caption{Rendu le plus simple. Une sphère sans aucun effet d'ombrage}
 	\label{basicRender}
@@ -134,8 +139,9 @@ A l'issue de ces implémentations, nous obtenons alors l'image suivante (la scè
 Chaque rayon qui a été lancé et qui a intersecté la sphère a alors donné un pixel rouge. Les autres rayons, ceux qui n'ont pas intersecté la sphère, ont simplement renvoyé la couleur du fond de la scène. 
 
 \subsubsection{L'ombrage de Phong}
+\label{ombragePhong}
 
-Comme vu précédemment, la première image (fig. \ref{basicRender}) produite par notre algorithme n'est pas tout à fait satisfaisante. Il n'y a en effet aucun effet de profondeur ou de lumière. Difficile de savoir qu'on a une sphère devant nous et pas un simple disque plat. La prochaine étape est donc celle là de l'ombrage de Phong. Un tel ombrage se découpe en trois composantes/parties:
+Comme vu précédemment, la première image (fig. \ref{basicRender}) produite par notre algorithme n'est pas tout à fait satisfaisante. Il n'y a en effet aucun effet de profondeur ou de lumière. Difficile de savoir qu'on a une sphère devant nous et non un simple disque plat. La prochaine étape est donc celle de l'ombrage de Phong. Un tel ombrage se découpe en trois composantes/parties:
 \begin{enumerate}
 	\item{La composante ambiante. Elle est responsable de la quantité minimale de lumière que va reçevoir un objet}
 	\item{La composante diffuse. Cette composante est celle qui permet de donner à un objet son relief. Plus les rayons de la lumière arrivent perpendiculairement à la surface de l'objet, plus l'intensité lumineuse sur la surface de l'objet sera importante}
@@ -152,14 +158,14 @@ Avec $I_L\ \in\ [0;1]$ l'intensité de la source lumineuse,\\
 $C_A\ \in\ [0; 1]$ le coefficient de luminosité ambiante de l'objet.
 
 \begin{figure}[h!]
-	\adjustbox{center}{\includegraphics[width=0.75\textwidth]{img/rt/differentAmbient.png}}
+	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/differentAmbient.png}}
 
 	\caption{Le rendu de la même sphère pour différentes intensités lumineuse $I_L$. $C_A = 1$ utilisé pour tous les rendus.}
 	\label{differentAmbient}
 \end{figure}
 \FloatBarrier
 
-La composante diffuse de l'ombrage de Phong permet d'ajouter un effet que l'on peut voir comme un dégradé d'intensité lumineuse. L'intensité est à son maximum lorsque les rayons de la source lumineuse frappent perpendiculaiurement la surface de l'objet. Au contraire, lorsque les rayons sont parallèles à la surface de l'objet, l'intensité lumineuse de la diffusion est très faible. Elle est calculée comme suit:\\
+La composante diffuse de l'ombrage de Phong permet d'ajouter un effet que l'on peut voir comme un dégradé d'intensité lumineuse. L'intensité est à son maximum lorsque les rayons de la source lumineuse frappent perpendiculairement la surface de l'objet. Au contraire, lorsque les rayons sont parallèles à la surface de l'objet, l'intensité lumineuse de la diffusion est très faible. Elle est calculée comme suit:\\
 
 \begin{center}
 	$Diffuse = I_D = C_D*(\overrightarrow{L}\cdot\overrightarrow{N})$
@@ -177,7 +183,7 @@ Appliqué au cas de notre sphère et de notre source de lumière :\\
 
 
 \begin{figure}[h!]
-	\adjustbox{center}{\includegraphics[width=0.85\textwidth]{img/rt/differentDiffuse.png}}
+	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/differentDiffuse.png}}
 
 	\caption{Le rendu de la même sphère pour différents coefficients de diffusion $C_D$ de l'objet. On devine la position de la source lumineuse à gauche.}
 	\label{differentDiffuse}
@@ -201,7 +207,7 @@ On peut grossièrement estimer que l'intensité lumineuse de la spécularité $I
 Ainsi $I_S$, décroîtra rapidement vers 0 lorsque élevée à la puissance $\alpha$. A contrario, $I_S$ se rapprochant de 1 au centre de la tâche lumineuse, la décroissance vers 0 sera plus lente, bien que tout à fait présente comme en témoigne la \figurename~\ref{differentSpecular} aux paramètres $C_S = 1$ et $\alpha = 512$.
 
 \begin{figure}[h!]
-	\adjustbox{center}{\includegraphics[width=1.2\textwidth]{img/rt/differentSpecular.png}}
+	\adjustbox{center}{\includegraphics[width=0.8\textwidth]{img/rt/differentSpecular.png}}
 
 	\caption{Le rendu de la même sphère pour différents coefficients de spécularité $C_S$ de l'objet et différentes valeurs du paramètre $\alpha$. La source lumineuse est à gauche.}
 	\label{differentSpecular}
@@ -217,12 +223,12 @@ Les trois composantes de l'ombrage de Phong étant maintenant calculées, nous p
 $C_{P(x, y)} = C_O * IntensitePhong = C_O*(I_A + I_D + I_S)$
 \end{center}
 $C_O$ étant la couleur de l'objet,\\
-$I_A, I_D, I_S$ sont les intensités ambiante, diffuse et spéculaire présentées précédemment.
+$I_A, I_D, I_S$ sont les intensités ambiantes, diffuses et spéculaires présentées précédemment.
 
 Pour la même sphère et la même source de lumière, nous obtenos alors:
 
 \begin{figure}[h!]
-	\adjustbox{center}{\includegraphics[width=\textwidth]{img/rt/phongAddition.png}}
+	\adjustbox{center}{\includegraphics[width=0.75\textwidth]{img/rt/phongAddition.png}}
 
 	\caption{Rendu final de la sphère en additionnant toutes les composantes de l'ombrage de Phong}
 	\label{finalPhong}
@@ -230,6 +236,36 @@ Pour la même sphère et la même source de lumière, nous obtenos alors:
 \FloatBarrier
 
 \subsubsection{Les ombres}
+
+Afin de rajouter un degré de réalisme au rendu, nous nous proposons de rajouter des ombres. Le principe est simple: pour chaque rayon tiré depuis la caméra, on se place au point d'intersection trouvé par le rayon avec un objet de l'environnement. Depuis ce point, on tire un autre rayon directement en direction de la source de lumière. Si ce nouveau rayon vient à intersecter quelque chose sur son chemin à la lumière, cela veut dire que nous sommes dans l'ombre. Quelque chose bloque l'accès direct à la lumière. La couleur du pixel sera alors seulement la partie ambiante de l'objet premièrement intersecté. Si ce deuxième rayon n'intersecte rien, nous ne sommes pas dans l'ombre et nous pouvons calculer l'intensité lumineuse en utilisant l'ombrage de Phong vu en partie \ref{ombragePhong}. De part leur nature, on appelle ces rayons "secondaires" des "shadow ray".
+
+\begin{algorithm}[H]
+	\KwIn{$x, y$ les coordonnées du pixel dont on souhaite calculer la couleur}
+	\KwOut{$C_P$, la couleur du pixel\\\hfill\\}
+	
+	cameraRay $\gets$ $Rayon(camera, P_{x, y)})$\\
+	\If{cameraRay.intersects(objetScene)}
+	{
+		cameraRayObject $\gets$ objet intersecté par $cameraRay$\\\hfill\\
+		shadowRay $\gets Rayon(pointIntersection, lumiere)$\\
+		\If(\tcp*[h]{Le point d'intersection est dans l'ombre}){shadowRay.intersects(objetScene)}
+		{
+			\Return{$Color_{cameraRayObject} * I_A$}
+		}
+		\Else(\tcp*[h]{Nous ne sommes pas dans l'ombre})
+		{
+			\Return{phongShading(pointIntersection)}
+		}
+	}
+	\Else
+	{
+		\Return{backgroundColor}
+	}
+
+	\caption{Algorithme retournant la couleur d'un pixel en fonction du fait qu'il soit dans l'ombre ou non.}
+	\label{algoOmbres}
+\end{algorithm}
+
 \subsubsection{Les réflexions}
 \label{reflexions}
 \subsubsection{Les réfractions}
