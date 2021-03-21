@@ -5,10 +5,10 @@ import scene.RayTracingScene;
 
 public class TileThread implements Runnable
 {
-	ThreadsTaskList taskList;
+	private ThreadsTaskList taskList;
 	
-	RayTracer rayTracerInstance;
-	RayTracingScene renderScene;
+	private RayTracer rayTracerInstance;
+	private RayTracingScene renderScene;
 	
 	public TileThread(ThreadsTaskList taskList, RayTracer rayTracerInstance, RayTracingScene renderScene) 
 	{

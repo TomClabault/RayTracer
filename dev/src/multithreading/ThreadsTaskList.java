@@ -5,11 +5,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ThreadsTaskList
 {
-	ArrayList<TileTask> taskList;
+	private ArrayList<TileTask> taskList;
 	
-	AtomicInteger totalTaskCount;
-	AtomicInteger totalTaskGiven;
-	AtomicInteger totalTaskFinished;
+	private AtomicInteger totalTaskCount;
+	private AtomicInteger totalTaskGiven;
+	private AtomicInteger totalTaskFinished;
 	
 	public ThreadsTaskList()
 	{

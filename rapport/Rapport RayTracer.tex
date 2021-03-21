@@ -361,6 +361,21 @@ La \figurename\ \ref{reflectionsDemo} montre un résultat que l'ont peut obtenir
 La prochaine étape consistera à ajouter le support des objets transparents en implémentant un système de réfraction des rayons.
 \subsubsection{Les réfractions}
 
+\subsection{Le multithreading}
+
+Les algorithmes de Ray Tracing sont capables de générer des images réalistes mais sont, en contrepartie, assez lents à exécuter. Un avantage cependant de ces algorithmes est que chaque pixel est calculé indépendamment des autres. Il n'y a pas besoin d'attendre que le "pixel 1" soit calculé pour pouvoir calculer le pixel 2". Tous les pixels sont indépendants des autres. Cela fait donc de ces algorithmes des cibles parfaites pour la parallélisation des calculs. Dans le cas de notre implémentation, elle est executée par le processeur de l'ordinateur. Nativement, notre programme n'était pas parallélisé et seul un des processeurs du CPU de la machine s'attelait à la tâche. L'idée était alors d'utiliser toute la puissance du CPU mise à disposition pour accélérer les temps de rendu. Pour ce faire, l'image à rendre est tout d'abord découpée en tuiles:
+
+\begin{figure}[h!]
+	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/grilleMUltithreading.png}}
+
+	\caption{L'image que l'on veut rendre est découpée en tuiles}
+	\label{grilleMultithreading}
+\end{figure}
+
+
+
+Faire un diagramme de classe pour montrer comment la classe TileTask hérite de la classe Thread de java etc...
+
 \section{Structuration du projet}
 \subsection{Les packages}
 \subsubsection{Liés au Ray Tracer}
