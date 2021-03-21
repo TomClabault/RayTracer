@@ -366,12 +366,19 @@ La prochaine étape consistera à ajouter le support des objets transparents en 
 Les algorithmes de Ray Tracing sont capables de générer des images réalistes mais sont, en contrepartie, assez lents à exécuter. Un avantage cependant de ces algorithmes est que chaque pixel est calculé indépendamment des autres. Il n'y a pas besoin d'attendre que le "pixel 1" soit calculé pour pouvoir calculer le pixel 2". Tous les pixels sont indépendants des autres. Cela fait donc de ces algorithmes des cibles parfaites pour la parallélisation des calculs. Dans le cas de notre implémentation, elle est executée par le processeur de l'ordinateur. Nativement, notre programme n'était pas parallélisé et seul un des processeurs du CPU de la machine s'attelait à la tâche. L'idée était alors d'utiliser toute la puissance du CPU mise à disposition pour accélérer les temps de rendu. Pour ce faire, l'image à rendre est tout d'abord découpée en tuiles:
 
 \begin{figure}[h!]
-	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/grilleMUltithreading.png}}
+	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/grilleMultithreading.png}}
 
 	\caption{L'image que l'on veut rendre est découpée en tuiles}
 	\label{grilleMultithreading}
 \end{figure}
 \FloatBarrier
+
+Afin de faciliter la gestion du multithreading, différentes classes vont être utilisées comme montré dans la \figurename\ \ref{packageMultithreading}. On utilisera les classes \textit{TileTask}, \textit{ThreadsTaskList} ainsi que \textit{TileThread}. Pour chaque tuile dont est composée l'image à rendre, nous allons créer la TileTask lui correspondant, définissant les dimensions de cette tuile:
+\begin{itemize}
+	\item {Un pixel de départ de la tuile x et y}
+	\item {Un pixel de fin de la tuile x et y}
+\end{itemize}
+Dans le cas de la \figurename\ \ref{grilleMultithreading}, l'image à rendre a été découpée en 8x8 = 64 tuiles/tasks. Chacune de ces \textit{TileTask} alors créée va être ajoutée à une \textit{ThreadsTaskList} créée en amont (voir \figurename\ \ref{packageMultithreading}). Cette \textit{ThreadsTaskList} gardera compte de combien de tâches (tuiles) sont à rendre au total, combien de tâches reste à rendre et combien de tâches ont été rendues.
 
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=0.85\textwidth]{diagrammes/package_multithreading.png}}
@@ -381,8 +388,37 @@ Les algorithmes de Ray Tracing sont capables de générer des images réalistes 
 \end{figure}
 \FloatBarrier
 
+Maintenant que nous avons notre liste de tâches prête, la prochaine étape est celle de la création des threads, de la distribution et du calcul des tâches. Nous allons pour cela utiliser la dernière classe du package multithreading, \textit{TileThread}. Cette classe permet de représenter des threads de calcul deu ray tracer. Chaque \textit{TileThread} créé gardera une référence sur la même liste des tâches à calculer ainsi que sur la scène de rendu et sur l'instance du Ray Tracer.
 
-Faire un diagramme de classe pour montrer comment la classe TileTask hérite de la classe Thread de java etc...
+\begin{algorithm}[H]
+	\KwIn{tskList une instance de ThreadsTaskList initialisée avec les tâches créées au préalable,\\
+		RTInst l'instance du Ray Tracer,\\
+		scene la scène contenant les objets à rendre,\\
+		threadCount le nombre de thread voulu pour le rendu\hfill\\}
+	
+	\For {$i \gets 1, i < threadCount$}
+	{
+		thread = creerThread(TileThread(tskList, RTInst, scene))
+
+		demarrer(thread)
+	}
+
+	\While(\tcp*[h]{Tant qu'il reste des tâches à calculer}){$tskList.totaltTaskFinished < taskList.totalTaskCount$}
+	{
+		computeTask(tskList)
+	}
+
+	\caption{Algorithme gérant la création des threads}
+	\label{creationThreads}
+\end{algorithm}
+
+L'algorithme \ref{creationThreads} qui crée les threads de calculs présente une subtilité. $threadCount-1$ sont créés et non pas $threadCount$. En effet, le thread principal va lui aussi s'atteler à la tâche, c'est un thread déjà créé par le lancement du programme lui même. Nul besoin de le recréer donc. Après la création des threads, une boucle while permet de faire calculer au thread principal autant de tâche qu'il en reste à calculer (pendant que les autres threads calculent leurs tâches en parallèle). Ainsi, lorsque la condition de la boucle while ne sera plus vérifiée, cela signifiera que toutes les tâches ont été calculées. Le rendu pourra donc être afficher. Voyons maintenant comment fonctionne la méthode \textit{computeTask} utilisée dans l'algorithme présenté précédemment.
+
+\begin{algorithm}
+	\KwIn{}
+
+	
+\end{algorithm}
 
 \section{Structuration du projet}
 \subsection{Les packages}
