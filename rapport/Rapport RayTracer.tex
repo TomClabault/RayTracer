@@ -50,7 +50,7 @@ Une différence notable avec ce qui nous permet de voir dans la vie de tous les 
 		}
 	}
 
-	\caption{Pseudo-code du lancer des rayons}
+	\caption{Pseudo-code du lancer des rayons - rayTrace}
 	\label{lancerRayons}
 \end {algorithm}
 
@@ -87,7 +87,7 @@ Prenons l'exemple du rendu d'une image dans une résolution 800x600 pixels. Si l
 	\hfill\\
 	\Return{$(x_{world}, y_{world}, -1)$}
 
-	\caption{Conversion des coordonnées d'un pixel de l'image aux coordonnées de la scène}
+	\caption{Conversion des coordonnées d'un pixel de l'image aux coordonnées de la scène - conversionPixelScene}
 	\label{conversionPixel}
 \end{algorithm}
 
@@ -240,9 +240,9 @@ Pour la même sphère et la même source de lumière, nous obtenons alors:
 Afin de rajouter un degré de réalisme au rendu, nous nous proposons de rajouter des ombres. Le principe est simple: pour chaque rayon tiré depuis la caméra, on se place au point d'intersection trouvé par le rayon avec un objet de l'environnement. Depuis ce point, on tire un autre rayon directement en direction de la source de lumière. Si ce nouveau rayon vient à intersecter quelque chose sur son chemin à la lumière, cela veut dire que nous sommes dans l'ombre. Quelque chose bloque l'accès direct à la lumière. La couleur du pixel sera alors seulement la partie ambiante de l'objet premièrement intersecté. Si ce deuxième rayon n'intersecte rien, nous ne sommes pas dans l'ombre et nous pouvons calculer l'intensité lumineuse en utilisant l'ombrage de Phong vu en partie \ref{ombragePhong}. De part leur nature, on appelle ces rayons secondaires des "shadow ray".
 
 \begin{figure}[h!]
-	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/test.png}}
+	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/ombresSchema.png}}
 
-	\caption{Les shadow-ray tirés depuis derrière la sphère ne peuvent pas accéder directement à la lumière. C'est une zone d'ombre.}
+	\caption{Des points d'intersection ont été trouvés avec le plan derrière la sphère. Les shadow-ray tirés depuis ces points d'intersection ne peuvent pas accéder directement à la lumière. C'est une zone d'ombre.}
 	\label{ombresSchema}
 \end{figure}
 \FloatBarrier
@@ -253,14 +253,15 @@ L'algorithme de calcul de la couleur de chacun des pixels peut donc être adapt�
 	\KwIn{$x, y$ les coordonnées du pixel dont on souhaite calculer la couleur}
 	\KwOut{$C_P$, la couleur du pixel\\\hfill\\}
 	
-	cameraRay $\gets$ $Rayon(camera, P_{x, y)})$\\
+	coord$_{(x, y)} \gets$ conversionPixelScene(x, y)\\
+	cameraRay $\gets$ $Rayon(camera, coord_{(x, y)})$\\
 	\If{cameraRay.intersects(objetScene)}
 	{
-		cameraRayObject $\gets$ objet intersecté par $cameraRay$\\\hfill\\
+		intersectedObject $\gets$ objet intersecté par $cameraRay$\\\hfill\\
 		shadowRay $\gets Rayon(pointIntersection, lumiere)$\\
 		\If(\tcp*[h]{Le point d'intersection est dans l'ombre}){shadowRay.intersects(objetScene)}
 		{
-			\Return{$Color_{cameraRayObject} * I_A$}
+			\Return{$Color_{intersectedObject} * I_A$}
 		}
 		\Else(\tcp*[h]{Nous ne sommes pas dans l'ombre})
 		{
@@ -272,12 +273,92 @@ L'algorithme de calcul de la couleur de chacun des pixels peut donc être adapt�
 		\Return{backgroundColor}
 	}
 
-	\caption{Algorithme retournant la couleur d'un pixel en fonction du fait qu'il soit dans l'ombre ou non.}
+	\caption{Algorithme retournant la couleur d'un pixel en fonction du fait qu'il soit dans l'ombre ou non - computeShadow}
 	\label{algoOmbres}
 \end{algorithm}
 
 \subsubsection{Les réflexions}
 \label{reflexions}
+
+Jusqu'alors, notre algorithme n'est capable de rendre que des objets dont le matériau est matte. La spécularité peut éventuellement donner un effet de brillance mais ce n'est qu'une impression. En ajoutant des matériaux réflexifs, nous pourrons créer des objets qui réfléchissent la lumière à la façon d'un miroir ou des objets à l'aspect métallique. Le principe derrière le calcul des réflexions est le suivant:
+\begin{itemize}
+	\item{Si le camera-ray lancé intersecte un objet qui n'est pas réfléchissant, calculer sa couleur avec l'ombrage de Phong comme vu précédemment.}
+	\item{Si le rayon intersecte un objet réfléchissant, calculer la direction du rayon réfléchi et lancer un nouveau rayon dans cette direction de façon récursive. La couleur renvoyée sera alors la dernière chose que touche le rayon (un objet non réflexif ou le fond de la scène)}
+\end{itemize}
+La direction d'un rayon parfaitement réfléchi peut se calculer grâce au rayon incident $I$ ainsi que grâce à la normale de la surface au point d'intersection $N$:
+
+\begin{figure}[h!]
+	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/reflectionVector.png}}
+
+	\caption{On peut calculer le rayon réfléchi à partir du rayon incident et de la normale. \textbf{Source: scratchapixel.com}}
+	\label{reflectionCalcul}
+\end{figure}
+\FloatBarrier
+
+La \figurename\ \ref{reflectionCalcul} nous montre qu'une balle de tennis (jouant le rôle d'un rayon) rebondira avec un angle de sortie $\theta$ égal à son angle d'arrivée ($\theta$) par rapport au sol. Le principe est le même avec les rayons. Par construction géométrique, on obtient la direction du rayon réfléchi:
+
+\begin{center}
+	$\overrightarrow{R} = \overrightarrow{I} - (\overrightarrow{N}\cdot \overrightarrow{I})*\overrightarrow{N}*2$
+\end{center}
+
+Il ne reste plus, pour calculer la couleur de la réflexion, qu'à prendre en compte le coefficient de réflexion $C_R$ du matériau. On obtient alors l'algorithme:
+
+\begin{algorithm}[H]
+	\DontPrintSemicolon
+	\KwIn{$\overrightarrow{R}$ le rayon incident, $depth$ la profondeur actuelle}
+	\KwOut{La couleur du pixel $P_{(x, y)}$ par lequel est passé le camera-ray initial\\\hfill\\}
+
+	\If(\tcp*[h]{La profondeur de récursion maximale a été atteinte}){depth == 0}
+	{
+		\Return{backgroundColor}
+	}
+	\hfill\\
+
+	\If(\tcp*[h]{On vérifie si on a intersecté quelque chose}){$\overrightarrow{R}$.intersects(objetsScene)}
+	{
+		intersectedObject $\gets$ objet intersecté par $\overrightarrow{R}$\\\hfill\\
+
+		\If(\tcp*[h]{Si l'objet intersecté est réfléchissant}){intersectedObject.isReflexive()}
+		{
+			$\overrightarrow{R_{reflect}} \gets$ computeReflectedDirection($\overrightarrow{R}$, $\overrightarrow{N}$)\\\hfill\\
+
+			\Return{$C_R*$computeReflection($\overrightarrow{R_{reflect}}$, depth - 1)}{\tcp*[h]{On effectue un appel récursif pour relancer un rayon}}
+		}
+		\Else(\tcp*[h]{L'objet n'est pas réfléchissant, on va simplement retourner son ombrage de Phong})
+		{
+			\Return{phongShading()}
+		}
+	}
+	\Else
+	{
+		\Return{backgroundColor}
+	}
+
+	\caption{Algorithme de calcul des réflexions pour des objets non colorés - computeReflection}
+	\label{algoReflections}
+\end{algorithm}
+
+Cet algorithme suppose que l'objet n'est pas coloré et donc qu'il renvoie les rayons tels quels. Dans le cas d'un objet métallique cependant, un lingot d'or par exemple, la réflexion sera colorée par la couleur du matériau. La méthode n'est pas présentée ici car il ne s'agit que de montrer le principe des réflexions.
+
+\begin{figure}[!h]
+	\adjustbox{center}{\includegraphics[width=1.1\textwidth]{img/rt/reflectionsSchema.png}}
+
+	\caption{Exemple de rebonds successifs des rayons jusqu'à un objet non réfléchissant}
+	\label{reflectionsSchema}
+\end{figure}
+\FloatBarrier
+
+La \figurename\ \ref{reflectionsDemo} montre un résultat que l'ont peut obtenir avec deux sphères réflexives (une au centre et une à sa droite), plusieures sphères mattes ainsi qu'un plan:
+
+\begin{figure}[h!]
+	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/reflectionsDemo.png}}
+
+	\caption{On peut voir une sphère rouge derrière la caméra grâce à la reflexion de la sphère centrale. Les coefficients de réflexion ont été fixés à 0.8 pour ce rendu.}
+	\label{reflectionsDemo}
+\end{figure}
+\FloatBarrier
+
+La prochaine étape consistera à ajouter le support des objets transparents en implémentant un système de réfraction des rayons.
 \subsubsection{Les réfractions}
 
 \section{Structuration du projet}
