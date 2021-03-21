@@ -52,8 +52,6 @@ public class Camera
 	public Camera(Point position, Point direction)
 	{
 		this(position, getHoriAngleFromDir(position, direction), getVertiAngleFromDir(position, direction));//this.getVeriAngleFromDir(direction));
-		
-		this.angleHori += 0.0000000001;
 	}
 	
 	/*
@@ -61,7 +59,7 @@ public class Camera
 	 * 
 	 * @param position 		Le point d'ancrage/d'origine de la caméra
 	 * @param angleHori 	L'angle de rotation horizontal en degré de la caméra
-	 * @param angleVerti	L'angle de rotation vertical en degré de la caméra. Un angle de plus de 90° ou de moins de -90° sera ramené à 900 ou -90° repsectivement
+	 * @param angleVerti	L'angle de rotation vertical en degré de la caméra. Un angle de plus de 90° ou de moins de -90° sera ramené à 90 ou -90° repsectivement
 	 */
 	public Camera(Point position, double angleHori, double angleVerti)
 	{
@@ -69,7 +67,7 @@ public class Camera
 		
 		this.angleHori = angleHori;
 		this.angleVerti = angleVerti;
-		this.angleVerti = this.angleVerti > 90 ? 90 : this.angleVerti < -90 ? -90 : this.angleVerti;//On ramène l'angle à 900 / -90° s'il dépassait
+		this.angleVerti = this.angleVerti > 90 ? 90 : this.angleVerti < -90 ? -90 : this.angleVerti;//On ramène l'angle à 90 / -90° s'il dépassait
 		
 		this.CTWMatrix = new CTWMatrix(this, angleHori, angleVerti);
 	}
@@ -164,11 +162,19 @@ public class Camera
 	 */
 	public static double getHoriAngleFromDir(Point position, Point direction)
 	{
-		Point positionNoY = new Point(position.getX(), 0, position.getZ());
-		Vector dirNoY = new Vector(direction.getX(), 0, direction.getZ());
-		Vector dirNormNoY = Vector.normalize(dirNoY);
+		Vector vecDir = new Vector(position, direction);
+		Vector vecDirNoY = new Vector(vecDir.getX(), 0, vecDir.getZ());
+		if(vecDirNoY.getX() == 0 && vecDirNoY.getY() == 0 && vecDirNoY.getZ() == 0)//Le point qu'on veut regarder est déjà aligné avec la direction de regard par défaut de la caméra 
+			return 0;
 		
-		return -Math.signum(dirNormNoY.getX())*Math.toDegrees(Math.acos(Vector.dotProduct(Point.p2v(Point.add(positionNoY, new Point(0, 0, -1))), dirNormNoY)));
+		Vector vecDirNoYNorm = Vector.normalize(vecDirNoY);
+		
+		double dotProd = Vector.dotProduct(vecDirNoYNorm, new Vector(0, 0, -1));
+		double arcos = Math.acos(dotProd);
+		double degrees = Math.toDegrees(arcos);
+		
+		double angle = -Math.signum(vecDirNoYNorm.getX())*degrees;
+		return angle;
 	}
 	
 	/*
@@ -181,10 +187,20 @@ public class Camera
 	 */
 	public static double getVertiAngleFromDir(Point position, Point direction)
 	{
-		Vector dirNoZ = new Vector(direction.getX(), direction.getY(), 0);
-		Vector dirNormNoZ = Vector.normalize(dirNoZ);
+		Vector vecDir = new Vector(position, direction);
+		Vector vecDirNoX = new Vector(0, vecDir.getY(), vecDir.getZ());
+		if(vecDirNoX.getX() == 0 && vecDirNoX.getY() == 0 && vecDirNoX.getZ() == 0)//La direction de regard n'a pas changé pas rapport à la direction de regard par défaut de la caméra (0, 0, -1)
+			return 0;
+		Vector vecDirNoXNorm = Vector.normalize(vecDirNoX);
 		
-		return Math.signum(dirNormNoZ.getY())*Math.toDegrees(Math.acos(Vector.dotProduct(Point.p2v(Point.add(position, new Point(1, 0, 0))), dirNormNoZ)));
+		double dotProd = Vector.dotProduct(vecDirNoXNorm, new Vector(0, 0, -1));
+		double arcos = Math.acos(dotProd);
+		double degrees = Math.toDegrees(arcos);
+		
+		double angle = Math.signum(vecDirNoXNorm.getY())*degrees;
+		
+		System.out.println(angle);
+		return angle;
 	}
 	
 	/*
@@ -259,6 +275,20 @@ public class Camera
 		this.angleHori = angle;
 		
 		this.CTWMatrix = new CTWMatrix(this, this.angleHori, this.angleVerti);//On a changé l'état de la caméra, il faut donc recalculer la matrice de passage qui lui est associée
+	}
+	
+	/*
+	 * Redéfini les angles de rotations de la caméra pour faire en sorte qu'elle regarde le point passé en argument
+	 * 
+	 * @param lookAt Le point que l'on veut faire regarder la caméra
+	 */
+	public void setAnglesFromPoint(Point lookAt)
+	{
+		this.angleHori = getHoriAngleFromDir(this.position, lookAt);
+		this.angleVerti = getVertiAngleFromDir(this.position, lookAt);
+		
+		this.CTWMatrix = new CTWMatrix(this, this.angleHori, this.angleVerti);
+;
 	}
 	
 	/*
