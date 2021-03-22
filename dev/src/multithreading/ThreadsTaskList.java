@@ -1,7 +1,6 @@
 package multithreading;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ThreadsTaskList
 {
@@ -18,23 +17,6 @@ public class ThreadsTaskList
 		this.totalTaskCount = 0;
 		this.totalTaskFinished = 0;
 		this.totalTaskGiven = 0;
-	}
-	
-	public boolean compareAndSetTaskGiven(int expectedValue, int newValue)
-	{
-		if(this.totalTaskGiven == expectedValue)
-		{
-			this.totalTaskGiven = newValue;
-			
-			return true;
-		}
-		
-		return false;
-	}
-	
-	public int getAndIncrementTaskGiven()
-	{
-		return this.totalTaskGiven++;
 	}
 	
 	public TileTask getTask(int index)
