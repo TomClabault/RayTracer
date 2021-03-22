@@ -421,9 +421,9 @@ L'algorithme \ref{creationThreads} qui crée les threads de calculs présente un
 	
 	\If(\tcp*[h]{Il reste encore des tâches à donner}){TskList.totalTaskGiven < TskList.totalTaskCount}
 	{
-		TskList.totalTaskGiven++
-		calculerTile(TskList.totalTaskGiven - 1)\tcp*[h]{On calcule la tâche numéro totalTaskGiven - 1}
-		TskList.totalTaskFinished++\\\hfill\\
+		TskList.incrementTotalTaskGiven()\\
+		calculerTile(TskList.totalTaskGiven - 1)\tcp*[l]{On calcule la tâche numéro totalTaskGiven - 1}
+		TskList.incrementTotalTaskFinished()\\\hfill\\
 
 		\Return{TRUE}
 	}

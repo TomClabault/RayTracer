@@ -343,10 +343,7 @@ public class RayTracer
 			new Thread(new TileThread(threadTaskList, this, renderScene), String.format("RT-Thread %d", i)).start();
 			
 		while(threadTaskList.getTotalTaskFinished() < threadTaskList.getTotalTaskCount())
-		{
-			//System.out.println(String.format("%d %d %d", threadTaskList.getTotalTaskCount(), threadTaskList.getTotalTaskGiven(), threadTaskList.getTotalTaskFinished()));
 			this.computeTask(renderScene, threadTaskList);
-		}
 		
 		return this.getRenderedPixels();
 	}
