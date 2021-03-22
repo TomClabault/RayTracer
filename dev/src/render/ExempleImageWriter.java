@@ -79,12 +79,12 @@ public class ExempleImageWriter extends Application
 		RayTracingScene sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 1);
 
 		
-	
 		long startTimer = System.currentTimeMillis();
 		rayTracerInstance.renderImage(sceneRT, 8);
 		long endTimer = System.currentTimeMillis();
-		
+
 		System.out.println(String.format("Render time: %dms", endTimer-startTimer));
+		
 		doImage(rayTracerInstance.getRenderedPixels(), height, width, pw);
 		
 		writeImageToDisk(scene, writableImage);

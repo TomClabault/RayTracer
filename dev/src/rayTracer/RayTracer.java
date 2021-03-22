@@ -269,7 +269,11 @@ public class RayTracer
 		}
 		this.computePartialImage(renderScene, currentTileTask.getStartX(), currentTileTask.getStartY(), currentTileTask.getEndX(), currentTileTask.getEndY());
 		
-		taskList.incrementTaskFinished();
+		Integer randomVariable = 0;
+		synchronized(randomVariable)
+		{
+			taskList.incrementTaskFinished();
+		}
 		return true;//Encore des tuiles à calculer
 	}
 	
@@ -339,7 +343,10 @@ public class RayTracer
 			new Thread(new TileThread(threadTaskList, this, renderScene), String.format("RT-Thread %d", i)).start();
 			
 		while(threadTaskList.getTotalTaskFinished() < threadTaskList.getTotalTaskCount())
+		{
+			//System.out.println(String.format("%d %d %d", threadTaskList.getTotalTaskCount(), threadTaskList.getTotalTaskGiven(), threadTaskList.getTotalTaskFinished()));
 			this.computeTask(renderScene, threadTaskList);
+		}
 		
 		return this.getRenderedPixels();
 	}
