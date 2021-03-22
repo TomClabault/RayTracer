@@ -6,11 +6,37 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{adjustbox}%Permet de centrer les figures dans la largeur de la page même si les figures sont plus larges que \textwidth
+\usepackage{xcolor}%/definecolor et /color
 \usepackage{graphicx}
 \usepackage{geometry}%Pour changer la largeur des marges du document notamment
 \usepackage{placeins}%pour utiliser FloatBarrier afin que les figure respectent bien leur position dans le code
 \usepackage{gensymb}%pour pouvoir écrire le signe °
 \usepackage{stmaryrd}%pour les crochets à double barres d'intervalles de nombre entiers
+\usepackage{listings}
+
+%%%%%%%%%%%%%% Couleurs de: https://texblog.org/2011/06/11/latex-syntax-highlighting-examples/ %%%%%%%%%%%%%%
+\definecolor{javared}{rgb}{0.6,0,0} % for strings
+\definecolor{javagreen}{rgb}{0.25,0.5,0.35} % comments
+\definecolor{javapurple}{rgb}{0.5,0,0.35} % keywords
+\definecolor{javadocblue}{rgb}{0.25,0.35,0.75} % javadoc
+ 
+\lstset
+{
+language=Java,
+keywordstyle=\color{javapurple}\bfseries,
+stringstyle=\color{javared},
+commentstyle=\color{javagreen},
+morecomment=[s][\color{javadocblue}]{/**}{*/},
+numbers=left,
+numberstyle=\tiny\color{black},
+stepnumber=1,
+numbersep=10pt,
+tabsize=4,
+showspaces=false,
+showstringspaces=false}
+%%%%%%%%%%%%%% Couleurs de: https://texblog.org/2011/06/11/latex-syntax-highlighting-examples/ %%%%%%%%%%%%%%
+
+
 
 
 
@@ -415,24 +441,17 @@ Maintenant que nous avons notre liste de tâches prête, la prochaine étape est
 
 L'algorithme \ref{creationThreads} qui crée les threads de calculs présente une subtilité. $threadCount-1$ threads sont créés et non pas $threadCount$. En effet, le thread principal va lui aussi s'atteler à la tâche, c'est un thread déjà créé par le lancement du programme lui même. Nul besoin de le recréer donc. Après la création des threads, une boucle while permet de faire calculer au thread principal autant de tâche qu'il en reste à calculer (pendant que les autres threads calculent ausis leurs tâches en parallèle). Ainsi, lorsque la condition de la boucle while ne sera plus vérifiée, cela signifiera que toutes les tâches ont été calculées. Le rendu pourra donc être affiché. Voyons maintenant comment fonctionne la méthode \textit{computeTask} utilisée dans l'algorithme présenté précédemment.
 
-\begin{algorithm}
-	\KwIn{TskList, une ThreadsTaskList}
-	\KwOut{Un booléen indiquant s'il reste encore des tâches à calculer ou non\\\hfill\\}
+\begin{figure}[h!]
+	\lstinputlisting[language=Java]{code/distribTask.java}
 	
-	\If(\tcp*[h]{Il reste encore des tâches à donner}){TskList.totalTaskGiven < TskList.totalTaskCount}
-	{
-		TskList.incrementTotalTaskGiven()\\
-		calculerTile(TskList.totalTaskGiven - 1)\tcp*[l]{On calcule la tâche numéro totalTaskGiven - 1}
-		TskList.incrementTotalTaskFinished()\\\hfill\\
+	\caption{Java - Méthode de gestion des calculs des tâches}
+	\label{distribTask}
+\end{figure}
+\FloatBarrier
 
-		\Return{TRUE}
-	}
-	\Else(\tcp*[h]{Il n'y a plus de tâches à donner, ce thread peut arrêter les calculs})
-	{
-		\Return{FALSE}
-	}
-	
-\end{algorithm}
+Cette méthode sera utilisée par tous les threads ayant été créé. Elle est destinée à donner les tâches aux threads tant qu'il en reste à calculer. A l'entrée de la méthode, on vérifie si toutes les tâches ont été données à calculer. Si c'est le cas, on retourne false, indiquant qu'il n'y a plus de tâches à donner aux threads. S'il reste des tâche à calculer, on récupère la prochaine tâche (tuile) et on incrémente la variable qui tient compte du nombre de tâches qui ont été données à calculer. On calcule ensuite la tuile correspondant à la tâche et on incrémente le nombre de tâche qui ont été calculées. On retourne alors true puisque le thread à calculer une tâche avec succès, il peut y en avoir d'autre à calculer. L'utilisation des blocs \color{javapurple}{\textbf{synchronized}} \color{black} de Java est justifiée pour éviter la concurrence des threads sur les variables partagées entre tous les threads de calcul. En effet, sans les blocs \color{javapurple}{\textbf{synchronized}}\color{black}, on peut se retrouver dans le cas suivant:
+
+
 
 \section{Structuration du projet}
 \subsection{Les packages}

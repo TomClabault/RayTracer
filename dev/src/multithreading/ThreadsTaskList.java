@@ -64,6 +64,10 @@ public class ThreadsTaskList
 		int tilesCountX = renderWidth / tilesWidth; tilesCountX = (tilesCountX * tilesWidth < renderWidth) ? tilesCountX + 1 : tilesCountX; 
 		int tilesCountY = renderHeight / tilesHeight; tilesCountY = (tilesCountY * tilesHeight < renderHeight) ? tilesCountY + 1 : tilesCountY;
 		
+		tilesCountX = tilesCountY = 4;
+		tilesWidth = renderWidth / tilesCountX;
+		tilesHeight = renderHeight / tilesCountY;
+		
 		for(int y = 0; y < tilesCountY; y++)
 		{
 			int startY = y*tilesHeight;
