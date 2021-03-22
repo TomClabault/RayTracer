@@ -10,6 +10,7 @@
 \usepackage{geometry}%Pour changer la largeur des marges du document notamment
 \usepackage{placeins}%pour utiliser FloatBarrier afin que les figure respectent bien leur position dans le code
 \usepackage{gensymb}%pour pouvoir écrire le signe °
+\usepackage{stmaryrd}%pour les crochets à double barres d'intervalles de nombre entiers
 
 
 
@@ -363,7 +364,7 @@ La prochaine étape consistera à ajouter le support des objets transparents en 
 
 \subsection{Le multithreading}
 
-Les algorithmes de Ray Tracing sont capables de générer des images réalistes mais sont, en contrepartie, assez lents à exécuter. Un avantage cependant de ces algorithmes est que chaque pixel est calculé indépendamment des autres. Il n'y a pas besoin d'attendre que le "pixel 1" soit calculé pour pouvoir calculer le pixel 2". Tous les pixels sont indépendants des autres. Cela fait donc de ces algorithmes des cibles parfaites pour la parallélisation des calculs. Dans le cas de notre implémentation, elle est executée par le processeur de l'ordinateur. Nativement, notre programme n'était pas parallélisé et seul un des processeurs du CPU de la machine s'attelait à la tâche. L'idée était alors d'utiliser toute la puissance du CPU mise à disposition pour accélérer les temps de rendu. Pour ce faire, l'image à rendre est tout d'abord découpée en tuiles:
+Les algorithmes de Ray Tracing sont capables de générer des images réalistes mais sont, en contrepartie, assez lents à exécuter. Un avantage cependant de ces algorithmes est que chaque pixel est calculé indépendamment des autres. Il n'y a pas besoin d'attendre que le "pixel 1" soit calculé pour pouvoir calculer le "pixel 2". Tous les pixels sont indépendants des autres. Cela fait donc de ces algorithmes des cibles parfaites pour la parallélisation des calculs. Dans le cas de notre implémentation, elle est executée par le processeur de l'ordinateur. Nativement, notre programme n'était pas parallélisé et seul un des processeurs du CPU de la machine s'attelait à la tâche. L'idée était alors d'utiliser toute la puissance du CPU mise à disposition pour accélérer les temps de rendu. Pour ce faire, l'image à rendre est tout d'abord découpée en tuiles:
 
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/grilleMultithreading.png}}
@@ -375,10 +376,10 @@ Les algorithmes de Ray Tracing sont capables de générer des images réalistes 
 
 Afin de faciliter la gestion du multithreading, différentes classes vont être utilisées comme montré dans la \figurename\ \ref{packageMultithreading}. On utilisera les classes \textit{TileTask}, \textit{ThreadsTaskList} ainsi que \textit{TileThread}. Pour chaque tuile dont est composée l'image à rendre, nous allons créer la TileTask lui correspondant, définissant les dimensions de cette tuile:
 \begin{itemize}
-	\item {Un pixel de départ de la tuile x et y}
-	\item {Un pixel de fin de la tuile x et y}
+	\item {Des positions de départ de la tuile x et y}
+	\item {Des positions de fin de la tuile x et y}
 \end{itemize}
-Dans le cas de la \figurename\ \ref{grilleMultithreading}, l'image à rendre a été découpée en 8x8 = 64 tuiles/tasks. Chacune de ces \textit{TileTask} alors créée va être ajoutée à une \textit{ThreadsTaskList} créée en amont (voir \figurename\ \ref{packageMultithreading}). Cette \textit{ThreadsTaskList} gardera compte de combien de tâches (tuiles) sont à rendre au total, combien de tâches reste à rendre et combien de tâches ont été rendues.
+Dans le cas de la \figurename\ \ref{grilleMultithreading}, l'image à rendre a été découpée en 8x8 = 64 tuiles ou (tasks). Chacune de ces \textit{TileTask} alors créée va être ajoutée à une \textit{ThreadsTaskList} créée en amont (voir \figurename\ \ref{packageMultithreading}). Cette \textit{ThreadsTaskList} gardera compte de combien de tâches (tuiles) sont à rendre au total, combien de tâches restent à rendre et combien de tâches ont été rendues.
 
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=0.85\textwidth]{diagrammes/package_multithreading.png}}
@@ -388,7 +389,7 @@ Dans le cas de la \figurename\ \ref{grilleMultithreading}, l'image à rendre a �
 \end{figure}
 \FloatBarrier
 
-Maintenant que nous avons notre liste de tâches prête, la prochaine étape est celle de la création des threads, de la distribution et du calcul des tâches. Nous allons pour cela utiliser la dernière classe du package multithreading, \textit{TileThread}. Cette classe permet de représenter des threads de calcul deu ray tracer. Chaque \textit{TileThread} créé gardera une référence sur la même liste des tâches à calculer ainsi que sur la scène de rendu et sur l'instance du Ray Tracer.
+Maintenant que nous avons notre liste de tâches prête, la prochaine étape est celle de la création des threads, de la distribution et du calcul des tâches. Nous allons pour cela utiliser la dernière classe du package multithreading, \textit{TileThread}. Cette classe permet de représenter des threads de calcul du ray tracer. Chaque \textit{TileThread} créé gardera une référence sur la même liste de tâches à calculer ainsi que sur la scène de rendu et sur l'instance du Ray Tracer.
 
 \begin{algorithm}[H]
 	\KwIn{tskList une instance de ThreadsTaskList initialisée avec les tâches créées au préalable,\\
@@ -396,14 +397,14 @@ Maintenant que nous avons notre liste de tâches prête, la prochaine étape est
 		scene la scène contenant les objets à rendre,\\
 		threadCount le nombre de thread voulu pour le rendu\hfill\\}
 	
-	\For {$i \gets 1, i < threadCount$}
+	\For {$i \in \llbracket 1; threadCount \llbracket$}
 	{
 		thread = creerThread(TileThread(tskList, RTInst, scene))
 
 		demarrer(thread)
 	}
 
-	\While(\tcp*[h]{Tant qu'il reste des tâches à calculer}){$tskList.totaltTaskFinished < taskList.totalTaskCount$}
+	\While(\tcp*[h]{Tant qu'il reste des tâches à calculer}){$tskList.totalTaskFinished < taskList.totalTaskCount$}
 	{
 		computeTask(tskList)
 	}
@@ -412,11 +413,24 @@ Maintenant que nous avons notre liste de tâches prête, la prochaine étape est
 	\label{creationThreads}
 \end{algorithm}
 
-L'algorithme \ref{creationThreads} qui crée les threads de calculs présente une subtilité. $threadCount-1$ sont créés et non pas $threadCount$. En effet, le thread principal va lui aussi s'atteler à la tâche, c'est un thread déjà créé par le lancement du programme lui même. Nul besoin de le recréer donc. Après la création des threads, une boucle while permet de faire calculer au thread principal autant de tâche qu'il en reste à calculer (pendant que les autres threads calculent leurs tâches en parallèle). Ainsi, lorsque la condition de la boucle while ne sera plus vérifiée, cela signifiera que toutes les tâches ont été calculées. Le rendu pourra donc être afficher. Voyons maintenant comment fonctionne la méthode \textit{computeTask} utilisée dans l'algorithme présenté précédemment.
+L'algorithme \ref{creationThreads} qui crée les threads de calculs présente une subtilité. $threadCount-1$ threads sont créés et non pas $threadCount$. En effet, le thread principal va lui aussi s'atteler à la tâche, c'est un thread déjà créé par le lancement du programme lui même. Nul besoin de le recréer donc. Après la création des threads, une boucle while permet de faire calculer au thread principal autant de tâche qu'il en reste à calculer (pendant que les autres threads calculent ausis leurs tâches en parallèle). Ainsi, lorsque la condition de la boucle while ne sera plus vérifiée, cela signifiera que toutes les tâches ont été calculées. Le rendu pourra donc être affiché. Voyons maintenant comment fonctionne la méthode \textit{computeTask} utilisée dans l'algorithme présenté précédemment.
 
 \begin{algorithm}
-	\KwIn{}
+	\KwIn{TskList, une ThreadsTaskList}
+	\KwOut{Un booléen indiquant s'il reste encore des tâches à calculer ou non\\\hfill\\}
+	
+	\If(\tcp*[h]{Il reste encore des tâches à donner}){TskList.totalTaskGiven < TskList.totalTaskCount}
+	{
+		TskList.totalTaskGiven++
+		calculerTile(TskList.totalTaskGiven - 1)\tcp*[h]{On calcule la tâche numéro totalTaskGiven - 1}
+		TskList.totalTaskFinished++\\\hfill\\
 
+		\Return{TRUE}
+	}
+	\Else(\tcp*[h]{Il n'y a plus de tâches à donner, ce thread peut arrêter les calculs})
+	{
+		\Return{FALSE}
+	}
 	
 \end{algorithm}
 
