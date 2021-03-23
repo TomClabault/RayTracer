@@ -258,24 +258,22 @@ public class RayTracer
 		Integer taskNumber = 0;
 		TileTask currentTileTask = null;
 		
-		//synchronized(taskNumber)
-		//{
+		synchronized(taskNumber)
+		{
 			taskNumber = taskList.getTotalTaskGiven();
 			if(taskNumber >= taskList.getTotalTaskCount())
 				return false;
 		
 			currentTileTask = taskList.getTask(taskList.getTotalTaskGiven());
 			taskList.incrementTaskGiven();
-		//}
+		}
 		this.computePartialImage(renderScene, currentTileTask.getStartX(), currentTileTask.getStartY(), currentTileTask.getEndX(), currentTileTask.getEndY());
 		
 		Integer randomVariable = 0;
-		//synchronized(randomVariable)
-		//{
-			//System.out.println(String.format("Tuile %d calculée", taskList.getTotalTaskFinished()));
+		synchronized(randomVariable)
+		{
 			taskList.incrementTaskFinished();
-			//System.out.println(String.format("after: %d", taskList.getTotalTaskFinished()));
-		//}
+		}
 		return true;//Encore des tuiles à calculer
 	}
 	
@@ -345,11 +343,7 @@ public class RayTracer
 			new Thread(new TileThread(threadTaskList, this, renderScene), String.format("RT-Thread %d", i)).start();
 			
 		while(threadTaskList.getTotalTaskFinished() < threadTaskList.getTotalTaskCount())
-		{
-			//System.out.println(threadTaskList.getTotalTaskFinished());
-			System.out.println(String.format("%d %d %d", threadTaskList.getTotalTaskCount(), threadTaskList.getTotalTaskGiven(), threadTaskList.getTotalTaskFinished()));
 			this.computeTask(renderScene, threadTaskList);
-		}
 		
 		return this.getRenderedPixels();
 	}

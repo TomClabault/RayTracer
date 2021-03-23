@@ -13,6 +13,7 @@
 \usepackage{gensymb}%pour pouvoir écrire le signe °
 \usepackage{stmaryrd}%pour les crochets à double barres d'intervalles de nombre entiers
 \usepackage{listings}
+\usepackage{slashbox}%Case séparée en deux tout en haut à gauche des tableaux à double entrées
 
 %%%%%%%%%%%%%% Couleurs de: https://texblog.org/2011/06/11/latex-syntax-highlighting-examples/ %%%%%%%%%%%%%%
 \definecolor{javared}{rgb}{0.6,0,0} % for strings
@@ -158,7 +159,7 @@ A l'issue de ces implémentations, nous obtenons alors l'image suivante (la scè
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/basicRender.png}}
 
-	\caption{Rendu le plus simple. Une sphère sans aucun effet d'ombrage}
+	\caption{Rendu le plus simple. Une sphère sans aucun effet d'ombrage.}
 	\label{basicRender}
 \end{figure}
 \FloatBarrier
@@ -307,7 +308,7 @@ L'algorithme de calcul de la couleur de chacun des pixels peut donc être adapt�
 \subsubsection{Les réflexions}
 \label{reflexions}
 
-Jusqu'alors, notre algorithme n'est capable de rendre que des objets dont le matériau est matte. La spécularité peut éventuellement donner un effet de brillance mais ce n'est qu'une impression. En ajoutant des matériaux réflexifs, nous pourrons créer des objets qui réfléchissent la lumière à la façon d'un miroir ou des objets à l'aspect métallique. Le principe derrière le calcul des réflexions est le suivant:
+Jusqu'alors, notre algorithme n'a été capable de rendre que des objets dont le matériau est matte. La spécularité peut éventuellement donner un effet de brillance mais ce n'est qu'une impression. En ajoutant des matériaux réflexifs, nous pourrons créer des objets qui réfléchissent la lumière à la façon d'un miroir ou des objets à l'aspect métallique. Le principe derrière le calcul des réflexions est le suivant:
 \begin{itemize}
 	\item{Si le camera-ray lancé intersecte un objet qui n'est pas réfléchissant, calculer sa couleur avec l'ombrage de Phong comme vu précédemment.}
 	\item{Si le rayon intersecte un objet réfléchissant, calculer la direction du rayon réfléchi et lancer un nouveau rayon dans cette direction de façon récursive. La couleur renvoyée sera alors la dernière chose que touche le rayon (un objet non réflexif ou le fond de la scène)}
@@ -389,8 +390,9 @@ La prochaine étape consistera à ajouter le support des objets transparents en 
 \subsubsection{Les réfractions}
 
 \subsection{Le multithreading}
+\subsubsection{Organisation et mise en place}
 
-Les algorithmes de Ray Tracing sont capables de générer des images réalistes mais sont, en contrepartie, assez lents à exécuter. Un avantage cependant de ces algorithmes est que chaque pixel est calculé indépendamment des autres. Il n'y a pas besoin d'attendre que le "pixel 1" soit calculé pour pouvoir calculer le "pixel 2". Tous les pixels sont indépendants des autres. Cela fait donc de ces algorithmes des cibles parfaites pour la parallélisation des calculs. Dans le cas de notre implémentation, elle est executée par le processeur de l'ordinateur. Nativement, notre programme n'était pas parallélisé et seul un des processeurs du CPU de la machine s'attelait à la tâche. L'idée était alors d'utiliser toute la puissance du CPU mise à disposition pour accélérer les temps de rendu. Pour ce faire, l'image à rendre est tout d'abord découpée en tuiles:
+Les algorithmes de Ray Tracing sont capables de générer des images réalistes mais sont, en contrepartie, assez lents à exécuter. Un avantage cependant de ces algorithmes est que chaque pixel est calculé indépendamment des autres. Il n'y a pas besoin d'attendre que le "pixel 1" soit calculé pour pouvoir calculer le "pixel 2". Tous les pixels sont indépendants les uns des autres. Cela fait donc de ces algorithmes des cibles parfaites pour la parallélisation des calculs. Dans le cas de notre implémentation, elle est executée par le processeur de l'ordinateur. Nativement, notre programme n'était pas parallélisé et seul un des processeurs du CPU de la machine s'attelait à la tâche. L'idée était alors d'utiliser toute la puissance du CPU mise à disposition pour accélérer les temps de rendu. Pour ce faire, l'image à rendre est tout d'abord découpée en tuiles:
 
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/grilleMultithreading.png}}
@@ -402,10 +404,10 @@ Les algorithmes de Ray Tracing sont capables de générer des images réalistes 
 
 Afin de faciliter la gestion du multithreading, différentes classes vont être utilisées comme montré dans la \figurename\ \ref{packageMultithreading}. On utilisera les classes \textit{TileTask}, \textit{ThreadsTaskList} ainsi que \textit{TileThread}. Pour chaque tuile dont est composée l'image à rendre, nous allons créer la TileTask lui correspondant, définissant les dimensions de cette tuile:
 \begin{itemize}
-	\item {Des positions de départ de la tuile x et y}
-	\item {Des positions de fin de la tuile x et y}
+	\item {Les positions de départ de la tuile x et y}
+	\item {Les positions de fin de la tuile x et y}
 \end{itemize}
-Dans le cas de la \figurename\ \ref{grilleMultithreading}, l'image à rendre a été découpée en 8x8 = 64 tuiles ou (tasks). Chacune de ces \textit{TileTask} alors créée va être ajoutée à une \textit{ThreadsTaskList} créée en amont (voir \figurename\ \ref{packageMultithreading}). Cette \textit{ThreadsTaskList} gardera compte de combien de tâches (tuiles) sont à rendre au total, combien de tâches restent à rendre et combien de tâches ont été rendues.
+Dans le cas de la \figurename\ \ref{grilleMultithreading}, l'image à rendre a été découpée en 8x8 = 64 tuiles ou (tasks). Chacune de ces \textit{TileTask} alors créée va être ajoutée à une \textit{ThreadsTaskList} créée en amont (voir \figurename\ \ref{packageMultithreading}). Cette \textit{ThreadsTaskList} gardera compte de combien de tâches (tuiles) sont à rendre au total, combien de tâches restent à rendre et combien de tâches ont été rendues. Comme son nom l'indique, cette classe disposera aussi de la liste des tâches elle même.
 
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=0.85\textwidth]{diagrammes/package_multithreading.png}}
@@ -415,7 +417,7 @@ Dans le cas de la \figurename\ \ref{grilleMultithreading}, l'image à rendre a �
 \end{figure}
 \FloatBarrier
 
-Maintenant que nous avons notre liste de tâches prête, la prochaine étape est celle de la création des threads, de la distribution et du calcul des tâches. Nous allons pour cela utiliser la dernière classe du package multithreading, \textit{TileThread}. Cette classe permet de représenter des threads de calcul du ray tracer. Chaque \textit{TileThread} créé gardera une référence sur la même liste de tâches à calculer ainsi que sur la scène de rendu et sur l'instance du Ray Tracer.
+Maintenant que nous avons notre liste de tâches prête, la prochaine étape est celle de la création des threads, de la distribution et du calcul des tâches. Nous allons pour cela utiliser la dernière classe du package multithreading, \textit{TileThread}. Cette classe permet de représenter des threads de calcul du ray tracer. Chaque \textit{TileThread} créé gardera une référence sur la liste de tâches à calculer ainsi que sur la scène de rendu et sur l'instance du Ray Tracer.
 
 \begin{algorithm}[H]
 	\KwIn{tskList une instance de ThreadsTaskList initialisée avec les tâches créées au préalable,\\
@@ -428,7 +430,7 @@ Maintenant que nous avons notre liste de tâches prête, la prochaine étape est
 		thread = creerThread(TileThread(tskList, RTInst, scene))
 
 		demarrer(thread)
-	}
+	}\hfill\\
 
 	\While(\tcp*[h]{Tant qu'il reste des tâches à calculer}){$tskList.totalTaskFinished < taskList.totalTaskCount$}
 	{
@@ -439,18 +441,50 @@ Maintenant que nous avons notre liste de tâches prête, la prochaine étape est
 	\label{creationThreads}
 \end{algorithm}
 
-L'algorithme \ref{creationThreads} qui crée les threads de calculs présente une subtilité. $threadCount-1$ threads sont créés et non pas $threadCount$. En effet, le thread principal va lui aussi s'atteler à la tâche, c'est un thread déjà créé par le lancement du programme lui même. Nul besoin de le recréer donc. Après la création des threads, une boucle while permet de faire calculer au thread principal autant de tâche qu'il en reste à calculer (pendant que les autres threads calculent ausis leurs tâches en parallèle). Ainsi, lorsque la condition de la boucle while ne sera plus vérifiée, cela signifiera que toutes les tâches ont été calculées. Le rendu pourra donc être affiché. Voyons maintenant comment fonctionne la méthode \textit{computeTask} utilisée dans l'algorithme présenté précédemment.
+L'algorithme \ref{creationThreads} qui crée les threads de calculs présente une subtilité. $threadCount-1$ threads sont créés et non pas $threadCount$. En effet, le thread principal va lui aussi s'atteler à la tâche, c'est un thread déjà créé par le lancement du programme lui même. On crée donc un thread de moins. Après la création des threads, une boucle while permet de donner au thread principal autant de tâche qu'il en reste à calculer (pendant que les autres threads calculent aussi leurs tâches en parallèle). Ainsi, lorsque la condition de la boucle while ne sera plus vérifiée, cela signifiera que toutes les tâches ont été calculées.Le thread principal pourra sortir de la boucle et le rendu pourra être affiché. Voyons maintenant comment fonctionne la méthode \textit{computeTask} utilisée dans l'algorithme présenté précédemment.
 
-\begin{figure}[h!]
-	\lstinputlisting[language=Java]{code/distribTask.java}
+\begin{algorithm}[H]
+	\KwIn{\textit{renderScene}, la scène dont on veut faire le rendu,\\
+		\textit{taskList}, la liste des tâches que les threads vont devoir calculer\\\hfill\\}
+
+	\lstinputlisting[language=Java]{code/computeTask.java}
 	
 	\caption{Java - Méthode de gestion des calculs des tâches}
-	\label{distribTask}
-\end{figure}
-\FloatBarrier
+	\label{computeTask}
+\end{algorithm}
 
-Cette méthode sera utilisée par tous les threads ayant été créé. Elle est destinée à donner les tâches aux threads tant qu'il en reste à calculer. A l'entrée de la méthode, on vérifie si toutes les tâches ont été données à calculer. Si c'est le cas, on retourne false, indiquant qu'il n'y a plus de tâches à donner aux threads. S'il reste des tâche à calculer, on récupère la prochaine tâche (tuile) et on incrémente la variable qui tient compte du nombre de tâches qui ont été données à calculer. On calcule ensuite la tuile correspondant à la tâche et on incrémente le nombre de tâche qui ont été calculées. On retourne alors true puisque le thread à calculer une tâche avec succès, il peut y en avoir d'autre à calculer. L'utilisation des blocs \color{javapurple}{\textbf{synchronized}} \color{black} de Java est justifiée pour éviter la concurrence des threads sur les variables partagées entre tous les threads de calcul. En effet, sans les blocs \color{javapurple}{\textbf{synchronized}}\color{black}, on peut se retrouver dans le cas suivant:
+Cette méthode sera utilisée par tous les threads ayant été créé. Elle est destinée à donner les tâches aux threads tant qu'il en reste à calculer. A l'entrée de la méthode, on vérifie si toutes les tâches ont déjà été données à calculer. Si c'est le cas, on retourne false, indiquant qu'il n'y a plus de tâches à donner aux threads. S'il reste des tâches à calculer, on récupère la prochaine tâche et on incrémente la variable qui tient compte du nombre de tâches qui ont été données à calculer. On calcule ensuite la tuile correspondant à la tâche et on incrémente le nombre de tâche qui ont été calculées. On retourne alors true puisque le thread a calculé une tâche avec succès, il peut y en avoir d'autre à calculer. L'utilisation des blocs \color{javapurple}{\textbf{synchronized}} \color{black} de Java est justifiée pour éviter la concurrence des threads sur les variables partagées entre tous les threads de calcul. En effet, les variables totalTaskCount, totalTaskGiven et totalTaskFinished sont réécrites par tous les threads, potentiellement simultanément. Les blocs \color{javapurple}{\textbf{synchronized}}\color{black}\ sont alors nécessaires pour éviter de nombreux problèmes.
 
+La méthode \textit{demarrer(thread)} permet de lancer le thread après l'avoir créé. Le thread va alors exécuter le code de sa méthode de départ:
+
+\begin{algorithm}[H]
+	\lstinputlisting[language=Java]{code/demarrerThread.java}
+
+	\caption{Point de départ des threads, appelé par \textit{demarrer}}
+	\label{methodeDemarrer}
+\end{algorithm}
+computeTask retournant false quand il n'y a plus de tâche à effectuer et true sinon, on peut simplement mettre l'appel de la méthode dans une boucle infinie. Cela aura pour effet de donner des tâches à calculer aux threads tant qu'il y en a. Dès que toutes les tâches auront été données, computeTask retournera false, le thread quittera la boucle et pourra être terminé.
+
+\subsubsection{Les performances}
+
+Le but de notre parallélisation étant d'accroître les performances du ray tracer, nous présentons dans cette section les résultats en termes de performances de notre implémentation.\\
+Nous comparerons les temps de rendu par image pour différentes résolutions et différents nombre de threads. L'image sera toujours découpée en $nbThread^2$ tuiles.
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		\backslashbox{Nombre de thread}{Résolution de rendu} & 128*128 & 256*256 & 512*512 & 1280*720\\
+		\hline
+		1 & 5.01ms & 18.39ms & 72.87ms & 240.54ms\\
+		2 & 2.63ms & 9.81ms & 38.49ms & 126.79ms\\
+		4 & 1.64ms & 5.54ms & 23.02ms & 78.42ms\\
+		8 & 1.46ms & 4.47ms & 16.72ms & 55.58ms\\
+		\hline
+	\end{tabular}
+\end{center}
+Toutes les mesures ont été faites sur un CPU disposant de 8 processeurs. La scène rendue est la même que celle de la \figurename\ \ref{reflectionsDemo}.\\
+On observe une réduction significative des temps de rendu quand le nombre de threads utilisé augmente. On passe en effet, pour une résolution de 512*512, de 72.87ms en moyenne à 16.72ms de temps de calcul par image. Cela se traduit par un affichage fluide d'un peu moins de 15 images par seconde avec 1 thread. Avec 8 threads, nous passons à environ 60 images par seconde. Les performances ont donc été multipliées par 4.\\
+Cette multiplication des performances nous permet entre autre de pouvoir profiter de mouvements fluides lorsque l'on déplace la caméra. Sans ces 8 threads, les mouvement seraient saccadés et peu agréables dû aux temps de rendu trop importants.
 
 
 \section{Structuration du projet}

@@ -41,8 +41,8 @@ public class ExempleImageWriter extends Application
 	@Override
 	public void start(Stage stage) 
 	{
-		int width = 512/4;
-		int height = 512/4;
+		int width = 512/2;
+		int height = 512/2;
 
 		WritableImage writableImage = new WritableImage(width, height);
 
@@ -79,14 +79,11 @@ public class ExempleImageWriter extends Application
 		RayTracingScene sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 1);
 
 		
-		for(int i = 0; i < 5000; i++)
-		{
-			long startTimer = System.currentTimeMillis();
-			rayTracerInstance.renderImage(sceneRT, 8);
-			long endTimer = System.currentTimeMillis();
-
-			System.out.println(String.format("Render time: %dms", endTimer-startTimer));
-		}
+		long startTimer, endTimer;
+		startTimer = System.currentTimeMillis();
+		rayTracerInstance.renderImage(sceneRT, 8);
+		endTimer = System.currentTimeMillis();
+		System.out.println(endTimer-startTimer + "ms");
 		
 		doImage(rayTracerInstance.getRenderedPixels(), height, width, pw);
 		

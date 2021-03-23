@@ -23,10 +23,4 @@ public class TileThread implements Runnable
 	{
 		while(this.rayTracerInstance.computeTask(this.renderScene, this.taskList)) {}//On calcule des tiles tant qu'il y en a à calculer
 	}
-
-	public void startThread()
-	{
-		Thread thisThread = new Thread(this, "");
-		thisThread.start();
-	}
 }
