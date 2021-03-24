@@ -111,6 +111,14 @@ public class MatrixD
 		return new Point(convertedPointCoords[0], convertedPointCoords[1], convertedPointCoords[2]);
 	}
 	
+	/*
+	 * Redéfinition de la méthode toString pour afficher la matrice comme suit (exemple avec la matrice identité):
+	 * 
+	 * 1.00 0.00 0.00 0.00
+	 * 0.00 1.00 0.00 0.00
+	 * 0.00 0.00 1.00 0.00
+	 * 0.00 0.00 0.00 1.00
+	 */
 	public String toString()
 	{
 		String output = "";

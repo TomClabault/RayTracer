@@ -1,8 +1,8 @@
 package geometry.shapes;
 
 import geometry.ShapeMaths;
-import geometry.materials.Material;
-import geometry.materials.MatteMaterial;
+import materials.Material;
+import materials.MatteMaterial;
 import javafx.scene.paint.Color;
 import maths.Point;
 import maths.Ray;
@@ -81,11 +81,14 @@ public class SphereMaths implements ShapeMaths
 	/*
 	 * Calcule de façon analytique l'intersection d'un rayon et d'une sphère
 	 * 
-	 * @param ray Le rayon avec lequel l'intersection avec la sphère doit être calculée
+	 * @param ray 				Le rayon avec lequel l'intersection avec la sphère doit être calculée
+	 * @param outNormalAtInter 	La normale au point d'intersection s'il existe. Inchangé s'il n'y a pas de point d'intersection avec le rayon passé en argument. Si ce paramètre est null, la normale ne sera pas automatiquement calculée
 	 * 
 	 * @return Retourne le point d'intersection avec la sphère s'il existe (s'il y a deux points d'intersection, ne retourne que le point le plus près de l'origine du rayon). Retourne null sinon.
+	 * intersect modifie le paramètre outNormalAtInter pour y stocker la normale au point d'intersection (si outNormalAtInter n'est pas null à l'appel de la méthode). 
+	 * S'il n'y a pas de point d'intersection, le vecteur reste inchangé.
 	 */
-	public Point intersect(Ray ray)
+	public Point intersect(Ray ray, Vector outNormalAtInter)
 	{
 		Point intersection = null;
 
@@ -135,6 +138,8 @@ public class SphereMaths implements ShapeMaths
 		
 		//On peut maintenant calculer les coordonnées du point d'intersection avec la sphère à l'aide de k1 qui contient le "bon" k
 		intersection = ray.determinePoint(k1);
+		if(outNormalAtInter != null)
+			outNormalAtInter.copyIn(this.getNormal(intersection));//On défini la normale au point d'intersection
 		
 		return intersection;
 	}
