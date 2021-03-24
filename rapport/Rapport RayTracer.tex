@@ -508,17 +508,17 @@ La résolution de rendu est fixe et est donnée au constructeur du RayTracer. La
 \end{figure}
 \FloatBarrier
 
-Les sources de lumière et la caméra sont contenues dans la scène:
+Les sources de lumière et la caméra dont a besoin le RayTracer sont des attributs de RayTracingScene:
 
 \begin{figure}[h!]
-	\adjustbox{center}{\includegraphics[width=0.75\textwidth]{diagrammes/classe_RayTracingScene.png}}
+	\adjustbox{center}{\includegraphics[width=0.42\textwidth]{diagrammes/classe_RayTracingScene.png}}
 	
 	\caption{Diagramme de la classe RayTracingScene}
 	\label{diagrammeRayTracingScene}
 \end{figure}
 \FloatBarrier
 
-Le package scene s'organise ainsi de la sorte:
+La classe Camera, l'interface Light et la classe RayTracingScene s'organisent toutes dans le package scene:
 
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=0.75\textwidth]{diagrammes/package_scene.png}}
@@ -527,5 +527,8 @@ Le package scene s'organise ainsi de la sorte:
 	\label{diagrammePackageScene}
 \end{figure}
 \FloatBarrier
+
+\subsubsection{Le package geometry}
+\subsubsection{Le package materials}
 
 \end{document}
