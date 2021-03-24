@@ -1,7 +1,7 @@
 package tests;
 
-import geometry.materials.MatteMaterial;
-import geometry.materials.MetallicMaterial;
+import materials.MatteMaterial;
+import materials.MetallicMaterial;
 import geometry.shapes.Triangle;
 import javafx.scene.paint.Color;
 import maths.Point;

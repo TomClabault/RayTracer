@@ -1,6 +1,6 @@
 package geometry;
 
-import geometry.materials.Material;
+import materials.Material;
 import maths.Point;
 import maths.Ray;
 import maths.Vector;

@@ -1,0 +1,10 @@
+dev/bin/
+dev/build/
+/javadoc
+.classpath
+.settings
+.project
+*.pdf
+
+#Fichiers geogebra
+*.ggb

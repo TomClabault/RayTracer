@@ -1,4 +1,4 @@
-package geometry.materials;
+package materials;
 
 import javafx.scene.paint.Color;
 

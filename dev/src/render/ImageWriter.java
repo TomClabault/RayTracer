@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import materials.MatteMaterial;
+import materials.MirrorMaterial;
+import materials.MetallicMaterial;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 
 import rayTracer.RayTracer;
-import geometry.materials.MirrorMaterial;
-import geometry.materials.MetallicMaterial;
-import geometry.materials.MatteMaterial;
 import geometry.shapes.*;
 import geometry.*;
 import maths.*;

@@ -1,8 +1,8 @@
 package geometry.shapes;
 
 import geometry.ShapeMaths;
-import geometry.materials.Material;
-import geometry.materials.MatteMaterial;
+import materials.Material;
+import materials.MatteMaterial;
 import javafx.scene.paint.Color;
 import maths.Point;
 import maths.Ray;

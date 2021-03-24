@@ -5,8 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import maths.Point;
-import maths.Vector;
 
 /**
  * La classe contenant le Main qui gère la totalité de l'application
