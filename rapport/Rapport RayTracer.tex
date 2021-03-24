@@ -508,7 +508,7 @@ La résolution de rendu est fixe et est donnée au constructeur du RayTracer. La
 \end{figure}
 \FloatBarrier
 
-Les sources de lumière et la caméra dont a besoin le RayTracer sont des attributs de RayTracingScene:
+Les sources de lumière, la caméra et les objets de la scène dont a besoin le RayTracer sont des attributs de RayTracingScene. Comme énoncé plus haut, on peut ainsi facilement les modifier dynamiquement pendant le rendu.
 
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=0.42\textwidth]{diagrammes/classe_RayTracingScene.png}}
@@ -528,7 +528,22 @@ La classe Camera, l'interface Light et la classe RayTracingScene s'organisent to
 \end{figure}
 \FloatBarrier
 
-\subsubsection{Le package geometry}
 \subsubsection{Le package materials}
+
+Afin de colorer notre scène, nous devons donner une couleur aux formes des objets qui composent la scène. De plus, nous devons indiquer au RayTracer si l'objet est réflexif ou si au contraire il est mat, s'il est spéculaire et si oui à quel point, s'il est diffus...
+Nous allons donc organiser toutes ces caractéristiques dans ce que l'on va appeler des matériaux.
+
+\begin{figure}[h!]
+	\adjustbox{center}{\includegraphics[width=0.75\textwidth]{diagrammes/package_materials.png}}
+	
+	\caption{Diagramme du package materials}
+	\label{diagrammePackageMaterials}
+\end{figure}
+\FloatBarrier
+
+Une classe mère Material permet de définir un matériau complètement arbitrairement. Toutes les caractéristiques peuvent être choisies comme on le souhaite.\\
+Différentes classes héritent ensuite de cette classe mère afin de définir des catégories de matériau. Par exemple, MettalicMaterial va fixer la réflectivité du matériau à un certain point, de même pour sa diffusion, sa spécularité etc... Toutes ces caractéristiques fixées d'une certaine façon donnera donc au matériau un aspect métallique. Il ne restera plus qu'à donner un MetallicMaterial à un objet de la scène pour qu'il ait un aspect métallique pendant le rendu. Le visuel des matériaux peut donc être personnalisé assez facilement et intuitivement avec l'utilisation des matériaux.
+
+\subsubsection{Le package geometry}
 
 \end{document}
