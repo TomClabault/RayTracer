@@ -38,11 +38,13 @@ public class Icosphere extends ShapeTriangle
     protected Vector3D depart,A,B,C,D,E,F,G,H,I,J,K,L;
     protected double t = ((1 + Math.sqrt(5))/2);
     protected double size;
+    protected int subdivision;
 
-    public Icosphere(Vector3D depart, double size, Material material)
+    public Icosphere(Point depart, double size,int subdivision, Material material)
     {
         this.depart = depart;
         this.size = size;
+        this.subdivision = subdivision;
 
         super.material = material;
 
@@ -112,6 +114,30 @@ public class Icosphere extends ShapeTriangle
         super.listeTriangle.add(tr18);
         super.listeTriangle.add(tr19);
         super.listeTriangle.add(tr20);
+
+
+
+
+        /*
+        for (int itr = 0 ; itr < this.subdivision; itr++ )
+        {
+            int listsize = listeTriangle.size();
+            for (int i = 0; i < listsize; i++)
+            {
+            Point A = listeTriangle[i].getA();
+            Point B = listeTriangle[i].getB();
+            Point C = listeTriangle[i].getC();
+
+            Triangle tri = new Triangle((A+B)/2, (B+C)/2, (C+A)/2);
+
+            super.listeTriangle.add(tri);
+
+
+            }
+        }
+
+
+         */
 
 
     }
