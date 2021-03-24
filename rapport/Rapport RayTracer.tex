@@ -389,6 +389,73 @@ La \figurename\ \ref{reflectionsDemo} montre un résultat que l'ont peut obtenir
 La prochaine étape consistera à ajouter le support des objets transparents en implémentant un système de réfraction des rayons.
 \subsubsection{Les réfractions}
 
+\subsection{Les mouvements de caméra}
+
+Notre projet nous permet de déplacer la caméra dans la scène et de recalculer en temps réel les images en accord avec la position de la caméra. Cependant, déplacer la caméra ne se résume pas à changer la position de la caméra. Divers calculs vont en effet être nécessaires afin que le rendu soit fidèle à la nouvelle position de la caméra.
+\subsubsection{Les mouvements de translation}
+Notre caméra est capable de deux types de mouvement. Les translations et les rotations (partie \ref{rotationsCamera}). Nous allons voir dans cette partie comment nous pouvons déplacer l'origine de la caméra sans changer sa direction de regard (rotation de la caméra).
+
+Par convention, la position de base de la caméra dans la scène est $P=(0, 0, 0)$. Nous avons également vu dans la partie \ref{conversionCamera} (voir \figurename\ \ref{repreCamRayon}) que le plan de la caméra se trouvait à 1 unité de distance. Par conséquent, dans le cas où la caméra est toujours dans sa position d'origine, les coordonnées d'un pixel $PixelWorld$ exprimées dans l'espace de la scène seront de la forme:
+
+\begin{center}
+	$PixelWorld = (x, y, -1)$
+\end{center}
+
+Si on déplace la caméra de 4 unité dans le sens de l'axe X, les coordonnées du pixel dans l'espace de la scène deviennent:
+
+\begin{center}
+	$PixelWorld = (x + 4, y, -1)$
+\end{center}
+
+De même, en déplaçant, la caméra de 3 unité dans le sens de l'axe Y en plus de la translation précédente, on obtient:
+
+\begin{center}
+	$PixelWorld = (x + 4, y + 3, -1)$
+\end{center}
+
+\begin{figure}[h!]
+	\adjustbox{center}{\includegraphics[width=0.9\textwidth]{img/rt/translationCamera.png}}
+	
+	\caption{Représentation de la translation de la caméra par les vecteurs $T_X = (4, 0, 0)$ et $T_Y = (0, 3, 0)$}
+	\label{translationCameraFigure}
+\end{figure}
+\FloatBarrier
+
+Nous remarquons qu'il suffit alors d'appliquer la même translation que nous avons appliqué à la caméra aux coordonnées des pixels dans l'espace de la scène. Les rayons que nous lancerons depuis la caméra auront alors pour origine la position de la caméra translatée et comme point de direction les nouvelles coordonnées des pixels translatés.\\
+Plus formellement, pour une translation $\overrightarrow{u} = (a, b, c)$, $P_T$ la position de la caméra translatée et $PixelWorld = (x, y, -1)$ les coordonnées du pixel visé exprimées dans l'espace de la scène:
+
+\begin{center}
+	$Rayon_T = (P_T, (x + a, y + b, -1 + c))$
+\end{center}
+
+\subsubsection{Les mouvements de rotation}
+
+La caméra pouvant maintenant être translatée, il reste à implémenter les rotations. Pour ce faire, nous considérerons 3 caractéristiques de la caméra:
+\begin{itemize}
+	\item{Sa direction de regard $\overrightarrow{d} = (0, 0, -1)$ par défaut}
+	\item{Son angle de rotation horizontal. 0 par défaut}
+	\item{Son angle de rotation vertical. 0 par défaut}
+\end{itemize}
+\hfill\\
+A l'aide de ces 3 caractéristiques, nous pouvons définir deux types de rotation:
+\begin{itemize}
+	\item{Les rotations horizontales}
+	\item{Les rotations verticales}
+\end{itemize}
+
+Une rotation horizontale est une rotation d'angle $\alpha$ autour de l'axe y. Une rotation verticale est une rotation d'angle $\beta$ autour de l'axe x:
+
+\begin{figure}[h!]
+	\adjustbox{center}{\includegraphics[width=\textwidth]{img/rt/rotationCameraY.png}}
+
+	\caption{Plusieures rotations horizontales de la caméra}
+	\label{rotationCameraY}
+\end{figure}
+\FloatBarrier
+
+\subsubsection{La matrice de transformation CTWMatrix}
+\label{rotationsCamera}
+
 \subsection{Le multithreading}
 \subsubsection{Organisation et mise en place}
 
@@ -407,6 +474,7 @@ Afin de faciliter la gestion du multithreading, différentes classes vont être 
 	\item {Les positions de départ de la tuile x et y}
 	\item {Les positions de fin de la tuile x et y}
 \end{itemize}
+\hfill\\
 Dans le cas de la \figurename\ \ref{grilleMultithreading}, l'image à rendre a été découpée en 8x8 = 64 tuiles ou (tasks). Chacune de ces \textit{TileTask} alors créée va être ajoutée à une \textit{ThreadsTaskList} créée en amont (voir \figurename\ \ref{packageMultithreading}). Cette \textit{ThreadsTaskList} gardera compte de combien de tâches (tuiles) sont à rendre au total, combien de tâches restent à rendre et combien de tâches ont été rendues. Comme son nom l'indique, cette classe disposera aussi de la liste des tâches elle même.
 
 \begin{figure}[h!]
