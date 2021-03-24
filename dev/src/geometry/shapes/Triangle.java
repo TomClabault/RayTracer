@@ -22,7 +22,13 @@ public class Triangle implements Shape
 		
 		this.material = material;
 	}
-	
+
+	public Point getA() {return this.A;}
+	public Point getB() {return this.B;}
+	public Point getC() {return this.C;}
+
+
+
 	public Vector3D getNormal(Vector3D point)
 	{
 		return this.planeNormal;
