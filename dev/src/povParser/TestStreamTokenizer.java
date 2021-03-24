@@ -92,6 +92,9 @@ public class TestStreamTokenizer
             System.err.println(e.getMessage());
         }
     }
+    /*
+    TODO: material.java
+     */
 
     public static void main(String[] args)
     {
@@ -112,11 +115,10 @@ public class TestStreamTokenizer
             
 
             while(currentToken != StreamTokenizer.TT_EOF)
-            {           
+            {
                 Figure currentFigure = null;
                 if(streamTokenizer.ttype == StreamTokenizer.TT_WORD)
                 {
-
                     if(streamTokenizer.sval.equals(Figure.SPHERE.getFigureName()))
                     {
                         Stack<Character> bracketStack = new Stack<>();
@@ -128,10 +130,7 @@ public class TestStreamTokenizer
                         {
                             System.out.println((char) currentToken);
                             bracketStack.push((char)currentToken);
-                            /*TODO
-                                appeler le thread SphereParser afin de parse la figure courante (sphere) sur place si possible
-                                (afin d'éviter de le relire une deuxième fois pour créer une chaîne)
-                             */
+
                             ArrayList<String> sphereAttributes = new ArrayList<>();
                             while(!bracketStack.isEmpty()) // figure content
                             {
