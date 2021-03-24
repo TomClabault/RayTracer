@@ -1,5 +1,6 @@
 package povParser;
 
+import javax.sound.midi.SysexMessage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -118,30 +119,68 @@ public class TestStreamTokenizer
 
                     if(streamTokenizer.sval.equals(Figure.SPHERE.getFigureName()))
                     {
-                        System.out.println(streamTokenizer);
                         Stack<Character> bracketStack = new Stack<>();
-                        boolean endingBracket = false;
+
                         String sphereContent = "";
                         currentToken = streamTokenizer.nextToken();
+                        int lastToken = currentToken;
                         if((char) currentToken == '{')
                         {
                             System.out.println((char) currentToken);
+                            bracketStack.push((char)currentToken);
                             /*TODO
                                 appeler le thread SphereParser afin de parse la figure courante (sphere) sur place si possible
                                 (afin d'éviter de le relire une deuxième fois pour créer une chaîne)
                              */
-
-                            /*while(!endingBracket)
+                            ArrayList<String> sphereAttributes = new ArrayList<>();
+                            while(!bracketStack.isEmpty()) // figure content
                             {
-                                sphereContent.concat()
-                            }*/
+                                currentToken = streamTokenizer.nextToken();
+                                if ((char)currentToken == '{')
+                                {
+                                    bracketStack.push((char) currentToken);
+                                }
+                                else if((char) currentToken == '}')
+                                {
+                                    if(bracketStack.peek() == '{')
+                                    {
+                                        bracketStack.pop();
+                                    }
+                                }
+                                else if(currentToken == '<') // ajout des coordonnées du centre et du rayon
+                                {
+                                    while((char) currentToken != '>')
+                                    {
+                                        if(streamTokenizer.ttype == StreamTokenizer.TT_NUMBER)
+                                            sphereAttributes.add(String.valueOf(streamTokenizer.nval));
+                                        currentToken = streamTokenizer.nextToken();
+                                    }
+                                    while(streamTokenizer.ttype != StreamTokenizer.TT_NUMBER)
+                                    {
+                                        currentToken = streamTokenizer.nextToken();
+                                        if(streamTokenizer.ttype == StreamTokenizer.TT_NUMBER)
+                                            sphereAttributes.add(String.valueOf(streamTokenizer.nval));
+                                    }
+
+                                }
+                                /*else if (lastToken == '>') //rayon du cercle
+                                {
+                                    currentToken = streamTokenizer.nextToken();
+                                    sphereAttributes.add(String.valueOf(currentToken));
+                                }*/
+                                else if(streamTokenizer.ttype == StreamTokenizer.TT_WORD)
+                                {
+
+                                }
+                                else if(streamTokenizer.ttype == StreamTokenizer.TT_NUMBER)
+                                {
+
+                                }
+                                System.out.println(sphereAttributes);
+                            }
                         }
-
-                        currentFigure = Figure.SPHERE;                    
                     }
-
                 }
-                
                 currentToken = streamTokenizer.nextToken();
             }
         }

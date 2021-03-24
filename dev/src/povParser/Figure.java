@@ -9,7 +9,7 @@ public enum Figure
 
     private String figure;
 
-    private Figure(String figure)
+    Figure(String figure)
     {
         this.figure = figure;
     }

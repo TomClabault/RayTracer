@@ -8,7 +8,7 @@ public class SphereParser implements Runnable
 
     public SphereParser()
     {
-        System.out.println();
+        System.out.println("sphere parser");
     }
 
     public void createSphere(double xCenter, double yCenter, double zCenter, double radius, String ... sphereModifiers)
