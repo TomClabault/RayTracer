@@ -444,14 +444,27 @@ A l'aide de ces 3 caractéristiques, nous pouvons définir deux types de rotatio
 \end{itemize}
 
 Une rotation horizontale est une rotation d'angle $\alpha$ autour de l'axe y. Une rotation verticale est une rotation d'angle $\beta$ autour de l'axe x:
+Ci-dessous, ce à quoi ressemble une rotation autour de l'axe Y de la caméra. Une rotation horizontale donc.
 
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=\textwidth]{img/rt/rotationCameraY.png}}
 
-	\caption{Plusieures rotations horizontales de la caméra}
+	\caption{Exemples de plusieures rotations horizontales de la caméra}
 	\label{rotationCameraY}
 \end{figure}
 \FloatBarrier
+
+De même pour les rotations verticales autour de l'axe X:
+
+\begin{figure}[h!]
+	\adjustbox{center}{\includegraphics[width=\textwidth]{img/rt/rotationCameraX.png}}
+
+	\caption{Exemples de plusieures rotations verticales de la caméra}
+	\label{rotationCameraX}
+\end{figure}
+\FloatBarrier
+
+En combinant et les rotations verticales et les rotations horizontales, on obtient ainsi n'importe quelle rotation dans l'espace. Cela nous permet donc, de regarder n'importe quel point de la scène avec la caméra. La seule exception étant les rotations autour de l'axe Z qui ne sont pas supportées par notre RayTracer. Il s'agit de rotations qui permettraient de faire passer le sol au plafond et le ciel au sol par exemple. Une métaphore culinaire pour imager ces rotations autour de l'axe Z seraient un poulet rôti sur une broche. La broche étant l'axe Z autour duquel tourne le poulet, la caméra.
 
 \subsubsection{La matrice de transformation CTWMatrix}
 \label{rotationsCamera}
