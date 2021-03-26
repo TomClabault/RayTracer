@@ -467,6 +467,29 @@ De même pour les rotations verticales autour de l'axe X:
 En combinant et les rotations verticales et les rotations horizontales, on obtient ainsi n'importe quelle rotation dans l'espace. Cela nous permet donc, de regarder n'importe quel point de la scène avec la caméra. La seule exception étant les rotations autour de l'axe Z qui ne sont pas supportées par notre RayTracer. Il s'agit de rotations qui permettraient de faire passer le sol au plafond et le ciel au sol par exemple. Une métaphore culinaire pour imager ces rotations autour de l'axe Z seraient un poulet rôti sur une broche. La broche étant l'axe Z autour duquel tourne le poulet, la caméra.
 
 \subsubsection{La matrice de transformation CTWMatrix}
+
+Afin de ne pas manipuler les deux rotations et la translation de la caméra individuellement, nous allons utiliser une matrice de transformation. Cette matrice porte le nom de CTWMatrix, Camera To World Matrix. En effet, c'est une matrice de passage entre la base de l'espace vectoriel de la caméra et la base de l'espace vectoriel du monde. On peut ainsi l'utiliser pour convertir les coordonnées des points exprimées dans l'espace de la caméra en coordonnées exprimées dans l'espace du monde. C'est exactement ce dont nous avons besoin pour les rotations de la caméra et les translations.\\
+Pour construire une telle matrice, nous utiliserons tout d'abord deux matrices de rotation:
+\begin{center}
+	$R_Y =
+	\begin{pmatrix}
+		cos(\alpha) & 0 & sin(\alpha)\\
+		0 & 1 & 0\\
+		-sin(\alpha) & 0 & cos(\alpha)
+	\end{pmatrix}
+	$ ;
+	$R_X = 
+	\begin{pmatrix}
+		1 & 0 & 0\\
+		0 & cos(\beta) & -sin(\beta)\\
+		0 & sin(\beta) & cos(\beta)
+	\end{pmatrix}
+	$
+\end{center}
+
+$(MR_{3x3}, \cdot)$ l'ensemble des matrices de rotation de taille 3x3 muni de la multiplication usuelle des matrices est un groupe. Ainsi, $R_Y\cdot R_X$ est une matrice de rotation qui de plus, combine les rotations de $R_Y$ et de $R_X$. Cependant ce n'est pas un groupe abélien et en général, $R_Y\cdot R_X \ne R_X\cdot R_Y$. On en déduit qu'une rotation autour de l'axe X suivie d'une rotation autour de l'axe Y ne donne pas la même rotation finale que la même rotation autour de l'axe Y suivie de la même rotation autour de l'axe X. Il va donc falloir choisir un ordre de rotation autour des axes. Nous avons choisi de tourner autour de l'axe Y en premier puis autour de l'axe X.\\
+Si $R_{YX} = R_Y\cdot R_X$, il ne nous manque plus que 
+
 \label{rotationsCamera}
 
 \subsection{Le multithreading}
