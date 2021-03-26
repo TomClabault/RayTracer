@@ -27,9 +27,10 @@ import scene.RayTracingScene;
  */
 public class RayTracer
 {
-	public static final double AIR_REFRACTION_INDEX = 1;
 	private int renderHeight;
 	private int renderWidth;
+
+	public static final double AIR_REFRACTION_INDEX = 1.000393;
 	public static final int DEPTH = 4;
 
 	IntBuffer renderedPixels;
@@ -390,13 +391,13 @@ public class RayTracer
 			return 1;
 		}
 		
-		double sup1 = (actualRefractionIndex*cosThetaIncident - incomingRefractionIndex*cosThetaRefracted);
-		double inf1 = (actualRefractionIndex*cosThetaIncident + incomingRefractionIndex*cosThetaRefracted);
-		double fpl = Math.pow(sup1/inf1, 2);
+		double sup = (actualRefractionIndex*cosThetaIncident - incomingRefractionIndex*cosThetaRefracted);
+		double inf = (actualRefractionIndex*cosThetaIncident + incomingRefractionIndex*cosThetaRefracted);
+		double fpl = Math.pow(sup/inf, 2);
 		
-		double sup2 = (incomingRefractionIndex*cosThetaRefracted - actualRefractionIndex*cosThetaIncident);
-		double inf2 = (incomingRefractionIndex*cosThetaRefracted + actualRefractionIndex*cosThetaIncident);
-		double fpr = Math.pow(sup2/inf2, 2);
+		sup = (incomingRefractionIndex*cosThetaIncident - actualRefractionIndex*cosThetaRefracted);
+		inf = (incomingRefractionIndex*cosThetaIncident + actualRefractionIndex*cosThetaRefracted);
+		double fpr = Math.pow(sup/inf, 2);
 		
 		return 0.5*(fpl+fpr);
 	}

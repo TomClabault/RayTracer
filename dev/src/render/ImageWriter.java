@@ -98,7 +98,7 @@ public class ImageWriter {
         shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, new MetallicMaterial(Color.rgb(255, 211, 0))));
         //shapeList.add(new SphereMaths(new Point(-1.25, 1, -6.5), 0.2, new MetallicMaterial(Color.LIGHTSKYBLUE)));
         //shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
-        shapeList.add(new SphereMaths(new Point(0,0,-8), 0.35, new MatteMaterial(Color.ORANGERED)));
+        //shapeList.add(new SphereMaths(new Point(0,0,-8), 0.35, new MatteMaterial(Color.ORANGERED)));
         //shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
         shapeList.add(new SphereMaths(new Point(0,1,-6), 1, new GlassMaterial()));
 
