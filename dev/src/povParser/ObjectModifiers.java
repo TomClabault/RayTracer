@@ -2,7 +2,7 @@ package povParser;
 
 public enum ObjectModifiers
 {
-    COLOR("pigment"),
+    COLOR("pigment"), //toujours suivi de rgb
     MATERIAL("finish");
 
     private String modifier;

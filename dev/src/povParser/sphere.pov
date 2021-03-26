@@ -11,3 +11,8 @@ triangle
 {
     <0, 0, 0>, <1, 1, 1>, <2, 2, 2>
 }
+
+polygon
+{
+    Number_Of_Points, <Point_1> <Point_2>... <Point_n>
+}

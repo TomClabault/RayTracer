@@ -4,7 +4,10 @@ public enum Finish
 {
     AMBIENT("ambient"),
     DIFFUSE("diffuse"),
-    REFLECTIVE("reflection");
+    REFLECTIVE("reflection"),
+    SPECULAR("specular"),
+    PHONG("phong"),
+    SHININESS("phong_size");
 
     private String finish;
 

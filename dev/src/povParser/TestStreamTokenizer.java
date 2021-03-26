@@ -1,6 +1,5 @@
 package povParser;
 
-import javax.sound.midi.SysexMessage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -92,9 +91,6 @@ public class TestStreamTokenizer
             System.err.println(e.getMessage());
         }
     }
-    /*
-    TODO: material.java
-     */
 
     public static void main(String[] args)
     {
@@ -112,76 +108,104 @@ public class TestStreamTokenizer
             streamTokenizer.commentChar(testFile.CROISILLON);
 
             int currentToken = streamTokenizer.nextToken();
-            
 
-            while(currentToken != StreamTokenizer.TT_EOF)
-            {
+            while (currentToken != StreamTokenizer.TT_EOF) {
                 Figure currentFigure = null;
-                if(streamTokenizer.ttype == StreamTokenizer.TT_WORD)
-                {
-                    if(streamTokenizer.sval.equals(Figure.SPHERE.getFigureName()))
-                    {
+                if (streamTokenizer.ttype == StreamTokenizer.TT_WORD) {
+                    if (streamTokenizer.sval.equals(Figure.SPHERE.getFigureName())) {
                         Stack<Character> bracketStack = new Stack<>();
 
-                        String sphereContent = "";
                         currentToken = streamTokenizer.nextToken();
-                        int lastToken = currentToken;
-                        if((char) currentToken == '{')
-                        {
-                            System.out.println((char) currentToken);
-                            bracketStack.push((char)currentToken);
+
+                        if ((char) currentToken == '{') {
+
+                            bracketStack.push((char) currentToken);
 
                             ArrayList<String> sphereAttributes = new ArrayList<>();
-                            while(!bracketStack.isEmpty()) // figure content
+                            while (!bracketStack.isEmpty()) // figure content
                             {
                                 currentToken = streamTokenizer.nextToken();
-                                if ((char)currentToken == '{')
-                                {
+                                if ((char) currentToken == '{') {
                                     bracketStack.push((char) currentToken);
-                                }
-                                else if((char) currentToken == '}')
-                                {
-                                    if(bracketStack.peek() == '{')
-                                    {
+                                } else if ((char) currentToken == '}') {
+                                    if (bracketStack.peek() == '{') {
                                         bracketStack.pop();
                                     }
-                                }
-                                else if(currentToken == '<') // ajout des coordonnées du centre et du rayon
+                                } else if (currentToken == '<') // ajout des coordonnées du centre et du rayon
                                 {
-                                    while((char) currentToken != '>')
-                                    {
-                                        if(streamTokenizer.ttype == StreamTokenizer.TT_NUMBER)
-                                            sphereAttributes.add(String.valueOf(streamTokenizer.nval));
+                                    while ((char) currentToken != '>') {
+                                        if (streamTokenizer.ttype == StreamTokenizer.TT_NUMBER)
+                                            sphereAttributes.add(String.valueOf(streamTokenizer.nval)); //coordonnées
                                         currentToken = streamTokenizer.nextToken();
                                     }
-                                    while(streamTokenizer.ttype != StreamTokenizer.TT_NUMBER)
-                                    {
+                                    while (streamTokenizer.ttype != StreamTokenizer.TT_NUMBER) {
                                         currentToken = streamTokenizer.nextToken();
-                                        if(streamTokenizer.ttype == StreamTokenizer.TT_NUMBER)
-                                            sphereAttributes.add(String.valueOf(streamTokenizer.nval));
+
+                                        if (streamTokenizer.ttype == StreamTokenizer.TT_NUMBER)
+                                            sphereAttributes.add(String.valueOf(streamTokenizer.nval)); //rayon du cercle
                                     }
-
                                 }
-                                /*else if (lastToken == '>') //rayon du cercle
-                                {
-                                    currentToken = streamTokenizer.nextToken();
-                                    sphereAttributes.add(String.valueOf(currentToken));
-                                }*/
-                                else if(streamTokenizer.ttype == StreamTokenizer.TT_WORD)
-                                {
+                                /*object modifiers de sphere*/
+                                if (streamTokenizer.ttype == StreamTokenizer.TT_WORD) {
+                                    if (streamTokenizer.sval.equals(ObjectModifiers.COLOR.getModifierName())) //attribut couleur de la sphere
+                                    {
+                                        Stack<Character>colorStack = new Stack<>();
+                                        currentToken = streamTokenizer.nextToken();
+                                        if ((char) currentToken == '{')
+                                        {
 
-                                }
-                                else if(streamTokenizer.ttype == StreamTokenizer.TT_NUMBER)
-                                {
+                                            colorStack.push((char) currentToken);
 
+                                            while (!colorStack.isEmpty()) // pigment section content
+                                            {
+                                                currentToken = streamTokenizer.nextToken();
+                                                if ((char) currentToken == '{')
+                                                {
+                                                    colorStack.push((char) currentToken);
+                                                }
+                                                else if ((char) currentToken == '}')
+                                                {
+                                                    if (colorStack.peek() == '{')
+                                                    {
+                                                        colorStack.pop();
+                                                    }
+                                                }
+                                                else if (streamTokenizer.ttype == StreamTokenizer.TT_WORD)
+                                                {
+                                                    if (streamTokenizer.sval.equals("color")) {
+                                                        currentToken = streamTokenizer.nextToken();
+                                                        if (streamTokenizer.ttype == StreamTokenizer.TT_WORD) {
+                                                            if (streamTokenizer.sval.equals("rgb")) //corps du bloc couleur soit rgb nombre soit rgb <r, g, b>
+                                                            {
+                                                                currentToken = streamTokenizer.nextToken();
+                                                                if (currentToken == '<') // ajout des coordonnées du centre et du rayon
+                                                                {
+                                                                    while ((char) currentToken != '>') {
+
+                                                                        if (streamTokenizer.ttype == StreamTokenizer.TT_NUMBER)
+                                                                            sphereAttributes.add(String.valueOf(streamTokenizer.nval)); //triplet de couleur (rgb <r, g, b>)
+                                                                        currentToken = streamTokenizer.nextToken();
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    sphereAttributes.add(String.valueOf(streamTokenizer.nval));
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
-                                System.out.println(sphereAttributes);
                             }
                         }
                     }
+                    currentToken = streamTokenizer.nextToken();
                 }
-                currentToken = streamTokenizer.nextToken();
             }
+            currentToken = streamTokenizer.nextToken();
         }
 
         catch (FileNotFoundException e)
