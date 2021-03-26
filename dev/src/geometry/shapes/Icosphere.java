@@ -118,17 +118,26 @@ public class Icosphere extends ShapeTriangle
 
 
 
-        /*
+
         for (int itr = 0 ; itr < this.subdivision; itr++ )
         {
             int listsize = listeTriangle.size();
             for (int i = 0; i < listsize; i++)
             {
-            Point A = listeTriangle[i].getA();
-            Point B = listeTriangle[i].getB();
-            Point C = listeTriangle[i].getC();
+            Point A = listeTriangle.get(i).getA();
+            Point B = listeTriangle.get(i).getB();
+            Point C = listeTriangle.get(i).getC();
 
-            Triangle tri = new Triangle((A+B)/2, (B+C)/2, (C+A)/2);
+            Point AB = Point.add(A,B);
+            Point BC = Point.add(B,C);
+            Point CA = Point.add(C,A);
+
+            Point ABmid = Point.scalarMul(0.5, AB);
+            Point BCmid = Point.scalarMul(0.5, BC);
+            Point CAmid = Point.scalarMul(0.5, CA);
+
+
+            Triangle tri = new Triangle(ABmid, BCmid, CAmid, material);
 
             super.listeTriangle.add(tri);
 
@@ -137,7 +146,7 @@ public class Icosphere extends ShapeTriangle
         }
 
 
-         */
+
 
 
     }
