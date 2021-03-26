@@ -44,7 +44,7 @@ public class Icosphere extends ShapeTriangle
     {
         this.depart = depart;
         this.size = size;
-        this.subdivision = subdivision;
+        this.subdivision = subdivision; // if subdivision < 1 , affiche erreur
 
         super.material = material;
 
@@ -119,30 +119,41 @@ public class Icosphere extends ShapeTriangle
 
 
 
-        for (int itr = 0 ; itr < this.subdivision; itr++ )
+        for (int itr = 0 ; itr < this.subdivision - 1; itr++ )
         {
             int listsize = listeTriangle.size();
             for (int i = 0; i < listsize; i++)
             {
+            // on recupere les points du triangle a chaque bouclage
             Point A = listeTriangle.get(i).getA();
             Point B = listeTriangle.get(i).getB();
             Point C = listeTriangle.get(i).getC();
 
+            // formule : (A+B)/2 , (B+C)/2 , (C+A)/2
+            // on ajout les deux points
             Point AB = Point.add(A,B);
             Point BC = Point.add(B,C);
             Point CA = Point.add(C,A);
 
+            // on multiplie les points par 0.5
             Point ABmid = Point.scalarMul(0.5, AB);
             Point BCmid = Point.scalarMul(0.5, BC);
             Point CAmid = Point.scalarMul(0.5, CA);
 
+            // on fait des triangles dans un triangle
+            Triangle trimid = new Triangle(ABmid, BCmid, CAmid, material);
+            Triangle trileft = new Triangle(A, AB, CA, material);
+            Triangle triright = new Triangle(CA, BC, C, material);
+            Triangle tribot = new Triangle(AB, B, BC, material);
 
-            Triangle tri = new Triangle(ABmid, BCmid, CAmid, material);
-
-            super.listeTriangle.add(tri);
+            super.listeTriangle.add(trimid);
+            super.listeTriangle.add(trileft);
+            super.listeTriangle.add(triright);
+            super.listeTriangle.add(tribot);
 
 
             }
+            // supprimer les triangles de la subdiv avant
         }
 
 
