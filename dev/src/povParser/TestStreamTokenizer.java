@@ -127,8 +127,10 @@ public class TestStreamTokenizer
                                 currentToken = streamTokenizer.nextToken();
                                 if ((char) currentToken == '{') {
                                     bracketStack.push((char) currentToken);
-                                } else if ((char) currentToken == '}') {
-                                    if (bracketStack.peek() == '{') {
+                                } else if ((char) currentToken == '}')
+                                {
+                                    if (bracketStack.peek() == '{')
+                                    {
                                         bracketStack.pop();
                                     }
                                 } else if (currentToken == '<') // ajout des coordonnées du centre et du rayon
