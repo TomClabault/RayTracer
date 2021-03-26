@@ -27,7 +27,7 @@ import scene.RayTracingScene;
  */
 public class RayTracer
 {
-	public static final double AIR_REFRACTION_INDEX = 1.000393;
+	public static final double AIR_REFRACTION_INDEX = 1;
 	private int renderHeight;
 	private int renderWidth;
 	public static final int DEPTH = 4;
