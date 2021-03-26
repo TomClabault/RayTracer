@@ -12,9 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 
 import rayTracer.RayTracer;
-import geometry.materials.MirrorMaterial;
-import geometry.materials.MetallicMaterial;
-import geometry.materials.MatteMaterial;
+import geometry.materials.*;
 import geometry.shapes.*;
 import geometry.*;
 import maths.*;
@@ -89,20 +87,22 @@ public class ImageWriter {
 
     public RayTracingScene addObjectsToScene() {/*utilisé dans le constructeur*/
 
-        Camera cameraRT = new Camera(new Point(0, 0, 0), 0, 0);
+    	Camera cameraRT = new Camera(new Point(0.000, 2.000, -3.500), 0, -24.0);
         cameraRT.setFOV(60);
         Light l = new LightBulb(new Point(0, 2, 0), 1);
 
         ArrayList<Shape> shapeList = new ArrayList<>();
         shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128))));
 
-        shapeList.add(new SphereMaths(new Point(0, 0.5, -6), 1, new MetallicMaterial(Color.rgb(240, 0, 0))));
+        //shapeList.add(new SphereMaths(new Point(0, 0.5, -6), 1, new MetallicMaterial(Color.rgb(240, 0, 0))));
         shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, new MetallicMaterial(Color.rgb(255, 211, 0))));
-        shapeList.add(new SphereMaths(new Point(-1.25, 1, -6.5), 0.2, new MetallicMaterial(Color.LIGHTSKYBLUE)));
-        shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
-        shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
-        
-        RayTracingScene sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.4);
+        //shapeList.add(new SphereMaths(new Point(-1.25, 1, -6.5), 0.2, new MetallicMaterial(Color.LIGHTSKYBLUE)));
+        //shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
+        //shapeList.add(new SphereMaths(new Point(0,0,-8), 0.35, new MatteMaterial(Color.ORANGERED)));
+        //shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
+        shapeList.add(new SphereMaths(new Point(0,1,-6), 1, new GlassMaterial()));
+
+        RayTracingScene sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.55);
 
         return  sceneRT;
     }
