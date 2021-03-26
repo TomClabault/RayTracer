@@ -390,13 +390,13 @@ public class RayTracer
 			return 1;
 		}
 		
-		double sup = (actualRefractionIndex*cosThetaIncident - incomingRefractionIndex*cosThetaRefracted);
-		double inf = (actualRefractionIndex*cosThetaIncident + incomingRefractionIndex*cosThetaRefracted);
-		double fpl = Math.pow(sup/inf, 2);
+		double sup1 = (actualRefractionIndex*cosThetaIncident - incomingRefractionIndex*cosThetaRefracted);
+		double inf1 = (actualRefractionIndex*cosThetaIncident + incomingRefractionIndex*cosThetaRefracted);
+		double fpl = Math.pow(sup1/inf1, 2);
 		
-		sup = (incomingRefractionIndex*cosThetaRefracted - actualRefractionIndex*cosThetaIncident);
-		inf = (incomingRefractionIndex*cosThetaRefracted + actualRefractionIndex*cosThetaIncident);
-		double fpr = Math.pow(sup/inf, 2);
+		double sup2 = (incomingRefractionIndex*cosThetaRefracted - actualRefractionIndex*cosThetaIncident);
+		double inf2 = (incomingRefractionIndex*cosThetaRefracted + actualRefractionIndex*cosThetaIncident);
+		double fpr = Math.pow(sup2/inf2, 2);
 		
 		return 0.5*(fpl+fpr);
 	}
