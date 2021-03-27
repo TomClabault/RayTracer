@@ -44,7 +44,15 @@ public class Icosphere extends ShapeTriangle
     {
         this.depart = depart;
         this.size = size;
-        this.subdivision = subdivision; // if subdivision < 1 , affiche erreur
+        //this.subdivision = subdivision; // if subdivision < 1 , affiche erreur
+        if (subdivision > 0)
+        {
+            this.subdivision = subdivision;
+        }
+        else
+        {
+            throw new RuntimeException();
+        }
 
         super.material = material;
 
@@ -154,6 +162,10 @@ public class Icosphere extends ShapeTriangle
 
             }
             // supprimer les triangles de la subdiv avant
+            for(int j = 0; j<listsize ; j++)
+            {
+                super.listeTriangle.remove(j);
+            }
         }
 
 
