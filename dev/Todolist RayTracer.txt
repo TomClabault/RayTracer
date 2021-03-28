@@ -1,8 +1,9 @@
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
 IMPORTANT :::::
-- Ajouter des try/catch pour éviter qu'en écrivant des lettres dans le choix de largeur/hauteur ça lève une exception
+- Ajouter des try/catch pour éviter qu'en écrivant des lettres (par exemple) dans le choix de largeur/hauteur ça lève une exception
 - Quand on quitte le MainApp avec la croix de la fenêtre sans avoir rien écrit dans largeur/hauteur, erreur dans le terminal
+- Résoudre le problème du fichier CSS pour les FPS
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
 
