@@ -26,9 +26,11 @@ public class WindowTimer extends AnimationTimer {
         this.pixelWriter = pixelWriter;
         this.rayTracer = rayTracer;
         Label fpsLabel = new Label("");
-        this.fpsLabel = fpsLabel;
         fpsLabel.setId("fpsLabel");
+        fpsLabel.setTranslateX(5);//Position du label + 5X
+        fpsLabel.setTranslateY(5);//Position du label + 5Y
 
+        this.fpsLabel = fpsLabel;
         this.pixelFormat = PixelFormat.getIntArgbPreInstance();
     }
 

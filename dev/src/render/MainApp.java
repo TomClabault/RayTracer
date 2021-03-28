@@ -1,6 +1,8 @@
 package render;
 
 import java.io.File;
+import java.net.URL;
+
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.application.Application;
@@ -33,15 +35,20 @@ public class MainApp extends Application {
         StackPane stackPane = new StackPane();
 
         Scene scene = new Scene(stackPane);
-        File f = new File("src/render/style/fpsCounter.css");
-        scene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));//line form https://blog.idrsolutions.com/2014/04/use-external-css-files-javafx/
-
+        
         ImageWriter imageWriter = new ImageWriter(scene);
         imageWriter.ImageWriterMain(HEIGHT, WIDTH);
-
-        //CounterFPS counterFPS = new CounterFPS(imageWriter.getUpdateWindow().getWindowTimer().getfpsLabel());
+        
         CounterFPS counterFPS = new CounterFPS(imageWriter.getWindowTimer().getfpsLabel());
 
+        URL fpsCounterCSSURL= this.getClass().getResource("styles/fpsCounter.css");
+        if(fpsCounterCSSURL == null)//Le fichier n'a pas été trouvé
+        	imageWriter.getWindowTimer().getfpsLabel().setStyle("-fx-font-size: 4em; -fx-text-fill: white; -fx-border-color: white;");//On peut avoir une partie du style avec cette ligne. Il manque seulement le contour noir au texte
+        else
+        {
+        	String fpsCounterCSSPath = fpsCounterCSSURL.toExternalForm();
+        	scene.getStylesheets().add(fpsCounterCSSPath);//line form https://blog.idrsolutions.com/2014/04/use-external-css-files-javafx/
+        }
         stackPane.getChildren().add(imageWriter.getPane());
         stackPane.getChildren().add(counterFPS.getPane());
 
