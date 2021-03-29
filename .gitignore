@@ -8,8 +8,8 @@ javadoc/
 .settings
 .project
 
-#JavaFX library
-dev/lib/javafx-sdk-15.0.1
+#External libraries
+dev/lib/
 
 #.jar généré par ant. On ne le commit pas
 dev/RayTracer.jar
