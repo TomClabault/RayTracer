@@ -1,5 +1,5 @@
 #!/bin/doc
 
-cd ..
-[-d doc || mkdir doc]
-javadoc -d /doc -sourcepath /src
+cd $(dirname $0)/..
+[ -d doc ] || mkdir doc
+javadoc -d "/doc" -sourcepath ./src/*/*.java

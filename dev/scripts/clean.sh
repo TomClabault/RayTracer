@@ -1,16 +1,16 @@
  #!/bin/sh
 
- if [-d ../doc]
+ if [ -d ../doc ]
  then
     rm -rf ../doc
 fi
 
-if [-d ../lib]
+if [ -d ../lib ]
 then
     rm -rf ../lib
 fi
 
-if[-d ../build]
+if [ -d ../build ]
 then
     rm -rf ../build
 fi
