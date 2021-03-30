@@ -1,6 +1,7 @@
 package materials;
 
 import javafx.scene.paint.Color;
+import textures.ProceduralTexture;
 
 /*
  * Classe permettant définir des matériaux à partir des différentes caractéristiques physiques que peut simuler le rayTracer
@@ -19,7 +20,7 @@ public class Material
 	private int shininess;
 	private double specularCoeff;
 	
-	private int special;//Attribut special qui spécifie la texture du matériau. Utilisé pour le damier par exemple
+	ProceduralTexture proceduralTexture;//Attribut special qui spécifie la texture du matériau. Utilisé pour le damier par exemple
 	
 	/*
 	 * Crée un matériau de A à Z
@@ -39,7 +40,7 @@ public class Material
 		this.specularCoeff = specularCoeff;
 		this.shininess = shininess;
 		
-		this.special = Material.NORMAL;
+		this.proceduralTexture = null;//Pas de texture par défaut
 	}
 	
 	/*
@@ -50,8 +51,9 @@ public class Material
 	 * @param reflectiveCoeff Réel entre 0 et 1. Coefficient qui gère la réflectivité du matériau. Plus ce coefficient se rapproche de 1 et plus le matériau se rapprochera d'un matériau "mirroir"
 	 * @param specularCoeff Réel entre 0 et 1. Coefficient permettant de jouer sur l'intensité des tâches spéculaires du matériau. Plus ce coefficient se rapproche de 1 plus les tâches spéculaires seront marquées. A 0, le matériau n'est pas spéculaire
 	 * @param shininess Entier positif non nul. Permet de jouer sur la taille des tâches spéculaires du matériau. Plus ce nombre est grand plus les tâches seront petites
+	 * @param proceduralTexture La texture procédurale de l'objet
 	 */
-	public Material(Color color, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess, int specialTexture)
+	public Material(Color color, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess, ProceduralTexture proceduralTexture)
 	{
 		this.color = color;
 		
@@ -60,7 +62,7 @@ public class Material
 		this.specularCoeff = specularCoeff;
 		this.shininess = shininess;
 		
-		this.special = specialTexture;
+		this.proceduralTexture = proceduralTexture;
 	}
 	
 	/*
@@ -117,5 +119,25 @@ public class Material
 	public double getSpecularCoeff()
 	{
 		return this.specularCoeff;
+	}
+	
+	/*
+	 * Permet d'obtenir la texture procédurale de l'objet s'il en a une
+	 * 
+	 * @return L'instance de la texture procédurale de l'objet. Retourne null si l'objet n'a pas de texture procédurale.
+	 */
+	public ProceduralTexture getProceduralTexture()
+	{
+		return this.proceduralTexture;
+	}
+	
+	/*
+	 * Permet de déterminer si le matériau a une texture procédurale appliquée ou non
+	 * 
+	 *  @return Retourne true si le matériau a une texture procédurale appliquée. false sinon
+	 */
+	public boolean hasProceduralTexture()
+	{
+		return !(this.proceduralTexture == null);
 	}
 }

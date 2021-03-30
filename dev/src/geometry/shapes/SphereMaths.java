@@ -1,8 +1,8 @@
 package geometry.shapes;
 
-import geometry.ShapeMaths;
 import materials.Material;
 import materials.MatteMaterial;
+import geometry.Shape;
 import javafx.scene.paint.Color;
 import maths.Point;
 import maths.Ray;
@@ -12,7 +12,7 @@ import maths.Vector;
  * Classe représentant une sphère décrite par son centre ainsi que son rayon. Représente la "version" mathématique d'une sphère. 
  * Pour une représentation polygonale d'une sphère, voir SphereTriangle
  */
-public class SphereMaths implements ShapeMaths
+public class SphereMaths implements Shape
 {
 	Point center;
 	double radius;
@@ -60,7 +60,6 @@ public class SphereMaths implements ShapeMaths
 	 * 
 	 * @return Matériau de la sphère
 	 */
-	@Override
 	public Material getMaterial() 
 	{
 		return this.material;
@@ -76,6 +75,15 @@ public class SphereMaths implements ShapeMaths
 	public Vector getNormal(Point point)
 	{
 		return Vector.normalize(Point.p2v(Point.sub(point, center)));
+	}
+	
+	/*
+	 * @link{geometry.shapes.Shape#getUVCoords}
+	 */
+	@Override
+	public Point getUVCoords(Point point)
+	{
+		return null;
 	}
 	
 	/*

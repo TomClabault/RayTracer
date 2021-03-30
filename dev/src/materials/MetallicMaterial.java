@@ -1,12 +1,28 @@
 package materials;
 
 import javafx.scene.paint.Color;
+import textures.ProceduralTexture;
 
 public class MetallicMaterial extends Material
 {
+	/*
+	 * Crée un matériau d'une certaine couleur ayant des reflets métalliques
+	 * 
+	 * @param color La couleur du matériau métallique
+	 */
 	public MetallicMaterial(Color color)
 	{
-		//public Material(Color color, double ambientCoeff, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess)
 		super(color, 0.75, 0.4, 1, 256);
+	}
+	
+	/*
+	 * Crée un matériau d'une certaine couleur ayant des reflets métalliques et une certaine texture procédurale
+	 * 
+	 * @param color La couleur du matériau métallique
+	 * @param proceduralTexture Texture procédurale du matériau @link{textures.ProceduralTexture}
+	 */
+	public MetallicMaterial(Color color, ProceduralTexture proceduralTexture)
+	{
+		super(color, 0.75, 0.4, 1, 256, proceduralTexture);
 	}
 }

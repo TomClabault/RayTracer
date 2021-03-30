@@ -192,8 +192,10 @@ public class RayTracer
 			double lightIntensity = renderScene.getLight().getIntensity();
 			double ambientLighting = computeAmbient(renderScene.getAmbientLightIntensity(), lightIntensity);
 
+			Point UVCoordsAtInterPoint = rayInterObject.getUVCoords(rayInterPoint);
 			Color finalColor = Color.rgb(0, 0, 0);
-			finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting));
+			Color objectColor = rayIntObjMaterial.hasProceduralTexture() ? rayIntObjMaterial.getProceduralTexture().getColorAt(UVCoordsAtInterPoint) : rayIntObjMaterial.getColor();
+			finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(objectColor, ambientLighting));
 
 
 
@@ -222,7 +224,7 @@ public class RayTracer
 				if(rayIntObjMaterial.getDiffuseCoeff() > 0)//Si le matériau est diffus
 				{
 					double diffuseComponent = computeDiffuse(shadowRayDir, normalAtIntersection, lightIntensity);
-					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(rayIntObjMaterial.getColor(), diffuseComponent * rayIntObjMaterial.getDiffuseCoeff()));
+					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(objectColor, diffuseComponent * rayIntObjMaterial.getDiffuseCoeff()));
 				}
 
 				if(rayIntObjMaterial.getSpecularCoeff() > 0)//Si le matériau est spéculaire
@@ -246,10 +248,10 @@ public class RayTracer
 					Color reflectionColor = computePixel(x, y, renderScene, new Ray(interPointShift, Vector.normalize(getReflectionVector(normalAtIntersection, ray.getDirection()))), depth - 1);
 
 					finalColor = ColorOperations.mulColor(reflectionColor, rayIntObjMaterial.getReflectiveCoeff());
-					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting));
+					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(objectColor, ambientLighting));
 				}
 				else
-					finalColor = ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting);//L'objet n'est pas réfléxif, on ne renvoie que la partie ambiante
+					finalColor = ColorOperations.mulColor(objectColor, ambientLighting);//L'objet n'est pas réfléxif, on ne renvoie que la partie ambiante
 			}
 
 			return finalColor;
