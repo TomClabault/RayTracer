@@ -89,7 +89,7 @@ public class ImageWriter {
 
     public RayTracingScene addObjectsToScene() {/*utilisé dans le constructeur*/
 
-        Camera cameraRT = new Camera(new Point(0, 1, -5.040), 0, 0);
+    	Camera cameraRT = new Camera(new Point(0.160, 1.130, -2.945), 0.000, -21.000);
         
         cameraRT.setFOV(60);
         Light l = new LightBulb(new Point(0, 2, 0), 1);
