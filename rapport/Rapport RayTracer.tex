@@ -11,6 +11,7 @@
 \usepackage{geometry}%Pour changer la largeur des marges du document notamment
 \usepackage{placeins}%pour utiliser FloatBarrier afin que les figure respectent bien leur position dans le code
 \usepackage{gensymb}%pour pouvoir écrire le signe °
+\usepackage{hyperref}%pour les liens dans la bibliographie
 \usepackage{stmaryrd}%pour les crochets à double barres d'intervalles de nombre entiers
 \usepackage{listings}
 \usepackage{slashbox}%Case séparée en deux tout en haut à gauche des tableaux à double entrées
@@ -47,6 +48,9 @@ showstringspaces=false}
 \geometry{hmargin=3cm, vmargin=2cm}
 
 \begin{document}
+\tableofcontents
+\newpage
+
 \maketitle
 
 \section{Détail des parties techniques}
@@ -149,7 +153,7 @@ $P(x, y, z), x \in [0; 799], y \in [0; 599], z = -1$ :
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/fovCamera.png}}
 
-	\caption{En augmentant le FOV (champ de vision) de la caméra, l'angle $\alpha$ augmente. La hauteur du plan de la caméra, $BC$, est étirée. La caméra verra donc une plus grande partie de la scène. \textbf{Source: scratchapixel.com}}
+	\caption{En augmentant le FOV (champ de vision) de la caméra, l'angle $\alpha$ augmente. La hauteur du plan de la caméra, $BC$, est étirée. La caméra verra donc une plus grande partie de la scène. \textbf{Source: scratchapixel.com} \cite{scratchapixel}}
 	\label{fovCam}
 \end{figure}
 \FloatBarrier
@@ -318,7 +322,7 @@ La direction d'un rayon parfaitement réfléchi peut se calculer grâce au rayon
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/reflectionVector.png}}
 
-	\caption{On peut calculer le rayon réfléchi à partir du rayon incident et de la normale. \textbf{Source: scratchapixel.com}}
+	\caption{On peut calculer le rayon réfléchi à partir du rayon incident et de la normale. \textbf{Source: scratchapixel.com} \cite{scratchapixel}}
 	\label{reflectionCalcul}
 \end{figure}
 \FloatBarrier
@@ -485,7 +489,8 @@ Pour construire une telle matrice, nous utiliserons tout d'abord deux matrices d
 		0 & cos(\beta) & -sin(\beta)\\
 		0 & sin(\beta) & cos(\beta)
 	\end{pmatrix}
-	$
+	$\\
+	\textbf{Source: wikipedia} \cite{wikipediaRotationMatrices}
 \end{center}
 
 $(MR_{3x3}, \cdot)$ l'ensemble des matrices de rotation de taille 3x3 muni de la multiplication usuelle des matrices est un groupe. Ainsi, $R_Y\cdot R_X$ est une matrice de rotation qui de plus, combine les rotations de $R_Y$ et de $R_X$. Cependant ce n'est pas un groupe abélien et en général, $R_Y\cdot R_X \ne R_X\cdot R_Y$. On en déduit qu'une rotation autour de l'axe X suivie d'une rotation autour de l'axe Y ne donne pas la même rotation finale que la même rotation autour de l'axe Y suivie de la même rotation autour de l'axe X. Il va donc falloir choisir un ordre de rotation autour des axes. Nous avons choisi de tourner autour de l'axe Y en premier puis autour de l'axe X.\\
@@ -578,7 +583,7 @@ Maintenant que nous avons notre liste de tâches prête, la prochaine étape est
 	\caption{Algorithme gérant la création des threads}
 	\label{creationThreads}
 \end{algorithm}
-
+\hfill\\
 L'algorithme \ref{creationThreads} qui crée les threads de calculs présente une subtilité. $threadCount-1$ threads sont créés et non pas $threadCount$. En effet, le thread principal va lui aussi s'atteler à la tâche, c'est un thread déjà créé par le lancement du programme lui même. On crée donc un thread de moins. Après la création des threads, une boucle while permet de donner au thread principal autant de tâche qu'il en reste à calculer (pendant que les autres threads calculent aussi leurs tâches en parallèle). Ainsi, lorsque la condition de la boucle while ne sera plus vérifiée, cela signifiera que toutes les tâches ont été calculées.Le thread principal pourra sortir de la boucle et le rendu pourra être affiché. Voyons maintenant comment fonctionne la méthode \textit{computeTask} utilisée dans l'algorithme présenté précédemment.
 
 \begin{algorithm}[H]
@@ -590,7 +595,7 @@ L'algorithme \ref{creationThreads} qui crée les threads de calculs présente un
 	\caption{Java - Méthode de gestion des calculs des tâches}
 	\label{computeTask}
 \end{algorithm}
-
+\hfill\\
 Cette méthode sera utilisée par tous les threads ayant été créé. Elle est destinée à donner les tâches aux threads tant qu'il en reste à calculer. A l'entrée de la méthode, on vérifie si toutes les tâches ont déjà été données à calculer. Si c'est le cas, on retourne false, indiquant qu'il n'y a plus de tâches à donner aux threads. S'il reste des tâches à calculer, on récupère la prochaine tâche et on incrémente la variable qui tient compte du nombre de tâches qui ont été données à calculer. On calcule ensuite la tuile correspondant à la tâche et on incrémente le nombre de tâche qui ont été calculées. On retourne alors true puisque le thread a calculé une tâche avec succès, il peut y en avoir d'autre à calculer. L'utilisation des blocs \color{javapurple}{\textbf{synchronized}} \color{black} de Java est justifiée pour éviter la concurrence des threads sur les variables partagées entre tous les threads de calcul. En effet, les variables totalTaskCount, totalTaskGiven et totalTaskFinished sont réécrites par tous les threads, potentiellement simultanément. Les blocs \color{javapurple}{\textbf{synchronized}}\color{black}\ sont alors nécessaires pour éviter de nombreux problèmes.
 
 La méthode \textit{demarrer(thread)} permet de lancer le thread après l'avoir créé. Le thread va alors exécuter le code de sa méthode de départ:
@@ -683,5 +688,9 @@ Une classe mère Material permet de définir un matériau complètement arbitrai
 Différentes classes héritent ensuite de cette classe mère afin de définir des catégories de matériau. Par exemple, MettalicMaterial va fixer la réflectivité du matériau à un certain point, de même pour sa diffusion, sa spécularité etc... Toutes ces caractéristiques fixées d'une certaine façon donnera donc au matériau un aspect métallique. Il ne restera plus qu'à donner un MetallicMaterial à un objet de la scène pour qu'il ait un aspect métallique pendant le rendu. Le visuel des matériaux peut donc être personnalisé assez facilement et intuitivement avec l'utilisation des matériaux.
 
 \subsubsection{Le package geometry}
+\cite{scratchapixel}
+
+\bibliographystyle{unsrt}
+\bibliography{bibliography/sources}
 
 \end{document}
