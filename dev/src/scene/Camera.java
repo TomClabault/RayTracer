@@ -10,10 +10,10 @@ import maths.Vector;
  */
 public class Camera 
 {
-	Point position;//Point depuis lequel regarde la caméra
+	private Point position;//Point depuis lequel regarde la caméra
 	
-	double angleHori;/* Angle de rotation de caméra sur le plan x, z en degré */
-	double angleVerti;/* Angle de rotation de caméra sur le plan x, y en degré */
+	private double angleHori;/* Angle de rotation de caméra sur le plan x, z en degré */
+	private double angleVerti;/* Angle de rotation de caméra sur le plan x, y en degré */
 	/*
 	 * Deux angles horizontal et vertical
 	 * 

@@ -83,7 +83,37 @@ public class SphereMaths implements Shape
 	@Override
 	public Point getUVCoords(Point point)
 	{
-		return null;
+		Point UVCoords = new Point(0, 0, 0);
+		
+		Vector toSphereOrigin = new Vector(point, this.center);
+		
+		/*
+		 * Formules de: https://en.wikipedia.org/wiki/UV_mapping
+		 */
+		UVCoords.setX(0.5 + Math.atan2(toSphereOrigin.getX(), toSphereOrigin.getZ())/(2*Math.PI));
+		UVCoords.setY(0.5 - Math.asin(toSphereOrigin.getY()/Math.PI));
+		
+		return UVCoords;
+	}
+	
+	/*
+	 * Permet d'obtenir les coordonnées de texture UV d'une supposée sphère de rayon 1 à partir d'un point de cette sphère
+	 * 
+	 * @param point Le point de la sphère dont on veut les coordonnées UV. Le point est supposé être effectivement sur la sphère. Aucune vérification n'est faite
+	 * 
+	 * @return Le point de coordonnées (x, y, z) tel que x = u et y = v. z sera toujours égal à 0 
+	 */
+	public static Point getUVCoord(Point point)
+	{
+		Point UVCoords = new Point(0, 0, 0);
+		
+		/*
+		 * Formules de: https://en.wikipedia.org/wiki/UV_mapping
+		 */
+		UVCoords.setX(0.5 + Math.atan2(point.getX(), point.getZ())/(2*Math.PI));
+		UVCoords.setY(0.5 - Math.asin(point.getY())/Math.PI);
+		
+		return UVCoords;
 	}
 	
 	/*

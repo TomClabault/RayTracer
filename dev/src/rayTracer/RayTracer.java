@@ -4,7 +4,9 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 import geometry.Shape;
+import geometry.shapes.SphereMaths;
 import materials.Material;
+import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 import maths.MatrixD;
 import maths.ColorOperations;
@@ -30,8 +32,10 @@ public class RayTracer
 	private int renderHeight;
 	private int renderWidth;
 
-	IntBuffer renderedPixels;
+	private IntBuffer renderedPixels;
 
+	private PixelReader skyboxPixelReader = null;
+	
 	public RayTracer(int renderWidth, int renderHeight)
 	{
 		this.renderWidth = renderWidth;
@@ -161,7 +165,7 @@ public class RayTracer
 				Ray cameraRay = new Ray(MatrixD.mulPoint(new Point(0, 0, 0), ctwMatrix), pixelWorldCoords);
 				cameraRay.normalize();
 
-				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay, 10);
+				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay, 4);
 				this.renderedPixels.put(y*renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
 			}
 		}
@@ -199,7 +203,6 @@ public class RayTracer
 
 
 
-			//Vector reflectionVector = getReflectionVector(normalAtIntersection, new Vector(rayInterPoint, renderScene.getLight().getCenter()));
 			Vector reflectionVector = getReflectionVector(normalAtIntersection, ray.getDirection());
 
 			Point interPointShift = Point.add(rayInterPoint, Point.scalarMul(0.0001d, Vector.v2p(Vector.normalize(reflectionVector))));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
@@ -237,7 +240,6 @@ public class RayTracer
 				{
 					Color reflectionColor = computePixel(x, y, renderScene, new Ray(interPointShift, Vector.normalize(getReflectionVector(normalAtIntersection, ray.getDirection()))), depth - 1);
 
-					//finalColor = ColorOperations.mulColor(reflectionColor, rayInterObject.getReflectiveCoeff());
 					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(reflectionColor, rayIntObjMaterial.getReflectiveCoeff()));
 				}
 			}
@@ -256,8 +258,21 @@ public class RayTracer
 
 			return finalColor;
 		}
-		else//Le rayon n'a rien intersecté --> couleur du background
-			return renderScene.getBackgroundColor();//Couleur du fond, noir si on a pas de fond
+		else//Le rayon n'a rien intersecté --> couleur du background / de la skybox
+			if(renderScene.hasSkybox())
+			{
+				Point UVCoords = SphereMaths.getUVCoord(Vector.v2p(ray.getDirection()));
+				
+				double uD = UVCoords.getX();
+				double vD = UVCoords.getY();
+				
+				int u = (int)Math.floor((renderScene.getSkyboxWidth()-1) * uD);
+				int v = (int)Math.floor((renderScene.getSkyboxHeight()-1) * vD);
+				
+				return this.skyboxPixelReader.getColor(u, v);
+			}
+			else
+				return renderScene.getBackgroundColor();//Couleur du fond, noir si on a pas de fond
 	}
 
 	public boolean computeTask(RayTracingScene renderScene, ThreadsTaskList taskList)
@@ -344,6 +359,10 @@ public class RayTracer
 
 	public IntBuffer renderImage(RayTracingScene renderScene, int nbCore)
 	{
+		//if(this.skyboxPixelReader != null)
+		if(renderScene.hasSkybox())
+			this.skyboxPixelReader = renderScene.getSkyboxPixelReader();
+		
 		ThreadsTaskList threadTaskList = new ThreadsTaskList();
 		threadTaskList.initTaskList(nbCore, this.renderWidth, this.renderHeight);
 
