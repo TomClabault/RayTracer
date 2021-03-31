@@ -53,7 +53,7 @@ public class ImageWriter {
         pane.getChildren().add(imageView);
         this.pane = pane;
 
-        WindowTimer windowTimer = new WindowTimer(this.MyGlobalScene, this.pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT));
+        WindowTimer windowTimer = new WindowTimer(this.MyGlobalScene, this.pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 8));
         this.windowTimer = windowTimer;
 
         CameraTimer cameraTimer = new CameraTimer(this.mainAppScene, this.MyGlobalScene);
@@ -90,13 +90,13 @@ public class ImageWriter {
 
     public RayTracingScene addObjectsToScene() {/*utilisé dans le constructeur*/
 
-    	Camera cameraRT = new Camera(new Point(0.160, 1.130, -2.945), 0.000, -21.000);
+    	Camera cameraRT = new Camera(new Point(0, 1, -2), 0.000, -15.000);
         
         cameraRT.setFOV(60);
         Light l = new LightBulb(new Point(0, 2, 0), 1);
 
         ArrayList<Shape> shapeList = new ArrayList<>();
-        shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150)))));
+        shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), new MetallicMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(24, 24, 24), Color.rgb(165, 165, 165)))));
 
         shapeList.add(new SphereMaths(new Point(0, 0.5, -6), 1, new MirrorMaterial(0.75)));
         shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, new MetallicMaterial(Color.rgb(255, 211, 0))));
@@ -104,7 +104,7 @@ public class ImageWriter {
         shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
         shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
         
-        Image skybox = new Image("file:kloppenheim_06.jpg");
+        Image skybox = new Image("file:oberer_kuhberg.jpg");
         RayTracingScene sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.75, skybox);
 
         return  sceneRT;

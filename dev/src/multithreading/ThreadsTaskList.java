@@ -64,10 +64,6 @@ public class ThreadsTaskList
 		int tilesCountX = renderWidth / tilesWidth; tilesCountX = (tilesCountX * tilesWidth < renderWidth) ? tilesCountX + 1 : tilesCountX; 
 		int tilesCountY = renderHeight / tilesHeight; tilesCountY = (tilesCountY * tilesHeight < renderHeight) ? tilesCountY + 1 : tilesCountY;
 		
-		tilesCountX = tilesCountY = 4;
-		tilesWidth = renderWidth / tilesCountX;
-		tilesHeight = renderHeight / tilesCountY;
-		
 		for(int y = 0; y < tilesCountY; y++)
 		{
 			int startY = y*tilesHeight;
@@ -81,5 +77,16 @@ public class ThreadsTaskList
 				this.totalTaskCount++;
 			}
 		}
+	}
+	
+	/*
+	 * Permet de remettre à zéro l'avancement de la liste des tâches. i.e. la liste garde les mêmes tâches mais est prête à être réutilisée.
+	 * Sans l'appel à cette fonction, une fois la liste de tâche complétée une fois, l'état de la liste est tel qu'elle ne pourra pas être réutilisée.
+	 * On doit donc reset la liste entre plusieures utilisations 
+	 */
+	public void resetTasksProgression()
+	{
+		this.totalTaskFinished = 0;
+		this.totalTaskGiven = 0;
 	}
 }

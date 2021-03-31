@@ -31,12 +31,14 @@ public class RayTracer
 {
 	private int renderHeight;
 	private int renderWidth;
-
+	private ThreadsTaskList threadTaskList;
+	private int nbCore;
+	
 	private IntBuffer renderedPixels;
 
 	private PixelReader skyboxPixelReader = null;
 	
-	public RayTracer(int renderWidth, int renderHeight)
+	public RayTracer(int renderWidth, int renderHeight, int nbCore)
 	{
 		this.renderWidth = renderWidth;
 		this.renderHeight = renderHeight;
@@ -44,6 +46,10 @@ public class RayTracer
 		this.renderedPixels = IntBuffer.allocate(renderWidth*renderHeight);
 		for(int i = 0; i < renderWidth*renderHeight; i++)
 			this.renderedPixels.put(i, ColorOperations.aRGB2Int(Color.rgb(255, 0, 0)));
+		
+		this.threadTaskList = new ThreadsTaskList();
+		this.nbCore = nbCore;
+		threadTaskList.initTaskList(nbCore, this.renderWidth, this.renderHeight);
 	}
 
 	/*
@@ -357,21 +363,18 @@ public class RayTracer
 		return this.renderedPixels;
 	}
 
-	public IntBuffer renderImage(RayTracingScene renderScene, int nbCore)
+	public IntBuffer renderImage(RayTracingScene renderScene)
 	{
-		//if(this.skyboxPixelReader != null)
 		if(renderScene.hasSkybox())
 			this.skyboxPixelReader = renderScene.getSkyboxPixelReader();
-		
-		ThreadsTaskList threadTaskList = new ThreadsTaskList();
-		threadTaskList.initTaskList(nbCore, this.renderWidth, this.renderHeight);
 
-		for(int i = 1; i < nbCore; i++)//Création des threads sauf 1, le thread principal, qui est déjà créé
+		for(int i = 1; i < this.nbCore; i++)//Création des threads sauf 1, le thread principal, qui est déjà créé
 			new Thread(new TileThread(threadTaskList, this, renderScene), String.format("RT-Thread %d", i)).start();
 
 		while(threadTaskList.getTotalTaskFinished() < threadTaskList.getTotalTaskCount())
 			this.computeTask(renderScene, threadTaskList);
 
+		this.threadTaskList.resetTasksProgression();
 		return this.getRenderedPixels();
 	}
 }
