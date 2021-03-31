@@ -26,4 +26,11 @@ public interface ProceduralTexture
 	 * @return Retourne la couleur de la texture au point de coordonnées de texture (u, v) donné
 	 */
 	public Color getColorAt(Point UVPoint);
+	
+	/*
+	 * Permet d'obtenir la taille du pattern de la texture
+	 * 
+	 * @return Retourne la taille du motif (pattern) de la texture
+	 */
+	public double getSize();
 }

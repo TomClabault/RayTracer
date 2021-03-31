@@ -86,12 +86,13 @@ public class SphereMaths implements Shape
 		Point UVCoords = new Point(0, 0, 0);
 		
 		Vector toSphereOrigin = new Vector(point, this.center);
+		toSphereOrigin.normalize();
 		
 		/*
 		 * Formules de: https://en.wikipedia.org/wiki/UV_mapping
 		 */
 		UVCoords.setX(0.5 + Math.atan2(toSphereOrigin.getX(), toSphereOrigin.getZ())/(2*Math.PI));
-		UVCoords.setY(0.5 - Math.asin(toSphereOrigin.getY()/Math.PI));
+		UVCoords.setY(0.5 - Math.asin(toSphereOrigin.getY())/Math.PI);
 		
 		return UVCoords;
 	}

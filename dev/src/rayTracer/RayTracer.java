@@ -202,9 +202,16 @@ public class RayTracer
 			double lightIntensity = renderScene.getLight().getIntensity();
 			double ambientLighting = computeAmbient(renderScene.getAmbientLightIntensity(), lightIntensity);
 
-			Point UVCoordsAtInterPoint = rayInterObject.getUVCoords(rayInterPoint);
 			Color finalColor = Color.rgb(0, 0, 0);
-			Color objectColor = rayIntObjMaterial.hasProceduralTexture() ? rayIntObjMaterial.getProceduralTexture().getColorAt(UVCoordsAtInterPoint) : rayIntObjMaterial.getColor();
+			Color objectColor = null;
+			if(rayIntObjMaterial.hasProceduralTexture())
+			{
+				Point UVCoordsAtInterPoint = rayInterObject.getUVCoords(rayInterPoint);
+				
+				objectColor = rayIntObjMaterial.getProceduralTexture().getColorAt(UVCoordsAtInterPoint);
+			}
+			else
+				objectColor = rayIntObjMaterial.getColor();
 			finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(objectColor, ambientLighting));
 
 

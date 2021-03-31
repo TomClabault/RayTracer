@@ -96,12 +96,12 @@ public class ImageWriter {
         Light l = new LightBulb(new Point(0, 2, 0), 1);
 
         ArrayList<Shape> shapeList = new ArrayList<>();
-        shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), new MetallicMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(24, 24, 24), Color.rgb(165, 165, 165)))));
+        shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), new MetallicMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(24, 24, 24), Color.rgb(165, 165, 165), 1.0/2.0))));
 
         shapeList.add(new SphereMaths(new Point(0, 0.5, -6), 1, new MirrorMaterial(0.75)));
         shapeList.add(new SphereMaths(new Point(1.1, 0.5, -5.5), 0.2, new MetallicMaterial(Color.rgb(255, 211, 0))));
         shapeList.add(new SphereMaths(new Point(-1.25, 1, -6.5), 0.2, new MetallicMaterial(Color.LIGHTSKYBLUE)));
-        shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.ORANGERED)));
+        shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.BLACK, new ProceduralTextureCheckerboard(Color.ORANGERED, Color.ORANGERED.darker(), 12))));
         shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
         
         Image skybox = new Image("file:oberer_kuhberg.jpg");

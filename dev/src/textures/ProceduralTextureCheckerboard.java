@@ -42,11 +42,19 @@ public class ProceduralTextureCheckerboard implements ProceduralTexture
 	@Override
 	public Color getColorAt(Point point) 
 	{
-		int xInt = (int)Math.floor(point.getX() / size);
-		int yInt = (int)Math.floor(point.getY() / size);
+		int xInt = (int)Math.floor(point.getX() * size);
+		int yInt = (int)Math.floor(point.getY() * size);
 		
 		//Si la somme de u et v est impaire, on est sur une case de couleur 2 du damier
 		//Sinon, couleur 1
 		return ((xInt + yInt) & 0x1) == 1 ? this.color2 : this.color1;
+	}
+	
+	/*
+	 * @link{textures.ProceduralTextures#getSize}
+	 */
+	public double getSize()
+	{
+		return this.size;
 	}
 }
