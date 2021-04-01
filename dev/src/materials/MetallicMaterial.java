@@ -12,7 +12,7 @@ public class MetallicMaterial extends Material
 	 */
 	public MetallicMaterial(Color color)
 	{
-		super(color, 0.5, 0.2, 1, 256);
+		super(color, 0, 0.15, 1, 256);
 	}
 	
 	/*
@@ -23,6 +23,6 @@ public class MetallicMaterial extends Material
 	 */
 	public MetallicMaterial(Color color, ProceduralTexture proceduralTexture)
 	{
-		super(color, 0.5, 0.2, 1, 256, proceduralTexture);
+		super(color, 0, 0.15, 1, 256, proceduralTexture);
 	}
 }

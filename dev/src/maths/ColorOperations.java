@@ -92,6 +92,18 @@ public class ColorOperations
 	}
 	
 	/*
+	 * Retourne une nouvelle instance de Color représentant la même couleur que celle passée en argument
+	 * 
+	 * @param La couleur à copier
+	 * 
+	 * @return Une nouvelle instance de couleur dont les valeurs des composantes sont les même que colorToCopy 
+	 */
+	public static Color copy(Color colorToCopy) 
+	{
+		return Color.rgb((int)(colorToCopy.getRed()*255), (int)(colorToCopy.getGreen()*255), (int)(colorToCopy.getBlue()*255));
+	}
+	
+	/*
 	 * Multiplie une couleur composante par composante par un scalaire
 	 * 
 	 * @param col Couleur à multiplier

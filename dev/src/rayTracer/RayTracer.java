@@ -211,6 +211,7 @@ public class RayTracer
 				Point UVCoordsAtInterPoint = rayInterObject.getUVCoords(rayInterPoint);
 				
 				objectColor = rayIntObjMaterial.getProceduralTexture().getColorAt(UVCoordsAtInterPoint);
+				finalColor = ColorOperations.copy(objectColor);
 			}
 			else
 				objectColor = rayIntObjMaterial.getColor();
@@ -285,7 +286,6 @@ public class RayTracer
 				int v = (int)Math.floor((renderScene.getSkyboxHeight()-1) * vD);
 				
 				Color skyboxPixelColor = this.skyboxPixelReader.getColor(u, v); 
-				Color gammeUnCorrected = ColorOperations.powColor(skyboxPixelColor, 2.2);//Les skybox sont déjà gamma-corrigées. On veut donc
 				
 				return skyboxPixelColor;
 			}

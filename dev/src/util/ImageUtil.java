@@ -1,5 +1,12 @@
 package util;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
@@ -12,6 +19,26 @@ public class ImageUtil
 	 * Constante de gamma utilisée pour les conversion en sRGB non-linéaire et RGB linéaire
 	 */
 	public static final double GAMMA = 2.2;
+	
+	/*
+	 * Calcule la table de transposition de sRGB + courbe de gamma vers linear RGB
+	 * telle que table[sRGBValue(GAMMA)] = LinearRGBValue avec:
+	 * - sRGBValue la valeur d'intensité (des composantes RGB notamment) dans l'espace de couleur sRGB corrigé avec un gamma de GAMMA
+	 * - GAMMA la constante utilisée pour la courbe de correction de gamma sRGB
+	 * - LinearRGBValue la valeur de sRGBValue mais dans l'espace de couleur RGB linéaire
+	 */
+	protected static int[] computesRGBToLinearTable()
+	{
+		int[] table = new int[256];
+		
+		for(int i = 0; i < 256; i++)
+		{
+			table[i] = (int)(Math.pow((double)i/256.0, ImageUtil.GAMMA)*256);
+			table[i] = table[i] > 255 ? 255 : table[i];
+		}
+			
+		return table;
+	}
 	
 	private static final int[] sRGBToLinearTable = ImageUtil.computesRGBToLinearTable();
 	/*
@@ -54,16 +81,24 @@ public class ImageUtil
 		return outputLinear;
 	}
 	
-	protected static int[] computesRGBToLinearTable()
+	/*
+	 * Code de: https://stackoverflow.com/questions/34194427/javafx-2-save-crisp-snapshot-of-scene-to-disk
+	 * 
+	 * Permet d'écrire le rendu d'une scène JavaFX sur le disque
+	 * 
+	 * @param javaFXScene Scène javaFX dont on veut faire un instantané à sauvegarder sur le disque
+	 * @param outputFile Le fichier dans lequel sauvegarder l'instantané
+	 */
+	public static void writeImageToDisk(Scene javaFXScene, String outputFile) throws IOException
 	{
-		int[] table = new int[256];
-		
-		for(int i = 0; i < 256; i++)
+		try 
 		{
-			table[i] = (int)(Math.pow((double)i/256.0, 2.2)*256);
-			table[i] = table[i] > 255 ? 255 : table[i];
+			WritableImage wi = new WritableImage((int) javaFXScene.getWidth(), (int) javaFXScene.getHeight());
+			WritableImage snapshot = javaFXScene.snapshot(wi);
+			File output = new File(outputFile);
+			ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
+		} catch (IOException ex) {
+			ex.printStackTrace();
 		}
-			
-		return table;
 	}
 }

@@ -1,12 +1,14 @@
 package render;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import util.ImageUtil;
 
 /**
  * La classe contenant le Main qui gère la totalité de l'application
