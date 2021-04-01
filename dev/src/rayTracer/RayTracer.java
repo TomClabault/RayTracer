@@ -172,6 +172,8 @@ public class RayTracer
 				cameraRay.normalize();
 
 				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay, 4);
+				pixelColor = ColorOperations.powColor(pixelColor, 1.0/2.2);//Gamma correction
+				
 				this.renderedPixels.put(y*renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
 			}
 		}
@@ -282,7 +284,10 @@ public class RayTracer
 				int u = (int)Math.floor((renderScene.getSkyboxWidth()-1) * uD);
 				int v = (int)Math.floor((renderScene.getSkyboxHeight()-1) * vD);
 				
-				return this.skyboxPixelReader.getColor(u, v);
+				Color skyboxPixelColor = this.skyboxPixelReader.getColor(u, v); 
+				Color gammeUnCorrected = ColorOperations.powColor(skyboxPixelColor, 2.2);//Les skybox sont déjà gamma-corrigées. On veut donc
+				
+				return skyboxPixelColor;
 			}
 			else
 				return renderScene.getBackgroundColor();//Couleur du fond, noir si on a pas de fond

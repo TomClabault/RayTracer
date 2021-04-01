@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 import scene.lights.Light;
+import util.ImageUtil;
 
 /*
  * Permet de représenter une scène de rendu contenant une caméra, une lumière et une liste de formes
@@ -71,7 +72,7 @@ public class RayTracingScene
 		this.light = light;
 		this.shapes = shapes;
 
-		this.skyboxTexture = skyboxTexture;
+		this.skyboxTexture = ImageUtil.sRGBImageToLinear(skyboxTexture, 2.2);
 		this.backgroundColor = backgroundColor;
 		this.ambientLightIntensity = ambientLightIntensity;
 		

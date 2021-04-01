@@ -115,6 +115,23 @@ public class ColorOperations
 	}
 	
 	/*
+	 * Permet d'élever toutes les composantes d'une couleur à une certaine puissance
+	 * 
+	 * @param col 	La couleur à élever à une certaine puissance
+	 * @param power L'exposant
+	 * 
+	 * @return Retourne une nouvelle couleur de composante (r^power, g^power, b^power) où ^ dénote l'exponentiation
+	 */
+	public static Color powColor(Color col, double power)
+	{
+		int newRed = (int)(Math.pow(col.getRed(), power)*255);
+		int newGreen = (int)(Math.pow(col.getGreen(), power)*255);
+		int newBlue = (int)(Math.pow(col.getBlue(), power)*255);
+		
+		return Color.rgb(newRed, newGreen, newBlue);
+	}
+	
+	/*
 	 * Soustrait deux couleurs terme à terme
 	 * 
 	 * @param col1 Première couleur
