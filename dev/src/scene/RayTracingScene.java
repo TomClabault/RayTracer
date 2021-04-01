@@ -72,7 +72,7 @@ public class RayTracingScene
 		this.light = light;
 		this.shapes = shapes;
 
-		this.skyboxTexture = ImageUtil.sRGBImageToLinear(skyboxTexture, 2.2);
+		this.skyboxTexture = ImageUtil.sRGBImageToLinear(skyboxTexture, ImageUtil.GAMMA);
 		this.backgroundColor = backgroundColor;
 		this.ambientLightIntensity = ambientLightIntensity;
 		
