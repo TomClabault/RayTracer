@@ -51,7 +51,7 @@ public class Icosphere extends ShapeTriangle
         }
         else
         {
-            throw new RuntimeException();
+            throw new RuntimeException("Subdivision has to be bigger than 0");
         }
 
         super.material = material;
@@ -126,7 +126,7 @@ public class Icosphere extends ShapeTriangle
 
 
 
-
+        // on va boucler selon combien de subdivision souhaite
         for (int itr = 0 ; itr < this.subdivision - 1; itr++ )
         {
             int listsize = listeTriangle.size();
@@ -154,6 +154,7 @@ public class Icosphere extends ShapeTriangle
             Triangle triright = new Triangle(CA, BC, C, material);
             Triangle tribot = new Triangle(AB, B, BC, material);
 
+            // on ajout ces triangles dans la liste des triangles
             super.listeTriangle.add(trimid);
             super.listeTriangle.add(trileft);
             super.listeTriangle.add(triright);
