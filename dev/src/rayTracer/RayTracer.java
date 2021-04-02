@@ -174,7 +174,7 @@ public class RayTracer
 				Ray cameraRay = new Ray(MatrixD.mulPoint(new Point(0, 0, 0), ctwMatrix), pixelWorldCoords);
 				cameraRay.normalize();
 
-				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay, 4);
+				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay, DEPTH);
 				pixelColor = ColorOperations.powColor(pixelColor, 1.0/2.2);//Gamma correction
 				
 				this.renderedPixels.put(y*renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
@@ -419,7 +419,8 @@ public class RayTracer
 		return this.getRenderedPixels();
 	}
 
-	public double Fresnel(Ray I, Vector N, double actualRefractionIndex) {
+	public double Fresnel(Ray I, Vector N, double actualRefractionIndex) 
+	{
 		double incomingRefractionIndex = AIR_REFRACTION_INDEX;
 		
 		if (Vector.dotProduct(I.getDirection(), N) > 0) {
@@ -448,7 +449,8 @@ public class RayTracer
 		return 0.5*(fpl+fpr);
 	}
 
-	public Vector computeRefractedVector(Ray I, Vector N, double actualRefractionIndex){
+	public Vector computeRefractedVector(Ray I, Vector N, double actualRefractionIndex)
+	{
 		double incomingRefractionIndex = AIR_REFRACTION_INDEX;
 		Vector Nneg = new Vector(0,0,0);
 		Nneg.copyIn(N);

@@ -70,20 +70,33 @@ public class RayTracingScene
 	 */
 	public RayTracingScene(Camera camera, Light light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, Image skyboxTexture) throws IllegalArgumentException
 	{
-		if(skyboxTexture.isError())
-			throw new IllegalArgumentException("Erreur durant le chargement de la skybox : " + skyboxTexture.getException().getMessage());
+		if(skyboxTexture != null)
+		{
+			if(skyboxTexture.isError())
+				throw new IllegalArgumentException("Erreur durant le chargement de la skybox : " + skyboxTexture.getException().getMessage());
+			else
+			{
+				this.skyboxTexture = ImageUtil.sRGBImageToLinear(skyboxTexture, ImageUtil.GAMMA);
+				this.skyboxPixelReader = this.skyboxTexture.getPixelReader();
+				
+				this.skyboxWidth = (int)skyboxTexture.getWidth();
+				this.skyboxHeight = (int)skyboxTexture.getHeight();
+			}
+		}
+		else
+		{
+			this.skyboxPixelReader = null;
+			
+			this.skyboxWidth = 0;
+			this.skyboxHeight = 0;	
+		}
 		
 		this.camera = camera;
 		this.light = light;
 		this.shapes = shapes;
 
-		this.skyboxTexture = ImageUtil.sRGBImageToLinear(skyboxTexture, ImageUtil.GAMMA);
 		this.backgroundColor = backgroundColor;
 		this.ambientLightIntensity = ambientLightIntensity;
-		
-		this.skyboxPixelReader = this.skyboxTexture.getPixelReader();
-		this.skyboxWidth = (int)skyboxTexture.getWidth();
-		this.skyboxHeight = (int)skyboxTexture.getHeight();
 	}
 
 	/*
