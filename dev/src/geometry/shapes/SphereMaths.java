@@ -1,8 +1,8 @@
 package geometry.shapes;
 
-import geometry.ShapeMaths;
-import geometry.materials.Material;
-import geometry.materials.MatteMaterial;
+import materials.Material;
+import materials.MatteMaterial;
+import geometry.Shape;
 import javafx.scene.paint.Color;
 import maths.Point;
 import maths.Ray;
@@ -12,7 +12,7 @@ import maths.Vector;
  * Classe représentant une sphère décrite par son centre ainsi que son rayon. Représente la "version" mathématique d'une sphère. 
  * Pour une représentation polygonale d'une sphère, voir SphereTriangle
  */
-public class SphereMaths implements ShapeMaths
+public class SphereMaths implements Shape
 {
 	Point center;
 	double radius;
@@ -60,7 +60,6 @@ public class SphereMaths implements ShapeMaths
 	 * 
 	 * @return Matériau de la sphère
 	 */
-	@Override
 	public Material getMaterial() 
 	{
 		return this.material;
@@ -79,13 +78,56 @@ public class SphereMaths implements ShapeMaths
 	}
 	
 	/*
+	 * @link{geometry.shapes.Shape#getUVCoords}
+	 */
+	@Override
+	public Point getUVCoords(Point point)
+	{
+		Point UVCoords = new Point(0, 0, 0);
+		
+		Vector toSphereOrigin = new Vector(point, this.center);
+		toSphereOrigin.normalize();
+		
+		/*
+		 * Formules de: https://en.wikipedia.org/wiki/UV_mapping
+		 */
+		UVCoords.setX(0.5 + Math.atan2(toSphereOrigin.getX(), toSphereOrigin.getZ())/(2*Math.PI));
+		UVCoords.setY(0.5 - Math.asin(toSphereOrigin.getY())/Math.PI);
+		
+		return UVCoords;
+	}
+	
+	/*
+	 * Permet d'obtenir les coordonnées de texture UV d'une supposée sphère de rayon 1 à partir d'un point de cette sphère
+	 * 
+	 * @param point Le point de la sphère dont on veut les coordonnées UV. Le point est supposé être effectivement sur la sphère. Aucune vérification n'est faite
+	 * 
+	 * @return Le point de coordonnées (x, y, z) tel que x = u et y = v. z sera toujours égal à 0 
+	 */
+	public static Point getUVCoord(Point point)
+	{
+		Point UVCoords = new Point(0, 0, 0);
+		
+		/*
+		 * Formules de: https://en.wikipedia.org/wiki/UV_mapping
+		 */
+		UVCoords.setX(0.5 + Math.atan2(point.getX(), point.getZ())/(2*Math.PI));
+		UVCoords.setY(0.5 - Math.asin(point.getY())/Math.PI);
+		
+		return UVCoords;
+	}
+	
+	/*
 	 * Calcule de façon analytique l'intersection d'un rayon et d'une sphère
 	 * 
-	 * @param ray Le rayon avec lequel l'intersection avec la sphère doit être calculée
+	 * @param ray 				Le rayon avec lequel l'intersection avec la sphère doit être calculée
+	 * @param outNormalAtInter 	La normale au point d'intersection s'il existe. Inchangé s'il n'y a pas de point d'intersection avec le rayon passé en argument. Si ce paramètre est null, la normale ne sera pas automatiquement calculée
 	 * 
 	 * @return Retourne le point d'intersection avec la sphère s'il existe (s'il y a deux points d'intersection, ne retourne que le point le plus près de l'origine du rayon). Retourne null sinon.
+	 * intersect modifie le paramètre outNormalAtInter pour y stocker la normale au point d'intersection (si outNormalAtInter n'est pas null à l'appel de la méthode). 
+	 * S'il n'y a pas de point d'intersection, le vecteur reste inchangé.
 	 */
-	public Point intersect(Ray ray)
+	public Point intersect(Ray ray, Vector outNormalAtInter)
 	{
 		Point intersection = null;
 
@@ -135,6 +177,8 @@ public class SphereMaths implements ShapeMaths
 		
 		//On peut maintenant calculer les coordonnées du point d'intersection avec la sphère à l'aide de k1 qui contient le "bon" k
 		intersection = ray.determinePoint(k1);
+		if(outNormalAtInter != null)
+			outNormalAtInter.copyIn(this.getNormal(intersection));//On défini la normale au point d'intersection
 		
 		return intersection;
 	}

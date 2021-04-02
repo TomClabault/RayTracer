@@ -1,14 +1,14 @@
 package geometry.shapes;
 
-import geometry.ShapeMaths;
-import geometry.materials.Material;
-import geometry.materials.MatteMaterial;
+import materials.Material;
+import materials.MatteMaterial;
+import geometry.Shape;
 import javafx.scene.paint.Color;
 import maths.Point;
 import maths.Ray;
 import maths.Vector;
 
-public class PlaneMaths implements ShapeMaths
+public class PlaneMaths implements Shape
 {
 	//Equation de plan: (p - point).normal = 0
 	private Vector normal;//partie (A, B, C) de l'équation
@@ -42,7 +42,6 @@ public class PlaneMaths implements ShapeMaths
 		this.material = material;
 	}
 	
-	@Override
 	public Material getMaterial() 
 	{
 		return this.material;
@@ -55,31 +54,45 @@ public class PlaneMaths implements ShapeMaths
 	 * 
 	 * @return Normale du plan
 	 */
-	@Override
 	public Vector getNormal(Point point) 
 	{
 		return this.normal;
 	}
 	
 	/*
+	 * @link{geometry.shapes.Shape#getUVCoords}
+	 */
+	@Override
+	public Point getUVCoords(Point point)
+	{
+		return new Point(point.getX(), point.getZ(), 0);
+	}
+	
+	/*
 	 * Calcule de façon analytique l'intersection d'un rayon et d'une sphère
 	 * 
 	 * @param ray Le rayon avec lequel l'intersection avec la sphère doit être calculée
+	 * @param outNormalAtInter 	Ce vecteur contiendra la normale du plan si un point d'intersection a été trouvé. Ce paramètre est inchangé sinon. 
+	 * 							Si ce paramètre est null, la normale au point d'intersection ne sera pas stockée dans outNormalAtInter, même si un point d'intersection a été trouvé
 	 * 
 	 * @return Retourne le point d'intersection avec la sphère s'il existe (s'il y a deux points d'intersection, ne retourne que le point le plus près de l'origine du rayon). Retourne null sinon.
 	 */
-	@Override
-	public Point intersect(Ray ray) 
+	public Point intersect(Ray ray, Vector outNormalAtInter) 
 	{
-		double NL = Vector.dotProduct(normal, ray.getDirection());
-		if(NL > 0.0000001d && NL < 0.0000001d)//Le rayon et le plan sont parallèles
+		double NDir = Vector.dotProduct(normal, ray.getDirection());
+		if(NDir > 0.0000001d && NDir < 0.0000001d)//Le rayon et le plan sont parallèles
 			return null;
 			
 		
 	    Vector p0l0 = Point.p2v(Point.sub(this.point, ray.getOrigin())); 
-	    double coeffVectorPoint = Vector.dotProduct(p0l0, this.normal) / NL;
+	    double coeffVectorPoint = Vector.dotProduct(p0l0, this.normal) / NDir;
 	    if(coeffVectorPoint > 0)
+	    {
+	    	if(outNormalAtInter != null)
+	    		outNormalAtInter.copyIn(this.getNormal(null));
+	    	
 			return ray.determinePoint(coeffVectorPoint);
+	    }
 	    else
 			return null;
 	}

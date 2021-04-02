@@ -3,21 +3,56 @@
 
     <property name="src" value="src"/>
     <property name="build" value="build"/>
-    <property name="classpath" value="lib"/>
     <property name="modulepath" value="javafx.controls"/>
+    <property name="projet.lib.dir" value="lib"/>
+    <property name="doc.dir" value="javadoc"/>
+	<property name="javafxlib.dir" value="lib/javafx-sdk-15.0.1/lib"/>
+
+    <path id="projet.classpath">
+        <fileset dir="${javafxlib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement location="${build}" />
+    </path>
 
     <target name="init">
       <!-- Create the time stamp -->
       <tstamp/>
       <!-- Create the build directory structure used by compile -->
       <mkdir dir="${build}"/>
+      <mkdir dir="${doc.dir}"/>
     </target>
 
     <target name="compile" depends="init" description="compile the source">
         <!-- Compile the Java code from ${src} into ${build} -->
-        <javac srcdir="${src}" destdir="${build}" classpath="${classpath}" modulepath="${modulepath}">
-            <exclude name="src/render/choiceWindow.java"/>
+        <javac includeantruntime="false" srcdir="${src}" destdir="${build}">
+            <exclude name="**/choiceWindow.java"/>
+            <exclude name="**/Rectangle.java"/>
+            <exclude name="**/Triangle.java"/>
+            <exclude name="**/MatricesTests.java"/>
+            <exclude name="**/CTWMatrixTests.java"/>
+            <classpath refid="projet.classpath"/>
         </javac>
     </target>
+
+    <target name="run" description="execution" depends="compile">
+        <java classname="render.MainApp">
+            <classpath refid="projet.classpath"/>
+        </java>
+    </target>
+
+    <target name = "clean" description="delete jar">
+      <delete file="test.jar"/>
+    </target>
+
+    <target name="packaging" depends="compile,clean">
+        <jar jarfile="test.jar" basedir="${build}" manifest="${basedir}/Manifest.txt"/>
+    </target>
+
+    <target name="doc" description="generate javadoc">
+    <javadoc encoding="UTF-8" charset="UTF-8" docencoding="UTF-8" sourcepath="${src}" destdir="${doc.dir}">
+        <classpath refid="projet.classpath"/>
+    </javadoc>
+  </target>
 
 </project>

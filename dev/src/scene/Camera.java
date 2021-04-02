@@ -3,6 +3,7 @@ package scene;
 import maths.CTWMatrix;
 import maths.MatrixD;
 import maths.Point;
+import maths.Vector;
 
 /*
  * Class permettant de représenter une caméra définie par sa position dans l'espace, la direction dans laquelle elle regarde ainsi que son champ de vision
@@ -10,7 +11,15 @@ import maths.Point;
 public class Camera 
 {
 	Point position;//Point depuis lequel regarde la caméra
-	Point pointDirection;//Point que regarde la caméra
+	
+	double angleHori;/* Angle de rotation de caméra sur le plan x, z en degré */
+	double angleVerti;/* Angle de rotation de caméra sur le plan x, y en degré */
+	/*
+	 * Deux angles horizontal et vertical
+	 * 
+	 * Faire deux constructeurs avec le point de direction et un autre avec les deux angles
+	 * Uné méthode pour faire regarder la caméra sur un certain point et calculer les deux angles à partir de ce point. En deux temps, horizontal et vertical après
+	 */
 	
 	MatrixD CTWMatrix;//Matrice de changement de base entre les coordonnées d'origine du monde [(1, 0, 0), (0, 1, 0), (0, 0, 1)] et les coordoonées de la caméra
 	
@@ -21,7 +30,7 @@ public class Camera
 	 */
 	public Camera()
 	{
-		this(new Point(0, 0, 0), new Point(0, 0, -1), 90);
+		this(new Point(0, 0, 0), 0, 0);
 	}
 	
 	/*
@@ -31,34 +40,75 @@ public class Camera
 	 */
 	public Camera(Point position)
 	{
-		this(position, new Point(0, 0, -1), 90);
+		this(position, 0, 0);
 	}
 	
 	/*
-	 * Crée une caméra à partir d'un point d'origine ainsi que d'un point que le caméra regarde
+	 * Crée une caméra avec un point d'ancrage donné et l'angle de rotation horizontal et vertical de la caméra
 	 * 
-	 *  @param position Le point d'origine de la caméra
-	 *  @param pointDirection Le point que regarde la caméra. Utilisé pour calculer la direction de la caméra
+	 * @param position 		Le point d'ancrage/d'origine de la caméra
+	 * @param angleHori 	L'angle de rotation horizontal en degré de la caméra
+	 * @param angleVerti	L'angle de rotation vertical en degré de la caméra. Un angle de plus de 90° ou de moins de -90° sera ramené à 900 ou -90° repsectivement
 	 */
-	public Camera(Point position, Point pointDirection)
-	{
-		this(position, pointDirection, 90);
-	}
-	
-	/*
-	 * Crée une caméra à partir de sa position, de sa direction et de son champ de vision
-	 * 
-	 * @param position Point de coordonnées (x, y, z) pour définir la position de la caméra
-	 * @param direction Vector de coordoonnées (x, y, z) pour définir la direction de la caméra
-	 * @param degreeFOV Réel 
-	 */
-	public Camera(Point position, Point pointDirection, float degreeFOV)
+	public Camera(Point position, double angleHori, double angleVerti)
 	{
 		this.position = position;
-		this.pointDirection = pointDirection;
-		this.degreeFOV = degreeFOV;
 		
-		this.CTWMatrix = new CTWMatrix(position, pointDirection);
+		this.angleHori = angleHori;
+		this.angleVerti = angleVerti;
+		this.angleVerti = this.angleVerti > 90 ? 90 : this.angleVerti < -90 ? -90 : this.angleVerti;//On ramène l'angle à 900 / -90° s'il dépassait
+		
+		this.CTWMatrix = new CTWMatrix(this, angleHori, angleVerti);
+	}
+	
+	/*
+	 * Ajoute un certain degré de rotation horizontal à la caméra
+	 * 
+	 * @param deltaAngle L'angle de rotation horizontal en degré que l'on veut ajouter
+	 */
+	public void addAngleHori(double deltaAngle)
+	{
+		this.angleHori += deltaAngle;
+		
+		this.CTWMatrix = new CTWMatrix(this, this.angleHori, this.angleVerti);//On a changé l'état de la caméra, il faut donc recalculer la matrice de passage qui lui est associée
+	}
+	
+	/*
+	 * Ajoute un certain degré de rotation vertical à la caméra.
+	 * Attention, cette méthode ne permet de pas des angles de rotation verticaux de plus de 90° ou de moins de 90°.
+	 * Si ajouter 'deltaAngle' à l'angle de rotation vertical actuel de la caméra ferait dépasser 90° de rotation ou -90°, l'angle est ramené à 90° ou -900 respectivement.
+	 * 
+	 * @param deltaAngle L'angle de rotation vertical en degré que l'on veut ajouter
+	 */
+	public void addAngleVerti(double deltaAngle)
+	{
+		this.angleVerti += deltaAngle;
+		if(this.angleVerti > 90)//90° veut dire que la caméra regarde directement le ciel, on n'accepte pas plus que cela sinon la caméra sera "retournée"
+			this.angleVerti = 90;
+		else if(this.angleVerti < -90)//Pareil, -90° veut dire qu'on regarde le sol. On se limite à cela
+			this.angleVerti = -90;
+		
+		this.CTWMatrix = new CTWMatrix(this, this.angleHori, this.angleVerti);//On a changé l'état de la caméra, il faut donc recalculer la matrice de passage qui lui est associée
+	}
+	
+	/*
+	 * Retourne l'angle de rotation horizontal (selon le plan (x, z)) de la caméra
+	 * 
+	 * @return Retourne l'angle de rotation horizontal de la caméra en degré
+	 */
+	public double getAngleHori()
+	{
+		return this.angleHori;
+	}
+	
+	/*
+	 * Retourne l'angle de rotation vertical (selon le plan (x, z)) de la caméra
+	 * 
+	 * @return Retourne l'angle de rotation vertical de la caméra en degré
+	 */
+	public double getAngleVerti()
+	{
+		return this.angleVerti;
 	}
 	
 	/*
@@ -76,19 +126,9 @@ public class Camera
 	 * 
 	 * @return Un vecteur de coordonnées (x, y, z) définissant la direction dans laquelle regarde la caméra 
 	 */
-	public Point getDirection()
+	public Vector getDirection()
 	{
-		return this.pointDirection;
-	}
-	
-	/*
-	 * Permet d'obtenir la position actuelle de la caméra
-	 * 
-	 * @return Un point de coordonnées (x, y, z) représentant les coordoonées actuelle de la caméra
-	 */
-	public Point getPosition()
-	{
-		return this.position;
+		return this.getZAxis();
 	}
 	
 	/*
@@ -102,15 +142,77 @@ public class Camera
 	}
 	
 	/*
-	 * Redéfinit la direction de la caméra. Cette méthode recalcule également la matrice de passage CTXMatrix
+	 * Permet d'obtenir la position actuelle de la caméra
 	 * 
-	 * @param newDirection Un vecteur pour redéfinir la direction de la caméra
+	 * @return Un point de coordonnées (x, y, z) représentant les coordoonées actuelle de la caméra
 	 */
-	public void setDirection(Point newPointDirection)
+	public Point getPosition()
 	{
-		this.pointDirection = newPointDirection;
+		return this.position;
+	}
+	
+	/*
+	 * Méthode permettant de factoriser le code de getXAxis, getYAxis et getZAxis
+	 * 
+	 * @param axisIndex Entier entre 0 et 2 représentant l'axe que l'on souhaite obtenir. 0 pour l'axe x, 1 pour l'axe y et 2 pour l'axe z
+	 */
+	protected Vector getWAxis(int axisIndex)
+	{
+		return new Vector(this.CTWMatrix.get(axisIndex, 0), this.CTWMatrix.get(axisIndex, 1), this.CTWMatrix.get(axisIndex, 2));
+	}
+	
+	/*
+	 * Retourne les coordonnées de l'axe X de la caméra par rapport à l'origine du monde i.e. les coordonnées du vecteur (1, 0, 0) dans la base de l'espace vectoriel du monde
+	 * 
+	 * @return Un vecteur de coordoonées (x, y, z) où x, y et z représentent les coordonnées du vecteur de l'axe x de la caméra exprmimées dans la base de l'espace vectoriel de la scène i.e. {(1, 0, 0), (0, 1, 0), (0, 0, 1)}
+	 */
+	public Vector getXAxis()
+	{
+		return getWAxis(0);
+	}
+	
+	/*
+	 * Retourne les coordonnées de l'axe Y de la caméra par rapport à l'origine du monde i.e. les coordonnées du vecteur (0, 1, 0) dans la base de l'espace vectoriel du monde
+	 * 
+	 * @return Un vecteur de coordoonées (x, y, z) où x, y et z représentent les coordonnées du vecteur de l'axe y de la caméra exprmimées dans la base de l'espace vectoriel de la scène i.e. {(1, 0, 0), (0, 1, 0), (0, 0, 1)}
+	 */
+	public Vector getYAxis()
+	{
+		return getWAxis(1);
+	}
+	
+	/*
+	 * Retourne les coordonnées de l'axe Z de la caméra par rapport à l'origine du monde i.e. les coordonnées du vecteur (0, 0, 1) dans la base de l'espace vectoriel du monde
+	 * 
+	 * @return Un vecteur de coordoonées (x, y, z) où x, y et z représentent les coordonnées du vecteur de l'axe z de la caméra exprmimées dans la base de l'espace vectoriel de la scène i.e. {(1, 0, 0), (0, 1, 0), (0, 0, 1)}
+	 */
+	public Vector getZAxis()
+	{
+		return getWAxis(2);
+	}
+	
+	/*
+	 * Redéfini l'angle de rotation horizontal de la caméra
+	 * 
+	 * @param angle Nouvel angle de rotation horizontal de la caméra en degré
+	 */
+	public void setAngleHori(double angle)
+	{
+		this.angleHori = angle;
 		
-		this.CTWMatrix = new CTWMatrix(this.position, this.pointDirection);
+		this.CTWMatrix = new CTWMatrix(this, this.angleHori, this.angleVerti);//On a changé l'état de la caméra, il faut donc recalculer la matrice de passage qui lui est associée
+	}
+	
+	/*
+	 * Redéfini l'angle de rotation vertical de la caméra
+	 * 
+	 * @param angle Nouvel angle de rotation vertical  de la caméra en degré
+	 */
+	public void setAngleVerti(double angle)
+	{
+		this.angleHori = angle;
+		
+		this.CTWMatrix = new CTWMatrix(this, this.angleHori, this.angleVerti);//On a changé l'état de la caméra, il faut donc recalculer la matrice de passage qui lui est associée
 	}
 	
 	/*
@@ -132,6 +234,6 @@ public class Camera
 	{
 		this.position = newPosition;
 		
-		this.CTWMatrix = new CTWMatrix(this.position, this.pointDirection);
+		this.CTWMatrix = new CTWMatrix(this, this.angleHori, this.angleVerti);
 	}
 }

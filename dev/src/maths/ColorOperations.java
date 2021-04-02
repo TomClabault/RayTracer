@@ -72,6 +72,38 @@ public class ColorOperations
 	}
 	
 	/*
+	 * Cette méthode converti la couleur passée en argument en entier 32 bits. Chaque composante de aRGB est codée sur 8 bits. 
+	 * Du MSB au LSB: alpha ; red ; green ; blue
+	 * 
+	 * @param color La couleur que l'on souhaite convertir en entier
+	 * 
+	 * @return Retourne un entier 32 bits dont la signification des bits est (du MSB au LSB):
+	 * 0-8: alpha
+	 * 8-16: red
+	 * 16-24: green
+	 * 24-32: blue
+	 */
+	public static int aRGB2Int(Color color)
+	{
+		return  ((int)(color.getOpacity() * 255) << 24)  |
+				((int)(color.getRed()     * 255) << 16) |
+				((int)(color.getGreen()   * 255) << 8)  |
+				((int)(color.getBlue()    * 255));
+	}
+	
+	/*
+	 * Retourne une nouvelle instance de Color représentant la même couleur que celle passée en argument
+	 * 
+	 * @param La couleur à copier
+	 * 
+	 * @return Une nouvelle instance de couleur dont les valeurs des composantes sont les même que colorToCopy 
+	 */
+	public static Color copy(Color colorToCopy) 
+	{
+		return Color.rgb((int)(colorToCopy.getRed()*255), (int)(colorToCopy.getGreen()*255), (int)(colorToCopy.getBlue()*255));
+	}
+	
+	/*
 	 * Multiplie une couleur composante par composante par un scalaire
 	 * 
 	 * @param col Couleur à multiplier
@@ -90,6 +122,23 @@ public class ColorOperations
 		int newRed = (int)(col.getRed() * scalar * 255); newRed = newRed > 255 ? 255 : newRed;
 		int newGreen = (int)(col.getGreen() * scalar * 255); newGreen = newGreen > 255 ? 255 : newGreen;
 		int newBlue = (int)(col.getBlue() * scalar * 255); newBlue = newBlue > 255 ? 255 : newBlue;
+		
+		return Color.rgb(newRed, newGreen, newBlue);
+	}
+	
+	/*
+	 * Permet d'élever toutes les composantes d'une couleur à une certaine puissance
+	 * 
+	 * @param col 	La couleur à élever à une certaine puissance
+	 * @param power L'exposant
+	 * 
+	 * @return Retourne une nouvelle couleur de composante (r^power, g^power, b^power) où ^ dénote l'exponentiation
+	 */
+	public static Color powColor(Color col, double power)
+	{
+		int newRed = (int)(Math.pow(col.getRed(), power)*255);
+		int newGreen = (int)(Math.pow(col.getGreen(), power)*255);
+		int newBlue = (int)(Math.pow(col.getBlue(), power)*255);
 		
 		return Color.rgb(newRed, newGreen, newBlue);
 	}

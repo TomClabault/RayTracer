@@ -1,0 +1,1 @@
+while(computeTask(this.renderScene, this.taskList)) {}
