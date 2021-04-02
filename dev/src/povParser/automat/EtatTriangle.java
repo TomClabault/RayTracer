@@ -102,9 +102,19 @@ public class EtatTriangle implements EtatToken
 
                 case PIGMENT:
                 {
+                    context.callNextToken(); //skip pigment
                     context.callNextToken(); //skip '{'
-                    context.callNextToken(); //skip
-                    System.exit(0);
+                    if (context.currentWord("color"))
+                    {
+                        context.callNextToken();
+                        if(context.currentWord("rgb"))
+                        {
+                            list.add("color"); //équivaut à figure.setFinish();
+                            nextToken = context.callNextToken();
+                            list.add(String.valueOf((char)nextToken));
+                            System.out.println(list);
+                        }
+                    }
                     break;
                 }
 

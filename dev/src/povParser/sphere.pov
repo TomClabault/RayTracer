@@ -6,18 +6,19 @@ sphere { <1.5,0.7,1>, 0.7
     reflection { 0.7 metallic }
   }
 }
-/*
+
 triangle
 {
     <0, 0, 0>, <1, 1, 1>, <2, 2, 2>
 }
-*/
-/*
-polygon
+
+plane
 {
-    Number_Of_Points, <Point_1> <Point_2>...<Point_n>
-}*/
-/*
-<p>bonjour</p>
-               <                   p                   >
-[exterieur]------->[tag ouvrant] -------->[balise p]-------->[tag fermant]------>[contenu]*/
+    <0, 0, 0> 1
+}
+
+box
+{
+    <1, 1, 1> <2, 2, 2>
+}
+

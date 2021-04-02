@@ -114,9 +114,10 @@ public class Automat
 
     public static void main(String[] args)
     {
-        String pathToTestFile = "src/povParser/test.pov";
+        String pathToTestFile = "dev/src/povParser/test.pov";
 
         try {
+
             InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(pathToTestFile));
             BufferedReader fileReader = new BufferedReader(inputStreamReader);
 
