@@ -57,7 +57,6 @@ public class ImageWriter {
 	        imageView.setFitWidth(primaryScreenBounds.getWidth());
         }
         
-
         Pane pane = new Pane();
         pane.getChildren().add(imageView);
         this.pane = pane;
