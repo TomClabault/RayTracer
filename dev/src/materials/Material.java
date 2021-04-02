@@ -17,8 +17,10 @@ public class Material
 	
 	private double diffuseCoeff;
 	private double reflectiveCoeff;
-	private int shininess;
 	private double specularCoeff;
+	private int shininess;
+	private boolean isTransparent;
+	private double refractionIndex;
 	
 	ProceduralTexture proceduralTexture;//Attribut special qui spécifie la texture du matériau. Utilisé pour le damier par exemple
 	
@@ -31,7 +33,7 @@ public class Material
 	 * @param specularCoeff Réel entre 0 et 1. Coefficient permettant de jouer sur l'intensité des tâches spéculaires du matériau. Plus ce coefficient se rapproche de 1 plus les tâches spéculaires seront marquées. A 0, le matériau n'est pas spéculaire
 	 * @param shininess Entier positif non nul. Permet de jouer sur la taille des tâches spéculaires du matériau. Plus ce nombre est grand plus les tâches seront petites
 	 */
-	public Material(Color color, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess)
+	public Material(Color color, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess, boolean isTransparent, double refractionIndex)
 	{
 		this.color = color;
 		
@@ -39,6 +41,8 @@ public class Material
 		this.reflectiveCoeff = reflectiveCoeff;
 		this.specularCoeff = specularCoeff;
 		this.shininess = shininess;
+		this.isTransparent = isTransparent;
+		this.refractionIndex = refractionIndex;
 		
 		this.proceduralTexture = null;//Pas de texture par défaut
 	}
@@ -53,7 +57,7 @@ public class Material
 	 * @param shininess Entier positif non nul. Permet de jouer sur la taille des tâches spéculaires du matériau. Plus ce nombre est grand plus les tâches seront petites
 	 * @param proceduralTexture La texture procédurale de l'objet
 	 */
-	public Material(Color color, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess, ProceduralTexture proceduralTexture)
+	public Material(Color color, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess, boolean isTransparent, double refractionIndex, ProceduralTexture proceduralTexture)
 	{
 		this.color = color;
 		
@@ -61,6 +65,8 @@ public class Material
 		this.reflectiveCoeff = reflectiveCoeff;
 		this.specularCoeff = specularCoeff;
 		this.shininess = shininess;
+		this.isTransparent = isTransparent;
+		this.refractionIndex = refractionIndex;
 		
 		this.proceduralTexture = proceduralTexture;
 	}
@@ -86,6 +92,11 @@ public class Material
 		return this.diffuseCoeff;
 	}
 	
+	public boolean getIsTransparent()
+	{
+		return this.isTransparent;
+	}
+	
 	/*
 	 * Permet d'obtenir la proportion de lumière que réfléchit le matériau.
 	 * Un coefficient réflectif de 1 fera du matériau un miroir tandis qu'à 0, le matériau ne réfléchira rien de ce qui l'entour
@@ -95,6 +106,11 @@ public class Material
 	public double getReflectiveCoeff()
 	{
 		return this.reflectiveCoeff;
+	}
+	
+	public double getRefractionIndex()
+	{
+		return this.refractionIndex;
 	}
 	
 	/*

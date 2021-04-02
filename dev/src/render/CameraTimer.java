@@ -41,7 +41,7 @@ public class CameraTimer extends AnimationTimer {
     }
 
     public void handle(long nanoTime){
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {//TODO ajouter liste keycode 
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.E) {
@@ -162,7 +162,6 @@ public class CameraTimer extends AnimationTimer {
     {
     	Vector axeX = this.rayTracingScene.getCamera().getXAxis();
     	Point newPosition = Point.add(Vector.v2p(Vector.scalarMul(axeX, DELTA_MOVE)), rayTracingScene.getCamera().getPosition());
-
     	this.rayTracingScene.getCamera().setPosition(newPosition);
    }
 }

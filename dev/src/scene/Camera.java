@@ -10,10 +10,10 @@ import maths.Vector;
  */
 public class Camera 
 {
-	private Point position;//Point depuis lequel regarde la caméra
+	Point position;//Point depuis lequel regarde la caméra
 	
-	private double angleHori;/* Angle de rotation de caméra sur le plan x, z en degré */
-	private double angleVerti;/* Angle de rotation de caméra sur le plan x, y en degré */
+	double angleHori;/* Angle de rotation de caméra sur le plan x, z en degré */
+	double angleVerti;/* Angle de rotation de caméra sur le plan x, y en degré */
 	/*
 	 * Deux angles horizontal et vertical
 	 * 
@@ -44,22 +44,11 @@ public class Camera
 	}
 	
 	/*
-	 * Crée une caméra à partir de son point d'ancrage et d'un point qu'elle regarde. Ce dernier définira la direction de regard de la caméra
-	 * 
-	 * @param position Point d'ancrage de la caméra
-	 * @param direction Point que regarde la caméra
-	 */
-	public Camera(Point position, Point direction)
-	{
-		this(position, getHoriAngleFromDir(position, direction), getVertiAngleFromDir(position, direction));//this.getVeriAngleFromDir(direction));
-	}
-	
-	/*
 	 * Crée une caméra avec un point d'ancrage donné et l'angle de rotation horizontal et vertical de la caméra
 	 * 
 	 * @param position 		Le point d'ancrage/d'origine de la caméra
 	 * @param angleHori 	L'angle de rotation horizontal en degré de la caméra
-	 * @param angleVerti	L'angle de rotation vertical en degré de la caméra. Un angle de plus de 90° ou de moins de -90° sera ramené à 90 ou -90° repsectivement
+	 * @param angleVerti	L'angle de rotation vertical en degré de la caméra. Un angle de plus de 90° ou de moins de -90° sera ramené à 900 ou -90° repsectivement
 	 */
 	public Camera(Point position, double angleHori, double angleVerti)
 	{
@@ -67,7 +56,7 @@ public class Camera
 		
 		this.angleHori = angleHori;
 		this.angleVerti = angleVerti;
-		this.angleVerti = this.angleVerti > 90 ? 90 : this.angleVerti < -90 ? -90 : this.angleVerti;//On ramène l'angle à 90 / -90° s'il dépassait
+		this.angleVerti = this.angleVerti > 90 ? 90 : this.angleVerti < -90 ? -90 : this.angleVerti;//On ramène l'angle à 900 / -90° s'il dépassait
 		
 		this.CTWMatrix = new CTWMatrix(this, angleHori, angleVerti);
 	}
@@ -153,57 +142,6 @@ public class Camera
 	}
 	
 	/*
-	 * En supposant que la direction de regard par défaut de la caméra suit le vecteur (0, 0, -1), calcule l'angle de rotation horizontal nécessaire à la caméra pour regarder le point 'direction' passé en paramètre
-	 * 
-	 * @param position Position de la caméra / point d'ancrage
-	 * @param direction Le point que regarde la caméra. Utilisé pour calculer l'angle de rotation horizontal
-	 * 
-	 * @return Retourne l'angle de rotation horizontal dont la caméra a besoin pour regarder le point passé en argument. L'angle retourné est en degré
-	 */
-	public static double getHoriAngleFromDir(Point position, Point direction)
-	{
-		Vector vecDir = new Vector(position, direction);
-		Vector vecDirNoY = new Vector(vecDir.getX(), 0, vecDir.getZ());
-		if(vecDirNoY.getX() == 0 && vecDirNoY.getY() == 0 && vecDirNoY.getZ() == 0)//Le point qu'on veut regarder est déjà aligné avec la direction de regard par défaut de la caméra 
-			return 0;
-		
-		Vector vecDirNoYNorm = Vector.normalize(vecDirNoY);
-		
-		double dotProd = Vector.dotProduct(vecDirNoYNorm, new Vector(0, 0, -1));
-		double arcos = Math.acos(dotProd);
-		double degrees = Math.toDegrees(arcos);
-		
-		double angle = -Math.signum(vecDirNoYNorm.getX())*degrees;
-		return angle;
-	}
-	
-	/*
-	 * En supposant que la direction de regard par défaut de la caméra suit le vecteur (0, 0, -1), calcule l'angle de rotation vertical nécessaire à la caméra pour regarder le point 'direction' passé en paramètre
-	 * 
-	 * @param position Position actuelle de la caméra
-	 * @param direction Le point que regarde la caméra. Utilisé pour calculer l'angle de rotation vertical
-	 * 
-	 * @return Retourne l'angle de rotation vertical dont la caméra a besoin pour regarder le point passé en argument. L'angle retourné est en degré
-	 */
-	public static double getVertiAngleFromDir(Point position, Point direction)
-	{
-		Vector vecDir = new Vector(position, direction);
-		Vector vecDirNoX = new Vector(0, vecDir.getY(), vecDir.getZ());
-		if(vecDirNoX.getX() == 0 && vecDirNoX.getY() == 0 && vecDirNoX.getZ() == 0)//La direction de regard n'a pas changé pas rapport à la direction de regard par défaut de la caméra (0, 0, -1)
-			return 0;
-		Vector vecDirNoXNorm = Vector.normalize(vecDirNoX);
-		
-		double dotProd = Vector.dotProduct(vecDirNoXNorm, new Vector(0, 0, -1));
-		double arcos = Math.acos(dotProd);
-		double degrees = Math.toDegrees(arcos);
-		
-		double angle = Math.signum(vecDirNoXNorm.getY())*degrees;
-		
-		System.out.println(angle);
-		return angle;
-	}
-	
-	/*
 	 * Permet d'obtenir la position actuelle de la caméra
 	 * 
 	 * @return Un point de coordonnées (x, y, z) représentant les coordoonées actuelle de la caméra
@@ -275,20 +213,6 @@ public class Camera
 		this.angleHori = angle;
 		
 		this.CTWMatrix = new CTWMatrix(this, this.angleHori, this.angleVerti);//On a changé l'état de la caméra, il faut donc recalculer la matrice de passage qui lui est associée
-	}
-	
-	/*
-	 * Redéfini les angles de rotations de la caméra pour faire en sorte qu'elle regarde le point passé en argument
-	 * 
-	 * @param lookAt Le point que l'on veut faire regarder la caméra
-	 */
-	public void setAnglesFromPoint(Point lookAt)
-	{
-		this.angleHori = getHoriAngleFromDir(this.position, lookAt);
-		this.angleVerti = getVertiAngleFromDir(this.position, lookAt);
-		
-		this.CTWMatrix = new CTWMatrix(this, this.angleHori, this.angleVerti);
-;
 	}
 	
 	/*

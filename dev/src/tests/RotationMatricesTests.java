@@ -11,7 +11,7 @@ public class RotationMatricesTests
 		RotationMatrix rotM = new RotationMatrix(axis, angle);
 		Point rotatedPoint = MatrixD.mulPoint(toRotate, rotM);
 
-		//System.out.println("Point rotaté: " + rotatedPoint + " | Attendu: " + expected);
+		System.out.println("Point rotaté: " + rotatedPoint + " | Attendu: " + expected);
 	}
 
 	public static void main(String[] args)
@@ -38,19 +38,6 @@ public class RotationMatricesTests
 		MatrixD r2r1 = MatrixD.mulMatrix(random2M, random1M);
 		MatrixD r1id = MatrixD.mulMatrix(random1M, id);
 		MatrixD r2id = MatrixD.mulMatrix(random2M, id);
-
-		System.out.println(r1r2);
-		System.out.println();
-		System.out.println(r2r1);
-		System.out.println();
-		System.out.println(r1id);
-		System.out.println();
-		System.out.println(r2id);
-
-
-
-
-		System.out.println("\n\nLa comparaison de points en nombre flottants n'est pas précise. A vous de comparer les résultats :D\n\n");
 
 		testRotate(RotationMatrix.xAxis, 90, new Point(0, 0, 1), new Point(0, -1, 0));
 		testRotate(RotationMatrix.xAxis, 45, new Point(0, 1, 0), new Point(0, 0.707, 0.707));
