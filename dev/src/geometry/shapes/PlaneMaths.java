@@ -20,7 +20,7 @@ public class PlaneMaths implements Shape
 	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan
 	 * 
 	 * @param normal Vecteur normal au plan
-	 * @param point Point par lequel passe le vecteur
+	 * @param point Point par lequel passe le plan
 	 */
 	public PlaneMaths(Vector normal, Point point)
 	{
