@@ -16,7 +16,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 
 import rayTracer.RayTracer;
-import geometry.materials.*;
 import geometry.shapes.*;
 import geometry.*;
 import maths.*;

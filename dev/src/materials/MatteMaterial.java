@@ -12,7 +12,7 @@ public class MatteMaterial extends Material
 	 */
 	public MatteMaterial(Color color)
 	{
-		super(color, 0.75, 0, 0.05, 1);
+		super(color, 0.75, 0, 0.05, 1, false, 00);
 	}
 	
 	/*

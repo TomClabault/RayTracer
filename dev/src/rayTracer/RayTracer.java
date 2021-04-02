@@ -219,7 +219,7 @@ public class RayTracer
 
 
 
-			Vector reflectionVector = getReflectionVector(normalAtIntersection, ray.getDirection());
+			Vector reflectionVector = computeReflectionVector(normalAtIntersection, ray.getDirection());
 
 			Point interPointShift = Point.add(rayInterPoint, Point.scalarMul(0.0001d, Vector.v2p(Vector.normalize(reflectionVector))));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
 
