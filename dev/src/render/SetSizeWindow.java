@@ -18,7 +18,7 @@ public class SetSizeWindow {
         Stage stage = new Stage();
         GridPane root = new GridPane();
         Scene scene = new Scene(root);
-        //scene.getStylesheets().add(SetSizeWindow.class.getResource("Login.css").toExternalForm());
+        scene.getStylesheets().add(SetSizeWindow.class.getResource("style/setSizeWindow.css").toExternalForm());
 
         stage.setScene(scene);
         stage.setTitle("Selection de la taille de rendu");
