@@ -104,7 +104,7 @@ public class EtatTriangle implements EtatToken
                 {
                     context.callNextToken(); //skip '{'
                     context.callNextToken(); //skip
-                    System.exit
+                    System.exit(0);
                     break;
                 }
 
