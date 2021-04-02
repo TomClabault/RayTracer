@@ -41,7 +41,7 @@ public class CameraTimer extends AnimationTimer {
     }
 
     public void handle(long nanoTime){
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {//TODO ajouter liste keycode 
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.E) {
