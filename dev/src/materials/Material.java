@@ -10,9 +10,6 @@ import textures.ProceduralTexture;
  */
 public class Material 
 {	
-	public static final int NORMAL = 0;
-	public static final int CHECKERBOARD = 1;
-	
 	private Color color;
 	
 	private double diffuseCoeff;
@@ -155,5 +152,45 @@ public class Material
 	public boolean hasProceduralTexture()
 	{
 		return !(this.proceduralTexture == null);
+	}
+	
+	public void setColor(Color color) 
+	{
+		this.color = color;
+	}
+
+	public void setDiffuseCoeff(double diffuseCoeff) 
+	{
+		this.diffuseCoeff = diffuseCoeff;
+	}
+
+	public void setProceduralTexture(ProceduralTexture proceduralTexture) 
+	{
+		this.proceduralTexture = proceduralTexture;
+	}
+	
+	public void setReflectiveCoeff(double reflectiveCoeff) 
+	{
+		this.reflectiveCoeff = reflectiveCoeff;
+	}
+
+	public void setRefractionIndex(double refractionIndex) 
+	{
+		this.refractionIndex = refractionIndex;
+	}
+	
+	public void setSpecularCoeff(double specularCoeff) 
+	{
+		this.specularCoeff = specularCoeff;
+	}
+
+	public void setShininess(int shininess) 
+	{
+		this.shininess = shininess;
+	}
+
+	public void setTransparent(boolean isTransparent) 
+	{
+		this.isTransparent = isTransparent;
 	}
 }

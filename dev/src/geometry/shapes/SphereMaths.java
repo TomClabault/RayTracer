@@ -182,4 +182,19 @@ public class SphereMaths implements Shape
 		
 		return intersection;
 	}
+
+	public void setCenter(Point center) 
+	{
+		this.center = center;
+	}
+	
+	public void setMaterial(Material material) 
+	{
+		this.material = material;
+	}
+	
+	public void setRadius(double radius) 
+	{
+		this.radius = radius;
+	}
 }
