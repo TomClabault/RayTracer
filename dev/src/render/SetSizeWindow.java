@@ -6,8 +6,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 
 public class SetSizeWindow {
 
@@ -24,6 +27,7 @@ public class SetSizeWindow {
         TextField inputLargeur = new TextField("largeur");
         Label textHauteur = new Label("Hauteur");
         TextField inputHauteur = new TextField("hauteur");
+        CheckBox checkbox = new CheckBox("Mode automatique");
         Button validateButton = new Button("Valider");
         Button cancelButton = new Button("Annuler");
 
@@ -33,18 +37,26 @@ public class SetSizeWindow {
         root.add(inputLargeur, 1, 0);
         root.add(textHauteur, 0, 1);
         root.add(inputHauteur, 1, 1);
-        root.add(validateButton, 0, 2);
-        root.add(cancelButton, 1, 2);
+        root.add(checkbox, 1, 2);
+        root.add(validateButton, 0, 3);
+        root.add(cancelButton, 1, 3);
 
         validateButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
             	try {
-            		if (Integer.parseInt(inputHauteur.getText()) < 0 || Integer.parseInt(inputLargeur.getText()) < 0) {
-						throw new NumberFormatException();
-					}
-            		MainApp.HEIGHT = Integer.parseInt(inputHauteur.getText());
-                    MainApp.WIDTH = Integer.parseInt(inputLargeur.getText());
+            		if(checkbox.isSelected() == true) {
+            			Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+            			MainApp.WIDTH = (int) primaryScreenBounds.getWidth();
+            			MainApp.HEIGHT = (int) primaryScreenBounds.getHeight();
+            			MainApp.MAXIMIZE = true;
+            		} else {
+            			if (Integer.parseInt(inputHauteur.getText()) < 0 || Integer.parseInt(inputLargeur.getText()) < 0) {
+    						throw new NumberFormatException();
+    					}
+                		MainApp.HEIGHT = Integer.parseInt(inputHauteur.getText());
+                        MainApp.WIDTH = Integer.parseInt(inputLargeur.getText());
+            		}
                     stage.close();
 				} catch (NumberFormatException e) {
 					System.out.println("Les arguments doivent être des entiers positifs");

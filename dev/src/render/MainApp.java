@@ -19,6 +19,8 @@ public class MainApp extends Application {
      * Définie par la fenètre du choix de taille de rendu
     */
     public static int WIDTH;
+    
+    public static boolean MAXIMIZE;
 
     public static void main(String[] args) {
 
@@ -51,6 +53,9 @@ public class MainApp extends Application {
 
             stage.setTitle("Rendu");
             stage.setScene(scene);
+            if (MAXIMIZE) {
+				stage.setMaximized(true);
+			}
             stage.show();
 		} catch (IllegalArgumentException e) {
 			System.out.println("Vous avez annulez");
