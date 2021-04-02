@@ -4,7 +4,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 import geometry.Shape;
-import geometry.materials.Material;
+import materials.Material;
 import javafx.scene.paint.Color;
 import maths.MatrixD;
 import maths.ColorOperations;
