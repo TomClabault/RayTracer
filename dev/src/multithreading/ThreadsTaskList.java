@@ -1,33 +1,22 @@
 package multithreading;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ThreadsTaskList
 {
-	ArrayList<TileTask> taskList;
+	private ArrayList<TileTask> taskList;
 	
-	AtomicInteger totalTaskCount;
-	AtomicInteger totalTaskGiven;
-	AtomicInteger totalTaskFinished;
+	private int totalTaskCount;
+	private int totalTaskGiven;
+	private int totalTaskFinished;
 	
 	public ThreadsTaskList()
 	{
 		this.taskList = new ArrayList<>();
 		
-		this.totalTaskCount = new AtomicInteger(0);
-		this.totalTaskFinished = new AtomicInteger(0);
-		this.totalTaskGiven = new AtomicInteger(0);;
-	}
-	
-	public boolean compareAndSetTaskGiven(int expectedValue, int newValue)
-	{
-		return this.totalTaskGiven.compareAndSet(expectedValue, newValue);
-	}
-	
-	public int getAndIncrementTaskGiven()
-	{
-		return this.totalTaskGiven.getAndIncrement();
+		this.totalTaskCount = 0;
+		this.totalTaskFinished = 0;
+		this.totalTaskGiven = 0;
 	}
 	
 	public TileTask getTask(int index)
@@ -37,27 +26,27 @@ public class ThreadsTaskList
 	
 	public int getTotalTaskCount()
 	{
-		return this.totalTaskCount.get();
+		return this.totalTaskCount;
 	}
 	
 	public int getTotalTaskFinished()
 	{
-		return this.totalTaskFinished.get();
+		return this.totalTaskFinished;
 	}
 	
 	public int getTotalTaskGiven()
 	{
-		return this.totalTaskGiven.get();
+		return this.totalTaskGiven;
 	}
 	
 	public void incrementTaskFinished()
 	{
-		this.totalTaskFinished.addAndGet(1);
+		this.totalTaskFinished++;
 	}
 	
 	public void incrementTaskGiven()
 	{
-		this.totalTaskGiven.addAndGet(1);
+		this.totalTaskGiven++;
 	}
 	
 	/*
@@ -85,8 +74,19 @@ public class ThreadsTaskList
 				int endX = x*tilesWidth + tilesWidth; endX = endX > renderWidth ? renderWidth : endX;
 			
 				this.taskList.add(new TileTask(startX, startY, endX, endY));
-				this.totalTaskCount.addAndGet(1);
+				this.totalTaskCount++;
 			}
 		}
+	}
+	
+	/*
+	 * Permet de remettre à zéro l'avancement de la liste des tâches. i.e. la liste garde les mêmes tâches mais est prête à être réutilisée.
+	 * Sans l'appel à cette fonction, une fois la liste de tâche complétée une fois, l'état de la liste est tel qu'elle ne pourra pas être réutilisée.
+	 * On doit donc reset la liste entre plusieures utilisations 
+	 */
+	public void resetTasksProgression()
+	{
+		this.totalTaskFinished = 0;
+		this.totalTaskGiven = 0;
 	}
 }

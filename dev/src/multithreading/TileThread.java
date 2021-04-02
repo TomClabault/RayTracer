@@ -5,10 +5,10 @@ import scene.RayTracingScene;
 
 public class TileThread implements Runnable
 {
-	ThreadsTaskList taskList;
+	private ThreadsTaskList taskList;
 	
-	RayTracer rayTracerInstance;
-	RayTracingScene renderScene;
+	private RayTracer rayTracerInstance;
+	private RayTracingScene renderScene;
 	
 	public TileThread(ThreadsTaskList taskList, RayTracer rayTracerInstance, RayTracingScene renderScene) 
 	{
@@ -22,11 +22,5 @@ public class TileThread implements Runnable
 	public void run() 
 	{
 		while(this.rayTracerInstance.computeTask(this.renderScene, this.taskList)) {}//On calcule des tiles tant qu'il y en a à calculer
-	}
-
-	public void startThread()
-	{
-		Thread thisThread = new Thread(this, "");
-		thisThread.start();
 	}
 }

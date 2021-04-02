@@ -1,20 +1,29 @@
 package geometry;
 
-import geometry.materials.Material;
+import materials.Material;
 import maths.Point;
 import maths.Ray;
 import maths.Vector;
 
 public interface Shape
 {
-	public abstract Material getMaterial();
+	public Material getMaterial();
 	
 	/*
 	 * Permet d'obtenir la normale à un point donné de la forme
 	 * 
 	 * @param point Le point par rapport auquel on souhaite la normale
 	 */
-	public abstract Vector getNormal(Point point);
+	public Vector getNormal(Point point);
+	
+	/*
+	 * Permet de récupérer les coordonnées (u, v) de la forme au point donné
+	 * 
+	 * @param Point Le point auquel on souhaite récupérer les coordonnées u et v 
+	 * 
+	 * @return Retourne un point (x, y, z) contenant les coordoonnées (u, v) tel que x = u, y = v et z = 0. La troisième coordonnée du point sera toujours fixée à 0 car non utilisée.
+	 */
+	public Point getUVCoords(Point point);
 	
 	/*
 	 * Calcule le point d'intersection avec un rayon et le renvoie si existant. Le point d'intersection n'est cherché que "en face" du rayon.

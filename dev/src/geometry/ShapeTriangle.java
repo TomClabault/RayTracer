@@ -2,7 +2,7 @@ package geometry;
 
 import java.util.ArrayList;
 
-import geometry.materials.Material;
+import materials.Material;
 import geometry.shapes.Triangle;
 import maths.Point;
 import maths.Ray;
