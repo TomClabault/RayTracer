@@ -7,14 +7,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.event.EventHandler;
-import javafx.geometry.Rectangle2D;
 
-public class SetSizeWindow {
-
-    public void execute() {
+public class SetSizeWindow 
+{
+	public void execute() {
         Stage stage = new Stage();
         GridPane root = new GridPane();
         Scene scene = new Scene(root);
@@ -41,7 +39,8 @@ public class SetSizeWindow {
         root.add(validateButton, 0, 3);
         root.add(cancelButton, 1, 3);
 
-        validateButton.setOnAction(new EventHandler<ActionEvent>() {
+        validateButton.setOnAction(new EventHandler<ActionEvent>() 
+    	{
             @Override
             public void handle(ActionEvent event) {
             	try {
@@ -49,15 +48,15 @@ public class SetSizeWindow {
             			MainApp.AUTO_MODE = true;
             		}
         			if (Integer.parseInt(inputHauteur.getText()) < 0 || Integer.parseInt(inputLargeur.getText()) < 0) {
-						throw new NumberFormatException();
-					}
+    					throw new NumberFormatException();
+    				}
             		MainApp.HEIGHT = Integer.parseInt(inputHauteur.getText());
                     MainApp.WIDTH = Integer.parseInt(inputLargeur.getText());
             		
                     stage.close();
-				} catch (NumberFormatException e) {
-					System.out.println("Les arguments doivent être des entiers positifs");
-				}
+    			} catch (NumberFormatException e) {
+    				System.out.println("Les arguments doivent être des entiers positifs");
+    			}
                 
             }
         });

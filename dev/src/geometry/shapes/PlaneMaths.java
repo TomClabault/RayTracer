@@ -1,14 +1,14 @@
 package geometry.shapes;
 
-import geometry.ShapeMaths;
 import materials.Material;
 import materials.MatteMaterial;
+import geometry.Shape;
 import javafx.scene.paint.Color;
 import maths.Point;
 import maths.Ray;
 import maths.Vector;
 
-public class PlaneMaths implements ShapeMaths
+public class PlaneMaths implements Shape
 {
 	//Equation de plan: (p - point).normal = 0
 	private Vector normal;//partie (A, B, C) de l'équation
@@ -42,7 +42,6 @@ public class PlaneMaths implements ShapeMaths
 		this.material = material;
 	}
 	
-	@Override
 	public Material getMaterial() 
 	{
 		return this.material;
@@ -55,10 +54,18 @@ public class PlaneMaths implements ShapeMaths
 	 * 
 	 * @return Normale du plan
 	 */
-	@Override
 	public Vector getNormal(Point point) 
 	{
 		return this.normal;
+	}
+	
+	/*
+	 * @link{geometry.shapes.Shape#getUVCoords}
+	 */
+	@Override
+	public Point getUVCoords(Point point)
+	{
+		return new Point(point.getX(), point.getZ(), 0);
 	}
 	
 	/*
@@ -70,7 +77,6 @@ public class PlaneMaths implements ShapeMaths
 	 * 
 	 * @return Retourne le point d'intersection avec la sphère s'il existe (s'il y a deux points d'intersection, ne retourne que le point le plus près de l'origine du rayon). Retourne null sinon.
 	 */
-	@Override
 	public Point intersect(Ray ray, Vector outNormalAtInter) 
 	{
 		double NDir = Vector.dotProduct(normal, ray.getDirection());

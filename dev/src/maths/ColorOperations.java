@@ -92,6 +92,18 @@ public class ColorOperations
 	}
 	
 	/*
+	 * Retourne une nouvelle instance de Color représentant la même couleur que celle passée en argument
+	 * 
+	 * @param La couleur à copier
+	 * 
+	 * @return Une nouvelle instance de couleur dont les valeurs des composantes sont les même que colorToCopy 
+	 */
+	public static Color copy(Color colorToCopy) 
+	{
+		return Color.rgb((int)(colorToCopy.getRed()*255), (int)(colorToCopy.getGreen()*255), (int)(colorToCopy.getBlue()*255));
+	}
+	
+	/*
 	 * Multiplie une couleur composante par composante par un scalaire
 	 * 
 	 * @param col Couleur à multiplier
@@ -110,6 +122,23 @@ public class ColorOperations
 		int newRed = (int)(col.getRed() * scalar * 255); newRed = newRed > 255 ? 255 : newRed;
 		int newGreen = (int)(col.getGreen() * scalar * 255); newGreen = newGreen > 255 ? 255 : newGreen;
 		int newBlue = (int)(col.getBlue() * scalar * 255); newBlue = newBlue > 255 ? 255 : newBlue;
+		
+		return Color.rgb(newRed, newGreen, newBlue);
+	}
+	
+	/*
+	 * Permet d'élever toutes les composantes d'une couleur à une certaine puissance
+	 * 
+	 * @param col 	La couleur à élever à une certaine puissance
+	 * @param power L'exposant
+	 * 
+	 * @return Retourne une nouvelle couleur de composante (r^power, g^power, b^power) où ^ dénote l'exponentiation
+	 */
+	public static Color powColor(Color col, double power)
+	{
+		int newRed = (int)(Math.pow(col.getRed(), power)*255);
+		int newGreen = (int)(Math.pow(col.getGreen(), power)*255);
+		int newBlue = (int)(Math.pow(col.getBlue(), power)*255);
 		
 		return Color.rgb(newRed, newGreen, newBlue);
 	}

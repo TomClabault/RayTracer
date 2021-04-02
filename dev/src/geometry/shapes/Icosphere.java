@@ -191,12 +191,12 @@ public class Icosphere extends ShapeTriangle
 
     }
 
-
-
-
-
-
-
-
-
+    /*
+	 * @link{geometry.shapes.Shape#getUVCoords}
+	 */
+	@Override
+	public Point getUVCoords(Point point)
+	{
+		return null;
+	}
 }

@@ -4,7 +4,9 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 import geometry.Shape;
+import geometry.shapes.SphereMaths;
 import materials.Material;
+import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 import maths.MatrixD;
 import maths.ColorOperations;
@@ -29,13 +31,17 @@ public class RayTracer
 {
 	private int renderHeight;
 	private int renderWidth;
-
+	private ThreadsTaskList threadTaskList;
+	private int nbCore;
+	
 	public static final double AIR_REFRACTION_INDEX = 1.000393;
 	public static final int DEPTH = 4;
 
 	IntBuffer renderedPixels;
 
-	public RayTracer(int renderWidth, int renderHeight)
+	private PixelReader skyboxPixelReader = null;
+
+	public RayTracer(int renderWidth, int renderHeight, int nbCore)
 	{
 		this.renderWidth = renderWidth;
 		this.renderHeight = renderHeight;
@@ -43,8 +49,12 @@ public class RayTracer
 		this.renderedPixels = IntBuffer.allocate(renderWidth*renderHeight);
 		for(int i = 0; i < renderWidth*renderHeight; i++)
 			this.renderedPixels.put(i, ColorOperations.aRGB2Int(Color.rgb(255, 0, 0)));
+		
+		this.threadTaskList = new ThreadsTaskList();
+		this.nbCore = nbCore;
+		threadTaskList.initTaskList(nbCore, this.renderWidth, this.renderHeight);
 	}
-
+	
 	/*
 	 * Calcule le premier point d'intersection du rayon passé en argument avec les objets de la scène
 	 *
@@ -164,7 +174,9 @@ public class RayTracer
 				Ray cameraRay = new Ray(MatrixD.mulPoint(new Point(0, 0, 0), ctwMatrix), pixelWorldCoords);
 				cameraRay.normalize();
 
-				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay, DEPTH);
+				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay, 4);
+				pixelColor = ColorOperations.powColor(pixelColor, 1.0/2.2);//Gamma correction
+				
 				this.renderedPixels.put(y*renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
 			}
 		}
@@ -196,9 +208,21 @@ public class RayTracer
 			double ambientLighting = computeAmbient(renderScene.getAmbientLightIntensity(), lightIntensity);
 
 			Color finalColor = Color.rgb(0, 0, 0);
-			finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting));
+			Color objectColor = null;
+			if(rayIntObjMaterial.hasProceduralTexture())
+			{
+				Point UVCoordsAtInterPoint = rayInterObject.getUVCoords(rayInterPoint);
+				
+				objectColor = rayIntObjMaterial.getProceduralTexture().getColorAt(UVCoordsAtInterPoint);
+				finalColor = ColorOperations.copy(objectColor);
+			}
+			else
+				objectColor = rayIntObjMaterial.getColor();
+			finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(objectColor, ambientLighting));
 
 
+			
+			
 
 			Vector reflectionVector = computeReflectionVector(normalAtIntersection, ray.getDirection());
 			Point interPointShift = Point.add(rayInterPoint, Point.scalarMul(0.0001d, Vector.v2p(Vector.normalize(reflectionVector))));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
@@ -224,7 +248,7 @@ public class RayTracer
 				if(rayIntObjMaterial.getDiffuseCoeff() > 0)//Si le matériau est diffus
 				{
 					double diffuseComponent = computeDiffuse(shadowRayDir, normalAtIntersection, lightIntensity);
-					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(rayIntObjMaterial.getColor(), diffuseComponent * rayIntObjMaterial.getDiffuseCoeff()));
+					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(objectColor, diffuseComponent * rayIntObjMaterial.getDiffuseCoeff()));
 				}
 
 				if(rayIntObjMaterial.getSpecularCoeff() > 0)//Si le matériau est spéculaire
@@ -241,9 +265,9 @@ public class RayTracer
 					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(reflectionColor, rayIntObjMaterial.getReflectiveCoeff()));
 				}
 				if (rayIntObjMaterial.getIsTransparent()) {
-					double fr = Fresnel(ray, normalAtIntersection, rayIntObjMaterial.getIndiceRef());
+					double fr = Fresnel(ray, normalAtIntersection, rayIntObjMaterial.getRefractionIndex());
 					double ft = 1 - fr;
-					Vector refractedRayDir = computeRefractedVector(ray, normalAtIntersection, rayIntObjMaterial.getIndiceRef());
+					Vector refractedRayDir = computeRefractedVector(ray, normalAtIntersection, rayIntObjMaterial.getRefractionIndex());
 					Ray reflectedRay = null;
 					Ray refractedRay = null;
 					if (Vector.dotProduct(ray.getDirection(), normalAtIntersection) > 0) {
@@ -272,16 +296,31 @@ public class RayTracer
 					Color reflectionColor = computePixel(x, y, renderScene, new Ray(interPointShift, Vector.normalize(computeReflectionVector(normalAtIntersection, ray.getDirection()))), depth - 1);
 
 					finalColor = ColorOperations.mulColor(reflectionColor, rayIntObjMaterial.getReflectiveCoeff());
-					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting));
+					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(objectColor, ambientLighting));
 				}
 				else
-					finalColor = ColorOperations.mulColor(rayIntObjMaterial.getColor(), ambientLighting);//L'objet n'est pas réfléxif, on ne renvoie que la partie ambiante
+					finalColor = ColorOperations.mulColor(objectColor, ambientLighting);//L'objet n'est pas réfléxif, on ne renvoie que la partie ambiante
 			}
 
 			return finalColor;
 		}
-		else//Le rayon n'a rien intersecté --> couleur du background
-			return renderScene.getBackgroundColor();//Couleur du fond, noir si on a pas de fond
+		else//Le rayon n'a rien intersecté --> couleur du background / de la skybox
+			if(renderScene.hasSkybox())
+			{
+				Point UVCoords = SphereMaths.getUVCoord(Vector.v2p(ray.getDirection()));
+				
+				double uD = UVCoords.getX();
+				double vD = UVCoords.getY();
+				
+				int u = (int)Math.floor((renderScene.getSkyboxWidth()-1) * uD);
+				int v = (int)Math.floor((renderScene.getSkyboxHeight()-1) * vD);
+				
+				Color skyboxPixelColor = this.skyboxPixelReader.getColor(u, v); 
+				
+				return skyboxPixelColor;
+			}
+			else
+				return renderScene.getBackgroundColor();//Couleur du fond, noir si on a pas de fond
 	}
 
 	public boolean computeTask(RayTracingScene renderScene, ThreadsTaskList taskList)
@@ -300,7 +339,12 @@ public class RayTracer
 		}
 		this.computePartialImage(renderScene, currentTileTask.getStartX(), currentTileTask.getStartY(), currentTileTask.getEndX(), currentTileTask.getEndY());
 
-		taskList.incrementTaskFinished();
+		Integer lockVariable = 0;
+		synchronized(lockVariable)
+		{
+			taskList.incrementTaskFinished();
+		}
+		
 		return true;//Encore des tuiles à calculer
 	}
 
@@ -346,7 +390,6 @@ public class RayTracer
 	 */
 	public Vector computeReflectionVector(Vector normalToSurface, Vector rayDirection)
 	{
-		//return Vector.sub(Vector.scalarMul(normalToSurface, 2*Vector.dotProduct(intersectToLightVec, normalToSurface)), intersectToLightVec);//2*(L.N)*N-L
 		return Vector.sub(rayDirection, Vector.scalarMul(normalToSurface, Vector.dotProduct(normalToSurface, rayDirection)*2));
 	}
 
@@ -361,17 +404,18 @@ public class RayTracer
 		return this.renderedPixels;
 	}
 
-	public IntBuffer renderImage(RayTracingScene renderScene, int nbCore)
+	public IntBuffer renderImage(RayTracingScene renderScene)
 	{
-		ThreadsTaskList threadTaskList = new ThreadsTaskList();
-		threadTaskList.initTaskList(nbCore, this.renderWidth, this.renderHeight);
+		if(renderScene.hasSkybox())
+			this.skyboxPixelReader = renderScene.getSkyboxPixelReader();
 
-		for(int i = 1; i < nbCore; i++)//Création des threads sauf 1, le thread principal, qui est déjà créé
+		for(int i = 1; i < this.nbCore; i++)//Création des threads sauf 1, le thread principal, qui est déjà créé
 			new Thread(new TileThread(threadTaskList, this, renderScene), String.format("RT-Thread %d", i)).start();
 
 		while(threadTaskList.getTotalTaskFinished() < threadTaskList.getTotalTaskCount())
 			this.computeTask(renderScene, threadTaskList);
 
+		this.threadTaskList.resetTasksProgression();
 		return this.getRenderedPixels();
 	}
 

@@ -1,6 +1,6 @@
 package geometry.shapes;
 
-import materials.*;
+import materials.Material;
 import maths.Point;
 import geometry.ShapeTriangle;
 
@@ -102,5 +102,12 @@ public class Pyramide extends ShapeTriangle {
 
     }
 
-
+    /*
+	 * @link{geometry.shapes.Shape#getUVCoords}
+	 */
+	@Override
+	public Point getUVCoords(Point point)
+	{
+		return null;
+	}
 }

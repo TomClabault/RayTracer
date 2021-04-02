@@ -1,6 +1,7 @@
 package geometry.shapes;
 
-import materials.*;
+import materials.Material;
+import materials.MatteMaterial;
 import javafx.scene.paint.Color;
 import maths.Point;
 import geometry.ShapeTriangle;
@@ -115,5 +116,12 @@ public class Rectangle extends ShapeTriangle
 		/*return listeTriangle;*/
 	}
 
-
+	/*
+	 * @link{geometry.shapes.Shape#getUVCoords}
+	 */
+	@Override
+	public Point getUVCoords(Point point)
+	{
+		return null;
+	}
 }

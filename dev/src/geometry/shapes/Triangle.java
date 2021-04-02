@@ -1,10 +1,7 @@
 package geometry.shapes;
 
 import geometry.Shape;
-import geometry.ShapeTriangle;
 import materials.Material;
-import materials.MatteMaterial;
-import javafx.scene.paint.Color;
 import maths.Point;
 import maths.Ray;
 import maths.Vector;
@@ -115,5 +112,14 @@ public class Triangle implements Shape
 	public Material getMaterial()
 	{
 		return this.material;
+	}
+	
+	/*
+	 * @link{geometry.shapes.Shape#getUVCoords}
+	 */
+	@Override
+	public Point getUVCoords(Point point)
+	{
+		return null;
 	}
 }
