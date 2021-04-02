@@ -1,69 +1,174 @@
 package povParser.automat;
 
+
 import java.io.*;
 
 public class Automat
 {
-    private EnumFigure currentState;
+    private EtatToken etatToken;
+    private StreamTokenizer streamTokenizer;
+    private State currentState;
+    private int currentToken;
 
-    public Automat(EnumFigure currentState)
+    public Automat(StreamTokenizer streamTokenizer, State currentState)
     {
+        this.streamTokenizer = streamTokenizer;
         this.currentState = currentState;
-        System.out.println("classe automat");
+    }
+
+    public Automat(StreamTokenizer streamTokenizer)
+    {
+        this(streamTokenizer, State.OUTSIDE);
+    }
+
+    public void setState(EtatToken etatToken)
+    {
+        this.etatToken = etatToken;
+    }
+    public void action()
+    {
+        etatToken.action(this);
+    }
+
+    public StreamTokenizer getStreamTokenizer()
+    {
+        return this.streamTokenizer;
+    }
+
+    public int callNextToken()
+    {
+        try {
+            this.currentToken = this.streamTokenizer.nextToken();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        finally {
+            return this.currentToken;
+        }
+    }
+
+    public void setStreamTokenizer(StreamTokenizer st)
+    {
+        this.streamTokenizer = st;
+    }
+
+    public double getNumberValue()
+    {
+        return this.streamTokenizer.nval;
+    }
+
+    public boolean isValidState()
+    {
+        int token = 0;
+        try {
+            token = this.streamTokenizer.nextToken();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(token == StreamTokenizer.TT_WORD)
+        {
+            if(this.streamTokenizer.sval.equals("sphere") || this.streamTokenizer.sval.equals("triangle") || this.streamTokenizer.sval.equals("box") || this.streamTokenizer.sval.equals("plane")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isFinished()
+    {
+        return (this.streamTokenizer.ttype == StreamTokenizer.TT_EOF);
+    }
+
+    public State getState()
+    {
+
+        if(this.streamTokenizer.sval.equals("sphere"))
+        {
+            return State.SPHERE;
+        }
+        else if(this.streamTokenizer.sval.equals("triangle"))
+        {
+            return State.TRIANGLE;
+        }
+        else if(this.streamTokenizer.sval.equals("box"))
+        {
+            return State.BOX;
+        }
+        else if(this.streamTokenizer.sval.equals("plane"))
+        {
+            return State.PLANE;
+        }
+        return State.OUTSIDE;
     }
 
     public static void main(String[] args)
     {
-        String pathToPov = "src/povParser/test.pov";
-        try
-        {
-            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(pathToPov));
+        String pathToTestFile = "src/povParser/test.pov";
+
+        try {
+            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(pathToTestFile));
             BufferedReader fileReader = new BufferedReader(inputStreamReader);
+
             StreamTokenizer streamTokenizer = new StreamTokenizer(fileReader);
+            streamTokenizer.wordChars('_', '_'); //permet d'avoir des noms contenant un underscore
+            streamTokenizer.commentChar('#');
 
-            streamTokenizer.wordChars(testFile.UNDERSCORE, testFile.UNDERSCORE);
-            streamTokenizer.commentChar(testFile.CROISILLON);
+            Automat automat = new Automat(streamTokenizer);
 
-            int token = streamTokenizer.nextToken();
-
-            Etat state = Etat.EXTERIEUR;
-
-            while(token != StreamTokenizer.TT_EOF)
+            while(! automat.isFinished())
             {
-                switch(state)
+                if(automat.isValidState())
                 {
-                    case EXTERIEUR:
-                    {
-                        if (streamTokenizer.ttype == StreamTokenizer.TT_WORD)
+                    State currentState = automat.getState();
+                    switch (currentState) {
+                        case SPHERE:
                         {
-                            if(streamTokenizer.sval == "sphere")
-                            {
-                                state = ;
-                            }
+                            System.out.println("sphere");
+                            automat.setState(new EtatSphere());
+                            automat.action();
+                            break;
                         }
-                        break;
-                    }
-                    case Etat.SPHERE.SPHERE:
-                    {
-                        token = streamTokenizer.nextToken();
-                        state = ;
-                        break;
-                    }
 
-                    case EnumFigure.SPH
+                        case TRIANGLE:
+                        {
+                            System.out.println("triangle");
+                            automat.setState(new EtatTriangle());
+                            automat.action();
+                            break;
+                        }
 
+                        case BOX:
+                        {
+                            System.out.println("box");
+                            automat.setState(new EtatBox());
+                            automat.action();
+                            break;
+                        }
+
+                        case PLANE:
+                        {
+                            System.out.println("plane");
+                            automat.setState(new EtatPlane());
+                            automat.action();
+                            break;
+                        }
+
+                        case OUTSIDE:
+                        {
+                            automat.setState(new EtatOutside());
+                            automat.action();
+                            break;
+                        }
+                        default:
+                            System.out.println("not any state");
+                    }
                 }
             }
         }
-
-        catch (FileNotFoundException e)
-        {
-            System.err.println(e.getMessage());
-        }
-
-        catch (IOException e)
-        {
-            System.err.println(e.getMessage());
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
+

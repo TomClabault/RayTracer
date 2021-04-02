@@ -1,10 +1,14 @@
 package povParser.automat;
 
-public enum Etat
+public enum State
 {
-    EXTERIEUR,
+    OUTSIDE,
+    SPHERE,
+    TRIANGLE,
+    PLANE,
+    BOX, //correspond à un rectangle
 
-        SPHERE,
+   /*     SPHERE,
         SPHERE_OPENING_BRACKET,
         SPHERE_ENDING_BRACKET,
         SPHERE_OPENING_CHEVRON,
@@ -23,9 +27,9 @@ public enum Etat
             SPHERE_FINISH_DIFFUSE,
             SPHERE_FINISH_SPECULAR,
             SPHERE_FINISH_PHONG, // --> shininess
-            /*
-            multiplier ambient diffuse et specular par phong
-            * */
+
+            //multiplier ambient diffuse et specular par phong
+
             SPHERE_FINISH_PHONG_SIZE,
 
             SPHERE_FINISH_REFLECTION,
@@ -34,5 +38,5 @@ public enum Etat
     POLYGON,
     PLANE,
     PRISM
-
+*/
 }
