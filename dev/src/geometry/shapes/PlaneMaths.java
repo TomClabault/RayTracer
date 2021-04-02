@@ -28,6 +28,29 @@ public class PlaneMaths implements Shape
 	}
 	
 	/*
+	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan
+	 * 
+	 * @param normal 	Vecteur normal au plan
+	 * @param distance 	Distance du plan par rapport à l'origine dans la direction du vecteur 'normal'
+	 */
+	public PlaneMaths(Vector normal, double distance)
+	{
+		this(normal, Vector.v2p(Vector.scalarMul(Vector.normalize(normal), distance)), new MatteMaterial(Color.rgb(128, 128, 128)));
+	}
+	
+	/*
+	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan
+	 * 
+	 * @param normal 	Vecteur normal au plan
+	 * @param distance 	Distance du plan par rapport à l'origine dans la direction du vecteur 'normal'
+	 * @param material Matériau qui sera utilisé pour le rendu du plan
+	 */
+	public PlaneMaths(Vector normal, double distance, Material material)
+	{
+		this(normal, Vector.v2p(Vector.scalarMul(Vector.normalize(normal), distance)), material);
+	}
+	
+	/*
 	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan 
 	 * 
 	 * @param normal Vecteur normal au plan
