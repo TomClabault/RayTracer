@@ -150,9 +150,9 @@ public class Icosphere extends ShapeTriangle
 
             // on fait des triangles dans un triangle
             Triangle trimid = new Triangle(ABmid, BCmid, CAmid, material);
-            Triangle trileft = new Triangle(A, AB, CA, material);
-            Triangle triright = new Triangle(CA, BC, C, material);
-            Triangle tribot = new Triangle(AB, B, BC, material);
+            Triangle trileft = new Triangle(A, ABmid, CAmid, material);
+            Triangle triright = new Triangle(CAmid, BCmid, C, material);
+            Triangle tribot = new Triangle(ABmid, B, BCmid, material);
 
             // on ajout ces triangles dans la liste des triangles
             super.listeTriangle.add(trimid);
@@ -163,10 +163,11 @@ public class Icosphere extends ShapeTriangle
 
             }
             // supprimer les triangles de la subdiv avant
-            for(int j = 0; j<listsize ; j++)
-            {
-                super.listeTriangle.remove(j);
-            }
+            //double subdivavant = 20 * Math.pow(4,this.subdivision - 1);
+            //for(int j = 0; j < subdivavant ; j++)
+            //{
+             //   super.listeTriangle.remove(j);
+            //}
         }
 
 
