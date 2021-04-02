@@ -15,6 +15,7 @@ public class SetSizeWindow {
         Stage stage = new Stage();
         GridPane root = new GridPane();
         Scene scene = new Scene(root);
+        //scene.getStylesheets().add(SetSizeWindow.class.getResource("Login.css").toExternalForm());
 
         stage.setScene(scene);
         stage.setTitle("Selection de la taille de rendu");
@@ -36,15 +37,30 @@ public class SetSizeWindow {
         root.add(cancelButton, 1, 2);
 
         validateButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	try {
+            		if (Integer.parseInt(inputHauteur.getText()) < 0 || Integer.parseInt(inputLargeur.getText()) < 0) {
+						throw new NumberFormatException();
+					}
+            		MainApp.HEIGHT = Integer.parseInt(inputHauteur.getText());
+                    MainApp.WIDTH = Integer.parseInt(inputLargeur.getText());
+                    stage.close();
+				} catch (NumberFormatException e) {
+					System.out.println("Les arguments doivent être des entiers positifs");
+				}
+                
+            }
+        });
+        
+        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
-                MainApp.HEIGHT = Integer.parseInt(inputHauteur.getText());
-                MainApp.WIDTH = Integer.parseInt(inputLargeur.getText());
                 stage.close();
             }
         });
-
+        
         stage.showAndWait();
 
 
