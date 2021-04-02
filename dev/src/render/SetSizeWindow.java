@@ -39,8 +39,8 @@ public class SetSizeWindow {
 
             @Override
             public void handle(ActionEvent event) {
-                MainApp.HEIGHT = Integer.parseInt(textHauteur.getText());
-                MainApp.WIDTH = Integer.parseInt(textLargeur.getText());
+                MainApp.HEIGHT = Integer.parseInt(inputHauteur.getText());
+                MainApp.WIDTH = Integer.parseInt(inputLargeur.getText());
                 stage.close();
             }
         });
