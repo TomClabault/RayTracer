@@ -162,7 +162,6 @@ public class CameraTimer extends AnimationTimer {
     {
     	Vector axeX = this.rayTracingScene.getCamera().getXAxis();
     	Point newPosition = Point.add(Vector.v2p(Vector.scalarMul(axeX, DELTA_MOVE)), rayTracingScene.getCamera().getPosition());
-
     	this.rayTracingScene.getCamera().setPosition(newPosition);
    }
 }

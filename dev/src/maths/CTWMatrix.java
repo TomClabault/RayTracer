@@ -19,9 +19,8 @@ public class CTWMatrix extends MatrixD
 			{0, 0, 1}		
 		});
 		
-
-		RotationMatrix rotateHori = new RotationMatrix(1, angleHori);//Création de la matrice de rotation pour l'axe horizontal 
 		RotationMatrix rotateVerti = new RotationMatrix(0, angleVerti);//Création de la matrice de rotation pour l'axe vertical
+		RotationMatrix rotateHori = new RotationMatrix(1, angleHori);//Création de la matrice de rotation pour l'axe horizontal 
 		
 		double rotateHori3x3[][] = new double[3][3];
 		double rotateVerti3x3[][] = new double[3][3];

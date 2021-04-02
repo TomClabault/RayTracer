@@ -26,11 +26,9 @@ public class WindowTimer extends AnimationTimer {
         this.pixelWriter = pixelWriter;
         this.rayTracer = rayTracer;
         Label fpsLabel = new Label("");
-        fpsLabel.setId("fpsLabel");
-        fpsLabel.setTranslateX(5);//Position du label + 5X
-        fpsLabel.setTranslateY(5);//Position du label + 5Y
-
         this.fpsLabel = fpsLabel;
+        fpsLabel.setId("fpsLabel");
+
         this.pixelFormat = PixelFormat.getIntArgbPreInstance();
     }
 
@@ -43,7 +41,7 @@ public class WindowTimer extends AnimationTimer {
         long dif = actualFrameTime - oldFrameTime;
         dif  = (long)1000000000.0 / dif;
         this.oldFrameTime = actualFrameTime;
-        ImageWriter.doImage(rayTracer.renderImage(this.rayTracingScene), this.pixelWriter, this.pixelFormat);
+        ImageWriter.doImage(rayTracer.renderImage(this.rayTracingScene, 8), this.pixelWriter, this.pixelFormat);
         fpsLabel.setText(String.format("FPS : %d", dif));
     }
 
