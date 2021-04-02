@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 
 import rayTracer.RayTracer;
+import geometry.materials.*;
 import geometry.shapes.*;
 import geometry.*;
 import maths.*;
@@ -91,7 +92,7 @@ public class ImageWriter {
     public RayTracingScene addObjectsToScene() {/*utilisé dans le constructeur*/
 
     	Camera cameraRT = new Camera(new Point(0, 1, -2), 0.000, -15.000);
-        
+
         cameraRT.setFOV(60);
         Light l = new LightBulb(new Point(0, 2, 0), 1);
 
@@ -103,7 +104,7 @@ public class ImageWriter {
         shapeList.add(new SphereMaths(new Point(-1.25, 1, -6.5), 0.2, new MetallicMaterial(Color.LIGHTSKYBLUE)));
         shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.BLACK, new ProceduralTextureCheckerboard(Color.ORANGERED, Color.ORANGERED.darker(), 12))));
         shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
-        
+
         Image skybox = new Image("file:oberer_kuhberg.jpg");
         RayTracingScene sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.75, skybox);
 
