@@ -46,17 +46,14 @@ public class SetSizeWindow {
             public void handle(ActionEvent event) {
             	try {
             		if(checkbox.isSelected() == true) {
-            			Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-            			MainApp.WIDTH = (int) primaryScreenBounds.getWidth();
-            			MainApp.HEIGHT = (int) primaryScreenBounds.getHeight();
-            			MainApp.MAXIMIZE = true;
-            		} else {
-            			if (Integer.parseInt(inputHauteur.getText()) < 0 || Integer.parseInt(inputLargeur.getText()) < 0) {
-    						throw new NumberFormatException();
-    					}
-                		MainApp.HEIGHT = Integer.parseInt(inputHauteur.getText());
-                        MainApp.WIDTH = Integer.parseInt(inputLargeur.getText());
+            			MainApp.AUTO_MODE = true;
             		}
+        			if (Integer.parseInt(inputHauteur.getText()) < 0 || Integer.parseInt(inputLargeur.getText()) < 0) {
+						throw new NumberFormatException();
+					}
+            		MainApp.HEIGHT = Integer.parseInt(inputHauteur.getText());
+                    MainApp.WIDTH = Integer.parseInt(inputLargeur.getText());
+            		
                     stage.close();
 				} catch (NumberFormatException e) {
 					System.out.println("Les arguments doivent être des entiers positifs");

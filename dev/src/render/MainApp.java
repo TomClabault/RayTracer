@@ -20,7 +20,7 @@ public class MainApp extends Application {
     */
     public static int WIDTH;
     
-    public static boolean MAXIMIZE;
+    public static boolean AUTO_MODE;
 
     public static void main(String[] args) {
 
@@ -38,6 +38,7 @@ public class MainApp extends Application {
         StackPane stackPane = new StackPane();
 
         Scene scene = new Scene(stackPane);
+
         File f = new File("src/render/style/fpsCounter.css");
         scene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));//line form https://blog.idrsolutions.com/2014/04/use-external-css-files-javafx/
         
@@ -53,9 +54,7 @@ public class MainApp extends Application {
 
             stage.setTitle("Rendu");
             stage.setScene(scene);
-            if (MAXIMIZE) {
-				stage.setMaximized(true);
-			}
+            stage.setMaximized(AUTO_MODE); // si AUTO_MODE alors on maximize la fenêtre
             stage.show();
 		} catch (IllegalArgumentException e) {
 			System.out.println("Vous avez annulez");

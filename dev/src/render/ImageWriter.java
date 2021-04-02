@@ -3,9 +3,11 @@ package render;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
 import javafx.scene.image.ImageView;
@@ -42,9 +44,15 @@ public class ImageWriter {
         this.writableImage = new WritableImage(MainApp.WIDTH,MainApp.HEIGHT);
 
         this.pw = writableImage.getPixelWriter();
-
+        
         ImageView imageView = new ImageView();
         imageView.setImage(writableImage);
+        if(MainApp.AUTO_MODE == true) {
+        	Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+			imageView.setFitHeight(primaryScreenBounds.getHeight());
+	        imageView.setFitWidth(primaryScreenBounds.getWidth());
+        }
+        
 
         Pane pane = new Pane();
         pane.getChildren().add(imageView);

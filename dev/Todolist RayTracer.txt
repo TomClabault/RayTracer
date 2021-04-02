@@ -12,7 +12,6 @@ RayTracer/Interface:
 	- Cliquer sur un objet avec la souris lance un rayon au point où on a cliqué et change la direction de regard de la caméra pour qu'elle regarde l'objet qui a été intersecté par le rayon
 	
 Interface: 
-	- Quand on lance un rendu dans une résolution qui ne remplit pas tout l'écran, aggrandir la fenêtre devrait aggrandir le rendu aussi (quitte à ce que le visuel soit flou / dégueulasse). parce que actuellement, si on aggrandi la fenêtre, le rendu ne change pas de taille et on obtient une fenêtre moitié blanche / moitié rendu
 	- Pouvoir se déplacer dans plusieurs directions en même temps. Si actuellement on fait Z+Q, il n'y a que la dernière touche enfoncée qui va prendre effet
 	- Ajouter un bouton pour renvoyer la caméra au point où elle était au lancement du rendu (pourquoi pas utiliser le pavé numérique 0 pour faire ça)
 	- Ajouter un bouton pour pouvoir exporter ce que l'on voit dans le rendu dans un fichier au format .png
