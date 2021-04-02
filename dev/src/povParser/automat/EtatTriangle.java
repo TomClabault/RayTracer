@@ -10,6 +10,11 @@ enum Trianglecontent
     OPENING_CHEVRON,
     ENDING_CHEVRON,
     OUTSIDE,
+    FINISH,
+    PIGMENT, //color of the figure
+    AMBIENT,
+    DIFFUSE,
+    SPECULAR,
 }
 
 public class EtatTriangle implements EtatToken
@@ -58,7 +63,25 @@ public class EtatTriangle implements EtatToken
                     context.callNextToken(); //passe le chevron fermant
                     if(coordNb == 3)
                     {
-                        state = Trianglecontent.ENDING_BRACKET;
+                        nextToken = context.callNextToken();
+
+                        if(context.isCurrentTokenAWord())
+                        {
+                            if(context.currentWord("pigment"))
+                            {
+                                System.out.println("pigment");
+                                state = Trianglecontent.PIGMENT;
+                            }
+                            else if(context.currentWord("finish"))
+                            {
+                                System.out.println("finish");
+                                state = Trianglecontent.FINISH;
+                            }
+                        }
+                        else
+                        {
+                            state = Trianglecontent.ENDING_BRACKET;
+                        }
                     }
                     else
                     {
@@ -76,6 +99,15 @@ public class EtatTriangle implements EtatToken
                     }
                     break;
                 }
+
+                case PIGMENT:
+                {
+                    context.callNextToken(); //skip '{'
+                    context.callNextToken(); //skip
+                    System.exit
+                    break;
+                }
+
                 case OUTSIDE:
                 {
                     state = Trianglecontent.OUTSIDE;

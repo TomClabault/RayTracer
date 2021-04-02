@@ -9,6 +9,11 @@ sphere { <1, 2, 3>, 4.0
 triangle
 {
     <0, 0, 0>, <1, 1, 1>, <2, 2, 2>
+    pigment {color rgb <0.3, 0.3, 0.3>} // <==> rgb 0.3
+    finish
+    {
+        ambient 0
+    }
 }
 
 plane {

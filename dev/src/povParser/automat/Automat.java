@@ -35,6 +35,16 @@ public class Automat
         return this.streamTokenizer;
     }
 
+    public boolean isCurrentTokenAWord()
+    {
+        return streamTokenizer.ttype == StreamTokenizer.TT_WORD;
+    }
+
+    public boolean currentWord(String word)
+    {
+        return streamTokenizer.sval.equals(word);
+    }
+
     public int callNextToken()
     {
         try {
@@ -124,7 +134,7 @@ public class Automat
                     switch (currentState) {
                         case SPHERE:
                         {
-                            System.out.println("sphere");
+
                             automat.setState(new EtatSphere());
                             automat.action();
                             break;
@@ -132,7 +142,7 @@ public class Automat
 
                         case TRIANGLE:
                         {
-                            System.out.println("triangle");
+
                             automat.setState(new EtatTriangle());
                             automat.action();
                             break;
@@ -140,7 +150,7 @@ public class Automat
 
                         case BOX:
                         {
-                            System.out.println("box");
+
                             automat.setState(new EtatBox());
                             automat.action();
                             break;
@@ -148,7 +158,7 @@ public class Automat
 
                         case PLANE:
                         {
-                            System.out.println("plane");
+
                             automat.setState(new EtatPlane());
                             automat.action();
                             break;
