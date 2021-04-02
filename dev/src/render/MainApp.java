@@ -40,8 +40,9 @@ public class MainApp extends Application {
         Scene scene = new Scene(stackPane);
 
         File f = new File("src/render/style/fpsCounter.css");
-        scene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));//line form https://blog.idrsolutions.com/2014/04/use-external-css-files-javafx/
-        
+        //scene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));//line form https://blog.idrsolutions.com/2014/04/use-external-css-files-javafx/
+        //scene.getStylesheets().add(MainApp.class.getResource("style/setSizeWindow.css").toExternalForm());
+        scene.getStylesheets().add(MainApp.class.getResource("style/fpsCounter.css").toExternalForm());
         try {
         	ImageWriter imageWriter = new ImageWriter(scene);
             imageWriter.ImageWriterMain(HEIGHT, WIDTH);
