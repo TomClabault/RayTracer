@@ -1,11 +1,3 @@
--------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------
-IMPORTANT :::::
-- Ajouter des try/catch pour éviter qu'en écrivant des lettres (par exemple) dans le choix de largeur/hauteur ça lève une exception
-- Quand on quitte le MainApp avec la croix de la fenêtre sans avoir rien écrit dans largeur/hauteur, erreur dans le terminal
--------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------
-
 RayTracer:
 	- Ajouter une skybox
 	- Ajouter de l'anti-aliasing SSAA activable et désactivable avec choix du nombre de sample
@@ -14,13 +6,12 @@ RayTracer:
 	- ajouter differentes depth en fonction de si le materiaux est transparent/mat/metalique
 	- Ajouter le support pour plusieures sources de lumière
 	- Ajouter le support pour une lumière diffuse/ambiante/spéculaire non blanche i.e. le support pour des lumières colorées
-	- Ajouter le support de l'absorption avec la loi de Beer Lambert pour les matériaux réfractifs
-
+	
 RayTracer/Interface:
 	- Ajouter des points de caméra fixes dans le code pour qu'on puisse se "téléporter" dans la scène, à des points fixés. On utiliserait les numéros du pavé numérique
 	- Cliquer sur un objet avec la souris lance un rayon au point où on a cliqué et change la direction de regard de la caméra pour qu'elle regarde l'objet qui a été intersecté par le rayon
-
-Interface:
+	
+Interface: 
 	- Pouvoir se déplacer dans plusieurs directions en même temps. Si actuellement on fait Z+Q, il n'y a que la dernière touche enfoncée qui va prendre effet
 	- Ajouter un bouton pour renvoyer la caméra au point où elle était au lancement du rendu (pourquoi pas utiliser le pavé numérique 0 pour faire ça)
 	- Ajouter un bouton pour pouvoir exporter ce que l'on voit dans le rendu dans un fichier au format .png

@@ -1,0 +1,9 @@
+#fpsLabel {
+    -fx-font-size: 4em;
+    -fx-text-fill: white;
+}
+
+#fpsLabel .text {
+    -fx-stroke-width: 0.1em;
+    -fx-stroke: black;
+}

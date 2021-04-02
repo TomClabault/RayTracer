@@ -1,8 +1,14 @@
 package geometry.shapes;
 
-import materials.Material;
+import geometry.materials.Material;
+import geometry.materials.MatteMaterial;
+import geometry.shapes.Triangle;
+import javafx.scene.paint.Color;
 import maths.Point;
+import geometry.Shape;
 import geometry.ShapeTriangle;
+import maths.Ray;
+import maths.Vector;
 
 import java.util.ArrayList;
 import java.lang.Math;
@@ -191,12 +197,12 @@ public class Icosphere extends ShapeTriangle
 
     }
 
-    /*
-	 * @link{geometry.shapes.Shape#getUVCoords}
-	 */
-	@Override
-	public Point getUVCoords(Point point)
-	{
-		return null;
-	}
+
+
+
+
+
+
+
+
 }

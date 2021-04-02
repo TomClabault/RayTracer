@@ -2,8 +2,8 @@ package multithreading;
 
 public class TileTask 
 {
-	private int startX, startY;
-	private int endX, endY;
+	int startX, startY;
+	int endX, endY;
 	
 	/*
 	 * Crée une tâche de calcul pour un thread. i.e. détermine la tuile de pixel à calculer en fonction des paramètres passés
