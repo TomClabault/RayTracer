@@ -1,17 +1,11 @@
 package geometry.shapes;
 
-import geometry.materials.Material;
-import geometry.materials.MatteMaterial;
-import geometry.shapes.Triangle;
+import materials.*;
 import javafx.scene.paint.Color;
 import maths.Point;
-import geometry.Shape;
 import geometry.ShapeTriangle;
-import maths.Ray;
-import maths.Vector;
 
 import java.util.ArrayList;
-import java.lang.Math;
 
 
 public class Rectangle extends ShapeTriangle

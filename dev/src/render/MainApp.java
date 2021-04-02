@@ -55,7 +55,7 @@ public class MainApp extends Application {
             stage.setMaximized(AUTO_MODE); // si AUTO_MODE alors on maximize la fenêtre
             stage.show();
 		} catch (IllegalArgumentException e) {
-			System.out.println("Vous avez annulez");
+			System.out.println("Vous avez annulé");
 		}
         
         
