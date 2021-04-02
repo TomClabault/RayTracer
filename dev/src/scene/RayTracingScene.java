@@ -65,9 +65,14 @@ public class RayTracingScene
 	 * @param backgroundColor La couleur de fond qui sera utilisée pour la scène. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scène. Si le paramètre skyboxTexture est utilisé, le paramètre backgroundColor sera ignoré
 	 * @param ambientLightIntensity L'intensité de la luminosité ambiante de la scène. Défini l'intensité lumineuse minimale par laquelle seront éclairés tous les points de la scène
 	 * @param skyboxTexture javafx.scene.image.Image chargé de la texture a utiliser pour la skybox de la scène. null si aucune skybox n'est voulue
+	 * 
+	 * @throws IllegalArgumentException quand l'argument skyboxTexture passé ne constitue pas une image correcte. i.e. l'image n'a peut être pas été ouverte correctement, introuvable, format non supporté, ...
 	 */
-	public RayTracingScene(Camera camera, Light light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, Image skyboxTexture) 
+	public RayTracingScene(Camera camera, Light light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, Image skyboxTexture) throws IllegalArgumentException
 	{
+		if(skyboxTexture.isError())
+			throw new IllegalArgumentException("Erreur durant le chargement de la skybox : " + skyboxTexture.getException().getMessage());
+		
 		this.camera = camera;
 		this.light = light;
 		this.shapes = shapes;
@@ -76,17 +81,9 @@ public class RayTracingScene
 		this.backgroundColor = backgroundColor;
 		this.ambientLightIntensity = ambientLightIntensity;
 		
-		if(skyboxTexture != null)
-		{
-			this.skyboxPixelReader = this.skyboxTexture.getPixelReader();
-			this.skyboxWidth = (int)skyboxTexture.getWidth();
-			this.skyboxHeight = (int)skyboxTexture.getHeight();
-		}
-		else
-		{
-			this.skyboxPixelReader = null;
-			this.skyboxWidth = this.skyboxHeight = 0;
-		}
+		this.skyboxPixelReader = this.skyboxTexture.getPixelReader();
+		this.skyboxWidth = (int)skyboxTexture.getWidth();
+		this.skyboxHeight = (int)skyboxTexture.getHeight();
 	}
 
 	/*

@@ -99,7 +99,7 @@ public class ImageWriter {
 
     public RayTracingScene addObjectsToScene() {/*utilisé dans le constructeur*/
 
-    	Camera cameraRT = new Camera(new Point(0.000, 2.000, -3.500), 0, -24.0);
+    	Camera cameraRT = new Camera(new Point(0.000, 0.5, -1.5), 0, 0);
         cameraRT.setFOV(60);
         //Light l = new LightBulb(Point.scalarMul(1000000, new Point(1, 2, 1)), 1);
         Light l = new LightBulb(new Point(1, 2, 1), 1);
@@ -119,8 +119,18 @@ public class ImageWriter {
         shapeList.add(new SphereMaths(new Point(-1.5, -0.65, -5.5), 0.35, new MatteMaterial(Color.BLACK, new ProceduralTextureCheckerboard(Color.ORANGERED, Color.ORANGERED.darker(), 12))));
         shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MirrorMaterial(0.75)));
         
-        Image skybox = new Image("file:oberer_kuhberg.jpg");
-        RayTracingScene sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1, skybox);
+        Image skybox = new Image(RayTracingScene.class.getResource("resources/skybox.jpg").toExternalForm());
+        RayTracingScene sceneRT = null;
+        try
+        {
+        	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1, skybox);
+        }
+        catch (IllegalArgumentException exception)//Skybox mal chargée
+        {
+        	System.err.println(exception.getMessage() + System.lineSeparator() + "Programme terminé.");
+        	
+        	System.exit(1);
+        }
 //=======
 //        shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128))));
 //
