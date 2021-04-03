@@ -19,33 +19,28 @@ import multithreading.TileThread;
 import scene.RayTracingScene;
 
 /*
- * Lumière dans la sphère: traverse
- * Lumière en dessous du plan, traverse
- * Classe matériaux --> couleur, specular, diffuse
- */
-
-/*
  * Une instance de RayTracer créée à partir de la largeur et de la hauteur du rendu voulu. Permet de générer les
  */
 public class RayTracer
 {
+	public static final double AIR_REFRACTION_INDEX = 1.000393;
+
 	private int renderHeight;
 	private int renderWidth;
 	private ThreadsTaskList threadTaskList;
 	private int nbCore;
-	
-	public static final double AIR_REFRACTION_INDEX = 1.000393;
-	public static final int DEPTH = 4;
+	private int maxDepth;
 
-	IntBuffer renderedPixels;
+	private IntBuffer renderedPixels;
 
 	private PixelReader skyboxPixelReader = null;
 
-	public RayTracer(int renderWidth, int renderHeight, int nbCore)
+	public RayTracer(int renderWidth, int renderHeight, int maxDepth, int nbCore)
 	{
 		this.renderWidth = renderWidth;
 		this.renderHeight = renderHeight;
-
+		this.maxDepth = maxDepth;
+		
 		this.renderedPixels = IntBuffer.allocate(renderWidth*renderHeight);
 		for(int i = 0; i < renderWidth*renderHeight; i++)
 			this.renderedPixels.put(i, ColorOperations.aRGB2Int(Color.rgb(255, 0, 0)));
@@ -174,7 +169,7 @@ public class RayTracer
 				Ray cameraRay = new Ray(MatrixD.mulPoint(new Point(0, 0, 0), ctwMatrix), pixelWorldCoords);
 				cameraRay.normalize();
 
-				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay, DEPTH);
+				Color pixelColor = this.computePixel(x, y, renderScene, cameraRay, maxDepth);
 				pixelColor = ColorOperations.powColor(pixelColor, 1.0/2.2);//Gamma correction
 				
 				this.renderedPixels.put(y*renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
