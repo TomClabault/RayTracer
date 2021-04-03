@@ -114,7 +114,7 @@ public class Automat
 
     public static void main(String[] args)
     {
-        String pathToTestFile = "dev/src/povParser/test.pov";
+        String pathToTestFile = "dev/src/povParser/sphere.pov";
 
         try {
 
@@ -135,7 +135,7 @@ public class Automat
                     switch (currentState) {
                         case SPHERE:
                         {
-
+                            System.out.println("SPHERE");
                             automat.setState(new EtatSphere());
                             automat.action();
                             break;
@@ -143,7 +143,7 @@ public class Automat
 
                         case TRIANGLE:
                         {
-
+                            System.out.println("TRIANGLE");
                             automat.setState(new EtatTriangle());
                             automat.action();
                             break;
@@ -151,7 +151,7 @@ public class Automat
 
                         case BOX:
                         {
-
+                            System.out.println("BOX");
                             automat.setState(new EtatBox());
                             automat.action();
                             break;
@@ -159,7 +159,7 @@ public class Automat
 
                         case PLANE:
                         {
-
+                            System.out.println("PLANE");
                             automat.setState(new EtatPlane());
                             automat.action();
                             break;
