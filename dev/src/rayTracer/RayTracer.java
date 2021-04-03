@@ -261,7 +261,6 @@ public class RayTracer
 				{
 					Color reflectionColor = computePixel(x, y, renderScene, new Ray(interPointShift, Vector.normalize(computeReflectionVector(normalAtIntersection, ray.getDirection()))), depth - 1);
 
-					//finalColor = ColorOperations.mulColor(reflectionColor, rayInterObject.getReflectiveCoeff());
 					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(reflectionColor, rayIntObjMaterial.getReflectiveCoeff()));
 				}
 				if (rayIntObjMaterial.getIsTransparent()) {
