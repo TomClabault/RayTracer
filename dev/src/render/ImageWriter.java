@@ -102,7 +102,6 @@ public class ImageWriter {
     public RayTracingScene addObjectsToScene() {/*utilisé dans le constructeur*/
 
     	Camera cameraRT = new Camera(new Point(0.000, 0.5, -1.5), 0, 0);
-    	System.out.println(new Vector(new Point(0, 0.5, -1.5), new Point(1.25, 0.5, -6)));
         cameraRT.setFOV(60);
         Light l = new LightBulb(new Point(1, 2, 1), 1);
 
