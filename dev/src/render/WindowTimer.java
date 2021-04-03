@@ -1,17 +1,14 @@
 package render;
 
-import java.io.IOException;
 import java.nio.IntBuffer;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritablePixelFormat;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 
 import scene.RayTracingScene;
-import util.ImageUtil;
 import rayTracer.RayTracer;
 
 public class WindowTimer extends AnimationTimer {

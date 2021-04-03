@@ -81,13 +81,10 @@ public class Triangle implements Shape
 	public Point intersect(Ray ray, Vector outNormalAtInter)
 	{
 		Point intersection = null;
-		double planeD;//Composante D du plan formé par les 3 points du triangle dans l'équation de plan Ax + By + Cz + D = 0
 		double denom =  -Vector.dotProduct(this.planeNormal, ray.getDirection());
 		
 		if(Math.abs(denom) < 0.0000001d)//Si la normale du plan et la direction du rayon sont perpendiculaires, le plan et le rayon sont parallèles, pas d'intersection
 			return null;
-		
-		planeD = Vector.dotProduct(this.planeNormal, new Vector(this.A.getX(), this.A.getY(), this.A.getZ()));
 		
 		double sup = Vector.dotProduct(Point.p2v(Point.sub(ray.getOrigin(), this.A)), planeNormal);//(Vector.dotProduct(this.planeNormal, ray.getOriginV()) + planeD);
 		double coeffVectorPoint = sup/denom;

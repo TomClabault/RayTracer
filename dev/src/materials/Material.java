@@ -6,7 +6,14 @@ import textures.ProceduralTexture;
 /*
  * Classe permettant définir des matériaux à partir des différentes caractéristiques physiques que peut simuler le rayTracer
  * 
- * Un matériau est définit par différentes caractéristiques 
+ * Un matériau est définit par différentes caractéristiques:
+ * 
+ *  - Une caractéristique diffuse: Plus un matériau est diffus, plus la lumière sera renvoyée dans "toute les directions", donnant un aspect mat au matériau
+ *  - Une caractéristique spéculaire: Donne de la brillance à l'objet
+ *  - Une caractéristique de "brillance" (shininess): Plus cette valeur est haute plus les tâches spéculaires de l'objet seront petites
+ *  - Une caractéristique réflective: Plus un matériau est réfléchissant plus il se comportera comme un miroir. 
+ *  - Une caractéristique de transparence: Si oui ou non le matériau est transparent. Un matériau transparent réfractera la lumière et aura donc besoin d'un indice de réfraction (décrit ci-dessous) approprié
+ *  - Un indice de réfraction: Caractérise à quel point les rayons de lumière sont réfractés par le matériau  
  */
 public class Material 
 {	
@@ -89,6 +96,11 @@ public class Material
 		return this.diffuseCoeff;
 	}
 	
+	/*
+	 * Permet de savoir si un matériau est transparent et réfracte la lumière ou non
+	 * 
+	 * @return Retourne true si le matériau est transparent, false sinon
+	 */
 	public boolean getIsTransparent()
 	{
 		return this.isTransparent;
@@ -105,6 +117,11 @@ public class Material
 		return this.reflectiveCoeff;
 	}
 	
+	/*
+	 * Permet d'obtenir l'indice de réfraction du matériau
+	 * 
+	 * @return Un réel représentant l'indice de réfraction du matériau. Si le matériau n'est pas transparent, retournera 0
+	 */
 	public double getRefractionIndex()
 	{
 		return this.refractionIndex;
@@ -154,11 +171,21 @@ public class Material
 		return !(this.proceduralTexture == null);
 	}
 	
+	/*
+	 * Permet de définir la couleur du matériau
+	 * 
+	 * @param color La nouvelle couleur du matériau
+	 */
 	public void setColor(Color color) 
 	{
 		this.color = color;
 	}
 
+	/*
+	 * Permet de définir le coefficient de diffusion du matériau
+	 * 
+	 * @param diffuseCoeff Le nouveau coefficient de diffusion du matériau
+	 */
 	public void setDiffuseCoeff(double diffuseCoeff) 
 	{
 		this.diffuseCoeff = diffuseCoeff;

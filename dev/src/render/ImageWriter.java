@@ -43,9 +43,10 @@ public class ImageWriter {
 
     /**
      *
-     * @param mainAppScene la Scene javafx, nécéssite d'être passée en argument pour {@link UpdateCamera}
+     * @param mainAppScene la Scene javafx, nécéssite d'être passée en argument pour {@link render.CameraTimer}
     */
-    public ImageWriter(Scene mainAppScene){
+    public ImageWriter(Scene mainAppScene)
+    {
         this.mainAppScene = mainAppScene;
         this.writableImage = new WritableImage(MainApp.WIDTH,MainApp.HEIGHT);
 

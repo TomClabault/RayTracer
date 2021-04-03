@@ -1,6 +1,7 @@
 #Dossiers générés par les compilations à ne pas commit
 dev/bin/
 dev/build/
+dev/doc
 javadoc/
 
 #Fichiers d'IDE
