@@ -4,6 +4,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 import geometry.Shape;
+import geometry.shapes.PlaneMaths;
 import geometry.shapes.SphereMaths;
 import materials.Material;
 import javafx.scene.image.PixelReader;
@@ -90,6 +91,17 @@ public class RayTracer
 		return closestObjectIntersected;
 	}
 
+	protected Color computeAndAddComputeColor(Material rayIntObjMaterial, Color finalColorBefore, Color objectColor, Vector toLightVector, Vector normalAtIntersection, double lightIntensity)
+	{
+		if(rayIntObjMaterial.getDiffuseCoeff() > 0)//Si le matériau est diffus
+		{
+			double diffuseComponent = computeDiffuse(toLightVector, normalAtIntersection, lightIntensity);
+			return ColorOperations.addColors(finalColorBefore, ColorOperations.mulColor(objectColor, diffuseComponent * rayIntObjMaterial.getDiffuseCoeff()));
+		}
+		else//L'objet n'est pas diffus, on renvoie la couleur inchangée
+			return finalColorBefore;
+	}
+	
 	/*
 	 * Calcule la luminosité ambiante de la scène à partir de l'intensité de la source de lumière et de l'intensité de la lumière ambiante
 	 *
@@ -209,11 +221,14 @@ public class RayTracer
 				Point UVCoordsAtInterPoint = rayInterObject.getUVCoords(rayInterPoint);
 				
 				objectColor = rayIntObjMaterial.getProceduralTexture().getColorAt(UVCoordsAtInterPoint);
-				finalColor = ColorOperations.copy(objectColor);
 			}
 			else
 				objectColor = rayIntObjMaterial.getColor();
-			finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(objectColor, ambientLighting));
+			
+			if(rayInterObject instanceof PlaneMaths && rayInterObject.getMaterial().hasProceduralTexture())//Si le plan est un checkerboard
+				finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(objectColor, 1));//Cas spécial pour notre application pour que le plan soit plus illuminé que le reste. Non réaliste mais meilleur aspect visuel. On applique une ambient lighting de 0.5
+			else
+				finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(objectColor, ambientLighting));
 
 
 			
@@ -240,11 +255,7 @@ public class RayTracer
 
 			if(shadowInterObject == null || interToShadowInterDist > interToLightDist || shadowInterObject.getMaterial().getIsTransparent())//Aucune intersection trouvée pour aller jusqu'à la lumière, on peut calculer la couleur directe de l'objet
 			{
-				if(rayIntObjMaterial.getDiffuseCoeff() > 0)//Si le matériau est diffus
-				{
-					double diffuseComponent = computeDiffuse(shadowRayDir, normalAtIntersection, lightIntensity);
-					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(objectColor, diffuseComponent * rayIntObjMaterial.getDiffuseCoeff()));
-				}
+				finalColor = computeAndAddComputeColor(rayIntObjMaterial, finalColor, objectColor, shadowRayDir, normalAtIntersection, lightIntensity);
 
 				if(rayIntObjMaterial.getSpecularCoeff() > 0)//Si le matériau est spéculaire
 				{

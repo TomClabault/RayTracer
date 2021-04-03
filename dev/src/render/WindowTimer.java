@@ -42,7 +42,7 @@ public class WindowTimer extends AnimationTimer {
         dif  = (long)1000000000.0 / dif;
         this.oldFrameTime = actualFrameTime;
         ImageWriter.doImage(rayTracer.renderImage(this.rayTracingScene), this.pixelWriter, this.pixelFormat);
-        fpsLabel.setText(String.format("FPS : %d", dif));
+        fpsLabel.setText(String.format("FPS : %d\n%s\nH: %.2f°\nV: %.2f°", dif, this.rayTracingScene.getCamera().getPosition().toString(), this.rayTracingScene.getCamera().getAngleHori(), this.rayTracingScene.getCamera().getAngleVerti()));
     }
 
 }

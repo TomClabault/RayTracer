@@ -111,7 +111,7 @@ public class ImageWriter {
         shapeList.add(new SphereMaths(new Point(-1.25, 0.5, -6), 1, new MirrorMaterial(0.75)));
         shapeList.add(new SphereMaths(Point.add(new Point(-0.25, 0.5, -0.1), Point.scalarMul(1.5625, new Point(1.250, 0.000, -4.500))), 0.2, new MetallicMaterial(Color.RED)));
         shapeList.add(new SphereMaths(new Point(-1.25, 1, -6.5), 0.2, new MetallicMaterial(Color.LIGHTSKYBLUE)));
-        shapeList.add(new SphereMaths(new Point(-2, -0.65, -5), 0.35, new MatteMaterial(Color.BLACK, new ProceduralTextureCheckerboard(Color.ORANGERED, Color.ORANGERED.darker(), 12))));
+        shapeList.add(new SphereMaths(new Point(-2, -0.65, -5), 0.35, new MatteMaterial(Color.ORANGERED, new ProceduralTextureCheckerboard(Color.ORANGERED, Color.ORANGERED.darker(), 12))));
         shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MetallicMaterial(Color.rgb(255, 211, 0))));
         shapeList.add(new SphereMaths(new Point(1.25, 0.5, -6), 1, new GlassMaterial()));
         
