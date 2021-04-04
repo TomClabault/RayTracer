@@ -79,6 +79,14 @@ public class EtatTriangle implements EtatToken
                     state = Trianglecontent.ENDING_CHEVRON;
                     if(!color)
                         coordNb++;
+                    else // color == true
+                    {
+                        for (int i = 0; i < 3; i++) {
+                            context.callNextToken(); // la virgule
+                            context.callNextToken();
+                            list.add(String.valueOf(st.nval));
+                        }
+                    }
 
                     break;
                 }
