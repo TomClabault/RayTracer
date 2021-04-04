@@ -132,6 +132,7 @@ public class Automat
                 if(automat.isValidState())
                 {
                     State currentState = automat.getState();
+
                     switch (currentState) {
                         case SPHERE:
                         {
