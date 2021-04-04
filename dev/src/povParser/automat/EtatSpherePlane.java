@@ -59,7 +59,6 @@ public abstract class EtatSpherePlane implements EtatToken
                 }
                 case OPENING_CHEVRON:
                 {
-                    System.out.println(context.getStreamTokenizer());
                     if(coord)
                     {
                         for (int i = 0; i < 3; i++) {
@@ -67,7 +66,10 @@ public abstract class EtatSpherePlane implements EtatToken
                             context.callNextToken();
                             list.add(String.valueOf(st.nval));
                         }
-                        state = SpherePlanecontent.ENDING_CHEVRON;
+                        context.callNextToken();
+                        context.callNextToken();
+                        list.add(String.valueOf(st.nval));
+
                     }
                     coord = false;
                     state = SpherePlanecontent.ENDING_CHEVRON;
@@ -126,6 +128,107 @@ public abstract class EtatSpherePlane implements EtatToken
 
                         }
                     }
+                    break;
+                }
+                case FINISH:
+                {
+                    context.callNextToken(); //skip finish
+                    context.callNextToken(); //skip '{'
+                    if(context.isCurrentTokenAWord())
+                    {
+                        if(context.currentWord("ambient"))
+                        {
+                            state = SpherePlanecontent.AMBIENT;
+                        }
+                        else if(context.currentWord("diffuse"))
+                        {
+                            state = SpherePlanecontent.DIFFUSE;
+                        }
+                        else if(context.currentWord("specular"))
+                        {
+                            state = SpherePlanecontent.SPECULAR;
+                        }
+                    }
+                    break;
+                }
+                case SPECULAR:
+                {
+                    list.add("specular");
+                    context.callNextToken(); //skip specular
+                    list.add(String.valueOf(context.getNumberValue()));
+                    context.callNextToken();
+                    if(context.isCurrentTokenAWord())
+                    {
+                        if(context.currentWord("ambient"))
+                        {
+                            state = SpherePlanecontent.AMBIENT;
+                        }
+                        else if(context.currentWord("diffuse"))
+                        {
+                            state = SpherePlanecontent.DIFFUSE;
+                        }
+                    }
+                    else
+                    {
+                        state = SpherePlanecontent.ENDING_BRACKET;
+                    }
+                    break;
+                }
+                case DIFFUSE:
+                {
+                    list.add("diffuse");
+                    context.callNextToken(); //skip diffuse
+                    list.add(String.valueOf(context.getNumberValue()));
+                    context.callNextToken();
+                    if(context.isCurrentTokenAWord())
+                    {
+                        if(context.currentWord("ambient"))
+                        {
+                            state = SpherePlanecontent.AMBIENT;
+                        }
+                        else if(context.currentWord("specular"))
+                        {
+                            state = SpherePlanecontent.SPECULAR;
+                        }
+                    }
+                    else
+                    {
+                        state = SpherePlanecontent.ENDING_BRACKET;
+                    }
+                    break;
+                }
+                case AMBIENT:
+                {
+                    list.add("ambient");
+                    context.callNextToken(); //skip ambient
+
+                    if(context.isCurrentTokenAWord())
+                    {
+                        if(context.currentWord("rgb"))
+                        {
+                            context.callNextToken();
+                            state = SpherePlanecontent.OPENING_CHEVRON;
+                        }
+                    }
+                    else
+                    {
+                        list.add(String.valueOf(context.getNumberValue()));
+                    }
+
+                    context.callNextToken();
+                    if(context.isCurrentTokenAWord())
+                    {
+                        if (context.currentWord("diffuse"))
+                        {
+                            state = SpherePlanecontent.DIFFUSE;
+                        }
+                        else if(context.currentWord("specular"))
+                        {
+                            state = SpherePlanecontent.SPECULAR;
+                        }
+                    }
+                    else
+                        state = SpherePlanecontent.ENDING_BRACKET;
                     break;
                 }
             }
