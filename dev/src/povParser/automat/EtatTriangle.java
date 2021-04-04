@@ -36,13 +36,11 @@ public class EtatTriangle implements EtatToken
 
         while(state != Trianglecontent.OUTSIDE)
         {
-            System.out.println(state);
+
             switch(state)
             {
                 case OPENING_BRACKET:
                 {
-                    context.callNextToken();
-
                     state = Trianglecontent.OPENING_CHEVRON;
                     triangleCoord = true;
                     bracketNb++;
@@ -51,32 +49,31 @@ public class EtatTriangle implements EtatToken
 
                 case OPENING_CHEVRON:
                 {
+                    context.callNextToken(); //skip '<'
                     if(triangleCoord)
                     {
-                        /*for (int i = 0; i < 3; i++)
+                        for(int point = 0; point < 3; point++)
                         {
-                            System.out.println(context.getStreamTokenizer());
-                            if(i > 0)
+                            if(point > 0)
                                 context.callNextToken();
-                            for(int j = 0; j < 3; j++)
+                            for (int coord = 0; coord < 3; coord++)
                             {
-
                                 list.add(String.valueOf(context.getNumberValue()));
-                                if(j < 2)
-                                    context.callNextToken(); // skip ',' between values
+
+                                context.callNextToken();
+
+
+                                if(point < 2 || coord < 2)
+                                    context.callNextToken();
+
 
                             }
-                            context.callNextToken(); // skip '>'
-                            if(i < 2)
-                                context.callNextToken(); //skip ',' between <, , >
-                        }*/
-                        for (int i = 0; i < 3; i++) {
-                            for (int j = 0; j < 3; j++) {
-                                System.out.println(context.getStreamTokenizer());
+                            if (point < 2)
+                            {
                                 context.callNextToken();
-
                             }
                         }
+
                     }
                     triangleCoord = false;
                     state = Trianglecontent.ENDING_CHEVRON;
@@ -103,6 +100,7 @@ public class EtatTriangle implements EtatToken
                     {
                         state = Trianglecontent.ENDING_BRACKET;
                     }
+                    break;
                 }
                 case ENDING_BRACKET:
                 {
@@ -143,7 +141,8 @@ public class EtatTriangle implements EtatToken
                                 state = Trianglecontent.OPENING_CHEVRON;
                             else
                                 list.add(String.valueOf(context.getNumberValue()));
-                            nextToken = context.callNextToken();
+                            context.callNextToken(); // skip color value
+                            context.callNextToken(); // skip '}'
                             if(context.isCurrentTokenAWord())
                             {
                                 if(context.currentWord("finish"))
@@ -151,7 +150,8 @@ public class EtatTriangle implements EtatToken
                                     state = Trianglecontent.FINISH;
                                 }
                             }
-                            state = Trianglecontent.ENDING_BRACKET;
+                            else
+                                state = Trianglecontent.ENDING_BRACKET;
 
                         }
                     }
@@ -182,16 +182,22 @@ public class EtatTriangle implements EtatToken
 
                 case AMBIENT:
                 {
+                    list.add("ambient");
                     context.callNextToken(); //skip ambient
+
                     if(context.isCurrentTokenAWord())
                     {
                         if(context.currentWord("rgb"))
                         {
+                            context.callNextToken();
                             state = Trianglecontent.OPENING_CHEVRON;
                         }
                     }
                     else
-                        list.add(String.valueOf((char) context.getNumberValue()));
+                    {
+                        list.add(String.valueOf(context.getNumberValue()));
+                    }
+
                     context.callNextToken();
                     if(context.isCurrentTokenAWord())
                     {
@@ -211,6 +217,7 @@ public class EtatTriangle implements EtatToken
 
                 case DIFFUSE:
                 {
+                    list.add("diffuse");
                     context.callNextToken(); //skip diffuse
                     list.add(String.valueOf(context.getNumberValue()));
                     context.callNextToken();
