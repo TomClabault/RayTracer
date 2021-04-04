@@ -40,7 +40,8 @@ public class Icosphere extends ShapeTriangle
     protected double size;
     protected int subdivision;
 
-    public Icosphere(Point depart, double size,int subdivision, Material material)
+
+    public Icosphere(Vector3D depart, double size,int subdivision, Material material)
     {
         this.depart = depart;
         this.size = size;
@@ -54,30 +55,31 @@ public class Icosphere extends ShapeTriangle
 
         super.material = material;
 
-        double xdepart = this.depart.getX();
-        double ydepart = this.depart.getY();
-        double zdepart = this.depart.getZ();
+        //double xdepart = this.depart.getX();
+        //double ydepart = this.depart.getY();
+        //double zdepart = this.depart.getZ();
 
         //On va construire des Points
-        //ArrayList<Point> listePoints = new ArrayList<Point>();
-        //Vector.v2p(Vector.normalize(Point.p2v()))
+        //ArrayList<Vector3D> listePoints = new ArrayList<Vector3D>();
+        //Vector3D.v2p(Vector3D.normalize(Vector3D.p2v()))
 
-        this.A = Vector.v2p(Vector.normalize(Point.p2v(new Point(-1 , t*1 ,0 ))));
-        this.B = Vector.v2p(Vector.normalize(Point.p2v(new Point(1 ,t*1 ,0 ))));
-        this.C = Vector.v2p(Vector.normalize(Point.p2v(new Point(-1 ,-t*1 ,0 ))));
-        this.D = Vector.v2p(Vector.normalize(Point.p2v(new Point(1 ,-t*1 ,0 ))));
+        this.A = Vector3D.normalize(new Vector3D(-1 , t*1 ,0 ));
+        this.B = Vector3D.normalize(new Vector3D(1 ,t*1 ,0 ));
+        this.C = Vector3D.normalize(new Vector3D(-1 ,-t*1 ,0 ));
+        this.D = Vector3D.normalize(new Vector3D(1 ,-t*1 ,0 ));
 
-        this.E = Vector.v2p(Vector.normalize(Point.p2v(new Point(0 ,-1 ,t*1 ))));
-        this.F = Vector.v2p(Vector.normalize(Point.p2v(new Point(0 ,1 ,t*1 ))));
-        this.G = Vector.v2p(Vector.normalize(Point.p2v(new Point(0 ,-1 ,-t*1 ))));
-        this.H = Vector.v2p(Vector.normalize(Point.p2v(new Point(0 ,1 ,-t*1 ))));
+        this.E = Vector3D.normalize(new Vector3D(0 ,-1 ,t*1 ));
+        this.F = Vector3D.normalize(new Vector3D(0 ,1 ,t*1 ));
+        this.G = Vector3D.normalize(new Vector3D(0 ,-1 ,-t*1 ));
+        this.H = Vector3D.normalize(new Vector3D(0 ,1 ,-t*1 ));
 
-        this.I = Vector.v2p(Vector.normalize(Point.p2v(new Point(t*1 ,0 ,-1 ))));
-        this.J = Vector.v2p(Vector.normalize(Point.p2v(new Point(t*1 ,0 ,1 ))));
-        this.K = Vector.v2p(Vector.normalize(Point.p2v(new Point(-t*1 ,0 ,-1 ))));
-        this.L = Vector.v2p(Vector.normalize(Point.p2v(new Point(-t*1 ,0 ,1 ))));
+        this.I = Vector3D.normalize(new Vector3D(t*1 ,0 ,-1 ));
+        this.J = Vector3D.normalize(new Vector3D(t*1 ,0 ,1 ));
+        this.K = Vector3D.normalize(new Vector3D(-t*1 ,0 ,-1 ));
+        this.L = Vector3D.normalize(new Vector3D(-t*1 ,0 ,1 ));
 
-        ArrayList<Point> listePoint = new ArrayList<Point>();
+        /*
+        ArrayList<Vector3D> listePoint = new ArrayList<Vector3D>();
         listePoint.add(A);
         listePoint.add(B);
         listePoint.add(C);
@@ -94,12 +96,11 @@ public class Icosphere extends ShapeTriangle
 
         for (int i = 0 ; i < listePoint.size(); i++)
         {
-            Point point = listePoint.get(i);
-            point = Point.scalarMul(size, point);
-            point = Point.add(point,new Point(xdepart,ydepart,zdepart));
+            Vector3D point = listePoint.get(i);
+            point = Vector3D.scalarMul(point, size);
             listePoint.set(i,point);
         }
-
+        
         A = listePoint.get(0);
         B = listePoint.get(1);
         C = listePoint.get(2);
@@ -112,6 +113,8 @@ public class Icosphere extends ShapeTriangle
         J = listePoint.get(9);
         K = listePoint.get(10);
         L = listePoint.get(11);
+*/
+
 
 
         //On va construire des triangles avec les points
@@ -159,19 +162,7 @@ public class Icosphere extends ShapeTriangle
         super.listeTriangle.add(tr19);
         super.listeTriangle.add(tr20);
 
-        System.out.println(A);
-        System.out.println(B);
-        System.out.println(C);
-        System.out.println(D);
-        System.out.println(E);
-        System.out.println(F);
-        System.out.println(G);
-        System.out.println(H);
-        System.out.println(I);
-        System.out.println(J);
-        System.out.println(K);
-        System.out.println(L);
-
+        
 
 
         // on va boucler selon combien de subdivision souhaite
@@ -181,29 +172,21 @@ public class Icosphere extends ShapeTriangle
             for (int i = 0; i < listsize; i++)
             {
             // on recupere les points du triangle a chaque bouclage
-            Point A = listeTriangle.get(i).getA();
-            Point B = listeTriangle.get(i).getB();
-            Point C = listeTriangle.get(i).getC();
+            Vector3D A = listeTriangle.get(i).getA();
+            Vector3D B = listeTriangle.get(i).getB();
+            Vector3D C = listeTriangle.get(i).getC();
 
             // formule : (A+B)/2 , (B+C)/2 , (C+A)/2
             // on ajout les deux points
-            Point AB = Point.add(A,B);
-            Point BC = Point.add(B,C);
-            Point CA = Point.add(C,A);
+            Vector3D AB = Vector3D.add(A,B);
+            Vector3D BC = Vector3D.add(B,C);
+            Vector3D CA = Vector3D.add(C,A);
 
             // on multiplie les points par 0.5
-            Point ABmid = Vector.v2p(Vector.normalize(Point.p2v(Point.scalarMul(0.5, AB))));
-            Point BCmid = Vector.v2p(Vector.normalize(Point.p2v(Point.scalarMul(0.5, BC))));
-            Point CAmid = Vector.v2p(Vector.normalize(Point.p2v(Point.scalarMul(0.5, CA))));
-
-            ABmid = Point.scalarMul(size,ABmid);
-            BCmid = Point.scalarMul(size,BCmid);
-            CAmid = Point.scalarMul(size,CAmid);
-
-            ABmid = Point.add(ABmid,new Point(xdepart,ydepart,zdepart));
-            BCmid = Point.add(BCmid,new Point(xdepart,ydepart,zdepart));
-            CAmid = Point.add(CAmid,new Point(xdepart,ydepart,zdepart));
-
+            Vector3D ABmid = Vector3D.normalize(Vector3D.scalarMul(AB, 0.5));
+            Vector3D BCmid = Vector3D.normalize(Vector3D.scalarMul(BC, 0.5));
+            Vector3D CAmid = Vector3D.normalize(Vector3D.scalarMul(CA, 0.5));
+           
             // on fait des triangles dans un triangle
             Triangle trimid = new Triangle(ABmid, BCmid, CAmid, material);
             Triangle trileft = new Triangle(A, ABmid, CAmid, material);
@@ -216,17 +199,39 @@ public class Icosphere extends ShapeTriangle
             super.listeTriangle.add(triright);
             super.listeTriangle.add(tribot);
 
-
             }
-            // supprimer les triangles de la subdiv avant
-            //double subdivavant = 20 * Math.pow(4,this.subdivision - 1);
-            //for(int j = 0; j < subdivavant ; j++)
-            //{
-             //   super.listeTriangle.remove(j);
-            //}
+            //supprimer les triangles de la subdiv avant
+            if(itr >= 1) 
+            {
+	            double subdivavant = 20 * Math.pow(4, itr - 1);
+	            for(int j = 0; j < subdivavant ; j++)
+	            {
+	                super.listeTriangle.remove(0);
+	            }
+            }
+                                  
+            
         }
 
-
+        for(Triangle triangle:listeTriangle) 
+        {
+        	Vector3D A = triangle.getA();
+        	Vector3D B = triangle.getB();
+        	Vector3D C = triangle.getC();
+        	
+        	A = Vector3D.scalarMul(A, size);
+        	B = Vector3D.scalarMul(B, size);
+        	C = Vector3D.scalarMul(C, size);
+        	
+        	A = Vector3D.add(A, depart);
+        	B = Vector3D.add(B, depart);
+        	C = Vector3D.add(C, depart);
+        	
+        	triangle.setA(A);
+        	triangle.setB(B);
+        	triangle.setC(C);
+        	
+        }
 
 
 

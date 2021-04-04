@@ -23,9 +23,9 @@ public class Triangle implements Shape
 		this.material = material;
 	}
 
-	public Point getA() {return this.A;}
-	public Point getB() {return this.B;}
-	public Point getC() {return this.C;}
+	public Vector3D getA() {return this.A;}
+	public Vector3D getB() {return this.B;}
+	public Vector3D getC() {return this.C;}
 
 
 
@@ -123,5 +123,20 @@ public class Triangle implements Shape
 	public Vector3D getUVCoords(Vector3D point)
 	{
 		return null;
+	}
+	
+	public void setA(Vector3D A)
+	{
+		this.A = A;
+	}
+	
+	public void setB(Vector3D B)
+	{
+		this.B = B;
+	}
+	
+	public void setC(Vector3D C)
+	{
+		this.C = C;
 	}
 }

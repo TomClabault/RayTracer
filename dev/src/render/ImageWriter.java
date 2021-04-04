@@ -61,7 +61,7 @@ public class ImageWriter {
         pane.getChildren().add(imageView);
         this.pane = pane;
 
-        WindowTimer windowTimer = new WindowTimer(this.MyGlobalScene, this.pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 8));
+        WindowTimer windowTimer = new WindowTimer(mainAppScene, this.MyGlobalScene, this.pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 8));
         this.windowTimer = windowTimer;
 
         CameraTimer cameraTimer = new CameraTimer(this.mainAppScene, this.MyGlobalScene);
@@ -98,7 +98,7 @@ public class ImageWriter {
 
     public RayTracingScene addObjectsToScene() {/*utilisé dans le constructeur*/
 
-    	Camera cameraRT = new Camera(new Vector3D(0.000, 0.5, -1.5), 0, 0);
+    	Camera cameraRT = new Camera(new Vector3D(0.000, 0.5, -1.5), 0, 5);
     	//Camera cameraRT = new Camera(new Vector3D(-1.25, 0.5, -9), 180, 0);
         cameraRT.setFOV(60);
         Light l = new LightBulb(new Vector3D(1, 2, 1), 1);
@@ -112,7 +112,7 @@ public class ImageWriter {
         shapeList.add(new SphereMaths(new Vector3D(-2, -0.65, -5), 0.35, new MatteMaterial(Color.ORANGERED, new ProceduralTextureCheckerboard(Color.BLACK, Color.YELLOW, 12))));
         shapeList.add(new SphereMaths(new Vector3D(1.5, -0.65, -5), 0.35, new MetallicMaterial(Color.rgb(255, 211, 0))));
         shapeList.add(new SphereMaths(new Vector3D(1.25, 0.5, -6), 1, new GlassMaterial()));
-        
+        shapeList.add(new Icosphere(new Vector3D(0, 2, -6), 1, 5, new MatteMaterial(Color.RED)));
         
         
 
