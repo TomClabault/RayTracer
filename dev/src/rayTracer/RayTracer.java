@@ -170,6 +170,8 @@ public class RayTracer
 	}
 	
 	/*
+	 * Calcule les couleurs venant des réfractions et des réflexions d'un objet transparent. 
+	 * 
 	 * @param renderScene La scène utilisée pour le rendu
 	 * @param rayIntObjMaterial Le matériau qui va être utilisé pour calculer la composante diffuse
 	 * @param finalColorBefore La couleur "sur" laquelle va être appliquée le calcul de la composante diffuse
@@ -178,22 +180,24 @@ public class RayTracer
 	 * @param rayInterPoint Le point d'intersection du rayon incident avec l'objet
 	 * @param interPointShift Le point d'intersection du rayon incident avec l'objet légèrement décalé dans le sens du rayon incident parfaitement réfléchi par la surface de l'objet
 	 * @param depth La profondeur de récursion actuelle de l'algorithme
+	 * 
+	 * @return Retourne la couleur donnée argument "mixée" avec les couleurs des réfractions et des réflexions de l'objet. Si l'objet n'est pas transparent, la couleur retournée est inchangée par rapport à celle passée en argument
 	 */
-	protected Color computeAndAddRefractions(RayTracingScene renderScene, Material rayIntObjMaterial, Color finalColorBefore, Ray incidentRay, Vector normalAtIntersection, Point rayInterPoint, Point interPointShift, int depth)
+	protected Color computeAndAddRefractions(RayTracingScene renderScene, Material rayIntObjMaterial, Color finalColorBefore, Vector incidentRayDirection, Vector normalAtIntersection, Point rayInterPoint, Point interPointShift, int depth)
 	{
 		if (rayIntObjMaterial.getIsTransparent())//L'objet est réfractif 
 		{
-			double fr = Fresnel(incidentRay, normalAtIntersection, rayIntObjMaterial.getRefractionIndex());
+			double fr = fresnel(incidentRayDirection, normalAtIntersection, rayIntObjMaterial.getRefractionIndex());
 			double ft = 1 - fr;
-			Vector refractedRayDir = computeRefractedVector(incidentRay, normalAtIntersection, rayIntObjMaterial.getRefractionIndex());
+			Vector refractedRayDir = computeRefractedVector(incidentRayDirection, normalAtIntersection, rayIntObjMaterial.getRefractionIndex());
 			Ray reflectedRay = null;
 			Ray refractedRay = null;
-			if (Vector.dotProduct(incidentRay.getDirection(), normalAtIntersection) > 0) {
-				refractedRay = new Ray(Point.add(rayInterPoint, Vector.v2p(Vector.scalarMul(incidentRay.getDirection(), 0.0001))), refractedRayDir);
-				reflectedRay = new Ray(interPointShift, computeReflectionVector(normalAtIntersection, incidentRay.getDirection()));
+			if (Vector.dotProduct(incidentRayDirection, normalAtIntersection) > 0) {
+				refractedRay = new Ray(Point.add(rayInterPoint, Vector.v2p(Vector.scalarMul(incidentRayDirection, 0.0001))), refractedRayDir);
+				reflectedRay = new Ray(interPointShift, computeReflectionVector(normalAtIntersection, incidentRayDirection));
 			} else {
-				refractedRay = new Ray(Point.add(rayInterPoint, Vector.v2p(Vector.scalarMul(incidentRay.getDirection(), 0.0001))), refractedRayDir);
-				reflectedRay = new Ray(Point.add(rayInterPoint, Vector.v2p(Vector.scalarMul(incidentRay.getDirection(), -0.0001))), computeReflectionVector(normalAtIntersection, incidentRay.getDirection()));
+				refractedRay = new Ray(Point.add(rayInterPoint, Vector.v2p(Vector.scalarMul(incidentRayDirection, 0.0001))), refractedRayDir);
+				reflectedRay = new Ray(Point.add(rayInterPoint, Vector.v2p(Vector.scalarMul(incidentRayDirection, -0.0001))), computeReflectionVector(normalAtIntersection, incidentRayDirection));
 			}
 			Color refractedColor = Color.rgb(0,0,0);
 			if (! refractedRayDir.equals(new Vector(0,0,0)) ) {
@@ -364,7 +368,7 @@ public class RayTracer
 				finalColor = computeAndAddDiffuse(rayIntObjMaterial, finalColor, objectColor, shadowRayDir, normalAtIntersection, lightIntensity);
 				finalColor = computeAndAddSpecular(rayIntObjMaterial, finalColor, ray, shadowRayDir, normalAtIntersection, lightIntensity);
 				finalColor = computeAndAddReflections(renderScene, rayIntObjMaterial, finalColor, objectColor, ray, shadowRayDir, normalAtIntersection, interPointShift, depth);
-				finalColor = computeAndAddRefractions(renderScene, rayIntObjMaterial, finalColor, ray, normalAtIntersection, rayInterPoint, interPointShift, depth);
+				finalColor = computeAndAddRefractions(renderScene, rayIntObjMaterial, finalColor, ray.getDirection(), normalAtIntersection, rayInterPoint, interPointShift, depth);
 			}
 			else//Une intersection a été trouvée et l'objet intersecté est entre la lumière et le départ du shadow ray. De plus, l'objet bloquant la vue à la lumière n'est pas transparent
 			{
@@ -483,26 +487,26 @@ public class RayTracer
 	/*
 	 * Calcule le rayon réfracté par un matériau transparent ayant un indice de réfraction différent de celui de l'air
 	 * 
-	 *  @param incidentRay Le rayon incident au point d'intersection avec le matériau
+	 *  @param rayDirection La directio, du rayon incident au point d'intersection avec le matériau
 	 *  @param normalAtIntersection Le vecteur normal de la surface au point d'intersection
 	 *  @param specialMediumIndex L'indice de réfraction du matériau réfractif
 	 *  
 	 *  @return Retourne la direction du rayon réfracté
 	 */
-	protected Vector computeRefractedVector(Ray incidentRay, Vector normalAtIntersection, double specialMediumIndex)
+	protected Vector computeRefractedVector(Vector rayDirection, Vector normalAtIntersection, double specialMediumRefIndex)
 	{
 		double startRefractionIndex = AIR_REFRACTION_INDEX;
 		Vector newNormal = new Vector(0,0,0);
 		newNormal.copyIn(normalAtIntersection);
 		
-		if (Vector.dotProduct(incidentRay.getDirection(), normalAtIntersection) > 0)//Si on est à l'intérieur de l'objet, il faut échanger les deux indices de réfraction
+		if (Vector.dotProduct(rayDirection, normalAtIntersection) > 0)//Si on est à l'intérieur de l'objet, il faut échanger les deux indices de réfraction
 		{
 			newNormal = Vector.scalarMul(normalAtIntersection, -1); 
-			startRefractionIndex = specialMediumIndex;
-			specialMediumIndex = AIR_REFRACTION_INDEX;
+			startRefractionIndex = specialMediumRefIndex;
+			specialMediumRefIndex = AIR_REFRACTION_INDEX;
 		}
-		double eta = startRefractionIndex / specialMediumIndex;
-		double c1 = Vector.dotProduct(incidentRay.getDirection(), newNormal);
+		double eta = startRefractionIndex / specialMediumRefIndex;
+		double c1 = Vector.dotProduct(rayDirection, newNormal);
 		if (c1 < 0) {
 			c1 = -c1;
 		}
@@ -514,9 +518,49 @@ public class RayTracer
 		}
 		double c2 = Math.sqrt(inRootC2);
 		
-		Vector leftPart = Vector.scalarMul(incidentRay.getDirection(), eta);
+		Vector leftPart = Vector.scalarMul(rayDirection, eta);
 		Vector rightPart = Vector.scalarMul(newNormal,eta*c1 - c2);
 		return  Vector.add(leftPart, rightPart);
+	}
+	
+	/*
+	 * Calcule la proportion de lumière réfléchie et réfractée par un objet réfractif
+	 * 
+	 * @param incidentRayDirection La direction du rayon incident au point d'intersection de l'objet
+	 * @param normalAtIntersection Vecteur normal à la surface de l'objet au point d'intersection
+	 * @param specialMediumRefractionIndex L'indice de réfraction du matériau réfractif
+	 * 
+	 * @return Retourne la proportion de lumière réfléchie par le matériau étant donne le rayon incident.
+	 * La proportion de lumière réfractée peut être déduite: réfractée = 1 - réfléchie
+	 */
+	protected double fresnel(Vector incidentRayDirection, Vector normalAtIntersection, double specialMediumRefIndex) 
+	{
+		double incomingRefractionIndex = AIR_REFRACTION_INDEX;
+		
+		if (Vector.dotProduct(incidentRayDirection, normalAtIntersection) > 0)//Le rayon est à l'intérieur de l'objet
+		{
+			incomingRefractionIndex = specialMediumRefIndex;
+			specialMediumRefIndex = AIR_REFRACTION_INDEX;
+		}
+		
+		double cosThetaIncident = Vector.dotProduct(incidentRayDirection, normalAtIntersection);
+		cosThetaIncident = Math.abs(cosThetaIncident);
+		double sinThetaRefracted = Math.sin(Math.acos(cosThetaIncident)) * incomingRefractionIndex/specialMediumRefIndex;
+		double thetaRefracted = Math.asin(sinThetaRefracted);
+		double cosThetaRefracted = Math.cos(thetaRefracted);
+		if (sinThetaRefracted >= 1) {
+			return 1;
+		}
+		
+		double sup = (specialMediumRefIndex*cosThetaIncident - incomingRefractionIndex*cosThetaRefracted);
+		double inf = (specialMediumRefIndex*cosThetaIncident + incomingRefractionIndex*cosThetaRefracted);
+		double fpl = Math.pow(sup/inf, 2);
+		
+		sup = (incomingRefractionIndex*cosThetaIncident - specialMediumRefIndex*cosThetaRefracted);
+		inf = (incomingRefractionIndex*cosThetaIncident + specialMediumRefIndex*cosThetaRefracted);
+		double fpr = Math.pow(sup/inf, 2);
+		
+		return 0.5*(fpl+fpr);
 	}
 	
 	/*
@@ -543,35 +587,5 @@ public class RayTracer
 
 		this.threadTaskList.resetTasksProgression();
 		return this.getRenderedPixels();
-	}
-
-	protected double Fresnel(Ray I, Vector N, double actualRefractionIndex) 
-	{
-		double incomingRefractionIndex = AIR_REFRACTION_INDEX;
-		
-		if (Vector.dotProduct(I.getDirection(), N) > 0) {
-			//N.negate();// possible caca here 
-			incomingRefractionIndex = actualRefractionIndex;
-			actualRefractionIndex = AIR_REFRACTION_INDEX;
-		}
-		
-		double cosThetaIncident = Vector.dotProduct(I.getDirection(), N);// le vrai angle est acos(thetaIncident) mais comme on utilise cos partout dans les formules on le laisse comme ça
-		cosThetaIncident = Math.abs(cosThetaIncident);
-		double sinThetaRefracted = Math.sin(Math.acos(cosThetaIncident)) * incomingRefractionIndex/actualRefractionIndex;
-		double thetaRefracted = Math.asin(sinThetaRefracted);
-		double cosThetaRefracted = Math.cos(thetaRefracted);
-		if (sinThetaRefracted >= 1) {
-			return 1;
-		}
-		
-		double sup = (actualRefractionIndex*cosThetaIncident - incomingRefractionIndex*cosThetaRefracted);
-		double inf = (actualRefractionIndex*cosThetaIncident + incomingRefractionIndex*cosThetaRefracted);
-		double fpl = Math.pow(sup/inf, 2);
-		
-		sup = (incomingRefractionIndex*cosThetaIncident - actualRefractionIndex*cosThetaRefracted);
-		inf = (incomingRefractionIndex*cosThetaIncident + actualRefractionIndex*cosThetaRefracted);
-		double fpr = Math.pow(sup/inf, 2);
-		
-		return 0.5*(fpl+fpr);
 	}
 }
