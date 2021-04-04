@@ -90,7 +90,7 @@ En appliquant le principe de la section \ref{rayTracingBase}, nous obtenons une 
 \FloatBarrier
 
 \subsubsection{Les réflexions}
-Une autre exigence du sujet (en plus de l'ombrage de Phong section \ref{ombragePhong}) était également l'implémentation de réflexions. Nous avons donc implémenté la réflexion des matériaux à la façon des miroirs. Autrement dit, nous supposons que les matériaux réflexifs de notre ray tracer sont parfaitement lisses et renvoient les rayons de lumière dans une seule et unique direction. Nous avons pour cela utilisé un algorithme récursif. En effet, si notre rayon frappe, un objet réfléchissant, il sera renvoyé dans une autre direction. De nouveau, si ce nouveau rayon réfléchi rencontre un autre objet réfléchissant, il sera une fois de plus renvoyé et ainsi de suite. Un algorithme récursif s'applique alors très bien ici.
+Une autre exigence du sujet (en plus de l'ombrage de Phong section \ref{ombragePhong}) était également l'implémentation de réflexions. Nous avons donc implémenté la réflexion des matériaux à la façon des miroirs. Autrement dit, nous supposons que les matériaux réflechissants de notre ray tracer sont parfaitement lisses et renvoient les rayons de lumière dans une seule et unique direction. Nous avons pour cela utilisé un algorithme récursif. En effet, si notre rayon frappe, un objet réfléchissant, il sera renvoyé dans une autre direction. De nouveau, si ce nouveau rayon réfléchi rencontre un autre objet réfléchissant, il sera une fois de plus renvoyé et ainsi de suite. Un algorithme récursif s'applique alors très bien ici.
 
 \begin{algorithm}[H]
 	\DontPrintSemicolon
@@ -297,7 +297,7 @@ La classe Camera, l'interface Light et la classe RayTracingScene s'organisent to
 
 \subsubsection{Le package materials}
 
-Afin de colorer notre scène, nous devons donner une couleur aux formes des objets qui composent la scène. De plus, nous devons indiquer au RayTracer si l'objet est réflexif ou si au contraire il est mat, s'il est spéculaire et si oui à quel point, s'il est diffus...
+Afin de colorer notre scène, nous devons donner une couleur aux formes des objets qui composent la scène. De plus, nous devons indiquer au RayTracer si l'objet est réfléchissant ou si au contraire il est mat, s'il est spéculaire et si oui à quel point, s'il est diffus...
 Nous allons donc organiser toutes ces caractéristiques dans ce que l'on va appeler des matériaux.
 
 \begin{figure}[h!]

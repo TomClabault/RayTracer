@@ -76,7 +76,7 @@ public class RayTracingScene
 				throw new IllegalArgumentException("Erreur durant le chargement de la skybox : " + skyboxTexture.getException().getMessage());
 			else
 			{
-				this.skyboxTexture = ImageUtil.sRGBImageToLinear(skyboxTexture, ImageUtil.GAMMA);
+				this.skyboxTexture = ImageUtil.sRGBImageToLinear(skyboxTexture);
 				this.skyboxPixelReader = this.skyboxTexture.getPixelReader();
 				
 				this.skyboxWidth = (int)skyboxTexture.getWidth();

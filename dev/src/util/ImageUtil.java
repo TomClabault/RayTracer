@@ -12,44 +12,18 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import maths.ColorOperations;
 
 public class ImageUtil 
 {
 	/*
-	 * Constante de gamma utilisée pour les conversion en sRGB non-linéaire et RGB linéaire
-	 */
-	public static final double GAMMA = 2.2;
-	
-	/*
-	 * Calcule la table de transposition de sRGB + courbe de gamma vers linear RGB
-	 * telle que table[sRGBValue(GAMMA)] = LinearRGBValue avec:
-	 * - sRGBValue la valeur d'intensité (des composantes RGB notamment) dans l'espace de couleur sRGB corrigé avec un gamma de GAMMA
-	 * - GAMMA la constante utilisée pour la courbe de correction de gamma sRGB
-	 * - LinearRGBValue la valeur de sRGBValue mais dans l'espace de couleur RGB linéaire
-	 */
-	protected static int[] computesRGBToLinearTable()
-	{
-		int[] table = new int[256];
-		
-		for(int i = 0; i < 256; i++)
-		{
-			table[i] = (int)(Math.pow((double)i/256.0, ImageUtil.GAMMA)*256);
-			table[i] = table[i] > 255 ? 255 : table[i];
-		}
-			
-		return table;
-	}
-	
-	private static final int[] sRGBToLinearTable = ImageUtil.computesRGBToLinearTable();
-	/*
-	 * Permet de passer d'une image sRGB de gamma ImageUtil.GAMMA à son équivalent en RGB linéaire
+	 * Permet de passer d'une image sRGB à composantes non-linéaires de gamma 2.2 à son équivalent RGB linéaire
 	 * 
-	 * @param sRGBImage L'image sRGB à convertir
-	 * @param gamma		Valeur du gamma utilisée pour la courbe sRGB de l'image
+	 * @param sRGBImage L'image sRGB gamma 2.2 à convertir
 	 * 
-	 * @return Retourne l'image sRGBImage dans l'espace de couleur RGB linéaire
+	 * @return Retourne l'image sRGBImage convertie dans l'espace de couleur RGB linéaire
 	 */
-	public static Image sRGBImageToLinear(Image sRGBImage, double gamma)
+	public static Image sRGBImageToLinear(Image sRGBImage)
 	{
 		int width = (int)sRGBImage.getWidth();
 		int height = (int)sRGBImage.getHeight();
@@ -68,9 +42,9 @@ public class ImageUtil
 				int gIntsRGB = (int)(inputsRGBColor.getGreen()*255);
 				int bIntsRGB = (int)(inputsRGBColor.getBlue()*255);
 				
-				int rIntLinear = sRGBToLinearTable[rIntsRGB];
-				int gIntLinear = sRGBToLinearTable[gIntsRGB];
-				int bIntLinear = sRGBToLinearTable[bIntsRGB];
+				int rIntLinear = ColorOperations.sRGB2_2ToLinearTable[rIntsRGB];
+				int gIntLinear = ColorOperations.sRGB2_2ToLinearTable[gIntsRGB];
+				int bIntLinear = ColorOperations.sRGB2_2ToLinearTable[bIntsRGB];
 				
 				Color outputLinearColor = Color.rgb(rIntLinear, gIntLinear, bIntLinear);
 				

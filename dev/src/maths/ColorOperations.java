@@ -8,6 +8,99 @@ import javafx.scene.paint.Color;
 public class ColorOperations 
 {
 	/*
+	 * Tables de transposition utilisées pour accélérer les calculs de correction de gamma
+	 */
+	public static final int[] sRGB2_2ToLinearTable = ColorOperations.computeSRGBToLinearTable(2.2);
+	public static final int[] sRGB2_4ToLinearTable = ColorOperations.computeSRGBToLinearTable(2.4);
+	
+	public static final int[] linearTosRGB2_2Table = ColorOperations.computeLinearToSRGBTable(2.4);
+	public static final int[] linearTosRGB2_4Table = ColorOperations.computeLinearToSRGBTable(2.4);
+	
+	/*
+	 * Calcule la sRGBToLinearTable : table de transposition des valeurs sRGB de gamma 'gammaValue' vers RGB linéaire
+	 * telle que sRGBToLinearTable[sRGBValue_gammaValue] = linearRGBValue avec:
+	 * - sRGBValue_gammaValue la valeur d'intensité d'une composante sRGB dans l'espace de couleur sRGB corrigé avec un gamma de 'gammaValue'
+	 * - _gammaValue indiquant avec quelle valeur de gamma la couleur sRGB a été encodée
+	 * - linearRGBValue la valeur de sRGBValue_gammaValue mais dans l'espace de couleur RGB linéaire
+	 * Pour le même gamma, cette table correspond à la table de transposition réciproque de linearTosRGBTable.
+	 * 
+	 * @param gammaValue Le valeur du gamma utilisé pour la conversion
+	 * 
+	 * @return Retourne la table de transposition appropriée et décrite ci-dessus
+	 */
+	protected static int[] computeSRGBToLinearTable(double gammaValue) throws IllegalArgumentException
+	{
+		int[] table = new int[256];
+	
+		if(gammaValue == 2.2)
+		{
+			for(int sRGB = 0; sRGB < 256; sRGB++)
+			{
+				table[sRGB] = (int)(Math.pow((double)sRGB/255.0, 2.2)*255);
+				table[sRGB] = table[sRGB] > 255 ? 255 : table[sRGB];
+			}
+		}
+		else if(gammaValue == 2.4)
+		{
+			//https://entropymine.com/imageworsener/srgbformula/
+			
+//			0 ≤ S ≤ 0.04045	L = S/12.92
+//			0.04045 < S ≤ 1	L = ((S+0.055)/1.055)2.4
+			
+			for(int sRGB = 0; sRGB < 256; sRGB++)
+			{
+				double sRGBDouble = (double)sRGB/255.0;
+				table[sRGB] = sRGBDouble <= 0.04045 ? (int)((sRGBDouble / 12.92)*255.0) : (int)(Math.pow(((sRGBDouble+0.055)/1.055), 2.4)*255.0);
+				table[sRGB] = table[sRGB] > 255 ? 255 : table[sRGB];
+			}
+		}
+			
+		return table;
+	}
+	
+	/*
+	 * Calcule la linearToSRGBTable : table de transposition des valeurs RGB linéaire vers sRGB de gamma 'gammaValue'
+	 * telle que linearToSRGBTable[linearRGBValue] = sRGBValue_gammaValue avec:
+	 * - sRGBValue_gammaValue la valeur d'intensité d'une composante sRGB dans l'espace de couleur sRGB corrigé avec un gamma de 'gammaValue'
+	 * - _gammaValue indiquant avec quelle valeur de gamma la couleur sRGB a été encodée
+	 * - linearRGBValue la valeur de sRGBValue_gammaValue mais dans l'espace de couleur RGB linéaire
+	 * Pour le même gamma, cette table correspond à la table de transposition réciproque de sRGBToLinearTable.
+	 * 
+	 * @param gammaValue Le valeur du gamma utilisé pour la conversion
+	 * 
+	 * @return Retourne la table de transposition appropriée et décrite ci-dessus
+	 */
+	protected static int[] computeLinearToSRGBTable(double gammaValue)
+	{
+		int[] table = new int[256];
+		
+		if(gammaValue == 2.2)
+		{
+			for(int linear = 0; linear < 256; linear++)
+			{
+				table[linear] = (int)(Math.pow((double)linear/255.0, 1.0/2.2)*255);
+				table[linear] = table[linear] > 255 ? 255 : table[linear];
+			}
+		}
+		else if(gammaValue == 2.4)
+		{
+			//https://entropymine.com/imageworsener/srgbformula/
+			
+//			0 ≤ L ≤ 0.0031308	S = L×12.92
+//			0.0031308 < L ≤ 1	S = 1.055×L1/2.4 − 0.055
+			
+			for(int linear = 0; linear < 256; linear++)
+			{
+				double linearDouble = (double)linear/255.0;
+				table[linear] = linearDouble <= 0.0031308 ? (int)((linearDouble * 12.92)*255.0) : (int)((1.055*Math.pow(linearDouble, 1.0/2.4) - 0.055)*255.0);
+				table[linear] = table[linear] > 255 ? 255 : table[linear];
+			}
+		}
+			
+		return table;
+	}
+	
+	/*
 	 * Ajoute deux couleurs terme à terme
 	 * 
 	 * @param col1 Première couleur
@@ -101,6 +194,47 @@ public class ColorOperations
 	public static Color copy(Color colorToCopy) 
 	{
 		return Color.rgb((int)(colorToCopy.getRed()*255), (int)(colorToCopy.getGreen()*255), (int)(colorToCopy.getBlue()*255));
+	}
+	
+	/*
+	 * Permet de convertir une couleur dont les composantes sont utilisées linéairement en son équivalent sRGB avec une correction correction de gamma de paramètre 2.2
+	 * 
+	 * @param linearColor La couleur linéaire à convertir
+	 * 
+	 * @return Retourne la couleur donnée en entrée convertie en sRGB + gamma 2.2 
+	 */
+	public static Color linearTosRGBGamma2_2(Color linearColor)
+	{
+		int redInt = (int)(linearColor.getRed()*255);
+		int greenInt = (int)(linearColor.getGreen()*255);
+		int blueInt = (int)(linearColor.getBlue()*255);
+		
+		int newRed = ColorOperations.linearTosRGB2_2Table[redInt];
+		int newGreen = ColorOperations.linearTosRGB2_2Table[greenInt];
+		int newBlue = ColorOperations.linearTosRGB2_2Table[blueInt];
+		
+		return Color.rgb(newRed, newGreen, newBlue);//Gamma correction 2.2
+	}
+	
+	/*
+	 * Permet de convertir une couleur dont les composantes sont utilisées linéairement en son équivalent sRGB avec une correction correction de gamma de paramètre 2.4
+	 * 
+	 * @param linearColor La couleur linéaire à convertir
+	 * 
+	 * @return Retourne la couleur donnée en entrée convertie en sRGB + gamma 2.4 
+	 */
+	public static Color linearTosRGBGamma2_4(Color linearColor)
+	{
+		//Gamma correction 2.4
+		int redInt = (int)(linearColor.getRed()*255);
+		int greenInt = (int)(linearColor.getGreen()*255);
+		int blueInt = (int)(linearColor.getBlue()*255);
+		
+		int newRed = ColorOperations.linearTosRGB2_4Table[redInt];
+		int newGreen = ColorOperations.linearTosRGB2_4Table[greenInt];
+		int newBlue = ColorOperations.linearTosRGB2_4Table[blueInt];
+		
+		return Color.rgb(newRed, newGreen, newBlue);
 	}
 	
 	/*

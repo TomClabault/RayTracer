@@ -61,7 +61,7 @@ public class RayTracer
 	 *
 	 * @return Retourne l'objet avec lequel le rayon a fait son intersection. 'outClosestInterPoint' est un point de l'objet retourné
 	 */
-	public Shape computeClosestInterPoint(ArrayList<Shape> objectList, Ray ray, Point outClosestInterPoint, Vector outNormalAtInter)
+	protected Shape computeClosestInterPoint(ArrayList<Shape> objectList, Ray ray, Point outClosestInterPoint, Vector outNormalAtInter)
 	{
 		Shape closestObjectIntersected = null;
 		Double distanceMin = null;
@@ -217,7 +217,7 @@ public class RayTracer
 	 *
 	 * @return Retourne la composante ambiante de l'illumination de la scène. Réel entre 0 et 1
 	 */
-	public double computeAmbient(double ambientLightIntensity, double lightIntensity)
+	protected double computeAmbient(double ambientLightIntensity, double lightIntensity)
 	{
 		return ambientLightIntensity * lightIntensity;
 	}
@@ -231,7 +231,7 @@ public class RayTracer
 	 *
 	 *  @return La composante diffuse en un point donné de la scène vis à vis de la surface d'un objet. Réel entre 0 et 1
 	 */
-	public double computeDiffuse(Vector toLightDirection, Vector normalAtIntersection, double lightIntensity)
+	protected double computeDiffuse(Vector toLightDirection, Vector normalAtIntersection, double lightIntensity)
 	{
 		double dotProdDiffuse = Vector.dotProduct(toLightDirection, normalAtIntersection);
 		double diffuseTerm = dotProdDiffuse < 0 ? 0 : lightIntensity*dotProdDiffuse;//Si le dotProduct est négatif, on ne calcule pas le terme diffus --> = 0
@@ -250,9 +250,8 @@ public class RayTracer
 	 *
 	 *  @return La composante spéculaire en un point donné de la scène vis à vis de la surface d'un objet. Réel entre 0 et 1.
 	 */
-	public double computeSpecular(Ray incidentRay, Vector toLightDirection, Vector normalAtIntersection, double lightIntensity, double objectShininess)
+	protected double computeSpecular(Ray incidentRay, Vector toLightDirection, Vector normalAtIntersection, double lightIntensity, double objectShininess)
 	{
-		//Composante spéculaire
 		double specularTerm = 0;
 		Vector reflectVector = Vector.normalize(this.computeReflectionVector(normalAtIntersection, toLightDirection.negate()));
 
@@ -271,10 +270,8 @@ public class RayTracer
 	 * @param endX Le pixel de fin horizontal de la zone de l'image qui doit être calculée. Entre startX + 1 et renderWidth - 1 inclus
 	 * @param endY Le pixel de fin vertical de la zone de l'image qui doit être calculée. Entre endY + 1 et renderHeight - 1 inclus
 	 */
-	public void computePartialImage(RayTracingScene renderScene, int startX, int startY, int endX, int endY)
+	protected void computePartialImage(RayTracingScene renderScene, int startX, int startY, int endX, int endY)
 	{
-		//RotationMatrix rotMatrix = new RotationMatrix(RotationMatrix.yAxis, -30);
-		//MatrixD transformMatrix = MatrixD.mulMatrix(ctwMatrix, rotMatrix);
 		MatrixD ctwMatrix = renderScene.getCamera().getCTWMatrix();
 
 		double FOV = renderScene.getCamera().getFOV();
@@ -289,7 +286,7 @@ public class RayTracer
 				cameraRay.normalize();
 
 				Color pixelColor = this.computePixel(renderScene, cameraRay, maxDepth);
-				pixelColor = ColorOperations.powColor(pixelColor, 1.0/2.2);//Gamma correction
+				pixelColor = ColorOperations.linearTosRGBGamma2_2(pixelColor);
 				
 				this.renderedPixels.put(y*renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
 			}
@@ -299,11 +296,13 @@ public class RayTracer
 	/*
 	 * Calcule la couleur d'un pixel grâce à un rayon
 	 *
-	 * @param ray Le rayon qu'on veut tirer et dont on déduira la couleur d'un pixel
+	 * @param renderScene La scène utilisée pour le rendu
+	 * @param ray Le camera ray passant par le pixel que l'on veut calculer
+	 * @param depth La profondeur maximale de récursion de l'algorithme. Défini entre autre le nombre maximum de reflets consécutifs que l'on peut observer dans deux surface se réfléchissants l'une l'autre
 	 *
-	 * @return Une instance de Color.RGB(r, g, b)
+	 * @return La couleur du pixel que traverse le rayon incident 'ray'
 	 */
-	public Color computePixel(RayTracingScene renderScene, Ray ray, int depth)
+	protected Color computePixel(RayTracingScene renderScene, Ray ray, int depth)
 	{
 		if(depth == 0)
 			return renderScene.getBackgroundColor();
@@ -333,7 +332,7 @@ public class RayTracer
 				objectColor = rayIntObjMaterial.getColor();
 			
 			if(rayInterObject instanceof PlaneMaths && rayInterObject.getMaterial().hasProceduralTexture())//Si le plan est un checkerboard
-				finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(objectColor, 1));//Cas spécial pour notre application pour que le plan soit plus illuminé que le reste. Non réaliste mais meilleur aspect visuel. On applique une ambient lighting de 0.5
+				finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(objectColor, 1));//Cas spécial pour notre application pour que le plan soit plus illuminé que le reste. Non réaliste mais meilleur aspect visuel. On applique une ambient lighting fixe de 1
 			else
 				finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(objectColor, ambientLighting));
 
@@ -401,6 +400,16 @@ public class RayTracer
 				return renderScene.getBackgroundColor();//Couleur du fond, noir si on a pas de fond
 	}
 
+	/*
+	 * Permet de calculer la prochaine tâche de rendu de la taskList. 
+	 * Cette méthode est exécutée par plusieurs threads en même temps.
+	 * Elle est public afin que TileThread, la classe des threads puisse appeler cette méthode depuis run() des threads 
+	 * 
+	 *  @param renderScene La scène qui doit être rendue par le rayTracer
+	 *  @param taskList La liste de tâche préalablement initialisée
+	 *  
+	 *  @return Retourne true si le thread à calculé une tâche avec succès. false sinon, i.e., le thread n'a pas calculé de tâche car il n'y en avait plus à calcuelr
+	 */
 	public boolean computeTask(RayTracingScene renderScene, ThreadsTaskList taskList)
 	{
 		Integer taskNumber = 0;
@@ -435,7 +444,7 @@ public class RayTracer
 	 *
 	 * @return Un point de cooordonnées (x, y, z) tel que x, y et z représentent les coordonnées du pixel dans la scène
 	 */
-	public Point convPxCoToWorldCoords(double FOV, int x, int y, MatrixD ctwMatrix)
+	protected Point convPxCoToWorldCoords(double FOV, int x, int y, MatrixD ctwMatrix)
 	{
 		double xWorld = (double)x;
 		double yWorld = (double)y;
@@ -466,11 +475,50 @@ public class RayTracer
 	 *
 	 * @return R, le vecteur d'origine le point d'intersection et de direction la direction de réflexion calculée par cette méthode
 	 */
-	public Vector computeReflectionVector(Vector normalToSurface, Vector rayDirection)
+	protected Vector computeReflectionVector(Vector normalToSurface, Vector rayDirection)
 	{
 		return Vector.sub(rayDirection, Vector.scalarMul(normalToSurface, Vector.dotProduct(normalToSurface, rayDirection)*2));
 	}
 
+	/*
+	 * Calcule le rayon réfracté par un matériau transparent ayant un indice de réfraction différent de celui de l'air
+	 * 
+	 *  @param incidentRay Le rayon incident au point d'intersection avec le matériau
+	 *  @param normalAtIntersection Le vecteur normal de la surface au point d'intersection
+	 *  @param specialMediumIndex L'indice de réfraction du matériau réfractif
+	 *  
+	 *  @return Retourne la direction du rayon réfracté
+	 */
+	protected Vector computeRefractedVector(Ray incidentRay, Vector normalAtIntersection, double specialMediumIndex)
+	{
+		double startRefractionIndex = AIR_REFRACTION_INDEX;
+		Vector newNormal = new Vector(0,0,0);
+		newNormal.copyIn(normalAtIntersection);
+		
+		if (Vector.dotProduct(incidentRay.getDirection(), normalAtIntersection) > 0)//Si on est à l'intérieur de l'objet, il faut échanger les deux indices de réfraction
+		{
+			newNormal = Vector.scalarMul(normalAtIntersection, -1); 
+			startRefractionIndex = specialMediumIndex;
+			specialMediumIndex = AIR_REFRACTION_INDEX;
+		}
+		double eta = startRefractionIndex / specialMediumIndex;
+		double c1 = Vector.dotProduct(incidentRay.getDirection(), newNormal);
+		if (c1 < 0) {
+			c1 = -c1;
+		}
+		double thetaIncident = Math.acos(c1);
+		
+		double inRootC2 = 1-eta*eta*Math.sin(thetaIncident)*Math.sin(thetaIncident);
+		if (inRootC2 < 0) {
+			return new Vector(0,0,0);
+		}
+		double c2 = Math.sqrt(inRootC2);
+		
+		Vector leftPart = Vector.scalarMul(incidentRay.getDirection(), eta);
+		Vector rightPart = Vector.scalarMul(newNormal,eta*c1 - c2);
+		return  Vector.add(leftPart, rightPart);
+	}
+	
 	/*
 	 * Permet d'obtenir le tableau de pixels correspondant à la dernière image rendue par le RayTracer
 	 * Si aucune image n'a été rendue, renvoie null
@@ -497,7 +545,7 @@ public class RayTracer
 		return this.getRenderedPixels();
 	}
 
-	public double Fresnel(Ray I, Vector N, double actualRefractionIndex) 
+	protected double Fresnel(Ray I, Vector N, double actualRefractionIndex) 
 	{
 		double incomingRefractionIndex = AIR_REFRACTION_INDEX;
 		
@@ -525,33 +573,5 @@ public class RayTracer
 		double fpr = Math.pow(sup/inf, 2);
 		
 		return 0.5*(fpl+fpr);
-	}
-
-	public Vector computeRefractedVector(Ray I, Vector N, double actualRefractionIndex)
-	{
-		double incomingRefractionIndex = AIR_REFRACTION_INDEX;
-		Vector Nneg = new Vector(0,0,0);
-		Nneg.copyIn(N);
-		if (Vector.dotProduct(I.getDirection(), N) > 0) {
-			Nneg = Vector.scalarMul(N, -1);// possible caca here 
-			incomingRefractionIndex = actualRefractionIndex;
-			actualRefractionIndex = AIR_REFRACTION_INDEX;
-		}
-		double eta = incomingRefractionIndex / actualRefractionIndex;
-		double c1 = Vector.dotProduct(I.getDirection(), Nneg);
-		if (c1 < 0) {
-			c1 = -c1;
-		}
-		double thetaIncident = Math.acos(c1);
-		
-		double inRootC2 = 1-eta*eta*Math.sin(thetaIncident)*Math.sin(thetaIncident);
-		if (inRootC2 < 0) {
-			return new Vector(0,0,0);
-		}
-		double c2 = Math.sqrt(inRootC2);
-		
-		Vector leftPart = Vector.scalarMul(I.getDirection(), eta);
-		Vector rightPart = Vector.scalarMul(Nneg,eta*c1 - c2);
-		return  Vector.add(leftPart, rightPart);
 	}
 }
