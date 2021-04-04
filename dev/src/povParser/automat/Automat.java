@@ -8,6 +8,7 @@ public class Automat
     /*TODO
     -retirer les cases outside dans les sous-classes (car inutiles)
     -debug entrée dans le bloc box dans Automat
+    -trouver un moyen de factoriser les object modifiers (finish et pigment) de chaque sous classe
      */
 
     private EtatToken etatToken;
@@ -55,7 +56,6 @@ public class Automat
         try {
             this.currentToken = this.streamTokenizer.nextToken();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         finally {

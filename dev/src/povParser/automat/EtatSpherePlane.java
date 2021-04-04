@@ -10,6 +10,11 @@ enum SpherePlanecontent
     OPENING_CHEVRON,
     ENDING_CHEVRON,
     OUTSIDE,
+    FINISH,
+    PIGMENT, //color of the figure
+    AMBIENT,
+    DIFFUSE,
+    SPECULAR,
 }
 
 public abstract class EtatSpherePlane implements EtatToken
@@ -41,8 +46,6 @@ public abstract class EtatSpherePlane implements EtatToken
                 }
                 case ENDING_BRACKET:
                 {
-                    context.callNextToken();
-                    System.out.println("endoing bracket : " + context.getStreamTokenizer());
                     bracketNb--;
                     if(bracketNb == 0)
                     {
@@ -65,7 +68,18 @@ public abstract class EtatSpherePlane implements EtatToken
                 case ENDING_CHEVRON:
                 {
                     context.callNextToken(); //skip le chevron fermant
-                    if (sphereCoord)
+                    if(context.isCurrentTokenAWord())
+                    {
+                        if(context.currentWord("finish"))
+                        {
+                            state = SpherePlanecontent.FINISH;
+                        }
+                        else if(context.currentWord("pigment"))
+                        {
+                            state = SpherePlanecontent.PIGMENT;
+                        }
+                    }
+                    else if (sphereCoord)
                     {
                         context.callNextToken(); //skip la virgule
                         list.add(String.valueOf(st.nval));
@@ -74,11 +88,11 @@ public abstract class EtatSpherePlane implements EtatToken
                     }
                     break;
                 }
-                /*case OUTSIDE:
+                case PIGMENT:
                 {
-                    state = SpherePlanecontent.OUTSIDE;
+
                     break;
-                }*/
+                }
             }
         }
         createInstance(list);
