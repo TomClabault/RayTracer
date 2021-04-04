@@ -9,6 +9,7 @@ public class Automat
     -retirer les cases outside dans les sous-classes (car inutiles)
     -debug entrée dans le bloc box dans Automat
     -trouver un moyen de factoriser les object modifiers (finish et pigment) de chaque sous classe
+    -rajouter le parsing de couleur sous forme <r, g, b> pour chaque sous classe (puis factoriser)
      */
 
     private EtatToken etatToken;
