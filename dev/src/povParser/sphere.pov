@@ -10,7 +10,7 @@
 triangle
 {
     <1, 2, 3>, <4, 5, 6>, <7, 8, 9>
-    pigment {color rgb <0.1, 0.1, 0.5>} // or rgb 1
+    pigment {color rgb <1, 2, 3>} // or rgb 1
     finish
     {
         ambient 1

@@ -80,10 +80,11 @@ public class EtatTriangle implements EtatToken
                         coordNb++;
                     else // color == true
                     {
-                        System.out.println(context.getStreamTokenizer());
                         for (int i = 0; i < 3; i++) {
                             list.add(String.valueOf(st.nval));
+                            System.out.println(context.getStreamTokenizer());
                             context.callNextToken(); // la virgule
+                            context.callNextToken();
                         }
                     }
                     state = Trianglecontent.ENDING_CHEVRON;
