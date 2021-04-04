@@ -1,4 +1,4 @@
-package textures;
+package materials.textures;
 
 import javafx.scene.paint.Color;
 import maths.Point;
@@ -48,13 +48,5 @@ public class ProceduralTextureCheckerboard implements ProceduralTexture
 		//Si la somme de u et v est impaire, on est sur une case de couleur 2 du damier
 		//Sinon, couleur 1
 		return ((xInt + yInt) & 0x1) == 1 ? this.color2 : this.color1;
-	}
-	
-	/*
-	 * @link{textures.ProceduralTextures#getSize}
-	 */
-	public double getSize()
-	{
-		return this.size;
 	}
 }

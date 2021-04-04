@@ -1,4 +1,4 @@
-package textures;
+package materials.textures;
 
 import javafx.scene.paint.Color;
 import maths.Point;
@@ -10,15 +10,6 @@ import maths.Point;
 public interface ProceduralTexture 
 {
 	/*
-	 * Énumération définissant les différentes textures procédurales implémentées
-	 */
-	public static enum TEXTURES 
-	{
-		TEXTURE_NO_TEXTURE,
-		TEXTURE_CHECKERBOARD
-	};
-	
-	/*
 	 * Permet de récupérer la couleur de la texture en des coordonées 2D (u, v) données
 	 * 
 	 * @param UVPoint Point (x, y, z) contenant les coordonnées de texture (u, v) du point dont on veut la couleur tel que: x = u, y = v. z est insignifiant 
@@ -26,11 +17,4 @@ public interface ProceduralTexture
 	 * @return Retourne la couleur de la texture au point de coordonnées de texture (u, v) donné
 	 */
 	public Color getColorAt(Point UVPoint);
-	
-	/*
-	 * Permet d'obtenir la taille du pattern de la texture
-	 * 
-	 * @return Retourne la taille du motif (pattern) de la texture
-	 */
-	public double getSize();
 }

@@ -26,7 +26,7 @@ import maths.*;
 import scene.*;
 import scene.RayTracingScene;
 import scene.lights.*;
-import textures.ProceduralTextureCheckerboard;
+import materials.textures.*;
 
 /**
 * Gère le Pane qui contient le rendu
@@ -121,7 +121,7 @@ public class ImageWriter {
         Image skybox = null;
         URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
         if(skyboxURL != null)
-        	skybox = new Image(skyboxURL.toExternalForm());
+        		skybox = new Image(skyboxURL.toExternalForm());
         
         RayTracingScene sceneRT = null;
         try

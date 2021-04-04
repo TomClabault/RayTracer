@@ -70,11 +70,11 @@ Les algorithmes de ray tracing permettent de générer des images fortes de réa
 	\item {Une source de lumière}
 	\item{Une scène contenant différents objets}
 \end{itemize}
-Le principe pour effectuer le rendu est ensuite assez simple. Nous lançons un rayon, partant de la caméra, à travers chaque pixel de l'image à rendre (on appelle cette image fictive par laquelle passent les rayons le "plan de la caméra"). Si ce rayon intersecte un objet de la scène, alors nous renvoyons la couleur de cet objet pour le pixel traversé par le rayon (voir annexe \ref{annexe:repreCamRayon}). Sinon, nous renvoyons la couleur du fond de la scène (ou de la skybox, section \ref{skybox}).
+Le principe pour effectuer le rendu est ensuite assez simple. Nous lançons un rayon, partant de la caméra, à travers chaque pixel de l'image à rendre (on appelle cette image fictive par laquelle passent les rayons le "plan de la caméra"). Si ce rayon intersecte un objet de la scène, alors nous renvoyons la couleur de cet objet pour le pixel traversé par le rayon (voir annexe \ref{annexe:repreCamRayon}). Sinon, nous renvoyons la couleur du fond de la scène (ou de la skybox, section \ref{checkerboardSkybox}).
 \subsubsection{L'ombrage de Phong}
 \label{ombragePhong}
 
-En appliquant le principe de la section \ref{rayTracingBase}, nous obtenons une image plate, sans aucun relief. Pour palier à cela, un modèle d'ombrage reste à implémenter. Ce sont en effet les ombres et les effets de lumière qui donnent aux images leur réalisme et leur profondeur. Un ombrage de Phong (imposé par le sujet) a donc été implémenté. L'ombrage de Phong consiste en l'addition de trois composantes distinctes:
+En appliquant le principe de la section \ref{rayTracingBase}, nous obtenons une image plate, sans aucun relief. Pour palier à cela, un modèle d'ombrage reste à implémenter. Ce sont en effet les ombres et les effets de lumière qui donnent aux images leur réalisme et leur relief. Un ombrage de Phong (imposé par le sujet) a donc été implémenté. L'ombrage de Phong consiste en l'addition de trois composantes distinctes:
 \begin{itemize}
 	\item {La composante ambiante. Elle permet de donner une luminosité minimale à la scène.}
 	\item {La composante diffuse. Illumine d'autant plus l'objet que les rayons de lumière le frappe perpendiculairement.}
@@ -110,7 +110,7 @@ Une autre exigence du sujet (en plus de l'ombrage de Phong section \ref{ombrageP
 
 		\If(\tcp*[h]{Si l'objet intersecté est réfléchissant}){intersectedObject.isReflexive()}
 		{
-			$\overrightarrow{R_{reflect}} \gets$ computeReflectedDirection($\overrightarrow{R}$, $\overrightarrow{N}$)\\\hfill\\
+			$\overrightarrow{R_{reflect}} \gets$ computeReflectedDirection($\overrightarrow{R}$, $\overrightarrow{normale}$)\\\hfill\\
 
 			\Return{computeReflection($\overrightarrow{R_{reflect}}$, depth - 1)}{\tcp*[h]{On effectue un appel récursif pour relancer un rayon dans la direction du rayon réfléchi}}
 		}
@@ -124,12 +124,12 @@ Une autre exigence du sujet (en plus de l'ombrage de Phong section \ref{ombrageP
 		\Return{backgroundColor}
 	}
 
-	\caption{Algorithme de calcul des réflexions pour des objets non colorés - computeReflection}
+	\caption{Algorithme de calcul des réflexions pour des objets non colorés - computeReflection$(R, depth)$}
 	\label{algoReflections}
 \end{algorithm}
 \hfill\\
-L'algorithme lance un rayon et vérifie si une intersection avec un objet a été trouvée ou non. Si oui, on s'assure que l'objet est réfléchissant. Dans ce cas, nous calculons la direction du rayon réfléchi et faisons un appel récursif à computeReflection. Nous avons également défini une profondeur maximale de récursion (ou nombre de réflexions maximal) afin d'éviter les récursions infinies (un rayon coincé dans une boîte dont les faces seraient toutes réfléchissantes par exemple). Si l'objet n'est pas réfléchissant, nous renvoyons simplement son ombrage de Phong comme vu dans la section \ref{ombragePhong}. Une représentation graphique de ce principe de réflexion est donné en annexe \ref{annexe:reflexionsRecursives}.\\
-Avec une scène contenant des sphères réfléchissantes et d'autres mattes, nous obtenons le résultat suivant: 
+L'algorithme lance un rayon et vérifie si une intersection avec un objet a été trouvée ou non. Si oui, on s'assure que l'objet est réfléchissant. Dans ce cas, nous calculons la direction du rayon réfléchi et faisons un appel récursif à computeReflection. Nous avons également défini une profondeur maximale de récursion (ou nombre de réflexion maximal) afin d'éviter les récursions infinies (un rayon coincé dans une boîte dont les faces seraient toutes réfléchissantes par exemple). Si l'objet n'est pas réfléchissant, nous renvoyons simplement son ombrage de Phong comme vu dans la section \ref{ombragePhong}. Une représentation graphique de ce principe de réflexion est donné en annexe \ref{annexe:reflexionsRecursives}.\\
+Avec une scène contenant des sphères réfléchissantes, des sphères mattes et un plan pour le sol, nous obtenons le rendu suivant: 
 
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/reflectionsDemo.png}}
@@ -143,7 +143,8 @@ Avec une scène contenant des sphères réfléchissantes et d'autres mattes, nou
 \label{refractions}
 
 \subsubsection{Le damier et le ciel (skybox)}
-Afin de rendre les réflexions de la scène plus remarquables et la scène moins monotone, nous avons implémenté un damier au sol au moyen d'UV mapping. Ainsi, pour chaque point d'intersection avec le plan représentant le sol, nous regardons si la somme des coordonnées X et Y du point d'intersection est paire ou non. Si la somme est paire, nous renverrons la première couleur du damier. Si elle est impaire, nous afficherons alors la deuxième couleur du damier.\\
+\label{checkerboardSkybox}
+Afin de rendre les réflexions de la scène plus remarquables et cette dernière moins monotone, nous avons implémenté un damier au sol au moyen d'UV mapping. Ainsi, pour chaque point d'intersection avec le plan représentant le sol, nous regardons si la somme des coordonnées X et Y du point d'intersection est paire ou non. Si la somme est paire, nous renverrons la première couleur du damier. Si elle est impaire, nous renverrons alors la deuxième couleur du damier.\\
 
 \begin{figure}[h!]
 	\adjustbox{center}
@@ -191,7 +192,7 @@ Afin de rendre les réflexions de la scène plus remarquables et la scène moins
 \end{figure}
 \FloatBarrier
 
-Bien que simple, cet algorithme d'UV mapping nous a permis d'embrayer sur l'implémentation d'une skybox. Notre skybox n'est autre qu'une image haute résolution d'un espace à ciel ouvert. Là encore, nous allons donc utiliser l'UV mapping. C'est en effet un moyen simple de convertir les coordonnées d'un point sur une sphère hypothétique de rayon 1 en des coordoonées 2D pour une image.
+Bien que simple, cet algorithme d'UV mapping nous a permis d'embrayer sur l'implémentation d'une skybox. Notre skybox n'est autre qu'une image équirectangulaire haute résolution d'un espace à ciel ouvert. Pour l'afficher correctement comme le ciel de notre scène, nous allons, là encore, utiliser un mécanisme d'UV mapping. C'est en effet un moyen simple de convertir les coordonnées d'un point sur une sphère hypothétique de rayon 1 (notre ciel) en des coordoonées 2D pour une image.
 
 \subsection{Le multithreading}
 \label{multithreading}
@@ -200,7 +201,7 @@ Les algorithmes de ray tracing sont réputés pour être lents à exécuter. Cep
 	\item{Un pixel de départ X et Y}	
 	\item{Un pixel d'arrivée X et Y}
 \end{itemize}
-A partir de toutes ces tâches est ensuite construite une liste de tâche. Cette dernière servira aux threads lorsqu'ils viendront piocher dans la liste afin de récupérer les informations sur la zone de l'image qu'ils ont à rendre.
+A partir de toutes ces tâches est ensuite construite une liste de tâche. Cette dernière servira aux threads. Ils viendront en effet piocher dans la liste afin de récupérer les informations sur la zone de l'image qu'ils ont à rendre.
 Un diagramme de classe illustre le fonctionnement du package multithreading dans la section \ref{packageMultithreading}.
 
 \subsection{Les mouvements de caméra}
@@ -264,8 +265,10 @@ Pour rendre une image, le RayTracer a besoin de:
 	\item{Une scène contenant les objets à rendre}
 	\item{Une ou plusieures sources de lumière}
 	\item{Une caméra}
+	\item{Une profondeur maximale de récursion}
+	\item{Un nombre de thread sur lequel le rendu sera effectué}
 \end{itemize}
-La résolution de rendu est fixe et est donnée au constructeur du RayTracer. La scène est les sources de lumière sont, quant à elles, dynamiques. La scène peut très bien être modifiée pendant le rendu et le RayTracer rendra les nouvelles images en conséquence. C'est pour cela que la scène est passée en argument de la méthode \textit{renderImage}. Il est alors facile de modifier la scène et d'ensuite la donner au RayTracer pour qu'il en fasse le rendu.
+La résolution de rendu est fixe et est donnée au constructeur du RayTracer. La scène est les sources de lumière sont, quant à elles, dynamiques. La scène peut très bien être modifiée pendant le rendu et le RayTracer rendra les nouvelles images en conséquence.
 
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=\textwidth]{diagrammes/classe_RayTracer.png}}
@@ -275,12 +278,10 @@ La résolution de rendu est fixe et est donnée au constructeur du RayTracer. La
 \end{figure}
 \FloatBarrier
 
-Les sources de lumière, la caméra et les objets de la scène dont a besoin le RayTracer sont des attributs de RayTracingScene. Comme énoncé plus haut, on peut ainsi facilement les modifier dynamiquement pendant le rendu.
-
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=0.42\textwidth]{diagrammes/classe_RayTracingScene.png}}
 	
-	\caption{Diagramme de la classe RayTracingScene}
+	\caption{Diagramme de la classe RayTracingScene contenant les informations de la scène}
 	\label{diagrammeRayTracingScene}
 \end{figure}
 \FloatBarrier
@@ -309,7 +310,7 @@ Nous allons donc organiser toutes ces caractéristiques dans ce que l'on va appe
 \FloatBarrier
 
 Une classe mère Material permet de définir un matériau complètement arbitrairement. Toutes les caractéristiques peuvent être choisies comme on le souhaite.\\
-Différentes classes héritent ensuite de cette classe mère afin de définir des catégories de matériau. Par exemple, MettalicMaterial va fixer la réflectivité du matériau à un certain point, de même pour sa diffusion, sa spécularité etc... Toutes ces caractéristiques fixées d'une certaine façon donnera donc au matériau un aspect métallique. Il ne restera plus qu'à donner un MetallicMaterial à un objet de la scène pour qu'il ait un aspect métallique pendant le rendu. Le visuel des matériaux peut donc être personnalisé assez facilement et intuitivement avec l'utilisation des matériaux.
+Différentes classes héritent ensuite de cette classe mère afin de définir des catégories de matériau avec des propriétés fixées
 
 \section{Mesures de performance}
 Comme présenté dans la section \ref{multithreading}, nous application tire partie de toute la puissnce du processeur de la machine. Le but étant de réduire le temps de calcul, nous présentons dans cette section les gains perçus en terme de performances.\\
@@ -318,7 +319,7 @@ Nous comparerons les temps de rendu par image pour différentes résolutions et 
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=1\textwidth]{img/rt/MultithreadingGraph.png}}
 	
-	\caption{Graphe de l'impact du nombre de thread sur le temps de rendu par image}
+	\caption{Graph de l'impact du nombre de thread sur le temps de rendu par image}
 	\label{graphMultithreading}
 \end{figure}
 \FloatBarrier
@@ -334,6 +335,7 @@ Cette multiplication des performances nous permet entre autre de pouvoir profite
 \newpage%Nouvelle page pour les annexes
 \begin{appendices}
 	\section{Le ray tracer}
+		\subsection{Configuration d'une caméra, d'une scène et de rayons}
 		\begin{figure}[h!]
 			\adjustbox{center}{\includegraphics[width=1.1\textwidth]{img/rt/repCam2Rayonsv2.png}}
 		
@@ -342,6 +344,7 @@ Cette multiplication des performances nous permet entre autre de pouvoir profite
 		\FloatBarrier
 		\label{annexe:repreCamRayon}
 
+		\subsection{Le principe récursif des réflexions}
 		\begin{figure}[!h]
 			\adjustbox{center}{\includegraphics[width=1.1\textwidth]{img/rt/reflectionsSchema.png}}
 		

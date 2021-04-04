@@ -1,7 +1,7 @@
 package materials;
 
 import javafx.scene.paint.Color;
-import textures.ProceduralTexture;
+import materials.textures.*;
 
 /*
  * Classe permettant définir des matériaux à partir des différentes caractéristiques physiques que peut simuler le rayTracer

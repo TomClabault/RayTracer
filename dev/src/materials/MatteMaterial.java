@@ -1,7 +1,7 @@
 package materials;
 
 import javafx.scene.paint.Color;
-import textures.ProceduralTexture;
+import materials.textures.*;
 
 public class MatteMaterial extends Material
 {
