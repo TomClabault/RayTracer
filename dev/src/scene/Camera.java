@@ -2,15 +2,14 @@ package scene;
 
 import maths.CTWMatrix;
 import maths.MatrixD;
-import maths.Point;
-import maths.Vector;
+import maths.Vector3D;
 
 /*
  * Class permettant de représenter une caméra définie par sa position dans l'espace, la direction dans laquelle elle regarde ainsi que son champ de vision
  */
 public class Camera 
 {
-	Point position;//Point depuis lequel regarde la caméra
+	Vector3D position;//Vector3D depuis lequel regarde la caméra
 	
 	double angleHori;/* Angle de rotation de caméra sur le plan x, z en degré */
 	double angleVerti;/* Angle de rotation de caméra sur le plan x, y en degré */
@@ -30,7 +29,7 @@ public class Camera
 	 */
 	public Camera()
 	{
-		this(new Point(0, 0, 0), 0, 0);
+		this(new Vector3D(0, 0, 0), 0, 0);
 	}
 	
 	/*
@@ -38,7 +37,7 @@ public class Camera
 	 * 
 	 *  @param position Le point d'origine de la caméra
 	 */
-	public Camera(Point position)
+	public Camera(Vector3D position)
 	{
 		this(position, 0, 0);
 	}
@@ -50,7 +49,7 @@ public class Camera
 	 * @param angleHori 	L'angle de rotation horizontal en degré de la caméra
 	 * @param angleVerti	L'angle de rotation vertical en degré de la caméra. Un angle de plus de 90° ou de moins de -90° sera ramené à 900 ou -90° repsectivement
 	 */
-	public Camera(Point position, double angleHori, double angleVerti)
+	public Camera(Vector3D position, double angleHori, double angleVerti)
 	{
 		this.position = position;
 		
@@ -126,7 +125,7 @@ public class Camera
 	 * 
 	 * @return Un vecteur de coordonnées (x, y, z) définissant la direction dans laquelle regarde la caméra 
 	 */
-	public Vector getDirection()
+	public Vector3D getDirection()
 	{
 		return this.getZAxis();
 	}
@@ -146,7 +145,7 @@ public class Camera
 	 * 
 	 * @return Un point de coordonnées (x, y, z) représentant les coordoonées actuelle de la caméra
 	 */
-	public Point getPosition()
+	public Vector3D getPosition()
 	{
 		return this.position;
 	}
@@ -156,9 +155,9 @@ public class Camera
 	 * 
 	 * @param axisIndex Entier entre 0 et 2 représentant l'axe que l'on souhaite obtenir. 0 pour l'axe x, 1 pour l'axe y et 2 pour l'axe z
 	 */
-	protected Vector getWAxis(int axisIndex)
+	protected Vector3D getWAxis(int axisIndex)
 	{
-		return new Vector(this.CTWMatrix.get(axisIndex, 0), this.CTWMatrix.get(axisIndex, 1), this.CTWMatrix.get(axisIndex, 2));
+		return new Vector3D(this.CTWMatrix.get(axisIndex, 0), this.CTWMatrix.get(axisIndex, 1), this.CTWMatrix.get(axisIndex, 2));
 	}
 	
 	/*
@@ -166,7 +165,7 @@ public class Camera
 	 * 
 	 * @return Un vecteur de coordoonées (x, y, z) où x, y et z représentent les coordonnées du vecteur de l'axe x de la caméra exprmimées dans la base de l'espace vectoriel de la scène i.e. {(1, 0, 0), (0, 1, 0), (0, 0, 1)}
 	 */
-	public Vector getXAxis()
+	public Vector3D getXAxis()
 	{
 		return getWAxis(0);
 	}
@@ -176,7 +175,7 @@ public class Camera
 	 * 
 	 * @return Un vecteur de coordoonées (x, y, z) où x, y et z représentent les coordonnées du vecteur de l'axe y de la caméra exprmimées dans la base de l'espace vectoriel de la scène i.e. {(1, 0, 0), (0, 1, 0), (0, 0, 1)}
 	 */
-	public Vector getYAxis()
+	public Vector3D getYAxis()
 	{
 		return getWAxis(1);
 	}
@@ -186,7 +185,7 @@ public class Camera
 	 * 
 	 * @return Un vecteur de coordoonées (x, y, z) où x, y et z représentent les coordonnées du vecteur de l'axe z de la caméra exprmimées dans la base de l'espace vectoriel de la scène i.e. {(1, 0, 0), (0, 1, 0), (0, 0, 1)}
 	 */
-	public Vector getZAxis()
+	public Vector3D getZAxis()
 	{
 		return getWAxis(2);
 	}
@@ -230,7 +229,7 @@ public class Camera
 	 * 
 	 * @param newPosition Un point de coordonnées (x, y, z) pour définir les nouvelles coordonnées de la caméra
 	 */
-	public void setPosition(Point newPosition)
+	public void setPosition(Vector3D newPosition)
 	{
 		this.position = newPosition;
 		

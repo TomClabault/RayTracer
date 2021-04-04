@@ -94,11 +94,11 @@ public class MatrixD
 	/*
 	 * Change la base du point pointToConvert vers la base de la caméra
 	 * 
-	 * @param pointToConvert Point à convertir vers la base de l'esapace vectoriel de la caméra.
+	 * @param pointToConvert Vecteur à convertir vers la base de l'espace vectoriel de la caméra.
 	 * 
 	 * @param Crée un nouveau point dont les coordoonnées (initialement de pointToConvert) sont exprimées selon l'orientation de la caméra 
 	 */
-	public static Point mulPoint(Point pointToConvert, MatrixD transformMatrix)
+	public static Vector3D mulPoint(Vector3D pointToConvert, MatrixD transformMatrix)
 	{
 		double[] pointToConvertCoords = new double[] {pointToConvert.getX(), pointToConvert.getY(), pointToConvert.getZ(), 1};
 		double[] convertedPointCoords = new double[] {0, 0, 0, 0};
@@ -108,7 +108,7 @@ public class MatrixD
 				convertedPointCoords[i] += pointToConvertCoords[j] * transformMatrix.matrix[j][i];
 		
 		//On retourne le point de coordoonées exprimées dans la base de la matrice passée en paramètre 
-		return new Point(convertedPointCoords[0], convertedPointCoords[1], convertedPointCoords[2]);
+		return new Vector3D(convertedPointCoords[0], convertedPointCoords[1], convertedPointCoords[2]);
 	}
 	
 	/*

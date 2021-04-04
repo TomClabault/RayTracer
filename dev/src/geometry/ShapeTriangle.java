@@ -4,9 +4,8 @@ import java.util.ArrayList;
 
 import materials.Material;
 import geometry.shapes.Triangle;
-import maths.Point;
+import maths.Vector3D;
 import maths.Ray;
-import maths.Vector;
 
 /*
  * Interface permettant d'implémenter des formes géomtriques construites à partir de triangles telles que les ico-sphère par exemple
@@ -28,11 +27,11 @@ public abstract class ShapeTriangle implements Shape
 		return listeTriangle;
 	}
 
-	public Point intersect(Ray ray, Vector outNormalAtInter)
+	public Vector3D intersect(Ray ray, Vector3D outNormalAtInter)
 	{
 		Double distancemin = null;
-		Point intersection = null;
-		Point closestInterPoint = null;
+		Vector3D intersection = null;
+		Vector3D closestInterPoint = null;
 		Triangle intersectedTriangle = null;
 		
 		for (int i = 0; i < listeTriangle.size(); i++)
@@ -41,7 +40,7 @@ public abstract class ShapeTriangle implements Shape
 			intersection = triangle.intersect(ray, null);
 			if(intersection != null)
 			{
-				double distance = Point.distance(intersection, ray.getOrigin());
+				double distance = Vector3D.distance(intersection, ray.getOrigin());
 				if(distancemin == null || distance < distancemin )
 				{
 					distancemin = distance;
@@ -64,7 +63,7 @@ public abstract class ShapeTriangle implements Shape
 		return closestInterPoint;
 
 	}
-	public Vector getNormal(Point point)
+	public Vector3D getNormal(Vector3D point)
 	{
 		for (int i = 0 ; i < listeTriangle.size() ;i++)
 		{

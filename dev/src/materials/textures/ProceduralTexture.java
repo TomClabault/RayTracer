@@ -1,7 +1,7 @@
 package materials.textures;
 
 import javafx.scene.paint.Color;
-import maths.Point;
+import maths.Vector3D;
 
 /*
  * Les classes implémentant cette interface définiront des textures dites procédurales. La couleur de ces textures ne dépend pas d'une image mais plutôt de mathématiques.
@@ -12,9 +12,9 @@ public interface ProceduralTexture
 	/*
 	 * Permet de récupérer la couleur de la texture en des coordonées 2D (u, v) données
 	 * 
-	 * @param UVPoint Point (x, y, z) contenant les coordonnées de texture (u, v) du point dont on veut la couleur tel que: x = u, y = v. z est insignifiant 
+	 * @param UVPoint Vector3D (x, y, z) contenant les coordonnées de texture (u, v) du point dont on veut la couleur tel que: x = u, y = v. z est insignifiant 
 	 * 
 	 * @return Retourne la couleur de la texture au point de coordonnées de texture (u, v) donné
 	 */
-	public Color getColorAt(Point UVPoint);
+	public Color getColorAt(Vector3D UVPoint);
 }

@@ -1,7 +1,7 @@
 package geometry.shapes;
 
 import materials.Material;
-import maths.Point;
+import maths.Vector3D;
 import geometry.ShapeTriangle;
 
 import java.util.ArrayList;
@@ -34,15 +34,15 @@ public class PyramideTriangulaire extends ShapeTriangle
      */
 
     protected double height,width;
-    protected Point A,B,C,D;
+    protected Vector3D A,B,C,D;
 
 
-    /* Le constructeur prendra 4 parametres sous la forme de Point; Point A, Point B, Point C, Point D
-    *  Point A, B et C sont le sol de la pyramide triangulaire
-    *  Point D sera le toit de la pyramide
+    /* Le constructeur prendra 4 parametres sous la forme de Vector3D; Vector3D A, Vector3D B, Vector3D C, Vector3D D
+    *  Vector3D A, B et C sont le sol de la pyramide triangulaire
+    *  Vector3D D sera le toit de la pyramide
     *  Tout est deja explique sur le petit dessin au-dessus*/
 
-    public PyramideTriangulaire(Point A, Point B, Point C, Point D, Material material)
+    public PyramideTriangulaire(Vector3D A, Vector3D B, Vector3D C, Vector3D D, Material material)
     {
         this.A = A;
         this.B = B;
@@ -55,13 +55,13 @@ public class PyramideTriangulaire extends ShapeTriangle
     }
 
     /* Constructeur pour construire une pyramide triangulaire equilaterale */
-    public PyramideTriangulaire(Point depart, double height, double width, Material material)
+    public PyramideTriangulaire(Vector3D depart, double height, double width, Material material)
     {
         this.A = depart;
 
-        this.D = new Point(this.A.getX() + width/4, this.A.getY() + height, this.A.getZ() + width*3/4);
-        this.B = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ() + width);
-        this.C = new Point(this.A.getX(), this.A.getY(), this.A.getZ() + width);
+        this.D = new Vector3D(this.A.getX() + width/4, this.A.getY() + height, this.A.getZ() + width*3/4);
+        this.B = new Vector3D(this.A.getX() + width, this.A.getY(), this.A.getZ() + width);
+        this.C = new Vector3D(this.A.getX(), this.A.getY(), this.A.getZ() + width);
 
         /*
         this.D.setX(this.A.getX() + width/4);
@@ -105,7 +105,7 @@ public class PyramideTriangulaire extends ShapeTriangle
 	 * @link{geometry.shapes.Shape#getUVCoords}
 	 */
 	@Override
-	public Point getUVCoords(Point point)
+	public Vector3D getUVCoords(Vector3D point)
 	{
 		return null;
 	}

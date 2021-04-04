@@ -2,25 +2,24 @@ package maths;
 
 public class Ray
 {
-	private Vector direction;
+	private Vector3D direction;
+	private Vector3D origin;
 	
-	private Point origin;
-	
-	public Ray(Point origin, Vector direction)
+	/*
+	 * Construit un rayon à partir de son point d'origine ainsi que d'un vecteur indiquant sa direction
+	 * 
+	 * @param origin Origine du rayon
+	 * @param direction Vecteur directeur du rayon
+	 */
+	public Ray(Vector3D origin, Vector3D direction)
 	{
 		this.origin = origin;
-		this.direction = new Vector(direction);
+		this.direction = direction;
 	}
 	
-	public Ray(Point origin, Point direction)
+	public Vector3D determinePoint(double coefficient)
 	{
-		this.origin = origin;
-		this.direction = new Vector(origin, direction);
-	}
-	
-	public Point determinePoint(double coefficient)
-	{
-		return Point.add(Point.scalarMul(coefficient, this.getDirectionP()), this.getOrigin());
+		return Vector3D.add(Vector3D.scalarMul(this.direction, coefficient), this.getOrigin());
 	}
 	
 	/*
@@ -28,19 +27,9 @@ public class Ray
 	 * 
 	 * @return Vecteur représentant la direction du rayon
 	 */
-	public Vector getDirection()
+	public Vector3D getDirection()
 	{
 		return this.direction;
-	}
-	
-	/*
-	 * Retourne la direction du rayon sous la forme d'un point
-	 * 
-	 * @return Pour un rayon de direction v(x, y, z), retourne le point p(x, y, z)
-	 */
-	public Point getDirectionP()
-	{
-		return Vector.v2p(this.direction);
 	}
 	
 	/*
@@ -48,7 +37,7 @@ public class Ray
 	 * 
 	 * @return Un point représentant l'origin du rayon
 	 */
-	public Point getOrigin()
+	public Vector3D getOrigin()
 	{
 		return this.origin;
 	}
@@ -58,9 +47,9 @@ public class Ray
 	 * 
 	 * @return Vecteur de même coordonnées que le point d'origine du rayon
 	 */
-	public Vector getOriginV()
+	public Vector3D getOriginV()
 	{
-		return new Vector(this.origin);
+		return new Vector3D(this.origin);
 	}
 	
 	/*
@@ -68,7 +57,7 @@ public class Ray
 	 * 
 	 * @return Si d = (x, y, z) le vecteur de direction du rayon, retourne v = (-x, -y, -z)
 	 */
-	public Vector negate()
+	public Vector3D negate()
 	{
 		return this.direction.negate();
 	}

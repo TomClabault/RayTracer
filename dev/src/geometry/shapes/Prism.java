@@ -1,7 +1,7 @@
 package geometry.shapes;
 
 import materials.Material;
-import maths.Point;
+import maths.Vector3D;
 import geometry.ShapeTriangle;
 
 import java.util.ArrayList;
@@ -49,10 +49,10 @@ public class Prism extends ShapeTriangle
     */
 
     protected double height,width;
-    protected Point A,B,C,D,E,F;
+    protected Vector3D A,B,C,D,E,F;
 
 
-    public Prism(Point A, Point B, Point C, Point D, Point E, Point F, Material material)
+    public Prism(Vector3D A, Vector3D B, Vector3D C, Vector3D D, Vector3D E, Vector3D F, Material material)
     {
         this.A = A;
         this.B = B;
@@ -67,15 +67,15 @@ public class Prism extends ShapeTriangle
 
     }
 
-    public Prism(Point depart, double height, double width, Material material)
+    public Prism(Vector3D depart, double height, double width, Material material)
     {
         this.A = depart;
 
-        this.B = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ());
-        this.C = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ() + width);
-        this.D = new Point(this.A.getX(), this.A.getY(), this.A.getZ() + width);
-        this.E = new Point(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ());
-        this.F = new Point(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ() + width);
+        this.B = new Vector3D(this.A.getX() + width, this.A.getY(), this.A.getZ());
+        this.C = new Vector3D(this.A.getX() + width, this.A.getY(), this.A.getZ() + width);
+        this.D = new Vector3D(this.A.getX(), this.A.getY(), this.A.getZ() + width);
+        this.E = new Vector3D(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ());
+        this.F = new Vector3D(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ() + width);
 
         /*
         this.B.setX(this.A.getX() + width);
@@ -137,7 +137,7 @@ public class Prism extends ShapeTriangle
 	 * @link{geometry.shapes.Shape#getUVCoords}
 	 */
 	@Override
-	public Point getUVCoords(Point point)
+	public Vector3D getUVCoords(Vector3D point)
 	{
 		return null;
 	}

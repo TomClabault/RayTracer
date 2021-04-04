@@ -1,7 +1,7 @@
 package povParser;
 
 import geometry.shapes.SphereMaths;
-import maths.Point;
+import maths.Vector3D;
 
 public class SphereParser implements Runnable
 {
@@ -13,7 +13,7 @@ public class SphereParser implements Runnable
 
     public void createSphere(double xCenter, double yCenter, double zCenter, double radius, String ... sphereModifiers)
     {
-        Point sphereCenter = new Point(xCenter, yCenter, zCenter);
+        Vector3D sphereCenter = new Vector3D(xCenter, yCenter, zCenter);
     }
     @Override
     public void run()

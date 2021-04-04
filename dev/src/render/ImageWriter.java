@@ -8,10 +8,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import materials.GlassMaterial;
-import materials.MatteMaterial;
-import materials.MirrorMaterial;
-import materials.MetallicMaterial;
 import javafx.stage.Screen;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
@@ -22,11 +18,12 @@ import javafx.scene.image.PixelWriter;
 import rayTracer.RayTracer;
 import geometry.shapes.*;
 import geometry.*;
+import materials.*;
+import materials.textures.*;
 import maths.*;
 import scene.*;
 import scene.RayTracingScene;
 import scene.lights.*;
-import materials.textures.*;
 
 /**
 * Gère le Pane qui contient le rendu
@@ -101,19 +98,20 @@ public class ImageWriter {
 
     public RayTracingScene addObjectsToScene() {/*utilisé dans le constructeur*/
 
-    	Camera cameraRT = new Camera(new Point(0.000, 0.5, -1.5), 0, 0);
+    	Camera cameraRT = new Camera(new Vector3D(0.000, 0.5, -1.5), 0, 0);
+    	//Camera cameraRT = new Camera(new Vector3D(-1.25, 0.5, -9), 180, 0);
         cameraRT.setFOV(60);
-        Light l = new LightBulb(new Point(1, 2, 1), 1);
+        Light l = new LightBulb(new Vector3D(1, 2, 1), 1);
 
         ArrayList<Shape> shapeList = new ArrayList<>();
-        shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0/2.0))));
+        shapeList.add(new PlaneMaths(new Vector3D(0, 1, 0), new Vector3D(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0/2.0))));
 
-        shapeList.add(new SphereMaths(new Point(-1.25, 0.5, -6), 1, new MirrorMaterial(0.75)));
-        shapeList.add(new SphereMaths(Point.add(new Point(-0.25, 0.5, -0.1), Point.scalarMul(1.5625, new Point(1.250, 0.000, -4.500))), 0.2, new MetallicMaterial(Color.RED)));
-        shapeList.add(new SphereMaths(new Point(-1.25, 1, -6.5), 0.2, new MetallicMaterial(Color.LIGHTSKYBLUE)));
-        shapeList.add(new SphereMaths(new Point(-2, -0.65, -5), 0.35, new MatteMaterial(Color.ORANGERED, new ProceduralTextureCheckerboard(Color.BLACK, Color.YELLOW, 12))));
-        shapeList.add(new SphereMaths(new Point(1.5, -0.65, -5), 0.35, new MetallicMaterial(Color.rgb(255, 211, 0))));
-        shapeList.add(new SphereMaths(new Point(1.25, 0.5, -6), 1, new GlassMaterial()));
+        shapeList.add(new SphereMaths(new Vector3D(-1.25, 0.5, -6), 1, new MirrorMaterial(0.75)));
+        shapeList.add(new SphereMaths(Vector3D.add(new Vector3D(-0.25, 0.5, -0.1), Vector3D.scalarMul(new Vector3D(1.250, 0.000, -4.500), 1.5625)), 0.2, new MetallicMaterial(Color.RED)));
+        shapeList.add(new SphereMaths(new Vector3D(-1.25, 1, -6.5), 0.2, new MetallicMaterial(Color.LIGHTSKYBLUE)));
+        shapeList.add(new SphereMaths(new Vector3D(-2, -0.65, -5), 0.35, new MatteMaterial(Color.ORANGERED, new ProceduralTextureCheckerboard(Color.BLACK, Color.YELLOW, 12))));
+        shapeList.add(new SphereMaths(new Vector3D(1.5, -0.65, -5), 0.35, new MetallicMaterial(Color.rgb(255, 211, 0))));
+        shapeList.add(new SphereMaths(new Vector3D(1.25, 0.5, -6), 1, new GlassMaterial()));
         
         
         

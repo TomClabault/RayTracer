@@ -1,8 +1,7 @@
 package render;
 
-import maths.Vector;
+import maths.Vector3D;
 import scene.RayTracingScene;
-import maths.Point;
 
 import javafx.scene.input.KeyEvent;
 import javafx.scene.Scene;
@@ -75,7 +74,7 @@ public class CameraTimer extends AnimationTimer {
     */
     public void upCamera()
     {
-        Point new_position = Point.add(this.rayTracingScene.getCamera().getPosition(),new Point(0, DELTA_MOVE_Y,0));
+        Vector3D new_position = Vector3D.add(this.rayTracingScene.getCamera().getPosition(),new Vector3D(0, DELTA_MOVE_Y,0));
 
         this.rayTracingScene.getCamera().setPosition(new_position);
     }
@@ -85,7 +84,7 @@ public class CameraTimer extends AnimationTimer {
     */
     public void downCamera()
     {
-        Point new_position = Point.add(this.rayTracingScene.getCamera().getPosition(),new Point(0,- DELTA_MOVE_Y,0));
+        Vector3D new_position = Vector3D.add(this.rayTracingScene.getCamera().getPosition(),new Vector3D(0,- DELTA_MOVE_Y,0));
 
         this.rayTracingScene.getCamera().setPosition(new_position);
     }
@@ -127,8 +126,8 @@ public class CameraTimer extends AnimationTimer {
     */
     public void goForwardCamera()
     {
-    	Vector axeZ = this.rayTracingScene.getCamera().getZAxis();
-    	Point newPosition = Point.add(Vector.v2p(Vector.scalarMul(axeZ, -DELTA_MOVE)), rayTracingScene.getCamera().getPosition());
+    	Vector3D axeZ = this.rayTracingScene.getCamera().getZAxis();
+    	Vector3D newPosition = Vector3D.add(Vector3D.scalarMul(axeZ, -DELTA_MOVE), rayTracingScene.getCamera().getPosition());
 
     	this.rayTracingScene.getCamera().setPosition(newPosition);
     }
@@ -138,8 +137,8 @@ public class CameraTimer extends AnimationTimer {
     */
     public void goBackwardCamera()
     {
-    	Vector axeZ = this.rayTracingScene.getCamera().getZAxis();
-    	Point newPosition = Point.add(Vector.v2p(Vector.scalarMul(axeZ, DELTA_MOVE)), rayTracingScene.getCamera().getPosition());
+    	Vector3D axeZ = this.rayTracingScene.getCamera().getZAxis();
+    	Vector3D newPosition = Vector3D.add(Vector3D.scalarMul(axeZ, DELTA_MOVE), rayTracingScene.getCamera().getPosition());
 
     	this.rayTracingScene.getCamera().setPosition(newPosition);
     }
@@ -149,8 +148,8 @@ public class CameraTimer extends AnimationTimer {
     */
     public void goLeftCamera()
     {
-    	Vector axeX = this.rayTracingScene.getCamera().getXAxis();
-    	Point newPosition = Point.add(Vector.v2p(Vector.scalarMul(axeX, -DELTA_MOVE)), rayTracingScene.getCamera().getPosition());
+    	Vector3D axeX = this.rayTracingScene.getCamera().getXAxis();
+    	Vector3D newPosition = Vector3D.add(Vector3D.scalarMul(axeX, -DELTA_MOVE), rayTracingScene.getCamera().getPosition());
 
     	this.rayTracingScene.getCamera().setPosition(newPosition);
     }
@@ -160,8 +159,8 @@ public class CameraTimer extends AnimationTimer {
     */
     public void goRightCamera()
     {
-    	Vector axeX = this.rayTracingScene.getCamera().getXAxis();
-    	Point newPosition = Point.add(Vector.v2p(Vector.scalarMul(axeX, DELTA_MOVE)), rayTracingScene.getCamera().getPosition());
+    	Vector3D axeX = this.rayTracingScene.getCamera().getXAxis();
+    	Vector3D newPosition = Vector3D.add(Vector3D.scalarMul(axeX, DELTA_MOVE), rayTracingScene.getCamera().getPosition());
     	this.rayTracingScene.getCamera().setPosition(newPosition);
    }
 }

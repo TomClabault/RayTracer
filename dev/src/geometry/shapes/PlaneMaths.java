@@ -4,15 +4,14 @@ import materials.Material;
 import materials.MatteMaterial;
 import geometry.Shape;
 import javafx.scene.paint.Color;
-import maths.Point;
+import maths.Vector3D;
 import maths.Ray;
-import maths.Vector;
 
 public class PlaneMaths implements Shape
 {
 	//Equation de plan: (p - point).normal = 0
-	private Vector normal;//partie (A, B, C) de l'équation
-	private Point point;//partie D de l'équation
+	private Vector3D normal;//partie (A, B, C) de l'équation
+	private Vector3D point;//partie D de l'équation
 	
 	private Material material;
 	
@@ -20,9 +19,9 @@ public class PlaneMaths implements Shape
 	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan
 	 * 
 	 * @param normal Vecteur normal au plan
-	 * @param point Point par lequel passe le plan
+	 * @param point Vector3D par lequel passe le plan
 	 */
-	public PlaneMaths(Vector normal, Point point)
+	public PlaneMaths(Vector3D normal, Vector3D point)
 	{
 		this(normal, point, new MatteMaterial(Color.rgb(128, 128, 128)));
 	}
@@ -33,9 +32,9 @@ public class PlaneMaths implements Shape
 	 * @param normal 	Vecteur normal au plan
 	 * @param distance 	Distance du plan par rapport à l'origine dans la direction du vecteur 'normal'
 	 */
-	public PlaneMaths(Vector normal, double distance)
+	public PlaneMaths(Vector3D normal, double distance)
 	{
-		this(normal, Vector.v2p(Vector.scalarMul(Vector.normalize(normal), distance)), new MatteMaterial(Color.rgb(128, 128, 128)));
+		this(normal, Vector3D.scalarMul(Vector3D.normalize(normal), distance), new MatteMaterial(Color.rgb(128, 128, 128)));
 	}
 	
 	/*
@@ -45,19 +44,19 @@ public class PlaneMaths implements Shape
 	 * @param distance 	Distance du plan par rapport à l'origine dans la direction du vecteur 'normal'
 	 * @param material Matériau qui sera utilisé pour le rendu du plan
 	 */
-	public PlaneMaths(Vector normal, double distance, Material material)
+	public PlaneMaths(Vector3D normal, double distance, Material material)
 	{
-		this(normal, Vector.v2p(Vector.scalarMul(Vector.normalize(normal), distance)), material);
+		this(normal, Vector3D.scalarMul(Vector3D.normalize(normal), distance), material);
 	}
 	
 	/*
 	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan 
 	 * 
 	 * @param normal Vecteur normal au plan
-	 * @param point Point par lequel passe le plan
+	 * @param point Vector3D par lequel passe le plan
 	 * @param material Matériau qui sera utilisé pour le rendu du plan
 	 */
-	public PlaneMaths(Vector normal, Point point, Material material)
+	public PlaneMaths(Vector3D normal, Vector3D point, Material material)
 	{
 		this.normal = normal;
 		this.point = point;
@@ -77,7 +76,7 @@ public class PlaneMaths implements Shape
 	 * 
 	 * @return Normale du plan
 	 */
-	public Vector getNormal(Point point) 
+	public Vector3D getNormal(Vector3D point) 
 	{
 		return this.normal;
 	}
@@ -86,9 +85,9 @@ public class PlaneMaths implements Shape
 	 * @link{geometry.shapes.Shape#getUVCoords}
 	 */
 	@Override
-	public Point getUVCoords(Point point)
+	public Vector3D getUVCoords(Vector3D point)
 	{
-		return new Point(point.getX(), point.getZ(), 0);
+		return new Vector3D(point.getX(), point.getZ(), 0);
 	}
 	
 	/*
@@ -100,15 +99,15 @@ public class PlaneMaths implements Shape
 	 * 
 	 * @return Retourne le point d'intersection avec la sphère s'il existe (s'il y a deux points d'intersection, ne retourne que le point le plus près de l'origine du rayon). Retourne null sinon.
 	 */
-	public Point intersect(Ray ray, Vector outNormalAtInter) 
+	public Vector3D intersect(Ray ray, Vector3D outNormalAtInter) 
 	{
-		double NDir = Vector.dotProduct(normal, ray.getDirection());
+		double NDir = Vector3D.dotProduct(normal, ray.getDirection());
 		if(NDir > 0.0000001d && NDir < 0.0000001d)//Le rayon et le plan sont parallèles
 			return null;
 			
 		
-	    Vector p0l0 = Point.p2v(Point.sub(this.point, ray.getOrigin())); 
-	    double coeffVectorPoint = Vector.dotProduct(p0l0, this.normal) / NDir;
+	    Vector3D p0l0 = Vector3D.sub(this.point, ray.getOrigin()); 
+	    double coeffVectorPoint = Vector3D.dotProduct(p0l0, this.normal) / NDir;
 	    if(coeffVectorPoint > 0)
 	    {
 	    	if(outNormalAtInter != null)

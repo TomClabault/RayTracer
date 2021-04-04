@@ -11,9 +11,8 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 import maths.MatrixD;
 import maths.ColorOperations;
-import maths.Point;
 import maths.Ray;
-import maths.Vector;
+import maths.Vector3D;
 import multithreading.ThreadsTaskList;
 import multithreading.TileTask;
 import multithreading.TileThread;
@@ -61,7 +60,7 @@ public class RayTracer
 	 *
 	 * @return Retourne l'objet avec lequel le rayon a fait son intersection. 'outClosestInterPoint' est un point de l'objet retourné
 	 */
-	protected Shape computeClosestInterPoint(ArrayList<Shape> objectList, Ray ray, Point outClosestInterPoint, Vector outNormalAtInter)
+	protected Shape computeClosestInterPoint(ArrayList<Shape> objectList, Ray ray, Vector3D outClosestInterPoint, Vector3D outNormalAtInter)
 	{
 		Shape closestObjectIntersected = null;
 		Double distanceMin = null;
@@ -70,11 +69,11 @@ public class RayTracer
 		{
 			double distRayOriInter = -1;
 
-			Vector newNormalAtInter = new Vector(0, 0, 0);//Ce vecteur va temporairement stocker la normale au point d'intersection trouvé (s'il existe). Si le point d'intersection trouvé et plus proche que les autres, c'est alors cette normale que l'on gardera
-			Point intersection = object.intersect(ray, newNormalAtInter);
+			Vector3D newNormalAtInter = new Vector3D(0, 0, 0);//Ce vecteur va temporairement stocker la normale au point d'intersection trouvé (s'il existe). Si le point d'intersection trouvé et plus proche que les autres, c'est alors cette normale que l'on gardera
+			Vector3D intersection = object.intersect(ray, newNormalAtInter);
 			if(intersection != null)
 			{
-				distRayOriInter = Point.distance(ray.getOrigin(), intersection);
+				distRayOriInter = Vector3D.distance(ray.getOrigin(), intersection);
 
 				if(distanceMin == null || distRayOriInter < distanceMin)//Si c'est le premier point d'intersection qu'on trouve ou si on a trouvé un point d'intersection plus proche que celui qu'on avait avant
 				{
@@ -104,7 +103,7 @@ public class RayTracer
 	 *  
 	 * @return La couleur passée en argument affectée de la composante diffuse de l'ombrage de Phong. Si l'objet n'est pas diffus, la couleur est renvoyée inchangée.
 	 */
-	protected Color computeAndAddDiffuse(Material rayIntObjMaterial, Color finalColorBefore, Color objectColor, Vector toLightVector, Vector normalAtIntersection, double lightIntensity)
+	protected Color computeAndAddDiffuse(Material rayIntObjMaterial, Color finalColorBefore, Color objectColor, Vector3D toLightVector, Vector3D normalAtIntersection, double lightIntensity)
 	{
 		if(rayIntObjMaterial.getDiffuseCoeff() > 0)//Si le matériau est diffus
 		{
@@ -128,7 +127,7 @@ public class RayTracer
 	 *  
 	 * @return La couleur passée en argument affectée de la composante spéculaire de l'ombrage de Phong. Si l'objet n'est pas spéculaire, la couleur est renvoyée inchangée
 	 */
-	protected Color computeAndAddSpecular(Material rayIntObjMaterial, Color finalColorBefore, Ray incidentRay, Vector toLightVector, Vector normalAtIntersection, double lightIntensity)
+	protected Color computeAndAddSpecular(Material rayIntObjMaterial, Color finalColorBefore, Ray incidentRay, Vector3D toLightVector, Vector3D normalAtIntersection, double lightIntensity)
 	{
 		if(rayIntObjMaterial.getSpecularCoeff() > 0)//Si le matériau est spéculaire
 		{
@@ -155,13 +154,13 @@ public class RayTracer
 	 *  
 	 * @return La couleur passée en argument affectée des couleurs qui se réfléchissent dans l'objet. Si l'objet n'est pas réflexif, la couleur est renvoyée inchangée
 	 */
-	protected Color computeAndAddReflections(RayTracingScene renderScene, Material rayIntObjMaterial, Color finalColorBefore, Color objectColor, Ray incidentRay, Vector toLightVector, Vector normalAtIntersection, Point interPointShift, int depth)
+	protected Color computeAndAddReflections(int x, int y, RayTracingScene renderScene, Material rayIntObjMaterial, Color finalColorBefore, Color objectColor, Ray incidentRay, Vector3D toLightVector, Vector3D normalAtIntersection, Vector3D interPointShift, int depth)
 	{
 		//Si l'objet est réfléchissant
 		if(rayIntObjMaterial.getReflectiveCoeff() > 0)
 		{
-			Vector reflectDirection = computeReflectionVector(normalAtIntersection, incidentRay.getDirection());
-			Color reflectionColor = computePixel(renderScene, new Ray(interPointShift, Vector.normalize(reflectDirection)), depth - 1);
+			Vector3D reflectDirection = computeReflectionVector(normalAtIntersection, incidentRay.getDirection());
+			Color reflectionColor = computePixel(x, y, renderScene, new Ray(interPointShift, Vector3D.normalize(reflectDirection)), depth - 1);
 
 			return ColorOperations.addColors(finalColorBefore, ColorOperations.mulColor(reflectionColor, rayIntObjMaterial.getReflectiveCoeff()));
 		}
@@ -183,28 +182,28 @@ public class RayTracer
 	 * 
 	 * @return Retourne la couleur donnée argument "mixée" avec les couleurs des réfractions et des réflexions de l'objet. Si l'objet n'est pas transparent, la couleur retournée est inchangée par rapport à celle passée en argument
 	 */
-	protected Color computeAndAddRefractions(RayTracingScene renderScene, Material rayIntObjMaterial, Color finalColorBefore, Vector incidentRayDirection, Vector normalAtIntersection, Point rayInterPoint, Point interPointShift, int depth)
+	protected Color computeAndAddRefractions(int x, int y, RayTracingScene renderScene, Material rayIntObjMaterial, Color finalColorBefore, Vector3D incidentRayDirection, Vector3D normalAtIntersection, Vector3D rayInterPoint, Vector3D interPointShift, int depth)
 	{
 		if (rayIntObjMaterial.getIsTransparent())//L'objet est réfractif 
 		{
 			double fr = fresnel(incidentRayDirection, normalAtIntersection, rayIntObjMaterial.getRefractionIndex());
 			double ft = 1 - fr;
-			Vector refractedRayDir = computeRefractedVector(incidentRayDirection, normalAtIntersection, rayIntObjMaterial.getRefractionIndex());
+			Vector3D refractedRayDir = computeRefractedVector(incidentRayDirection, normalAtIntersection, rayIntObjMaterial.getRefractionIndex());
 			Ray reflectedRay = null;
 			Ray refractedRay = null;
-			if (Vector.dotProduct(incidentRayDirection, normalAtIntersection) > 0) {
-				refractedRay = new Ray(Point.add(rayInterPoint, Vector.v2p(Vector.scalarMul(incidentRayDirection, 0.0001))), refractedRayDir);
+			if (Vector3D.dotProduct(incidentRayDirection, normalAtIntersection) > 0) {
+				refractedRay = new Ray(Vector3D.add(rayInterPoint, Vector3D.scalarMul(incidentRayDirection, 0.0001)), refractedRayDir);
 				reflectedRay = new Ray(interPointShift, computeReflectionVector(normalAtIntersection, incidentRayDirection));
 			} else {
-				refractedRay = new Ray(Point.add(rayInterPoint, Vector.v2p(Vector.scalarMul(incidentRayDirection, 0.0001))), refractedRayDir);
-				reflectedRay = new Ray(Point.add(rayInterPoint, Vector.v2p(Vector.scalarMul(incidentRayDirection, -0.0001))), computeReflectionVector(normalAtIntersection, incidentRayDirection));
+				refractedRay = new Ray(Vector3D.add(rayInterPoint, Vector3D.scalarMul(incidentRayDirection, 0.0001)), refractedRayDir);
+				reflectedRay = new Ray(Vector3D.add(rayInterPoint, Vector3D.scalarMul(incidentRayDirection, -0.0001)), computeReflectionVector(normalAtIntersection, incidentRayDirection));
 			}
 			Color refractedColor = Color.rgb(0,0,0);
-			if (! refractedRayDir.equals(new Vector(0,0,0)) ) {
-				refractedColor = computePixel(renderScene, refractedRay, depth -1);
+			if (! refractedRayDir.equals(new Vector3D(0,0,0)) ) {
+				refractedColor = computePixel(x, y, renderScene, refractedRay, depth -1);
 			}
 			
-			Color reflectedColor = computePixel(renderScene, reflectedRay, depth -1);
+			Color reflectedColor = computePixel(x, y, renderScene, reflectedRay, depth -1);
 			
 			finalColorBefore = ColorOperations.addColors(finalColorBefore, ColorOperations.mulColor(refractedColor, ft));
 			return ColorOperations.addColors(finalColorBefore, ColorOperations.mulColor(reflectedColor, fr));
@@ -235,9 +234,9 @@ public class RayTracer
 	 *
 	 *  @return La composante diffuse en un point donné de la scène vis à vis de la surface d'un objet. Réel entre 0 et 1
 	 */
-	protected double computeDiffuse(Vector toLightDirection, Vector normalAtIntersection, double lightIntensity)
+	protected double computeDiffuse(Vector3D toLightDirection, Vector3D normalAtIntersection, double lightIntensity)
 	{
-		double dotProdDiffuse = Vector.dotProduct(toLightDirection, normalAtIntersection);
+		double dotProdDiffuse = Vector3D.dotProduct(toLightDirection, normalAtIntersection);
 		double diffuseTerm = dotProdDiffuse < 0 ? 0 : lightIntensity*dotProdDiffuse;//Si le dotProduct est négatif, on ne calcule pas le terme diffus --> = 0
 
 		return diffuseTerm;
@@ -254,12 +253,12 @@ public class RayTracer
 	 *
 	 *  @return La composante spéculaire en un point donné de la scène vis à vis de la surface d'un objet. Réel entre 0 et 1.
 	 */
-	protected double computeSpecular(Ray incidentRay, Vector toLightDirection, Vector normalAtIntersection, double lightIntensity, double objectShininess)
+	protected double computeSpecular(Ray incidentRay, Vector3D toLightDirection, Vector3D normalAtIntersection, double lightIntensity, double objectShininess)
 	{
 		double specularTerm = 0;
-		Vector reflectVector = Vector.normalize(this.computeReflectionVector(normalAtIntersection, toLightDirection.negate()));
+		Vector3D reflectVector = Vector3D.normalize(this.computeReflectionVector(normalAtIntersection, toLightDirection.negate()));
 
-		double dotProdSpecular = Vector.dotProduct(reflectVector, incidentRay.negate());
+		double dotProdSpecular = Vector3D.dotProduct(reflectVector, incidentRay.negate());
 		specularTerm = lightIntensity*Math.pow(Math.max(dotProdSpecular, 0), objectShininess);
 
 		return specularTerm;
@@ -284,12 +283,13 @@ public class RayTracer
 		{
 			for(int x = startX; x < endX; x++)
 			{
-				Point pixelWorldCoords = this.convPxCoToWorldCoords(FOV, x, y, ctwMatrix);
+				Vector3D pixelWorldCoords = this.convPxCoToWorldCoords(FOV, x, y, ctwMatrix);
 
-				Ray cameraRay = new Ray(MatrixD.mulPoint(new Point(0, 0, 0), ctwMatrix), pixelWorldCoords);
+				Vector3D rayDirection = Vector3D.sub(pixelWorldCoords, renderScene.getCamera().getPosition());
+				Ray cameraRay = new Ray(MatrixD.mulPoint(new Vector3D(0, 0, 0), ctwMatrix), rayDirection);
 				cameraRay.normalize();
 
-				Color pixelColor = this.computePixel(renderScene, cameraRay, maxDepth);
+				Color pixelColor = this.computePixel(x,y,renderScene, cameraRay, maxDepth);
 				pixelColor = ColorOperations.linearTosRGBGamma2_2(pixelColor);
 				
 				this.renderedPixels.put(y*renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
@@ -306,15 +306,15 @@ public class RayTracer
 	 *
 	 * @return La couleur du pixel que traverse le rayon incident 'ray'
 	 */
-	protected Color computePixel(RayTracingScene renderScene, Ray ray, int depth)
+	protected Color computePixel(int x, int y, RayTracingScene renderScene, Ray ray, int depth)
 	{
 		if(depth == 0)
 			return renderScene.getBackgroundColor();
 
 		ArrayList<Shape> objectList = renderScene.getSceneObjects();
 
-		Point rayInterPoint = new Point(0, 0, 0);
-		Vector normalAtIntersection = new Vector(0, 0, 0);
+		Vector3D rayInterPoint = new Vector3D(0, 0, 0);
+		Vector3D normalAtIntersection = new Vector3D(0, 0, 0);
 		Shape rayInterObject = computeClosestInterPoint(objectList, ray, rayInterPoint, normalAtIntersection);
 
 		if(rayInterObject != null)//Il y a un point d'intersection
@@ -328,7 +328,8 @@ public class RayTracer
 			Color objectColor = null;
 			if(rayIntObjMaterial.hasProceduralTexture())
 			{
-				Point UVCoordsAtInterPoint = rayInterObject.getUVCoords(rayInterPoint);
+				Vector3D UVCoordsAtInterPoint = rayInterObject.getUVCoords(rayInterPoint);
+				
 				
 				objectColor = rayIntObjMaterial.getProceduralTexture().getColorAt(UVCoordsAtInterPoint);
 			}
@@ -344,37 +345,37 @@ public class RayTracer
 			
 			
 
-			Vector reflectionVector = computeReflectionVector(normalAtIntersection, ray.getDirection());
-			Point interPointShift = Point.add(rayInterPoint, Point.scalarMul(0.0001d, Vector.v2p(Vector.normalize(reflectionVector))));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
+			Vector3D reflectionVector = computeReflectionVector(normalAtIntersection, ray.getDirection());
+			Vector3D interPointShift = Vector3D.add(rayInterPoint, Vector3D.scalarMul(Vector3D.normalize(reflectionVector), 0.0001d));//On ajoute un très léger décalage au point d'intersection pour quand le retirant vers la lumière, il ne réintersecte
 
 			
-			Vector shadowRayDir = new Vector(interPointShift, renderScene.getLight().getCenter());//On calcule la direction du rayon secondaire qui va droit dans la source de lumière
+			Vector3D shadowRayDir = new Vector3D(interPointShift, renderScene.getLight().getCenter());//On calcule la direction du rayon secondaire qui va droit dans la source de lumière
 			Ray shadowRay = new Ray(interPointShift, shadowRayDir);//Création du rayon secondaire avec pour origine le premier point d'intersection décalé et avec comme direction le centre de la lampe
 			double interToLightDist = shadowRayDir.length();//Distance qui sépare le point d'intersection du centre de la lumière
 			shadowRay.normalize();
 			shadowRayDir.normalize();
 
 			//On cherche une intersection avec un objet qui se trouverait entre la lampe et l'origine du shadow ray
-			Point shadowInterPoint = new Point(0, 0, 0);
+			Vector3D shadowInterPoint = new Vector3D(0, 0, 0);
 			Shape shadowInterObject = computeClosestInterPoint(objectList, shadowRay, shadowInterPoint, null);
 
 			double interToShadowInterDist = 0;
 			if(shadowInterObject != null)
-				interToShadowInterDist = Point.distance(rayInterPoint, shadowInterPoint);
+				interToShadowInterDist = Vector3D.distance(rayInterPoint, shadowInterPoint);
 
 
 			if(shadowInterObject == null || interToShadowInterDist > interToLightDist || shadowInterObject.getMaterial().getIsTransparent())//Aucune intersection trouvée pour aller jusqu'à la lumière, on peut calculer la couleur directe de l'objet
 			{
 				finalColor = computeAndAddDiffuse(rayIntObjMaterial, finalColor, objectColor, shadowRayDir, normalAtIntersection, lightIntensity);
 				finalColor = computeAndAddSpecular(rayIntObjMaterial, finalColor, ray, shadowRayDir, normalAtIntersection, lightIntensity);
-				finalColor = computeAndAddReflections(renderScene, rayIntObjMaterial, finalColor, objectColor, ray, shadowRayDir, normalAtIntersection, interPointShift, depth);
-				finalColor = computeAndAddRefractions(renderScene, rayIntObjMaterial, finalColor, ray.getDirection(), normalAtIntersection, rayInterPoint, interPointShift, depth);
+				finalColor = computeAndAddReflections(x, y, renderScene, rayIntObjMaterial, finalColor, objectColor, ray, shadowRayDir, normalAtIntersection, interPointShift, depth);
+				finalColor = computeAndAddRefractions(x, y, renderScene, rayIntObjMaterial, finalColor, ray.getDirection(), normalAtIntersection, rayInterPoint, interPointShift, depth);
 			}
 			else//Une intersection a été trouvée et l'objet intersecté est entre la lumière et le départ du shadow ray. De plus, l'objet bloquant la vue à la lumière n'est pas transparent
 			{
 				if(rayIntObjMaterial.getReflectiveCoeff() > 0)//Si l'objet est réflectif, on va calculer le reflet de l'objet qui bloque le chemin à la lumière plutôt que de l'ombre
 				{
-					Color reflectionColor = computePixel(renderScene, new Ray(interPointShift, Vector.normalize(computeReflectionVector(normalAtIntersection, ray.getDirection()))), depth - 1);
+					Color reflectionColor = computePixel(x, y, renderScene, new Ray(interPointShift, Vector3D.normalize(computeReflectionVector(normalAtIntersection, ray.getDirection()))), depth - 1);
 
 					finalColor = ColorOperations.mulColor(reflectionColor, rayIntObjMaterial.getReflectiveCoeff());
 					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(objectColor, ambientLighting));
@@ -388,7 +389,7 @@ public class RayTracer
 		else//Le rayon n'a rien intersecté --> couleur du background / de la skybox
 			if(renderScene.hasSkybox())
 			{
-				Point UVCoords = SphereMaths.getUVCoord(Vector.v2p(ray.getDirection()));
+				Vector3D UVCoords = SphereMaths.getUVCoord(ray.getDirection());
 				
 				double uD = UVCoords.getX();
 				double vD = UVCoords.getY();
@@ -448,7 +449,7 @@ public class RayTracer
 	 *
 	 * @return Un point de cooordonnées (x, y, z) tel que x, y et z représentent les coordonnées du pixel dans la scène
 	 */
-	protected Point convPxCoToWorldCoords(double FOV, int x, int y, MatrixD ctwMatrix)
+	protected Vector3D convPxCoToWorldCoords(double FOV, int x, int y, MatrixD ctwMatrix)
 	{
 		double xWorld = (double)x;
 		double yWorld = (double)y;
@@ -465,8 +466,8 @@ public class RayTracer
 		yWorld = 1 - yWorld * 2;//Décalage des pixels dans [-1, 1]
 		yWorld *= demiHeightPlane;
 
-		Point pixelWorld = new Point(xWorld, yWorld, -1);
-		Point pixelWorldConverted = MatrixD.mulPoint(pixelWorld, ctwMatrix);
+		Vector3D pixelWorld = new Vector3D(xWorld, yWorld, -1);
+		Vector3D pixelWorldConverted = MatrixD.mulPoint(pixelWorld, ctwMatrix);
 
 		return pixelWorldConverted;
 	}
@@ -479,9 +480,9 @@ public class RayTracer
 	 *
 	 * @return R, le vecteur d'origine le point d'intersection et de direction la direction de réflexion calculée par cette méthode
 	 */
-	protected Vector computeReflectionVector(Vector normalToSurface, Vector rayDirection)
+	protected Vector3D computeReflectionVector(Vector3D normalToSurface, Vector3D rayDirection)
 	{
-		return Vector.sub(rayDirection, Vector.scalarMul(normalToSurface, Vector.dotProduct(normalToSurface, rayDirection)*2));
+		return Vector3D.sub(rayDirection, Vector3D.scalarMul(normalToSurface, Vector3D.dotProduct(normalToSurface, rayDirection)*2));
 	}
 
 	/*
@@ -493,20 +494,20 @@ public class RayTracer
 	 *  
 	 *  @return Retourne la direction du rayon réfracté
 	 */
-	protected Vector computeRefractedVector(Vector rayDirection, Vector normalAtIntersection, double specialMediumRefIndex)
+	protected Vector3D computeRefractedVector(Vector3D rayDirection, Vector3D normalAtIntersection, double specialMediumRefIndex)
 	{
 		double startRefractionIndex = AIR_REFRACTION_INDEX;
-		Vector newNormal = new Vector(0,0,0);
+		Vector3D newNormal = new Vector3D(0,0,0);
 		newNormal.copyIn(normalAtIntersection);
 		
-		if (Vector.dotProduct(rayDirection, normalAtIntersection) > 0)//Si on est à l'intérieur de l'objet, il faut échanger les deux indices de réfraction
+		if (Vector3D.dotProduct(rayDirection, normalAtIntersection) > 0)//Si on est à l'intérieur de l'objet, il faut échanger les deux indices de réfraction
 		{
-			newNormal = Vector.scalarMul(normalAtIntersection, -1); 
+			newNormal = Vector3D.scalarMul(normalAtIntersection, -1); 
 			startRefractionIndex = specialMediumRefIndex;
 			specialMediumRefIndex = AIR_REFRACTION_INDEX;
 		}
 		double eta = startRefractionIndex / specialMediumRefIndex;
-		double c1 = Vector.dotProduct(rayDirection, newNormal);
+		double c1 = Vector3D.dotProduct(rayDirection, newNormal);
 		if (c1 < 0) {
 			c1 = -c1;
 		}
@@ -514,13 +515,13 @@ public class RayTracer
 		
 		double inRootC2 = 1-eta*eta*Math.sin(thetaIncident)*Math.sin(thetaIncident);
 		if (inRootC2 < 0) {
-			return new Vector(0,0,0);
+			return new Vector3D(0,0,0);
 		}
 		double c2 = Math.sqrt(inRootC2);
 		
-		Vector leftPart = Vector.scalarMul(rayDirection, eta);
-		Vector rightPart = Vector.scalarMul(newNormal,eta*c1 - c2);
-		return  Vector.add(leftPart, rightPart);
+		Vector3D leftPart = Vector3D.scalarMul(rayDirection, eta);
+		Vector3D rightPart = Vector3D.scalarMul(newNormal,eta*c1 - c2);
+		return  Vector3D.add(leftPart, rightPart);
 	}
 	
 	/*
@@ -533,17 +534,17 @@ public class RayTracer
 	 * @return Retourne la proportion de lumière réfléchie par le matériau étant donne le rayon incident.
 	 * La proportion de lumière réfractée peut être déduite: réfractée = 1 - réfléchie
 	 */
-	protected double fresnel(Vector incidentRayDirection, Vector normalAtIntersection, double specialMediumRefIndex) 
+	protected double fresnel(Vector3D incidentRayDirection, Vector3D normalAtIntersection, double specialMediumRefIndex) 
 	{
 		double incomingRefractionIndex = AIR_REFRACTION_INDEX;
 		
-		if (Vector.dotProduct(incidentRayDirection, normalAtIntersection) > 0)//Le rayon est à l'intérieur de l'objet
+		if (Vector3D.dotProduct(incidentRayDirection, normalAtIntersection) > 0)//Le rayon est à l'intérieur de l'objet
 		{
 			incomingRefractionIndex = specialMediumRefIndex;
 			specialMediumRefIndex = AIR_REFRACTION_INDEX;
 		}
 		
-		double cosThetaIncident = Vector.dotProduct(incidentRayDirection, normalAtIntersection);
+		double cosThetaIncident = Vector3D.dotProduct(incidentRayDirection, normalAtIntersection);
 		cosThetaIncident = Math.abs(cosThetaIncident);
 		double sinThetaRefracted = Math.sin(Math.acos(cosThetaIncident)) * incomingRefractionIndex/specialMediumRefIndex;
 		double thetaRefracted = Math.asin(sinThetaRefracted);

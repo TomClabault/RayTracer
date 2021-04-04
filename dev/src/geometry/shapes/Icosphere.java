@@ -1,7 +1,7 @@
 package geometry.shapes;
 
 import materials.Material;
-import maths.Point;
+import maths.Vector3D;
 import geometry.ShapeTriangle;
 
 import java.util.ArrayList;
@@ -29,17 +29,17 @@ public class Icosphere extends ShapeTriangle
      */
 
 
-    //protected Point BottomPoint,Centre,TopPoint,Atop,Btop,Ctop,Dtop,Etop,Arot,Brot,Crot,Drot,Erot;
+    //protected Vector3D BottomPoint,Centre,TopPoint,Atop,Btop,Ctop,Dtop,Etop,Arot,Brot,Crot,Drot,Erot;
 
     //Disclaimer: Les codes ci-dessous ne sont pas totalement le fruit de mon travail, une petite partie est issue de ces sites:
     //La liste des points vient de: http://blog.coredumping.com/subdivision-of-icosahedrons/
     //La construction initiale d'icoshpere vient de: http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
 
-    protected Point depart,A,B,C,D,E,F,G,H,I,J,K,L;
+    protected Vector3D depart,A,B,C,D,E,F,G,H,I,J,K,L;
     protected double t = ((1 + Math.sqrt(5))/2);
     protected double size;
 
-    public Icosphere(Point depart, double size, Material material)
+    public Icosphere(Vector3D depart, double size, Material material)
     {
         this.depart = depart;
         this.size = size;
@@ -51,21 +51,21 @@ public class Icosphere extends ShapeTriangle
         double zdepart = this.depart.getZ();
 
         //On va construire des Points
-        //ArrayList<Point> listePoints = new ArrayList<Point>();
-        this.A = new Point(-size + xdepart, t*size + ydepart,0 + zdepart);
-        this.B = new Point(size + xdepart,t*size + ydepart,0 + zdepart);
-        this.C = new Point(-size + xdepart,-t*size + ydepart,0 + zdepart);
-        this.D = new Point(size + xdepart,-t*size + ydepart,0 + zdepart);
+        //ArrayList<Vector3D> listePoints = new ArrayList<Vector3D>();
+        this.A = new Vector3D(-size + xdepart, t*size + ydepart,0 + zdepart);
+        this.B = new Vector3D(size + xdepart,t*size + ydepart,0 + zdepart);
+        this.C = new Vector3D(-size + xdepart,-t*size + ydepart,0 + zdepart);
+        this.D = new Vector3D(size + xdepart,-t*size + ydepart,0 + zdepart);
 
-        this.E = new Point(0 + xdepart,-size + ydepart,t*size + zdepart);
-        this.F = new Point(0 + xdepart,size + ydepart,t*size + zdepart);
-        this.G = new Point(0 + xdepart,-size + ydepart,-t*size + zdepart);
-        this.H = new Point(0 + xdepart,size + ydepart,-t*size + zdepart);
+        this.E = new Vector3D(0 + xdepart,-size + ydepart,t*size + zdepart);
+        this.F = new Vector3D(0 + xdepart,size + ydepart,t*size + zdepart);
+        this.G = new Vector3D(0 + xdepart,-size + ydepart,-t*size + zdepart);
+        this.H = new Vector3D(0 + xdepart,size + ydepart,-t*size + zdepart);
 
-        this.I = new Point(t*size + xdepart,0 + ydepart,-size + zdepart);
-        this.J = new Point(t*size + xdepart,0 + ydepart,size + zdepart);
-        this.K = new Point(-t*size + xdepart,0 + ydepart,-size + zdepart);
-        this.L = new Point(-t*size + xdepart,0 + ydepart,size + zdepart);
+        this.I = new Vector3D(t*size + xdepart,0 + ydepart,-size + zdepart);
+        this.J = new Vector3D(t*size + xdepart,0 + ydepart,size + zdepart);
+        this.K = new Vector3D(-t*size + xdepart,0 + ydepart,-size + zdepart);
+        this.L = new Vector3D(-t*size + xdepart,0 + ydepart,size + zdepart);
 
 
         //On va construire des triangles avec les points
@@ -120,21 +120,21 @@ public class Icosphere extends ShapeTriangle
     {
         /*
         //On va construire des Points
-        //ArrayList<Point> listePoints = new ArrayList<Point>();
-        Point A = new Point(-size, t*size,0);
-        Point B = new Point(size,t*size,0);
-        Point C = new Point(-size,-t*size,0);
-        Point D = new Point(size,-t*size,0);
+        //ArrayList<Vector3D> listePoints = new ArrayList<Vector3D>();
+        Vector3D A = new Vector3D(-size, t*size,0);
+        Vector3D B = new Vector3D(size,t*size,0);
+        Vector3D C = new Vector3D(-size,-t*size,0);
+        Vector3D D = new Vector3D(size,-t*size,0);
 
-        Point E = new Point(0,-size,t*size);
-        Point F = new Point(0,size,t*size);
-        Point G = new Point(0,-size,-t*size);
-        Point H = new Point(0,size,-t*size);
+        Vector3D E = new Vector3D(0,-size,t*size);
+        Vector3D F = new Vector3D(0,size,t*size);
+        Vector3D G = new Vector3D(0,-size,-t*size);
+        Vector3D H = new Vector3D(0,size,-t*size);
 
-        Point I = new Point(t*size,0,-size);
-        Point J = new Point(t*size,0,size);
-        Point K = new Point(-t*size,0,-size);
-        Point L = new Point(-t*size,0,size);
+        Vector3D I = new Vector3D(t*size,0,-size);
+        Vector3D J = new Vector3D(t*size,0,size);
+        Vector3D K = new Vector3D(-t*size,0,-size);
+        Vector3D L = new Vector3D(-t*size,0,size);
         */
 
 
@@ -195,7 +195,7 @@ public class Icosphere extends ShapeTriangle
 	 * @link{geometry.shapes.Shape#getUVCoords}
 	 */
 	@Override
-	public Point getUVCoords(Point point)
+	public Vector3D getUVCoords(Vector3D point)
 	{
 		return null;
 	}
