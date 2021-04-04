@@ -73,21 +73,20 @@ public class EtatTriangle implements EtatToken
                                 context.callNextToken();
                             }
                         }
-
+                        triangleCoord = false;
                     }
-                    triangleCoord = false;
-                    state = Trianglecontent.ENDING_CHEVRON;
+
                     if(!color)
                         coordNb++;
                     else // color == true
                     {
+                        System.out.println(context.getStreamTokenizer());
                         for (int i = 0; i < 3; i++) {
-                            context.callNextToken(); // la virgule
-                            context.callNextToken();
                             list.add(String.valueOf(st.nval));
+                            context.callNextToken(); // la virgule
                         }
                     }
-
+                    state = Trianglecontent.ENDING_CHEVRON;
                     break;
                 }
                 case ENDING_CHEVRON:
@@ -146,7 +145,10 @@ public class EtatTriangle implements EtatToken
                             list.add("color"); //équivaut à figure.setFinish();
                             nextToken = context.callNextToken();
                             if((char)nextToken == '<')
+                            {
                                 state = Trianglecontent.OPENING_CHEVRON;
+                                break;
+                            }
                             else
                                 list.add(String.valueOf(context.getNumberValue()));
                             context.callNextToken(); // skip color value
