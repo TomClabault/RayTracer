@@ -18,6 +18,7 @@ dev/RayTracer.jar
 #Fichiers générés par la compilation du rapport latex
 Rapport RayTracer.pdf
 Rapport RayTracer.synctex.gz
+*.dia~
 
 #Fichiers geogebra
 *.ggb
