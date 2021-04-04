@@ -42,6 +42,7 @@ public abstract class EtatSpherePlane implements EtatToken
                 case ENDING_BRACKET:
                 {
                     context.callNextToken();
+                    System.out.println("endoing bracket : " + context.getStreamTokenizer());
                     bracketNb--;
                     if(bracketNb == 0)
                     {
@@ -73,11 +74,11 @@ public abstract class EtatSpherePlane implements EtatToken
                     }
                     break;
                 }
-                case OUTSIDE:
+                /*case OUTSIDE:
                 {
                     state = SpherePlanecontent.OUTSIDE;
                     break;
-                }
+                }*/
             }
         }
         createInstance(list);

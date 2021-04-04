@@ -5,6 +5,11 @@ import java.io.*;
 
 public class Automat
 {
+    /*TODO
+    -retirer les cases outside dans les sous-classes (car inutiles)
+    -debug entrée dans le bloc box dans Automat
+     */
+
     private EtatToken etatToken;
     private StreamTokenizer streamTokenizer;
     private State currentState;
