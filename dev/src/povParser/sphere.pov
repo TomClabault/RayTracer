@@ -1,11 +1,11 @@
-/*sphere { <1.5,0.7,1>, 0.7
-  pigment { color rgb 1 }
+sphere { <0.5, 1.5, 2.5>, 0.7
+  pigment { color rgb 1}
   finish {
     ambient 0 diffuse 0
-    specular 0.7  roughness 0.01
-    reflection { 0.7 metallic }
+    specular 0.7  //roughness 0.01
+    //reflection { 0.7 metallic }
   }
-}*/
+}
 
 triangle
 {
@@ -20,7 +20,7 @@ triangle
 
 plane
 {
-    <0, 0, 0> 1
+    <0, 0, 0>, 1
 }
 
 box
