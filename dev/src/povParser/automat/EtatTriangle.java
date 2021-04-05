@@ -271,12 +271,6 @@ public class EtatTriangle implements EtatToken
                     }
                     break;
                 }
-
-                case OUTSIDE:
-                {
-                    state = Trianglecontent.OUTSIDE;
-                    break;
-                }
             }
         }
         System.out.println(list);
