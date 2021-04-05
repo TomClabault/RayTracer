@@ -19,7 +19,7 @@ public class Triangle extends ShapeUtil implements Shape
 		this.C = C;
 		this.planeNormal = Vector3D.normalize(Vector3D.crossProduct(new Vector3D(A, B), new Vector3D(A, C)));
 		
-		this.material = material;
+		super.material = material;
 	}
 
 	public Vector3D getA() {return this.A;}
@@ -90,7 +90,7 @@ public class Triangle extends ShapeUtil implements Shape
 		if(Math.abs(denom) < 0.0000001d)//Si la normale du plan et la direction du rayon sont perpendiculaires, le plan et le rayon sont parallèles, pas d'intersection
 			return null;
 		
-		double sup = Vector3D.dotProduct(Vector3D.sub(ray.getOrigin(), this.A), planeNormal);//(Vector.dotProduct(this.planeNormal, ray.getOriginV()) + planeD);
+		double sup = Vector3D.dotProduct(Vector3D.sub(ray.getOrigin(), this.A), planeNormal);
 		double coeffVectorPoint = sup/denom;
 		
 		if(coeffVectorPoint < 0)//L'intersection est dans la direction opposée du rayon, c'est à dire derrière la caméra
@@ -119,16 +119,27 @@ public class Triangle extends ShapeUtil implements Shape
 		return null;
 	}
 	
+	/*
+	 * Permet de redéfinir le point A du triangle
+	 * 
+	 * @param A Le nouveau point A du triangle
+	 */
 	public void setA(Vector3D A)
 	{
 		this.A = A;
 	}
 	
+	/*
+	 * Analogue à @link{geometry.shapes.Triangle#setA}
+	 */
 	public void setB(Vector3D B)
 	{
 		this.B = B;
 	}
 	
+	/*
+	 * Analogue à @link{geometry.shapes.Triangle#setA}
+	 */
 	public void setC(Vector3D C)
 	{
 		this.C = C;
