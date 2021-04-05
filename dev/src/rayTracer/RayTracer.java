@@ -184,7 +184,7 @@ public class RayTracer
 	 */
 	protected Color computeAndAddRefractions(int x, int y, RayTracingScene renderScene, Material rayIntObjMaterial, Color finalColorBefore, Vector3D incidentRayDirection, Vector3D normalAtIntersection, Vector3D rayInterPoint, Vector3D interPointShift, int depth)
 	{
-		if (rayIntObjMaterial.getIsTransparent())//L'objet est réfractif 
+		if (rayIntObjMaterial.getRefractionIndex() != 0)//L'objet est réfractif 
 		{
 			double fr = fresnel(incidentRayDirection, normalAtIntersection, rayIntObjMaterial.getRefractionIndex());
 			double ft = 1 - fr;
@@ -198,9 +198,13 @@ public class RayTracer
 				refractedRay = new Ray(Vector3D.add(rayInterPoint, Vector3D.scalarMul(incidentRayDirection, 0.0001)), refractedRayDir);
 				reflectedRay = new Ray(Vector3D.add(rayInterPoint, Vector3D.scalarMul(incidentRayDirection, -0.0001)), computeReflectionVector(normalAtIntersection, incidentRayDirection));
 			}
+			
 			Color refractedColor = Color.rgb(0,0,0);
-			if (! refractedRayDir.equals(new Vector3D(0,0,0)) ) {
-				refractedColor = computePixel(x, y, renderScene, refractedRay, depth -1);
+			if(rayIntObjMaterial.getIsTransparent())//L'objet est transparent, on va donc calculer les rayons réfractés à l'intérieur de l'objet
+			{
+				if (! refractedRayDir.equals(new Vector3D(0,0,0)) ) {
+					refractedColor = computePixel(x, y, renderScene, refractedRay, depth -1);
+				}
 			}
 			
 			Color reflectedColor = computePixel(x, y, renderScene, reflectedRay, depth -1);
