@@ -6,13 +6,15 @@ import java.io.*;
 public class Automat
 {
     /*TODO
-    -retirer les cases outside dans les sous-classes (car inutiles)
-    -debug entrée dans le bloc box dans Automat
-    -trouver un moyen de factoriser les object modifiers (finish et pigment) de chaque sous classe
+    -trouver un moyen de factoriser les object modifiers (finish et pigment) de chaque sous classe (classe mère des attributs)
     -rajouter le parsing de couleur sous forme <r, g, b> (voir EtatTriangle) pour chaque sous classe (puis factoriser)
     -remplacer les add de liste par l'instanciation de la bonne classe et ses setters
     -réparer EtatPlane (sphere plane) probleme de boucle infinie ?
     -réparer problème sémantique dans etatsphereplane (ending chevron utilisé après <, , > d <--- après le d alors que ce n'est n'est pas un ending chevron
+    -parse les lumières (une seule: Point Light)
+    -parse les textures spéciales
+    -parse cheker dans pigment
+    -parse camera (attributs: locate, rotate, translate, look_at)
      */
 
     private EtatToken etatToken;
@@ -101,7 +103,6 @@ public class Automat
 
     public State getState()
     {
-
         if(this.streamTokenizer.sval.equals("sphere"))
         {
             return State.SPHERE;

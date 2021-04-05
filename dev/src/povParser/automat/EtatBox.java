@@ -12,7 +12,6 @@ enum Boxcontent
     OUTSIDE,
 }
 
-
 public class EtatBox implements EtatToken
 {
     @Override
