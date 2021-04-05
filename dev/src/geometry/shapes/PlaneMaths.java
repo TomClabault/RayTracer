@@ -3,17 +3,16 @@ package geometry.shapes;
 import materials.Material;
 import materials.MatteMaterial;
 import geometry.Shape;
+import geometry.ShapeUtil;
 import javafx.scene.paint.Color;
 import maths.Vector3D;
 import maths.Ray;
 
-public class PlaneMaths implements Shape
+public class PlaneMaths extends ShapeUtil implements Shape
 {
 	//Equation de plan: (p - point).normal = 0
 	private Vector3D normal;//partie (A, B, C) de l'équation
 	private Vector3D point;//partie D de l'équation
-	
-	private Material material;
 	
 	/*
 	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan
@@ -61,12 +60,7 @@ public class PlaneMaths implements Shape
 		this.normal = normal;
 		this.point = point;
 		
-		this.material = material;
-	}
-	
-	public Material getMaterial() 
-	{
-		return this.material;
+		super.material = material;
 	}
 	
 	/*

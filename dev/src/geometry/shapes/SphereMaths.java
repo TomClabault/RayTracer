@@ -3,6 +3,7 @@ package geometry.shapes;
 import materials.Material;
 import materials.MatteMaterial;
 import geometry.Shape;
+import geometry.ShapeUtil;
 import javafx.scene.paint.Color;
 import maths.Vector3D;
 import maths.Ray;
@@ -11,12 +12,10 @@ import maths.Ray;
  * Classe représentant une sphère décrite par son centre ainsi que son rayon. Représente la "version" mathématique d'une sphère. 
  * Pour une représentation polygonale d'une sphère, voir SphereTriangle
  */
-public class SphereMaths implements Shape
+public class SphereMaths extends ShapeUtil implements Shape
 {
-	Vector3D center;
-	double radius;
-
-	Material material;
+	private Vector3D center;
+	private double radius;
 	
 	/*
 	 * Crée une sphère blanche à partie de son centre et de son rayon
@@ -41,7 +40,7 @@ public class SphereMaths implements Shape
 		this.center = center;
 		this.radius = radius;
 		
-		this.material = material;
+		super.material = material;
 	}
 	
 	/*
@@ -52,16 +51,6 @@ public class SphereMaths implements Shape
 	public Vector3D getCenter()
 	{
 		return this.center;
-	}
-	
-	/*
-	 * Permet d'obtenir le matériau de la sphère
-	 * 
-	 * @return Matériau de la sphère
-	 */
-	public Material getMaterial() 
-	{
-		return this.material;
 	}
 	
 	/*
@@ -181,17 +170,22 @@ public class SphereMaths implements Shape
 		
 		return intersection;
 	}
-
+	
+	/*
+	 * Permet de redéfinir la position du centre de la sphère
+	 * 
+	 * @param center Le nouveau centre de la sphère dans la scène
+	 */
 	public void setCenter(Vector3D center) 
 	{
 		this.center = center;
 	}
 	
-	public void setMaterial(Material material) 
-	{
-		this.material = material;
-	}
-	
+	/*
+	 * Permet de redéfinir le rayon de la sphère
+	 * 
+	 * @param radius Le nouveau rayon de la sphère
+	 */
 	public void setRadius(double radius) 
 	{
 		this.radius = radius;

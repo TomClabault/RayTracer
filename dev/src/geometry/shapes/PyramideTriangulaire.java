@@ -2,11 +2,11 @@ package geometry.shapes;
 
 import materials.Material;
 import maths.Vector3D;
-import geometry.ShapeTriangle;
+import geometry.ShapeUtil;
 
 import java.util.ArrayList;
 
-public class PyramideTriangulaire extends ShapeTriangle
+public class PyramideTriangulaire extends ShapeUtil
 {
 
     /*
@@ -33,15 +33,13 @@ public class PyramideTriangulaire extends ShapeTriangle
 
      */
 
-    protected double height,width;
-    protected Vector3D A,B,C,D;
+	private Vector3D A,B,C,D;
 
 
     /* Le constructeur prendra 4 parametres sous la forme de Vector3D; Vector3D A, Vector3D B, Vector3D C, Vector3D D
     *  Vector3D A, B et C sont le sol de la pyramide triangulaire
     *  Vector3D D sera le toit de la pyramide
-    *  Tout est deja explique sur le petit dessin au-dessus*/
-
+    *  Tout est deja explique sur le schéma au-dessus*/
     public PyramideTriangulaire(Vector3D A, Vector3D B, Vector3D C, Vector3D D, Material material)
     {
         this.A = A;
@@ -49,7 +47,7 @@ public class PyramideTriangulaire extends ShapeTriangle
         this.C = C;
         this.D = D;
 
-        this.material = material;
+        super.material = material;
 
         this.buildPyramide();
     }
@@ -78,7 +76,7 @@ public class PyramideTriangulaire extends ShapeTriangle
         this.C.setZ(this.A.getZ() + width);
         */
 
-        this.material = material;
+        super.material = material;
 
         this.buildPyramide();
     }

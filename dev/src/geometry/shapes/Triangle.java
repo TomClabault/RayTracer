@@ -1,17 +1,16 @@
 package geometry.shapes;
 
 import geometry.Shape;
+import geometry.ShapeUtil;
 import materials.Material;
 import maths.Vector3D;
 import maths.Ray;
 
-public class Triangle implements Shape
+public class Triangle extends ShapeUtil implements Shape
 {
-	Vector3D A, B, C;
+	private Vector3D A, B, C;
 	
-	Vector3D planeNormal;//Vecteur normal du plan formé par les 3 points du triangle
-	
-	Material material;
+	private Vector3D planeNormal;//Vecteur normal du plan formé par les 3 points du triangle
 	
 	public Triangle(Vector3D A, Vector3D B, Vector3D C, Material material)
 	{
@@ -109,11 +108,6 @@ public class Triangle implements Shape
 		}
 		else//Cela veut dire que le rayon intersecte le plan formé par le triangle mais pas le triangle lui même
 			return null;
-	}
-
-	public Material getMaterial()
-	{
-		return this.material;
 	}
 	
 	/*
