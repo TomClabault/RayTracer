@@ -30,7 +30,7 @@
 \definecolor{javagreen}{rgb}{0.25,0.5,0.35} % comments
 \definecolor{javapurple}{rgb}{0.5,0,0.35} % keywords
 \definecolor{javadocblue}{rgb}{0.25,0.35,0.75} % javadoc
- 
+
 \lstset
 {
 language=Java,
@@ -95,6 +95,10 @@ showstringspaces=false}
 
 \subfile{latex/RT/mouvementsCam.tex}
 
+    \subsection{L'interface graphique}
+
+    \input{latex/render.javafx/GUI.tex}
+
 \section{Structuration du projet}
 \subsection{Les packages}
 \subsubsection{Liés au Ray Tracer}
@@ -120,7 +124,7 @@ showstringspaces=false}
 		\subsection{Configuration d'une caméra, d'une scène et de rayons}
 		\begin{figure}[h!]
 			\adjustbox{center}{\includegraphics[width=1.1\textwidth]{img/rt/repCam2Rayonsv2.png}}
-		
+
 			\caption{Des rayons sont tirés depuis la caméra dans sa direction de regard. Nous cherchons les points d'intersection avec les objets de la scène}
 		\end{figure}
 		\FloatBarrier
@@ -129,7 +133,7 @@ showstringspaces=false}
 		\subsection{Le principe récursif des réflexions}
 		\begin{figure}[!h]
 			\adjustbox{center}{\includegraphics[width=1.1\textwidth]{img/rt/reflectionsSchema.png}}
-		
+
 			\caption{Exemple de rebonds successifs des rayons jusqu'à un objet non réfléchissant}
 			\label{reflectionsSchema}
 		\end{figure}

@@ -27,3 +27,14 @@ rapport v2/img/rt/photoshop
 
 #Image du rendu généré automatiquement
 RenderOutput.png
+
+#Fichier Latex inutiles
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.toc
+*.pdf
