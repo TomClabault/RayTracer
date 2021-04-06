@@ -220,4 +220,12 @@ public class Material
 	{
 		this.isTransparent = isTransparent;
 	}
+
+	@Override
+	public String toString() {
+		return "Material:"
+				+ " [color=" + color + ", diffuseCoeff=" + diffuseCoeff + ", reflectiveCoeff=" + reflectiveCoeff
+				+ ", specularCoeff=" + specularCoeff + ", shininess=" + shininess + ", isTransparent=" + isTransparent
+				+ ", refractionIndex=" + refractionIndex + ", proceduralTexture=" + proceduralTexture + "]";
+	}
 }
