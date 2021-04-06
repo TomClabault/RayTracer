@@ -2,12 +2,13 @@ package geometry.shapes;
 
 import materials.Material;
 import maths.Vector3D;
-import geometry.ShapeTriangle;
+import geometry.ShapeUtil;
 
 import java.util.ArrayList;
 
 
-public class Pyramide extends ShapeTriangle {
+public class Pyramide extends ShapeUtil
+{
     /*Imagine une pyramide ABCDE
 
 
@@ -30,8 +31,7 @@ public class Pyramide extends ShapeTriangle {
 
      */
 
-    protected Vector3D A, B, C, D, E;
-    protected double height, width;
+	private Vector3D A, B, C, D, E;
 
     public Pyramide(Vector3D A, Vector3D B, Vector3D C, Vector3D D, Vector3D E, Material material) {
         this.A = A;
@@ -40,7 +40,7 @@ public class Pyramide extends ShapeTriangle {
         this.D = D;
         this.E = E;
 
-        this.material = material;
+        super.material = material;
 
         buildPyramide();
     }
@@ -74,7 +74,7 @@ public class Pyramide extends ShapeTriangle {
         this.E.setZ(this.A.getZ() + width/2);
         */
 
-        this.material = material;
+        super.material = material;
 
         buildPyramide();
 

@@ -61,7 +61,7 @@ public class ImageWriter {
         pane.getChildren().add(imageView);
         this.pane = pane;
 
-        WindowTimer windowTimer = new WindowTimer(mainAppScene, this.MyGlobalScene, this.pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 8));
+        WindowTimer windowTimer = new WindowTimer(this.MyGlobalScene, this.pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 8));
         this.windowTimer = windowTimer;
 
         CameraTimer cameraTimer = new CameraTimer(this.mainAppScene, this.MyGlobalScene);

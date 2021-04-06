@@ -26,7 +26,7 @@ public class Material
 	private boolean isTransparent;
 	private double refractionIndex;
 	
-	ProceduralTexture proceduralTexture;//Attribut special qui spécifie la texture du matériau. Utilisé pour le damier par exemple
+	private ProceduralTexture proceduralTexture;//Attribut special qui spécifie la texture du matériau. Utilisé pour le damier par exemple
 	
 	/*
 	 * Crée un matériau de A à Z
@@ -219,5 +219,13 @@ public class Material
 	public void setTransparent(boolean isTransparent) 
 	{
 		this.isTransparent = isTransparent;
+	}
+
+	@Override
+	public String toString() {
+		return "Material:"
+				+ " [color=" + color + ", diffuseCoeff=" + diffuseCoeff + ", reflectiveCoeff=" + reflectiveCoeff
+				+ ", specularCoeff=" + specularCoeff + ", shininess=" + shininess + ", isTransparent=" + isTransparent
+				+ ", refractionIndex=" + refractionIndex + ", proceduralTexture=" + proceduralTexture + "]";
 	}
 }

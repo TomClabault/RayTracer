@@ -1,17 +1,16 @@
 package geometry.shapes;
 
 import geometry.Shape;
+import geometry.ShapeUtil;
 import materials.Material;
 import maths.Vector3D;
 import maths.Ray;
 
-public class Triangle implements Shape
+public class Triangle extends ShapeUtil implements Shape
 {
-	Vector3D A, B, C;
+	private Vector3D A, B, C;
 	
-	Vector3D planeNormal;//Vecteur normal du plan formé par les 3 points du triangle
-	
-	Material material;
+	private Vector3D planeNormal;//Vecteur normal du plan formé par les 3 points du triangle
 	
 	public Triangle(Vector3D A, Vector3D B, Vector3D C, Material material)
 	{
@@ -20,7 +19,7 @@ public class Triangle implements Shape
 		this.C = C;
 		this.planeNormal = Vector3D.normalize(Vector3D.crossProduct(new Vector3D(A, B), new Vector3D(A, C)));
 		
-		this.material = material;
+		super.material = material;
 	}
 
 	public Vector3D getA() {return this.A;}
@@ -91,7 +90,7 @@ public class Triangle implements Shape
 		if(Math.abs(denom) < 0.0000001d)//Si la normale du plan et la direction du rayon sont perpendiculaires, le plan et le rayon sont parallèles, pas d'intersection
 			return null;
 		
-		double sup = Vector3D.dotProduct(Vector3D.sub(ray.getOrigin(), this.A), planeNormal);//(Vector.dotProduct(this.planeNormal, ray.getOriginV()) + planeD);
+		double sup = Vector3D.dotProduct(Vector3D.sub(ray.getOrigin(), this.A), planeNormal);
 		double coeffVectorPoint = sup/denom;
 		
 		if(coeffVectorPoint < 0)//L'intersection est dans la direction opposée du rayon, c'est à dire derrière la caméra
@@ -110,11 +109,6 @@ public class Triangle implements Shape
 		else//Cela veut dire que le rayon intersecte le plan formé par le triangle mais pas le triangle lui même
 			return null;
 	}
-
-	public Material getMaterial()
-	{
-		return this.material;
-	}
 	
 	/*
 	 * @link{geometry.shapes.Shape#getUVCoords}
@@ -125,16 +119,27 @@ public class Triangle implements Shape
 		return null;
 	}
 	
+	/*
+	 * Permet de redéfinir le point A du triangle
+	 * 
+	 * @param A Le nouveau point A du triangle
+	 */
 	public void setA(Vector3D A)
 	{
 		this.A = A;
 	}
 	
+	/*
+	 * Analogue à @link{geometry.shapes.Triangle#setA}
+	 */
 	public void setB(Vector3D B)
 	{
 		this.B = B;
 	}
 	
+	/*
+	 * Analogue à @link{geometry.shapes.Triangle#setA}
+	 */
 	public void setC(Vector3D C)
 	{
 		this.C = C;

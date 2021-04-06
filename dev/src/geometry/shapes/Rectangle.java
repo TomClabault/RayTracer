@@ -4,16 +4,16 @@ import materials.Material;
 import materials.MatteMaterial;
 import javafx.scene.paint.Color;
 import maths.Vector3D;
-import geometry.ShapeTriangle;
+import geometry.ShapeUtil;
 
 import java.util.ArrayList;
 
 
-public class Rectangle extends ShapeTriangle
+public class Rectangle extends ShapeUtil
 {
 
-	protected double height,width,length,volume;
-	protected Vector3D A,B,C,D,E,F,G,H;
+	private double height,width,length;
+	private Vector3D A,B,C,D,E,F,G,H;
 
 	/*
 
@@ -47,7 +47,7 @@ public class Rectangle extends ShapeTriangle
 		this.length = this.G.getX() - this.A.getX();
 		this.width = this.G.getZ() - this.A.getZ();
 		this.height = this.G.getY() - this.A.getY();
-		this.material = material;
+		super.material = material;
 		
 		this.buildRectangle();
 	}
@@ -62,9 +62,8 @@ public class Rectangle extends ShapeTriangle
 		this.G.setX(this.A.getX() + this.length);
 		this.G.setZ(this.A.getZ() + this.width);
 		this.G.setY(this.A.getY() + this.height);
-		this.volume = this.length * this.height * this.width;
 
-		this.material = new MatteMaterial(Color.rgb(200, 200, 200));
+		super.material = new MatteMaterial(Color.rgb(200, 200, 200));
 		this.buildRectangle();
 	}
 
