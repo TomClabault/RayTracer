@@ -1,5 +1,7 @@
 package render;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -30,29 +32,40 @@ public class Toolbox {
 		Stage stage = new Stage();
 		VBox root = new VBox();
 		Scene scene = new Scene(root);
-        scene.getStylesheets().add(SetSizeWindow.class.getResource("style/window.css").toExternalForm()); // TODO ajouter css
+        scene.getStylesheets().add(SetSizeWindow.class.getResource("style/window.css").toExternalForm());
         stage.setScene(scene);
         stage.setTitle("ToolBox");
         
         TextField saveTextField = new TextField("Chemin d'enregistrement du rendu");
         Button saveButton = new Button("Save");
+        
         Label resolutionLabel = new Label("Résolution de la scène");
         
         HBox resolutionHbox = new HBox();
-        TextField WidthSceneRes = new TextField("Width");
-        TextField HeightSceneRes = new TextField("Height");
-        resolutionHbox.getChildren().addAll(WidthSceneRes, HeightSceneRes);
+        TextField widthSceneRes = new TextField("Width");
+        TextField heightSceneRes = new TextField("Height");
+        resolutionHbox.getChildren().addAll(widthSceneRes, heightSceneRes);
+        
+        Button applyResButton = new Button("Appliquer");
+        
         
         Label depthLabel = new Label();
         Slider depthSlider = new Slider(0,10,1);
         
-        root.getChildren().addAll(saveTextField, saveButton, resolutionLabel, resolutionHbox, depthLabel, depthSlider);
+        root.getChildren().addAll(saveTextField, saveButton, resolutionLabel, resolutionHbox, applyResButton, depthLabel, depthSlider);
+        
+        applyResButton.setOnAction(new EventHandler<ActionEvent>() 
+    	{
+            @Override
+            public void handle(ActionEvent event) {
+        		if (Integer.parseInt(widthSceneRes.getText()) < 0 || Integer.parseInt(heightSceneRes.getText()) < 0) {
+					throw new NumberFormatException();
+				}
+        		MainApp.HEIGHT = Integer.parseInt(heightSceneRes.getText());
+                MainApp.WIDTH = Integer.parseInt(widthSceneRes.getText());
+            }
+        });
         
         stage.show();
-        
-        
-        
-		
-		
 	}
 }
