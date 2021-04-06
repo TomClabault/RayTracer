@@ -16,7 +16,7 @@ public class SetSizeWindow
         Stage stage = new Stage();
         GridPane root = new GridPane();
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(SetSizeWindow.class.getResource("style/setSizeWindow.css").toExternalForm());
+        scene.getStylesheets().add(SetSizeWindow.class.getResource("style/window.css").toExternalForm());
 
         stage.setScene(scene);
         stage.setTitle("Selection de la taille de rendu");
@@ -28,8 +28,6 @@ public class SetSizeWindow
         CheckBox checkbox = new CheckBox("Mode automatique");
         Button validateButton = new Button("Valider");
         Button cancelButton = new Button("Annuler");
-
-        //gridPane.setPadding(new Insets(2));
 
         root.add(textLargeur, 0, 0);
         root.add(inputLargeur, 1, 0);

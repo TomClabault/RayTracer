@@ -30,7 +30,7 @@ public class Toolbox {
 		Stage stage = new Stage();
 		VBox root = new VBox();
 		Scene scene = new Scene(root);
-        //scene.getStylesheets().add(SetSizeWindow.class.getResource("style/setSizeWindow.css").toExternalForm()); // TODO ajouter css
+        scene.getStylesheets().add(SetSizeWindow.class.getResource("style/window.css").toExternalForm()); // TODO ajouter css
         stage.setScene(scene);
         stage.setTitle("ToolBox");
         
