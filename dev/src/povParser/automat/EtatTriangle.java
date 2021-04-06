@@ -1,5 +1,7 @@
 package povParser.automat;
 
+import materials.Material;
+
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 
@@ -10,14 +12,10 @@ enum Trianglecontent
     OPENING_CHEVRON,
     ENDING_CHEVRON,
     OUTSIDE,
-    FINISH,
-    PIGMENT, //color of the figure
-    AMBIENT,
-    DIFFUSE,
-    SPECULAR,
+    ATTRIBUTE;
 }
 
-public class EtatTriangle implements EtatToken
+public class EtatTriangle extends EtatUtil implements EtatToken
 {
     @Override
     public void action(Automat context)
@@ -94,14 +92,7 @@ public class EtatTriangle implements EtatToken
                     context.callNextToken(); //passe le chevron fermant
                     if(context.isCurrentTokenAWord())
                     {
-                        if(context.currentWord("finish"))
-                        {
-                            state = Trianglecontent.FINISH;
-                        }
-                        else if(context.currentWord("pigment"))
-                        {
-                            state = Trianglecontent.PIGMENT;
-                        }
+                        state = Trianglecontent.ATTRIBUTE;
                     }
                     else
                     {
@@ -120,155 +111,16 @@ public class EtatTriangle implements EtatToken
                     context.callNextToken();
                     if(context.isCurrentTokenAWord())
                     {
-                        if(context.currentWord("pigment"))
-                        {
-                            state = Trianglecontent.PIGMENT;
-                        }
-                        else if(context.currentWord("finish"))
-                        {
-                            state = Trianglecontent.FINISH;
-                        }
+                        state = Trianglecontent.ATTRIBUTE;
                     }
                     break;
                 }
 
-                case PIGMENT:
+
+                case ATTRIBUTE:
                 {
-                    context.callNextToken(); //skip pigment
-                    context.callNextToken(); //skip '{'
-                    if (context.currentWord("color"))
-                    {
-                        color = true;
-                        context.callNextToken();
-                        if(context.currentWord("rgb"))
-                        {
-                            list.add("color"); //équivaut à figure.setFinish();
-                            nextToken = context.callNextToken();
-                            if((char)nextToken == '<')
-                            {
-                                state = Trianglecontent.OPENING_CHEVRON;
-                                break;
-                            }
-                            else
-                                list.add(String.valueOf(context.getNumberValue()));
-                            context.callNextToken(); // skip color value
-                            context.callNextToken(); // skip '}'
-                            if(context.isCurrentTokenAWord())
-                            {
-                                if(context.currentWord("finish"))
-                                {
-                                    state = Trianglecontent.FINISH;
-                                }
-                            }
-                            else
-                                state = Trianglecontent.ENDING_BRACKET;
-
-                        }
-                    }
-                    break;
-                }
-
-                case FINISH:
-                {
-                    context.callNextToken(); //skip finish
-                    context.callNextToken(); //skip '{'
-                    if(context.isCurrentTokenAWord())
-                    {
-                        if(context.currentWord("ambient"))
-                        {
-                            state = Trianglecontent.AMBIENT;
-                        }
-                        else if(context.currentWord("diffuse"))
-                        {
-                            state = Trianglecontent.DIFFUSE;
-                        }
-                        else if(context.currentWord("specular"))
-                        {
-                            state = Trianglecontent.SPECULAR;
-                        }
-                    }
-                    break;
-                }
-
-                case AMBIENT:
-                {
-                    list.add("ambient");
-                    context.callNextToken(); //skip ambient
-
-                    if(context.isCurrentTokenAWord())
-                    {
-                        if(context.currentWord("rgb"))
-                        {
-                            context.callNextToken();
-                            state = Trianglecontent.OPENING_CHEVRON;
-                        }
-                    }
-                    else
-                    {
-                        list.add(String.valueOf(context.getNumberValue()));
-                    }
-
-                    context.callNextToken();
-                    if(context.isCurrentTokenAWord())
-                    {
-                        if (context.currentWord("diffuse"))
-                        {
-                        state = Trianglecontent.DIFFUSE;
-                        }
-                        else if(context.currentWord("specular"))
-                        {
-                            state = Trianglecontent.SPECULAR;
-                        }
-                    }
-                    else
-                        state = Trianglecontent.ENDING_BRACKET;
-                    break;
-                }
-
-                case DIFFUSE:
-                {
-                    list.add("diffuse");
-                    context.callNextToken(); //skip diffuse
-                    list.add(String.valueOf(context.getNumberValue()));
-                    context.callNextToken();
-                    if(context.isCurrentTokenAWord())
-                    {
-                        if(context.currentWord("ambient"))
-                        {
-                            state = Trianglecontent.AMBIENT;
-                        }
-                        else if(context.currentWord("specular"))
-                        {
-                            state = Trianglecontent.SPECULAR;
-                        }
-                    }
-                    else
-                    {
-                        state = Trianglecontent.ENDING_BRACKET;
-                    }
-                    break;
-                }
-
-                case SPECULAR:
-                {
-                    context.callNextToken(); //skip specular
-                    list.add(String.valueOf(context.getNumberValue()));
-                    context.callNextToken();
-                    if(context.isCurrentTokenAWord())
-                    {
-                        if(context.currentWord("ambient"))
-                        {
-                            state = Trianglecontent.AMBIENT;
-                        }
-                        else if(context.currentWord("diffuse"))
-                        {
-                            state = Trianglecontent.DIFFUSE;
-                        }
-                    }
-                    else
-                    {
-                        state = Trianglecontent.ENDING_BRACKET;
-                    }
+                    Material material = super.parseAttributes(context);
+                    state = Trianglecontent.OUTSIDE;
                     break;
                 }
             }

@@ -1,5 +1,7 @@
 package povParser.automat;
 
+import materials.Material;
+
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 
@@ -29,15 +31,14 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
         boolean color = false;
         boolean coord = false;
         int nextToken = 0;
+        Material material = null;
 
         SpherePlanecontent state = SpherePlanecontent.OPENING_BRACKET;
 
         while(state != SpherePlanecontent.OUTSIDE)
         {
-            switch(state)
-            {
-                case OPENING_BRACKET:
-                {
+            switch(state) {
+                case OPENING_BRACKET: {
                     context.callNextToken();
 
                     state = SpherePlanecontent.OPENING_CHEVRON;
@@ -45,26 +46,21 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
                     coord = true;
                     break;
                 }
-                case ENDING_BRACKET:
-                {
+                case ENDING_BRACKET: {
 
                     nextToken = context.callNextToken(); //skip '}'
-                    state = super.parsePropertryAndGetState(context);
-
-                    if(state == null)
-                    {
+                    if (context.isCurrentTokenAWord()) {
+                        state = SpherePlanecontent.ATTRIBUTE;
+                    } else {
                         bracketNb--;
-                        if(bracketNb == 0)
-                        {
+                        if (bracketNb == 0) {
                             state = SpherePlanecontent.OUTSIDE;
                         }
                     }
                     break;
                 }
-                case OPENING_CHEVRON:
-                {
-                    if(coord)
-                    {
+                case OPENING_CHEVRON: {
+                    if (coord) {
                         for (int i = 0; i < 3; i++) {
                             context.callNextToken(); // la virgule
                             context.callNextToken();
@@ -75,120 +71,34 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
                     state = SpherePlanecontent.ENDING_CHEVRON;
                     break;
                 }
-                case ENDING_CHEVRON:
-                {
+                case ENDING_CHEVRON: {
                     nextToken = context.callNextToken(); //skip le chevron fermant
-                    state  = super.parsePropertryAndGetState(context);
-                    if(state == null)
+                    if (context.isCurrentTokenAWord())
                     {
-                        if((char)nextToken == ',')
+                        state = SpherePlanecontent.ATTRIBUTE;
+                    }
+                    else
                         {
+                        if ((char) nextToken == ',') {
                             context.callNextToken();
                             list.add(String.valueOf(context.getNumberValue()));
                             context.callNextToken();
-                            state = super.parsePropertryAndGetState(context);
-                            if(state == null)
+                            if(context.isCurrentTokenAWord())
+                            {
+                                state = SpherePlanecontent.ATTRIBUTE;
+                            }
+                            else
                                 state = SpherePlanecontent.ENDING_BRACKET;
-                        }
-                        else if((char) nextToken == '}')
-                        {
+                        } else if ((char) nextToken == '}') {
                             state = SpherePlanecontent.ENDING_BRACKET;
                         }
                     }
                     break;
                 }
-                case PIGMENT:
+                case ATTRIBUTE:
                 {
-                    context.callNextToken(); //skip pigment
-                    context.callNextToken(); //skip '{'
-                    if (context.currentWord("color"))
-                    {
-                        color = true;
-                        context.callNextToken();
-                        if(context.currentWord("rgb"))
-                        {
-                            list.add("color"); //équivaut à figure.setFinish();
-                            nextToken = context.callNextToken();
-                            if((char)nextToken == '<')
-                            {
-                                state = SpherePlanecontent.OPENING_CHEVRON;
-                                break;
-                            }
-                            else
-                                list.add(String.valueOf(context.getNumberValue()));
-                            context.callNextToken(); // skip color value
-                            context.callNextToken(); // skip '}'
-                            if(context.isCurrentTokenAWord())
-                            {
-                                if(context.currentWord("finish"))
-                                {
-                                    state = SpherePlanecontent.FINISH;
-                                }
-                            }
-                            else
-                                state = SpherePlanecontent.ENDING_BRACKET;
-
-                        }
-                    }
-                    break;
-                }
-                case FINISH:
-                {
-                    context.callNextToken(); //skip finish
-                    context.callNextToken(); //skip '{'
-                    state = super.parsePropertryAndGetState(context);
-                    if (state == null)
-                        state = SpherePlanecontent.ENDING_BRACKET;
-                    break;
-                }
-                case SPECULAR:
-                {
-                    list.add("specular");
-                    context.callNextToken(); //skip specular
-                    list.add(String.valueOf(context.getNumberValue()));
-                    context.callNextToken();
-                    state = super.parsePropertryAndGetState(context);
-                    if(state == null)
-                    {
-                        state = SpherePlanecontent.ENDING_BRACKET;
-                    }
-                    break;
-                }
-                case DIFFUSE:
-                {
-                    list.add("diffuse");
-                    context.callNextToken(); //skip diffuse
-                    list.add(String.valueOf(context.getNumberValue()));
-                    context.callNextToken();
-                    state = super.parsePropertryAndGetState(context);
-                    if(state == null)
-                    {
-                        state = SpherePlanecontent.ENDING_BRACKET;
-                    }
-                    break;
-                }
-                case AMBIENT:
-                {
-                    list.add("ambient");
-                    context.callNextToken(); //skip ambient
-
-                    if(context.isCurrentTokenAWord())
-                    {
-                        if(context.currentWord("rgb"))
-                        {
-                            context.callNextToken();
-                            state = SpherePlanecontent.OPENING_CHEVRON;
-                        }
-                    }
-                    else
-                    {
-                        list.add(String.valueOf(context.getNumberValue()));
-                    }
-
-                    context.callNextToken();
-                    state = super.parsePropertryAndGetState(context);
-                    if(state == null)
-                        state = SpherePlanecontent.ENDING_BRACKET;
+                    material = super.parseAttributes(context);
+                    state = SpherePlanecontent.OUTSIDE;
                     break;
                 }
             }

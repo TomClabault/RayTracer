@@ -110,6 +110,7 @@ public abstract class EtatUtil
                 case FINISH:
                 {
                     context.callNextToken(); // skip finish
+                    context.callNextToken(); // skip '{'
                     state = parsePropertryAndGetState(context);
                     if(state == null)
                     {
@@ -207,5 +208,6 @@ public abstract class EtatUtil
                 }
             }
         }
+        return material;
     }
 }

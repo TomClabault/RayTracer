@@ -1,5 +1,7 @@
 package povParser.automat;
 
+import materials.Material;
+
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 
@@ -10,9 +12,10 @@ enum Boxcontent
     OPENING_CHEVRON,
     ENDING_CHEVRON,
     OUTSIDE,
+    ATTRIBUTE,
 }
 
-public class EtatBox implements EtatToken
+public class EtatBox extends EtatUtil implements EtatToken
 {
     @Override
     public void action(Automat context)
@@ -68,6 +71,10 @@ public class EtatBox implements EtatToken
                 case ENDING_BRACKET:
                 {
                     context.callNextToken();
+                    if(context.isCurrentTokenAWord())
+                    {
+                        state = Boxcontent.ATTRIBUTE;
+                    }
                     bracketNb--;
                     if(bracketNb == 0)
                     {
@@ -75,8 +82,10 @@ public class EtatBox implements EtatToken
                     }
                     break;
                 }
-                case OUTSIDE:
+
+                case ATTRIBUTE:
                 {
+                    Material material = super.parseAttributes(context);
                     state = Boxcontent.OUTSIDE;
                     break;
                 }
