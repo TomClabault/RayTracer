@@ -3,6 +3,7 @@ package render;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -36,7 +37,19 @@ public class Toolbox {
         TextField saveTextField = new TextField("Chemin d'enregistrement du rendu");
         Button saveButton = new Button("Save");
         Label resolutionLabel = new Label("Résolution de la scène");
+        
         HBox resolutionHbox = new HBox();
+        TextField WidthSceneRes = new TextField("Width");
+        TextField HeightSceneRes = new TextField("Height");
+        resolutionHbox.getChildren().addAll(WidthSceneRes, HeightSceneRes);
+        
+        Label depthLabel = new Label();
+        Slider depthSlider = new Slider(0,10,1);
+        
+        root.getChildren().addAll(saveTextField, saveButton, resolutionLabel, resolutionHbox, depthLabel, depthSlider);
+        
+        stage.show();
+        
         
         
 		
