@@ -27,6 +27,7 @@ public class EtatBox extends EtatUtil implements EtatToken
         context.callNextToken();
         int bracketNb = 0;
         int coordNb = 0;
+        Material material = null;
 
         Boxcontent state = Boxcontent.OPENING_BRACKET;
 
@@ -85,12 +86,13 @@ public class EtatBox extends EtatUtil implements EtatToken
 
                 case ATTRIBUTE:
                 {
-                    Material material = super.parseAttributes(context);
+                    material = super.parseAttributes(context);
                     state = Boxcontent.OUTSIDE;
                     break;
                 }
             }
         }
+        System.out.println(material);
         System.out.println(list);
     }
 }

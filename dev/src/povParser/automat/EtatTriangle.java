@@ -29,6 +29,7 @@ public class EtatTriangle extends EtatUtil implements EtatToken
         int coordNb = 0;
         boolean color = false;
         boolean triangleCoord = false;
+        Material material = null;
 
         Trianglecontent state = Trianglecontent.OPENING_BRACKET;
 
@@ -119,12 +120,13 @@ public class EtatTriangle extends EtatUtil implements EtatToken
 
                 case ATTRIBUTE:
                 {
-                    Material material = super.parseAttributes(context);
+                    material = super.parseAttributes(context);
                     state = Trianglecontent.OUTSIDE;
                     break;
                 }
             }
         }
+        System.out.println(material);
         System.out.println(list);
     }
 }

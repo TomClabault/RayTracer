@@ -103,6 +103,7 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
                 }
             }
         }
+        System.out.println(material);
         createInstance(list);
     }
 }
