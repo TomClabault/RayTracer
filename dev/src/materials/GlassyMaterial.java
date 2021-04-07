@@ -9,7 +9,7 @@ public class GlassyMaterial extends Material
 {
 	public GlassyMaterial(Color color)
 	{
-		//L'indice de réfraction de 1.250 est arbitraire
-		super(color, 1, 0.03, 1, 256, false, 50);
+		//L'indice de réfraction de 1.5 est arbitraire
+		super(color, 1, 0.03, 1, 256, false, 1.5);
 	}
 }

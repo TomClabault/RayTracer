@@ -146,7 +146,7 @@ public class RayTracer
 	 * @param rayIntObjMaterial Le matériau qui va être utilisé pour calculer la composante diffuse
 	 * @param finalColorBefore La couleur "sur" laquelle va être appliquée le calcul de la composante diffuse
 	 * @param objectColor La couleur du matériau de l'objet
-	 * @param incidentRay Le rayon incident au point d'intersection de l'objet
+	 * @param rayDirection Direction du rayon incident au point d'intersection de l'objet
 	 * @param toLightVector Vecteur indiquant la direction vers la source de lumière
 	 * @param normalAtIntersection Le vecteur normal de la surface de l'objet au point d'intersection
 	 * @param interPointShift Le point d'intersection du rayon incident avec l'objet légèrement décalé dans le sens du rayon incident parfaitement réfléchi par la surface de l'objet
@@ -154,12 +154,12 @@ public class RayTracer
 	 *  
 	 * @return La couleur passée en argument affectée des couleurs qui se réfléchissent dans l'objet. Si l'objet n'est pas réflexif, la couleur est renvoyée inchangée
 	 */
-	protected Color computeAndAddReflections(int x, int y, RayTracingScene renderScene, Material rayIntObjMaterial, Color finalColorBefore, Color objectColor, Ray incidentRay, Vector3D toLightVector, Vector3D normalAtIntersection, Vector3D interPointShift, int depth)
+	protected Color computeAndAddReflections(int x, int y, RayTracingScene renderScene, Material rayIntObjMaterial, Color finalColorBefore, Color objectColor, Vector3D rayDirection, Vector3D toLightVector, Vector3D normalAtIntersection, Vector3D interPointShift, int depth)
 	{
 		//Si l'objet est réfléchissant
 		if(rayIntObjMaterial.getReflectiveCoeff() > 0)
 		{
-			Vector3D reflectDirection = computeReflectionVector(normalAtIntersection, incidentRay.getDirection());
+			Vector3D reflectDirection = computeReflectionVector(normalAtIntersection, rayDirection);
 			Color reflectionColor = computePixel(x, y, renderScene, new Ray(interPointShift, Vector3D.normalize(reflectDirection)), depth - 1);
 
 			return ColorOperations.addColors(finalColorBefore, ColorOperations.mulColor(reflectionColor, rayIntObjMaterial.getReflectiveCoeff()));
@@ -180,7 +180,7 @@ public class RayTracer
 	 * @param interPointShift Le point d'intersection du rayon incident avec l'objet légèrement décalé dans le sens du rayon incident parfaitement réfléchi par la surface de l'objet
 	 * @param depth La profondeur de récursion actuelle de l'algorithme
 	 * 
-	 * @return Retourne la couleur donnée argument "mixée" avec les couleurs des réfractions et des réflexions de l'objet. Si l'objet n'est pas transparent, la couleur retournée est inchangée par rapport à celle passée en argument
+	 * @return Retourne la couleur donnée en argument "mixée" avec les couleurs des réfractions et des réflexions de l'objet. Si l'objet n'est pas transparent, la couleur retournée est inchangée par rapport à celle passée en argument
 	 */
 	protected Color computeAndAddRefractions(int x, int y, RayTracingScene renderScene, Material rayIntObjMaterial, Color finalColorBefore, Vector3D incidentRayDirection, Vector3D normalAtIntersection, Vector3D rayInterPoint, Vector3D interPointShift, int depth)
 	{
@@ -214,6 +214,32 @@ public class RayTracer
 		}
 		else//L'objet n'est pas réfractif
 			return finalColorBefore;
+	}
+	
+	/*
+	 * Calcule la couleur d'un point de la scène ombragé 
+	 * 
+	 * @param renderScene La scène utilisée pour le rendu
+	 * @param rayIntObjMaterial Le matériau qui va être utilisé pour calculer la composante diffuse
+	 * @param objectColor La couleur du matériau de l'objet
+	 * @param normalAtIntersection Le vecteur normal de la surface de l'objet au point d'intersection
+	 * @param rayDirection La direction du rayon incident
+	 * @param rayInterPoint Le point d'intersection du rayon incident avec l'objet
+	 * @param rayInterPointShift Le point d'intersection du rayon incident avec l'objet légèrement décalé dans le sens du rayon incident parfaitement réfléchi par la surface de l'objet
+	 * @param ambientLighting L'intensité de la lumière ambiante de la scène
+	 * @param depth La profondeur de récursion actuelle de l'algorithme
+	 * 
+	 * @return Retourne la couleur ombragée
+	 */
+	protected Color computeShadow(int x, int y, RayTracingScene renderScene, Material rayIntObjMaterial, Color objectColor, Vector3D normalAtIntersection, Vector3D rayDirection, Vector3D rayInterPoint, Vector3D rayInterPointShift, double ambientLighting, int depth)
+	{
+		Color finalColor = null;
+
+		finalColor = ColorOperations.mulColor(objectColor, ambientLighting);
+		finalColor = ColorOperations.addColors(finalColor, computeAndAddReflections(x, y, renderScene, rayIntObjMaterial, Color.BLACK, objectColor, rayDirection, new Vector3D(rayInterPoint, renderScene.getLight().getCenter()), normalAtIntersection, rayInterPointShift, depth));
+		finalColor = ColorOperations.addColors(finalColor, computeAndAddRefractions(x, y, renderScene, rayIntObjMaterial, Color.BLACK, rayDirection, normalAtIntersection, rayInterPoint, rayInterPointShift, depth));
+		
+		return finalColor;
 	}
 	
 	/*
@@ -267,7 +293,7 @@ public class RayTracer
 
 		return specularTerm;
 	}
-
+	
 	/*
 	 * Calcule un partie de la scène représentée par un pixel de départ X et Y et un pixel d'arrivée X et Y. Le rectangle de pixel définit par ces valeurs est alors calculé
 	 *
@@ -313,7 +339,7 @@ public class RayTracer
 	protected Color computePixel(int x, int y, RayTracingScene renderScene, Ray ray, int depth)
 	{
 		if(depth == 0)
-			return renderScene.getBackgroundColor();
+			return Color.BLACK;
 
 		ArrayList<Shape> objectList = renderScene.getSceneObjects();
 
@@ -372,21 +398,11 @@ public class RayTracer
 			{
 				finalColor = computeAndAddDiffuse(rayIntObjMaterial, finalColor, objectColor, shadowRayDir, normalAtIntersection, lightIntensity);
 				finalColor = computeAndAddSpecular(rayIntObjMaterial, finalColor, ray, shadowRayDir, normalAtIntersection, lightIntensity);
-				finalColor = computeAndAddReflections(x, y, renderScene, rayIntObjMaterial, finalColor, objectColor, ray, shadowRayDir, normalAtIntersection, interPointShift, depth);
+				finalColor = computeAndAddReflections(x, y, renderScene, rayIntObjMaterial, finalColor, objectColor, ray.getDirection(), shadowRayDir, normalAtIntersection, interPointShift, depth);
 				finalColor = computeAndAddRefractions(x, y, renderScene, rayIntObjMaterial, finalColor, ray.getDirection(), normalAtIntersection, rayInterPoint, interPointShift, depth);
 			}
 			else//Une intersection a été trouvée et l'objet intersecté est entre la lumière et le départ du shadow ray. De plus, l'objet bloquant la vue à la lumière n'est pas transparent
-			{
-				if(rayIntObjMaterial.getReflectiveCoeff() > 0)//Si l'objet est réflectif, on va calculer le reflet de l'objet qui bloque le chemin à la lumière plutôt que de l'ombre
-				{
-					Color reflectionColor = computePixel(x, y, renderScene, new Ray(interPointShift, Vector3D.normalize(computeReflectionVector(normalAtIntersection, ray.getDirection()))), depth - 1);
-
-					finalColor = ColorOperations.mulColor(reflectionColor, rayIntObjMaterial.getReflectiveCoeff());
-					finalColor = ColorOperations.addColors(finalColor, ColorOperations.mulColor(objectColor, ambientLighting));
-				}
-				else
-					finalColor = ColorOperations.mulColor(objectColor, ambientLighting);//L'objet n'est pas réfléxif, on ne renvoie que la partie ambiante
-			}
+				finalColor = computeShadow(x, y, renderScene, rayIntObjMaterial, objectColor, normalAtIntersection, ray.getDirection(), rayInterPoint, interPointShift, ambientLighting, depth);
 
 			return finalColor;
 		}
