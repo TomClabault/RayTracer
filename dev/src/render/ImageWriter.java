@@ -113,7 +113,7 @@ public class ImageWriter {
         shapeList.add(new SphereMaths(new Vector3D(0, -0.5, -6), 0.5, new GlassyMaterial(Color.RED)));
         shapeList.add(new SphereMaths(new Vector3D(-0.75, -0.75, -6), 0.25, new GlassyMaterial(Color.rgb(255, 64, 0))));
         shapeList.add(new SphereMaths(new Vector3D(0.75, -0.75, -6), 0.25, new GlassyMaterial(Color.rgb(255, 64, 0))));
-        //shapeList.add(new SphereMaths(new Vector3D(1.25, 0.5, -6), 1, new GlassMaterial()));
+        shapeList.add(new SphereMaths(new Vector3D(1.25, 0.5, -6), 1, new GlassMaterial()));
         //shapeList.add(new Icosphere(new Vector3D(0, 2, -6), 1, 1, new GlassyMaterial(Color.rgb(0, 128, 255))));
         
         
