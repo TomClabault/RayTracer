@@ -97,6 +97,7 @@ public abstract class EtatUtil
 
         while(state != Attribute.OUTSIDE)
         {
+            System.out.println(context.getStreamTokenizer());
             switch (state)
             {
                 case AMBIENT:
@@ -230,7 +231,7 @@ public abstract class EtatUtil
                     int[] colorTab = new int[3];
                     for(int i = 0; i < 3; i++)
                     {
-                        System.out.println(context.getStreamTokenizer());
+
                         colorTab[i] = (int)(context.getNumberValue() * 255);
                         context.callNextToken();
                         if(i < 2)

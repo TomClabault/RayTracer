@@ -35,9 +35,9 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
 
         SpherePlanecontent state = SpherePlanecontent.OPENING_BRACKET;
 
-        while(state != SpherePlanecontent.OUTSIDE)
-        {
-            switch(state) {
+        while(state != SpherePlanecontent.OUTSIDE) {
+
+            switch (state) {
                 case OPENING_BRACKET: {
                     context.callNextToken();
 
@@ -72,21 +72,16 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
                 }
                 case ENDING_CHEVRON: {
                     nextToken = context.callNextToken(); //skip le chevron fermant
-                    if (context.isCurrentTokenAWord())
-                    {
+                    if (context.isCurrentTokenAWord()) {
                         state = SpherePlanecontent.ATTRIBUTE;
-                    }
-                    else
-                        {
+                    } else {
                         if ((char) nextToken == ',') {
                             context.callNextToken();
                             list.add(String.valueOf(context.getNumberValue()));
                             context.callNextToken();
-                            if(context.isCurrentTokenAWord())
-                            {
+                            if (context.isCurrentTokenAWord()) {
                                 state = SpherePlanecontent.ATTRIBUTE;
-                            }
-                            else
+                            } else
                                 state = SpherePlanecontent.ENDING_BRACKET;
                         } else if ((char) nextToken == '}') {
                             state = SpherePlanecontent.ENDING_BRACKET;
@@ -94,16 +89,13 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
                     }
                     break;
                 }
-                case ATTRIBUTE:
-                {
-                    System.out.println(list);
+                case ATTRIBUTE: {
                     material = super.parseAttributes(context);
                     state = SpherePlanecontent.OUTSIDE;
                     break;
                 }
             }
         }
-        System.out.println(material);
         createInstance(list);
     }
 }
