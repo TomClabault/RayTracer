@@ -3,6 +3,7 @@ package povParser.automat;
 import javafx.scene.paint.Color;
 import materials.Material;
 
+import javax.imageio.spi.ImageOutputStreamSpi;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 
@@ -23,6 +24,9 @@ enum Attribute
 
 public abstract class EtatUtil
 {
+
+    int nbBracket = 0;
+
     public Attribute parsePropertryAndGetState(Automat context)
     {
         if(context.isCurrentTokenAWord())
@@ -63,6 +67,26 @@ public abstract class EtatUtil
         return null;
     }
 
+
+    public Attribute checkEndingBracket(Automat context)
+    {
+        int token = context.callNextToken();
+        Attribute state  = parsePropertryAndGetState(context);
+        if(state == null)
+        {
+            if ((char) token == '}')
+            {
+                this.nbBracket --;
+                if (this.nbBracket == 0)
+                {
+                    return Attribute.OUTSIDE;
+                }
+                state = parsePropertryAndGetState(context);
+            }
+        }
+        return state;
+    }
+
     public Material parseAttributes(Automat context) throws RuntimeException
     {
         Material material = new Material(null, 0, 0, 0, 0, false, 0);
@@ -70,6 +94,7 @@ public abstract class EtatUtil
         int token = 0;
         boolean color = false;
         double phong_value = 0;
+
         while(state != Attribute.OUTSIDE)
         {
             switch (state)
@@ -78,10 +103,12 @@ public abstract class EtatUtil
                 {
                     context.callNextToken(); // skip ambient
                     //appeler le setter material correspondant à l'ambient
-                    context.callNextToken(); // skip ambient coeff
+                    token = context.callNextToken(); // skip ambient coeff
                     state  = parsePropertryAndGetState(context);
                     if(state == null)
-                        state = Attribute.OUTSIDE;
+                    {
+                        state = this.checkEndingBracket(context);
+                    }
                     break;
                 }
 
@@ -92,7 +119,9 @@ public abstract class EtatUtil
                     context.callNextToken();
                     state = parsePropertryAndGetState(context);
                     if(state == null)
-                        state = Attribute.OUTSIDE;
+                    {
+                        state = this.checkEndingBracket(context);
+                    }
                     break;
                 }
 
@@ -103,7 +132,9 @@ public abstract class EtatUtil
                     context.callNextToken();
                     state = parsePropertryAndGetState(context);
                     if(state == null)
-                        state = Attribute.OUTSIDE;
+                    {
+                        state = this.checkEndingBracket(context);
+                    }
                     break;
                 }
 
@@ -111,6 +142,7 @@ public abstract class EtatUtil
                 {
                     context.callNextToken(); // skip finish
                     context.callNextToken(); // skip '{'
+                    nbBracket++;
                     state = parsePropertryAndGetState(context);
                     if(state == null)
                     {
@@ -122,6 +154,7 @@ public abstract class EtatUtil
                 {
                     context.callNextToken(); //skip pigment
                     context.callNextToken(); //skip '{'
+                    nbBracket++;
                     if (context.currentWord("color"))
                     {
                         color = true;
@@ -141,9 +174,12 @@ public abstract class EtatUtil
                             }
                             context.callNextToken(); // skip color value
                             context.callNextToken(); // skip '}'
+                            nbBracket--;
                             state = parsePropertryAndGetState(context);
                             if(state == null)
-                                state = Attribute.OUTSIDE;
+                            {
+                                state = this.checkEndingBracket(context);
+                            }
 
                         }
                     }
@@ -155,8 +191,10 @@ public abstract class EtatUtil
                     phong_value = context.getNumberValue();
                     context.callNextToken();
                     state = parsePropertryAndGetState(context);
-                    if (state == null)
-                        state = Attribute.OUTSIDE;
+                    if(state == null)
+                    {
+                        state = this.checkEndingBracket(context);
+                    }
                     break;
                 }
 
@@ -167,7 +205,9 @@ public abstract class EtatUtil
                     context.callNextToken();
                     state = parsePropertryAndGetState(context);
                     if(state == null)
-                        state = Attribute.OUTSIDE;
+                    {
+                        state = this.checkEndingBracket(context);
+                    }
                     break;
                 }
 
@@ -179,19 +219,22 @@ public abstract class EtatUtil
                     state = parsePropertryAndGetState(context);
                     if(state == null)
                     {
-                        state = Attribute.OUTSIDE;
+                        state = this.checkEndingBracket(context);
                     }
                     break;
                 }
 
                 case OPENING_CHEVRON:
                 {
+                    context.callNextToken(); //skip '<'
                     int[] colorTab = new int[3];
                     for(int i = 0; i < 3; i++)
                     {
+                        System.out.println(context.getStreamTokenizer());
+                        colorTab[i] = (int)(context.getNumberValue() * 255);
                         context.callNextToken();
-                        context.callNextToken();
-                        colorTab[i] = (int)context.getNumberValue() * 255;
+                        if(i < 2)
+                            context.callNextToken();
                     }
                     material.setColor(Color.rgb(colorTab[0], colorTab[1], colorTab[2]));
                     state = Attribute.ENDING_CHEVRON;

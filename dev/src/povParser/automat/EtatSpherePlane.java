@@ -47,7 +47,6 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
                     break;
                 }
                 case ENDING_BRACKET: {
-
                     nextToken = context.callNextToken(); //skip '}'
                     if (context.isCurrentTokenAWord()) {
                         state = SpherePlanecontent.ATTRIBUTE;
@@ -97,6 +96,7 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
                 }
                 case ATTRIBUTE:
                 {
+                    System.out.println(list);
                     material = super.parseAttributes(context);
                     state = SpherePlanecontent.OUTSIDE;
                     break;
