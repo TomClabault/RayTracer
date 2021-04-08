@@ -12,7 +12,7 @@ public class MatteMaterial extends Material
 	 */
 	public MatteMaterial(Color color)
 	{
-		super(color, 0.75, 0, 0.05, 1, false, 0);
+		super(color, 1, 0.75, 0, 0.05, 1, false, 0);
 	}
 	
 	/*
@@ -23,6 +23,6 @@ public class MatteMaterial extends Material
 	 */
 	public MatteMaterial(Color color, ProceduralTexture proceduralTexture)
 	{
-		super(color, 0.75, 0, 0.05, 1, false, 0, proceduralTexture);
+		super(color, 1, 0.75, 0, 0.05, 1, false, 0, proceduralTexture);
 	}
 }

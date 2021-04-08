@@ -246,13 +246,13 @@ public class RayTracer
 	 * Calcule la luminosité ambiante de la scène à partir de l'intensité de la source de lumière et de l'intensité de la lumière ambiante
 	 *
 	 * @param ambientLightIntensity Intensité de la luminosité ambiante de la scène
-	 * @param lightIntensity Intensité de la source de lumière
+	 * @param materialAmbientCoeff Coefficient de réflexion de la lumière ambiante du matériau
 	 *
-	 * @return Retourne la composante ambiante de l'illumination de la scène. Réel entre 0 et 1
+	 * @return Retourne la composante ambiante du matériau dont le coefficient ambiant a été passé en paramètre. Réel entre 0 et 1
 	 */
-	protected double computeAmbient(double ambientLightIntensity, double lightIntensity)
+	protected double computeAmbient(double ambientLightIntensity, double materialAmbientCoeff)
 	{
-		return ambientLightIntensity * lightIntensity;
+		return ambientLightIntensity * materialAmbientCoeff;
 	}
 
 	/*
@@ -352,7 +352,7 @@ public class RayTracer
 			Material rayIntObjMaterial = rayInterObject.getMaterial();
 
 			double lightIntensity = renderScene.getLight().getIntensity();
-			double ambientLighting = computeAmbient(renderScene.getAmbientLightIntensity(), lightIntensity);
+			double ambientLighting = computeAmbient(renderScene.getAmbientLightIntensity(), rayIntObjMaterial.getAmbientCoeff());
 
 			Color finalColor = Color.rgb(0, 0, 0);
 			Color objectColor = null;
