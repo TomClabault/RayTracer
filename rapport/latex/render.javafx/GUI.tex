@@ -1,1 +1,20 @@
-\subsubsection{La fenêtre principale}
+\subsubsection{Pourquoi JavaFX ?}
+
+Une des premières questions que nous nous sommes posées est : Swing ou JavaFX ?
+
+Nous avons choisi d'utiliser JavaFX pour une principale raison. JavaFX est désormais la librairie officielle de Java. Swing n'étant plus maintenu, nous ne voulions pas développer avec une librairie qui commence à être dépréciée.
+
+De plus, le sujet de Bataille Navale étant à faire obligatoirement en swing, nous voulions essayer aux deux librairies.
+
+\subsubsection{Les différents éléments du package render}
+
+Le package render contient le code de l'interface graphique et celui permettant l'affichage des fenêtres.
+
+\begin{description}
+    \item [MainApp] contient le main de l'application et lance toutes les fenêtres.
+    \item [SetSizeWindow] est la classe responsable de la fenêtre du choix de taille du rendu.
+    \item [ImageWriter] est la classe responsable de l'affichage de la fenêtre du rendu.
+    \item [Toolbox] est la classe responsable de la fenêtre de changement lors de l'affichage du rendu.
+    \item [CameraTimer] est la classe responsable du déplacement de la caméra lors de l'appuie de touches.
+    \item [Window Timer et CounterFPS] sont les classes responsable de l'affichage des FPS sur la fenêtre de rendu.
+\end{description}
