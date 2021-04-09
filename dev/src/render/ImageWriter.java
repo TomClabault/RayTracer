@@ -114,13 +114,9 @@ public class ImageWriter {
         shapeList.add(new SphereMaths(new Vector3D(-0.75, -0.75, -6), 0.25, new GlassyMaterial(Color.rgb(255, 64, 0))));
         shapeList.add(new SphereMaths(new Vector3D(0.75, -0.75, -6), 0.25, new GlassyMaterial(Color.rgb(255, 64, 0))));
         shapeList.add(new SphereMaths(new Vector3D(1.25, 0.5, -6), 1, new GlassMaterial()));
-<<<<<<< HEAD
+
         shapeList.add(new Icosphere(new Vector3D(0, 2, -6), 1, 1, new MatteMaterial(Color.RED)));
         shapeList.add(new PyramideTriangulaire(new Vector3D(2,1,-5),1,1,new MetallicMaterial(Color.BLUE)));
-=======
-        //shapeList.add(new Icosphere(new Vector3D(0, 2, -6), 1, 1, new GlassyMaterial(Color.rgb(0, 128, 255))));
-        
->>>>>>> origin/master
         
 
         Image skybox = null;

@@ -56,30 +56,8 @@ public class Pyramide extends ShapeUtil
 
         // b --> c , c --> d , d --> b
 
-<<<<<<< HEAD
-        
-        this.material = material;
-=======
-        /*
-        this.B.setX(this.A.getX() + width);
-        this.B.setY(this.A.getY());
-        this.B.setZ(this.A.getZ() + width);
-
-        this.C.setX(this.A.getX());
-        this.C.setY(this.A.getY());
-        this.C.setZ(this.A.getZ() + width);
-
-        this.D.setX(this.A.getX() + width);
-        this.D.setY(this.A.getY());
-        this.D.setZ(this.A.getZ());
-
-        this.E.setX(this.A.getX() + width/2);
-        this.E.setY(this.A.getY() + height);
-        this.E.setZ(this.A.getZ() + width/2);
-        */
 
         super.material = material;
->>>>>>> origin/master
 
         buildPyramide();
 

@@ -28,11 +28,11 @@ public class Icosphere extends ShapeUtil
 
 
         super.material = material;
-<<<<<<< HEAD
+
     
         //On va construire des Points
-=======
->>>>>>> origin/master
+
+
 
         this.A = Vector3D.normalize(new Vector3D(-1 , t*1 ,0 ));
         this.B = Vector3D.normalize(new Vector3D(1 ,t*1 ,0 ));
@@ -49,13 +49,9 @@ public class Icosphere extends ShapeUtil
         this.K = Vector3D.normalize(new Vector3D(-t*1 ,0 ,-1 ));
         this.L = Vector3D.normalize(new Vector3D(-t*1 ,0 ,1 ));
 
-<<<<<<< HEAD
-        
-=======
 
 
 
->>>>>>> origin/master
         //On va construire des triangles avec les points
         Triangle tr1 = new Triangle(J,F,E, material);
         Triangle tr2 = new Triangle(F,L,E, material);
@@ -171,13 +167,12 @@ public class Icosphere extends ShapeUtil
         	triangle.setC(C);
         	
         }
-<<<<<<< HEAD
 
     }
 
-=======
-    }
->>>>>>> origin/master
+
+
+
 
     /*
 	 * @link{geometry.shapes.Shape#getUVCoords}

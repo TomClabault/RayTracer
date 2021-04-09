@@ -76,12 +76,10 @@ public class Prism extends ShapeUtil
         this.E = new Vector3D(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ());
         this.F = new Vector3D(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ() + width);
 
-<<<<<<< HEAD
-        
-        this.material = material;
-=======
+
+
         super.material = material;
->>>>>>> origin/master
+
 
         buildPrism();
     }
