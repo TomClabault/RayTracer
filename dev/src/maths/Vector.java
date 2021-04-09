@@ -3,10 +3,12 @@ package maths;
 /*
  * Classe permettant de représenter un vecteur en coordonnées réelles dans l'espace
  */
-public class Vector3D
+public class Vector implements CoordinateObject
 {
 	private double x, y, z;
 
+	private static double EPSILON_EQUALS = 0.00000001;
+	
 	/*
 	 * Contruit un vecteur à partir de ses trois composantes x, y et z
 	 *
@@ -14,7 +16,7 @@ public class Vector3D
 	 * @param y Composante y du vecteur
 	 * @param z Composante z du vecteur
 	 */
-	public Vector3D(double x, double y, double z)
+	public Vector(double x, double y, double z)
 	{
 		this.x = x;
 		this.y = y;
@@ -24,12 +26,12 @@ public class Vector3D
 	/*
 	 * Construit le vecteur AB à partir des points a et b passés en paramètre
 	 *
-	 * @param a Vecteur A dont les coordonnées seront interprétées comme celle d'un point
-	 * @param b Vecteur B dont les coordonnées seront interprétées comme celle d'un point
+	 * @param a Point A
+	 * @param b Point B
 	 */
-	public Vector3D(Vector3D originPoint, Vector3D directionPoint)
+	public Vector(Point originPoint, Point directionPoint)
 	{
-		Vector3D vectorPoint = Vector3D.sub(directionPoint, originPoint);
+		Point vectorPoint = Point.sub(directionPoint, originPoint);
 
 		this.x = vectorPoint.getX();
 		this.y = vectorPoint.getY();
@@ -39,7 +41,7 @@ public class Vector3D
 	/*
 	 * Créer un nouveau vecteur à partir d'un existant. i.e. fait une copie
 	 */
-	public Vector3D(Vector3D u)
+	public Vector(Vector u)
 	{
 		this.x = u.x;
 		this.y = u.y;
@@ -54,9 +56,9 @@ public class Vector3D
 	 *
 	 * @return u + v
 	 */
-	public static Vector3D add(Vector3D u, Vector3D v)
+	public static Vector add(Vector u, Vector v)
 	{
-		return new Vector3D(v.x + u.x, v.y + u.y, v.z + u.z);
+		return new Vector(v.x + u.x, v.y + u.y, v.z + u.z);
 	}
 
 	/*
@@ -66,9 +68,9 @@ public class Vector3D
 	 *
 	 * @return this + v
 	 */
-	public Vector3D add(Vector3D v)
+	public Vector add(Vector v)
 	{
-		return new Vector3D(this.x + v.x, this.y + v.y, this.z + v.z);
+		return new Vector(this.x + v.x, this.y + v.y, this.z + v.z);
 	}
 
 	/*
@@ -79,7 +81,7 @@ public class Vector3D
 	 *
 	 * @return True si les deux vecteurs passés en argument sont coliénaires. False sinon
 	 */
-	public static boolean areColinear(Vector3D u, Vector3D v)
+	public static boolean areColinear(Vector u, Vector v)
 	{
 		double xy = u.x*v.y - u.y*v.x;
 		double xz = u.x*v.z - u.z*v.x;
@@ -96,7 +98,7 @@ public class Vector3D
      *
      * @param vectorToCopy Vecteur dont les coordonnées vont être copiées dans l'instance actuelle
      */
-    public void copyIn(Vector3D vectorToCopy)
+    public void copyIn(Vector vectorToCopy)
     {
     	this.x = vectorToCopy.x;
     	this.y = vectorToCopy.y;
@@ -109,21 +111,11 @@ public class Vector3D
 	 *
 	 * @return Le produit vectoriel de u et v
 	 */
-	public static Vector3D crossProduct(Vector3D u, Vector3D v)
+	public static Vector crossProduct(Vector u, Vector v)
 	{
-		return new Vector3D(u.y*v.z - u.z*v.y, u.z*v.x - u.x*v.z, u.x*v.y - u.y*v.x);
+		return new Vector(u.y*v.z - u.z*v.y, u.z*v.x - u.x*v.z, u.x*v.y - u.y*v.x);
 	}
 
-	/*
-	 * En interprétant les coordonnées des vecteurs comme celles de deux points, calcule la distance entre ces deux points
-	 */
-	public static double distance(Vector3D u, Vector3D v)
-	{
-		Vector3D vMinU = Vector3D.sub(v, u);
-		
-		return Math.sqrt(vMinU.x*vMinU.x + vMinU.y*vMinU.y + vMinU.z*vMinU.z);
-	}
-	
 	/*
 	 * Calcule le produit scalaire de deux vecteurs
 	 *
@@ -132,39 +124,41 @@ public class Vector3D
 	 *
 	 * @return Produit scalaire de u et v
 	 */
-	public static double dotProduct(Vector3D u, Vector3D v)
+	public static double dotProduct(Vector u, Vector v)
 	{
 		return u.x*v.x + u.y*v.y + u.z*v.z;
 	}
 
 	@Override
-	public boolean equals(Object object) {
-		Vector3D vector = (Vector3D) object;
-		if (this.x == vector.x && this.y == vector.y && this.z == vector.z) {
-			return true;
-		}
-		return false;
+	public boolean equals(Object v)
+	{
+		Vector vVec = (Vector)v;
+		
+		double diffX = Math.abs(this.x - vVec.getX());
+		if(diffX > EPSILON_EQUALS)
+			return false;
+		
+		double diffY = Math.abs(this.y - vVec.getY());
+		if(diffY > EPSILON_EQUALS)
+			return false;
+		
+		double diffZ = Math.abs(this.z - vVec.getZ());
+		if(diffZ > EPSILON_EQUALS)
+			return false;
+		
+		return true;
 	}
 	
-	/*
-	 * @return Retourne la coordonnée X du vecteur
-	 */
 	public double getX()
 	{
 		return this.x;
 	}
 
-	/*
-	 * @return Retourne la coordonnée Y du vecteur
-	 */
 	public double getY()
 	{
 		return this.y;
 	}
 
-	/*
-	 * @return Retourne la coordonnée Z du vecteur
-	 */
 	public double getZ()
 	{
 		return this.z;
@@ -185,13 +179,13 @@ public class Vector3D
 	 *
 	 * @return Si le vecteur de l'instance appelante est de coordonnée (x, y, z), retourne un vecteur de coordoonnées (-x, -y, -z)
 	 */
-	public Vector3D negate()
+	public Vector negate()
 	{
-		return new Vector3D(-this.x, -this.y, -this.z);
+		return new Vector(-this.x, -this.y, -this.z);
 	}
 
 	/*
-	 * Normalise le vecteur i.e. la longueur du vecteur est 1 après normalisation
+	 * Normalise le vecteur
 	 */
 	public void normalize()
 	{
@@ -202,58 +196,78 @@ public class Vector3D
 		this.z /= length;
 	}
 
-	/*
-	 * Normalise le vecteur donné en argument
-	 * 
-	 * @param toNormalize Le vecteur à normaliser
-	 * 
-	 * @return Retourne le vecteur passé en argument mais normalisé
-	 */
-	public static Vector3D normalize(Vector3D toNormalize)
+	protected static Point normalize(CoordinateObject object)
 	{
-		Vector3D normalized = new Vector3D(toNormalize);
-		normalized.normalize();
+		double x, y, z;
+		x = object.getX();
+		y = object.getY();
+		z = object.getZ();
+		
+		Point normalized = new Point(x, y, z);
+		
+		double length = Math.sqrt(x*x + y*y + z*z);
+		
+		normalized.setX(x / length);
+		normalized.setY(y / length);
+		normalized.setZ(z / length);
 
 		return normalized;
 	}
-
+	
 	/*
-	 * Multiplie toutes les coordonnées du vecteur passé en argument par le scalaire passé en arument
+	 * Calcule les coordonnées normalisée du CoordinateObject passé en paramètre et renvoie un point ayant ces coordonnées normalisées
 	 * 
-	 * @param u Le vecteur dont les coordonnées doivent être multipliées
-	 * @param scalar Le scalaire par lequel les coordonnées vont être multipliées
-	 * 
-	 * @return Pour un vecteur u de coordonnées (x, y, z) et un scalaire k, retourne le vecteur v = (k*x, k*y, k*z)
+	 *  @param toNormalize L'objet dont on veut les coordonnées normalisées
+	 *  
+	 *  @return Retourne un point de coordonnées (x, y, z) tel que sqrt(x^2 + y^2 + z^2) = 1 
 	 */
-	public static Vector3D scalarMul(Vector3D u, double scalar)
+	public static Point normalizeP(CoordinateObject toNormalize)
 	{
-		return new Vector3D(u.getX()*scalar, u.getY()*scalar, u.getZ()*scalar);
+		return normalize(toNormalize);
 	}
 	
 	/*
-	 * @param x Nouvelle coordonnée x du vecteur
+	 * Calcule les coordonnées normalisée du CoordinateObject passé en paramètre et renvoie un vecteur ayant ces coordonnées normalisées
+	 * 
+	 *  @param toNormalize L'objet dont on veut les coordonnées normalisées
+	 *  
+	 *  @return Retourne un vecteur de norme 1 à partir des coordonnées de l'objet 'toNormalize'    
 	 */
+	public static Vector normalizeV(CoordinateObject toNormalize)
+	{
+		Point normalized = normalize(toNormalize);
+		
+		return new Vector(normalized.getX(), normalized.getY(), normalized.getZ());
+	}
+
 	public void setX(double x)
 	{
 		this.x = x;
 	}
 	
-	/*
-	 * @param x Nouvelle coordonnée y du vecteur
-	 */
 	public void setY(double y)
 	{
 		this.y = y;
 	}
 	
-	/*
-	 * @param x Nouvelle coordonnée z du vecteur
-	 */
 	public void setZ(double z)
 	{
 		this.z = z;
 	}
 	
+	/*
+	 * Multiple chaque coordonnée d'un vecteur par un scalaire
+	 * 
+	 * @param u Un vecteur de coordonnées (x, y, z)
+	 * @param scalar Le scalaire qui sera utilisé pour la multiplication des coordonnées du vecteur
+	 * 
+	 * @return Un nouveau vecteur de coordonnées (scalar*x, scalar*y, scalar*z)
+	 */
+	public static Vector scalarMul(Vector u, double scalar)
+	{
+		return new Vector(u.getX()*scalar, u.getY()*scalar, u.getZ()*scalar);
+	}
+
 	/*
 	 * Ajoute deux vecteurs et retourne le vecteur somme
 	 *
@@ -262,9 +276,9 @@ public class Vector3D
 	 *
 	 * @return u - v
 	 */
-	public static Vector3D sub(Vector3D u, Vector3D v)
+	public static Vector sub(Vector u, Vector v)
 	{
-		return new Vector3D(u.x - v.x, u.y - v.y, u.z - v.z);
+		return new Vector(u.x - v.x, u.y - v.y, u.z - v.z);
 	}
 
 	/*
@@ -275,5 +289,17 @@ public class Vector3D
 	public String toString()
 	{
 		return String.format("(%.3f, %.3f, %.3f)", this.x, this.y, this.z);
+	}
+
+	/*
+	 * Utilise les coordoonées d'un vecteur pour définir un point
+	 *
+	 * @param u Un vecteur de coordonnées (x, y, z)
+	 *
+	 * @return Le point de coordonnées (x, y, z)
+	 */
+	public static Point v2p(Vector u)
+	{
+		return new Point(u.x, u.y, u.z);
 	}
 }

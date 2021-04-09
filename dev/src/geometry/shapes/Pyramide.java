@@ -1,7 +1,7 @@
 package geometry.shapes;
 
 import materials.Material;
-import maths.Vector3D;
+import maths.Point;
 import geometry.ShapeUtil;
 
 import java.util.ArrayList;
@@ -31,9 +31,9 @@ public class Pyramide extends ShapeUtil
 
      */
 
-	private Vector3D A, B, C, D, E;
+	private Point A, B, C, D, E;
 
-    public Pyramide(Vector3D A, Vector3D B, Vector3D C, Vector3D D, Vector3D E, Material material) {
+    public Pyramide(Point A, Point B, Point C, Point D, Point E, Material material) {
         this.A = A;
         this.B = B;
         this.C = C;
@@ -46,13 +46,13 @@ public class Pyramide extends ShapeUtil
     }
 
     // Constructeur pour creer une pyramide equilaterale
-    public Pyramide(Vector3D depart, double height, double width, Material material) {
+    public Pyramide(Point depart, double height, double width, Material material) {
         this.A = depart;
 
-        this.C = new Vector3D(this.A.getX() + width, this.A.getY(), this.A.getZ() + width);
-        this.D = new Vector3D(this.A.getX(), this.A.getY(), this.A.getZ() + width);
-        this.B = new Vector3D(this.A.getX() + width, this.A.getY(), this.A.getZ());
-        this.E = new Vector3D(this.A.getX() + width / 2, this.A.getY() + height, this.A.getZ() + width / 2);
+        this.C = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ() + width);
+        this.D = new Point(this.A.getX(), this.A.getY(), this.A.getZ() + width);
+        this.B = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ());
+        this.E = new Point(this.A.getX() + width / 2, this.A.getY() + height, this.A.getZ() + width / 2);
 
         // b --> c , c --> d , d --> b
 
@@ -106,7 +106,7 @@ public class Pyramide extends ShapeUtil
 	 * @link{geometry.shapes.Shape#getUVCoords}
 	 */
 	@Override
-	public Vector3D getUVCoords(Vector3D point)
+	public Point getUVCoords(Point point)
 	{
 		return null;
 	}

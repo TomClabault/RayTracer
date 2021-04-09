@@ -5,8 +5,10 @@ import materials.MatteMaterial;
 import geometry.Shape;
 import geometry.ShapeUtil;
 import javafx.scene.paint.Color;
-import maths.Vector3D;
+import maths.CoordinateObject;
+import maths.Point;
 import maths.Ray;
+import maths.Vector;
 
 /*
  * Classe représentant une sphère décrite par son centre ainsi que son rayon. Représente la "version" mathématique d'une sphère. 
@@ -14,7 +16,7 @@ import maths.Ray;
  */
 public class SphereMaths extends ShapeUtil implements Shape
 {
-	private Vector3D center;
+	private Point center;
 	private double radius;
 	
 	/*
@@ -23,7 +25,7 @@ public class SphereMaths extends ShapeUtil implements Shape
 	 * @param center Vector3D représentant le centre de la sphère
 	 * @param radius Rayon de la sphère 
 	 */
-	public SphereMaths(Vector3D center, double radius)
+	public SphereMaths(Point center, double radius)
 	{
 		this(center, radius, new MatteMaterial(Color.rgb(255, 255, 255)));
 	}
@@ -35,7 +37,7 @@ public class SphereMaths extends ShapeUtil implements Shape
 	 * @param radius Rayon de la sphère 
 	 * @param material Matériau utilisé pour le rendu de la sphère
 	 */
-	public SphereMaths(Vector3D center, double radius, Material material)
+	public SphereMaths(Point center, double radius, Material material)
 	{
 		this.center = center;
 		this.radius = radius;
@@ -48,7 +50,7 @@ public class SphereMaths extends ShapeUtil implements Shape
 	 * 
 	 * @return Instance sur le point représentant le centre de la sphère 
 	 */
-	public Vector3D getCenter()
+	public Point getCenter()
 	{
 		return this.center;
 	}
@@ -60,20 +62,20 @@ public class SphereMaths extends ShapeUtil implements Shape
 	 * 
 	 * @return Un vecteur d'origine le centre de la sphère et de direction le point passé en argument représentant la normale de la sphère en un point donné. Ce vecteur est normalisé  
 	 */
-	public Vector3D getNormal(Vector3D point)
+	public Vector getNormal(Point point)
 	{
-		return Vector3D.normalize(Vector3D.sub(point, center));
+		return Vector.normalizeV(Point.sub(point, center));
 	}
 	
 	/*
 	 * @link{geometry.shapes.Shape#getUVCoords}
 	 */
 	@Override
-	public Vector3D getUVCoords(Vector3D point)
+	public Point getUVCoords(Point point)
 	{
-		Vector3D UVCoords = new Vector3D(0, 0, 0);
+		Point UVCoords = new Point(0, 0, 0);
 		
-		Vector3D toSphereOrigin = new Vector3D(point, this.center);
+		Vector toSphereOrigin = new Vector(point, this.center);
 		toSphereOrigin.normalize();
 		
 		/*
@@ -92,9 +94,9 @@ public class SphereMaths extends ShapeUtil implements Shape
 	 * 
 	 * @return Le point de coordonnées (x, y, z) tel que x = u et y = v. z sera toujours égal à 0 
 	 */
-	public static Vector3D getUVCoord(Vector3D point)
+	public static Point getUVCoordsUnitSphere(CoordinateObject point)
 	{
-		Vector3D UVCoords = new Vector3D(0, 0, 0);
+		Point UVCoords = new Point(0, 0, 0);
 		
 		/*
 		 * Formules de: https://en.wikipedia.org/wiki/UV_mapping
@@ -115,20 +117,20 @@ public class SphereMaths extends ShapeUtil implements Shape
 	 * intersect modifie le paramètre outNormalAtInter pour y stocker la normale au point d'intersection (si outNormalAtInter n'est pas null à l'appel de la méthode). 
 	 * S'il n'y a pas de point d'intersection, le vecteur reste inchangé.
 	 */
-	public Vector3D intersect(Ray ray, Vector3D outNormalAtInter)
+	public Point intersect(Ray ray, Vector outNormalAtInter)
 	{
-		Vector3D intersection = null;
+		Point intersection = null;
 
 		//Équation de sphère: (P-C)² - R² = 0 avec P un point sur la sphère, C le centre de la sphère et R le rayon
 		//Équation paramétrique d'un rayon: O + kD avec O l'origine du rayon, D la direction du rayon et k un réel
 		//En substituant on obtient (O + kD - C)² - R² = 0 <--> O² + (kD)² + C² + 2OkD + 2OC + 2kDC - R² = 0 <--> k²(D²) + k(2OD + 2DC) + (O² + C² + 2OC - R²) = 0
 		//On cherche k
 		
-		Vector3D OC = new Vector3D(ray.getOrigin(), center);
+		Vector OC = new Vector(ray.getOrigin(), center);
 		
-		double a = Vector3D.dotProduct(ray.getDirection(), ray.getDirection());// = D²
-		double b = -2 * Vector3D.dotProduct(ray.getDirection(), OC);// = 2D(O-C)
-		double c = Vector3D.dotProduct(OC, OC) - radius*radius;
+		double a = Vector.dotProduct(ray.getDirection(), ray.getDirection());// = D²
+		double b = -2 * Vector.dotProduct(ray.getDirection(), OC);// = 2D(O-C)
+		double c = Vector.dotProduct(OC, OC) - radius*radius;
 		
 		double b2 = b*b;
 		double ac4 = 4*a*c;
@@ -176,7 +178,7 @@ public class SphereMaths extends ShapeUtil implements Shape
 	 * 
 	 * @param center Le nouveau centre de la sphère dans la scène
 	 */
-	public void setCenter(Vector3D center) 
+	public void setCenter(Point center) 
 	{
 		this.center = center;
 	}
