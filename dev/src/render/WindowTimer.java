@@ -3,6 +3,7 @@ package render;
 import java.nio.IntBuffer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.PixelFormat;
@@ -55,7 +56,10 @@ public class WindowTimer extends AnimationTimer {
 
 
     public void handle(long actualFrameTime){
+    	System.out.println("handle");
     	DoImageTask task = new DoImageTask(mainAppScene, pixelWriter, PixelFormat.getIntArgbPreInstance(), rayTracingScene);
+    	CameraTimer cameraTimerTask = new CameraTimer(mainAppScene, rayTracingScene);
+
         es.execute(task);
 
         task.setOnSucceeded((succeededEvent) -> {
@@ -67,7 +71,16 @@ public class WindowTimer extends AnimationTimer {
             dif  = (long)1000000000.0 / dif;
             this.oldFrameTime = actualFrameTime;
             fpsLabel.setText(String.format("FPS : %d\n%s\nH: %.2f°\nV: %.2f°", dif, this.rayTracingScene.getCamera().getPosition().toString(), this.rayTracingScene.getCamera().getAngleHori(), this.rayTracingScene.getCamera().getAngleVerti()));
-         });
+        });
+
+        
+        /*try {
+			es.awaitTermination(100,TimeUnit.MILLISECONDS);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+        es.execute(cameraTimerTask);
 
     }
 

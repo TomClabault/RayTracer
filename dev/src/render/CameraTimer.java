@@ -8,12 +8,13 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.Scene;
 import javafx.event.EventHandler;
 import javafx.animation.AnimationTimer;
+import javafx.concurrent.Task;
 import javafx.scene.input.KeyCode;
 
 /**
 * Déplace la caméra en fonction des touches pressées
 */
-public class CameraTimer extends AnimationTimer {
+public class CameraTimer extends Task<Object> {
 
     /**
     * Sensibilité du déplacement droite/gauche de la caméra
@@ -40,7 +41,8 @@ public class CameraTimer extends AnimationTimer {
         this.rayTracingScene = rayTracingScene;
     }
 
-    public void handle(long nanoTime){
+    @Override
+    public Object call(){
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {//TODO ajouter liste keycode 
             @Override
             public void handle(KeyEvent event) {
@@ -68,6 +70,8 @@ public class CameraTimer extends AnimationTimer {
                 }
             }
         });
+        
+        return null;
 
     }
 
