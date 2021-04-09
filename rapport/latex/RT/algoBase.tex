@@ -1,0 +1,15 @@
+\documentclass[../../Rapport RayTracer.tex]{subfiles}
+
+\begin{document}
+
+
+Les algorithmes de ray tracing permettent de générer des images fortes de réalisme grâce à la simulation de lois physiques appliquées à la lumière. Pour rendre une image par lancer de rayon, nous avons besoin de :
+\begin{itemize}
+	\item {Une caméra}
+	\item {Une source de lumière}
+	\item{Une scène contenant différents objets}
+\end{itemize}
+Le principe pour effectuer le rendu est ensuite assez simple. Nous lançons un rayon, partant de la caméra, à travers chaque pixel de l'image à rendre (on appelle cette image fictive par laquelle passent les rayons le "plan de la caméra"). Si ce rayon intersecte un objet de la scène, alors nous renvoyons la couleur de cet objet pour le pixel traversé par le rayon (voir annexe \ref{annexe:repreCamRayon}). Sinon, nous renvoyons la couleur du fond de la scène (ou de la skybox, section \ref{checkerboardSkybox}).
+
+
+\end{document}

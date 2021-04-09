@@ -1,0 +1,56 @@
+\documentclass[../../Rapport RayTracer]{subfiles}
+
+
+\begin{document}
+
+
+Afin de pouvoir se déplacer dans la scène, nous nous sommes attelé à l'implémentation de mouvements de caméra grâce aux touches du clavier. Les mouvements possible sont: les translations de la caméra ainsi que les rotations de cette dernière autour des axes X et Y. Translater la caméra est assez simple. Il suffit de choisir un vecteur par lequel translater la caméra et appliquer cette même translation à l'origine des rayons (car leur origine doit rester la caméra) ainsi qu'à leur point de direction. Pour ce qui est des rotations, le principe est le même. En effet, faire une rotation de la caméra de 90\degree\ autour de l'axe Y revient à appliquer la même rotation aux points de direction des rayons. Afin de simplifier l'utilisation des translation et des rotations, nous avons utilisé une matrice appelée la CTWMatrix (Camera To World Matrix). Cette matrice rassemble les transformations de translation et de rotation appliquées à la caméra. Il n'y a donc plus qu'à multiplier le point que l'on veut transformer par cette matrice et le tour est joué.\\
+Les matrices de rotation dans un espace de dimension 3 se présentent sous la forme suivante:
+
+\begin{center}
+	$R_{Y_{\alpha}} =
+	\begin{pmatrix}
+		cos(\alpha) & 0 & sin(\alpha)\\
+		0 & 1 & 0\\
+		-sin(\alpha) & 0 & cos(\alpha)
+	\end{pmatrix}
+	$ ;
+	$R_{X_{\beta}} = 
+	\begin{pmatrix}
+		1 & 0 & 0\\
+		0 & cos(\beta) & -sin(\beta)\\
+		0 & sin(\beta) & cos(\beta)
+	\end{pmatrix}
+	$\\
+	\textbf{Source: wikipedia} \cite{wikipediaRotationMatrices}
+\end{center}
+$R_{Y_{\alpha}}$ représente la matrice de rotation d'angle $\alpha$ autour de l'axe Y et $R_{X_{\beta}}$ son équivalent d'angle $\beta$ autour de l'axe X.
+
+Une matrice de translation pour un vecteur $\overrightarrow{u}(a, b, c)$ se présente comme suit:
+\begin{center}
+	$T_{\overrightarrow{u}} =
+	\begin{pmatrix}
+		1 & 0 & 0\\
+		0 & 1 & 0\\
+		0 & 0 & 1\\
+		a & b & c
+	\end{pmatrix}
+	$
+\end{center}
+
+On sait que la multiplication de deux matrices de rotation donne aussi une matrice de rotation combinant les deux rotations: $R_{Y_{\alpha}}$*$R_{X_{\beta}}$ = $R_{Y_{\alpha}X_{\beta}}$. On peut ensuite combiner la matrice de rotation obtenue avec notre de matrice de translation et on obtient:
+\begin{center}
+	$CTWMatrix =
+	\begin{pmatrix}
+		R_{YX_{0, 0}} & R_{YX_{0, 1}}  & R_{YX_{0, 2}}\\
+		R_{YX_{1, 0}} & R_{YX_{1, 1}}  & R_{YX_{1, 2}}\\
+		R_{YX_{2, 0}} & R_{YX_{2, 1}}  & R_{YX_{2, 2}}\\
+		a & b & c
+	\end{pmatrix}
+	$
+\end{center}
+
+Multiplier un point par cette matrice revient alors à effectuer les rotations des deux matrices $R_{Y_{\alpha}}$ et $R_{X_{\beta}}$ et ensuite à translater le point résultant par le vecteur $\overrightarrow{u}(a, b, c)$.Tout cela en une seule opération de multiplication matricielle.
+
+
+\end{document}

@@ -1,0 +1,16 @@
+\documentclass[../../Rapport RayTracer.tex]{subfiles}
+
+
+\begin{document}
+
+\label{multithreading}
+Les algorithmes de ray tracing sont réputés pour être lents à exécuter. Cependant, chaque pixel pouvant être calculé totalement indépendemment des autres, ces algorithmes sont des cibles parfaites pour la parallélisation de calcul. Nous avons donc mis en place, afin d'accélérer les temps de rendu, un multithreading de l'application grâce aux threads de Java. Pour ce faire, nous découpons l'image à rendre en plusieures "tuiles". Nous construisons ensuite une tâche à partir de chaque tuile. Une tâche consistant en:
+\begin{itemize}
+	\item{Un pixel de départ X et Y}	
+	\item{Un pixel d'arrivée X et Y}
+\end{itemize}
+A partir de toutes ces tâches est ensuite construite une liste de tâche. Cette dernière servira aux threads. Ils viendront en effet piocher dans la liste afin de récupérer les informations sur la zone de l'image qu'ils ont à rendre.
+Un diagramme de classe illustre le fonctionnement du package multithreading dans la section \ref{packageMultithreading}.
+
+
+\end{document}

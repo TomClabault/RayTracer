@@ -2,60 +2,37 @@ package geometry.shapes;
 
 import materials.Material;
 import maths.Vector3D;
-import geometry.ShapeTriangle;
+import geometry.ShapeUtil;
 
 import java.util.ArrayList;
 import java.lang.Math;
 
 
 
-
-public class Icosphere extends ShapeTriangle
+/*
+	Les positions des points de l'icosphere de subdivision 1 viennent de: http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
+*/
+public class Icosphere extends ShapeUtil
 {
-    /*
-    !!!!!!!! Merci de lire cette notice avant de lire les codes !!!!!!!!!!!!!!
-    !!! DISCLAIMER / ATTENTION / AVERTISSEMENT !!!
-    Les codes ci-dessous ne sont pas totalement le fruit de mon travail, une petite partie est issue de ces sites:
-    La liste des points vient de: http://blog.coredumping.com/subdivision-of-icosahedrons/
-    La construction initiale d'icoshpere vient de: http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
-
-
-
-
-
-
-
-
-     */
-
-
-    //protected Vector3D BottomPoint,Centre,TopPoint,Atop,Btop,Ctop,Dtop,Etop,Arot,Brot,Crot,Drot,Erot;
-
-    //Disclaimer: Les codes ci-dessous ne sont pas totalement le fruit de mon travail, une petite partie est issue de ces sites:
-    //La liste des points vient de: http://blog.coredumping.com/subdivision-of-icosahedrons/
-    //La construction initiale d'icoshpere vient de: http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
-
-    protected Vector3D depart,A,B,C,D,E,F,G,H,I,J,K,L;
-    protected double t = ((1 + Math.sqrt(5))/2);
-    protected double size;
-    protected int subdivision;
-
+    private Vector3D A,B,C,D,E,F,G,H,I,J,K,L;
+    private double t = ((1 + Math.sqrt(5))/2);
+    private int subdivision;
 
     public Icosphere(Vector3D depart, double size,int subdivision, Material material)
     {
-        this.depart = depart;
-        this.size = size;
-        //this.subdivision = subdivision; // if subdivision < 1 , affiche erreur
         if (subdivision > 0)
             this.subdivision = subdivision;
         else
-            throw new RuntimeException("Subdivision has to be bigger than 0");
+            throw new IllegalArgumentException("Subdivision has to be bigger than 0");
 
 
 
         super.material = material;
+<<<<<<< HEAD
     
         //On va construire des Points
+=======
+>>>>>>> origin/master
 
         this.A = Vector3D.normalize(new Vector3D(-1 , t*1 ,0 ));
         this.B = Vector3D.normalize(new Vector3D(1 ,t*1 ,0 ));
@@ -72,7 +49,13 @@ public class Icosphere extends ShapeTriangle
         this.K = Vector3D.normalize(new Vector3D(-t*1 ,0 ,-1 ));
         this.L = Vector3D.normalize(new Vector3D(-t*1 ,0 ,1 ));
 
+<<<<<<< HEAD
         
+=======
+
+
+
+>>>>>>> origin/master
         //On va construire des triangles avec les points
         Triangle tr1 = new Triangle(J,F,E, material);
         Triangle tr2 = new Triangle(F,L,E, material);
@@ -188,9 +171,13 @@ public class Icosphere extends ShapeTriangle
         	triangle.setC(C);
         	
         }
+<<<<<<< HEAD
 
     }
 
+=======
+    }
+>>>>>>> origin/master
 
     /*
 	 * @link{geometry.shapes.Shape#getUVCoords}

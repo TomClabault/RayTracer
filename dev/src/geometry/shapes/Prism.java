@@ -2,17 +2,17 @@ package geometry.shapes;
 
 import materials.Material;
 import maths.Vector3D;
-import geometry.ShapeTriangle;
+import geometry.ShapeUtil;
 
 import java.util.ArrayList;
 
-public class Prism extends ShapeTriangle
+public class Prism extends ShapeUtil
 {
 
 
     /*
 
-    Imagine une prism
+    Imagine un prism
 
                          F
                         /\
@@ -48,8 +48,7 @@ public class Prism extends ShapeTriangle
 
     */
 
-    protected double height,width;
-    protected Vector3D A,B,C,D,E,F;
+	private Vector3D A,B,C,D,E,F;
 
 
     public Prism(Vector3D A, Vector3D B, Vector3D C, Vector3D D, Vector3D E, Vector3D F, Material material)
@@ -61,7 +60,7 @@ public class Prism extends ShapeTriangle
         this.E = E;
         this.F = F;
 
-        this. material = material;
+        super. material = material;
 
         buildPrism();
 
@@ -77,8 +76,12 @@ public class Prism extends ShapeTriangle
         this.E = new Vector3D(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ());
         this.F = new Vector3D(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ() + width);
 
+<<<<<<< HEAD
         
         this.material = material;
+=======
+        super.material = material;
+>>>>>>> origin/master
 
         buildPrism();
     }

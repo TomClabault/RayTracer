@@ -2,11 +2,11 @@ package geometry.shapes;
 
 import materials.Material;
 import maths.Vector3D;
-import geometry.ShapeTriangle;
+import geometry.ShapeUtil;
 
 import java.util.ArrayList;
 
-public class PyramideTriangulaire extends ShapeTriangle
+public class PyramideTriangulaire extends ShapeUtil
 {
 
     /*
@@ -33,15 +33,13 @@ public class PyramideTriangulaire extends ShapeTriangle
 
      */
 
-    protected double height,width;
-    protected Vector3D A,B,C,D;
+	private Vector3D A,B,C,D;
 
 
     /* Le constructeur prendra 4 parametres sous la forme de Vector3D; Vector3D A, Vector3D B, Vector3D C, Vector3D D
     *  Vector3D A, B et C sont le sol de la pyramide triangulaire
     *  Vector3D D sera le toit de la pyramide
-    *  Tout est deja explique sur le petit dessin au-dessus*/
-
+    *  Tout est deja explique sur le schéma au-dessus*/
     public PyramideTriangulaire(Vector3D A, Vector3D B, Vector3D C, Vector3D D, Material material)
     {
         this.A = A;
@@ -49,7 +47,7 @@ public class PyramideTriangulaire extends ShapeTriangle
         this.C = C;
         this.D = D;
 
-        this.material = material;
+        super.material = material;
 
         this.buildPyramide();
     }
@@ -63,8 +61,27 @@ public class PyramideTriangulaire extends ShapeTriangle
         this.B = new Vector3D(this.A.getX() + width, this.A.getY(), this.A.getZ() + width);
         this.C = new Vector3D(this.A.getX(), this.A.getY(), this.A.getZ() + width);
 
+<<<<<<< HEAD
        
         this.material = material;
+=======
+        /*
+        this.D.setX(this.A.getX() + width/4);
+        this.D.setY(this.A.getY() + height);
+        this.D.setZ(this.A.getZ() + width*3/4);
+
+
+        this.B.setX(this.A.getX() + width);
+        this.B.setY(this.A.getY());
+        this.B.setZ(this.A.getZ() + width);
+
+        this.C.setX(this.A.getX());
+        this.C.setY(this.A.getY());
+        this.C.setZ(this.A.getZ() + width);
+        */
+
+        super.material = material;
+>>>>>>> origin/master
 
         this.buildPyramide();
     }
