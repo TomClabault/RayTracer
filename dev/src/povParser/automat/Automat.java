@@ -6,7 +6,6 @@ import java.io.*;
 public class Automat
 {
     /*TODO
-    -parse les lumières (une seule: Point Light)
     -parse les textures spéciales
     -parse cheker dans pigment
     -parse camera (attributs: locate, rotate, translate, look_at)
@@ -84,7 +83,11 @@ public class Automat
         }
         if(token == StreamTokenizer.TT_WORD)
         {
-            if(this.streamTokenizer.sval.equals("sphere") || this.streamTokenizer.sval.equals("triangle") || this.streamTokenizer.sval.equals("box") || this.streamTokenizer.sval.equals("plane")) {
+            if(this.streamTokenizer.sval.equals("sphere") ||
+                    this.streamTokenizer.sval.equals("triangle") ||
+                    this.streamTokenizer.sval.equals("box") ||
+                    this.streamTokenizer.sval.equals("plane") ||
+                    this.streamTokenizer.sval.equals("light_source")) {
                 return true;
             }
         }
@@ -101,6 +104,10 @@ public class Automat
         if(this.streamTokenizer.sval.equals("sphere"))
         {
             return State.SPHERE;
+        }
+        else if(this.streamTokenizer.sval.equals("light_source"))
+        {
+            return State.LIGHT_SOURCE;
         }
         else if(this.streamTokenizer.sval.equals("triangle"))
         {
@@ -140,6 +147,15 @@ public class Automat
                     State currentState = automat.getState();
 
                     switch (currentState) {
+
+                        case LIGHT_SOURCE:
+                        {
+                            System.out.println("LIGHT_SOURCE");
+                            automat.setState(new EtatLightSource());
+                            automat.action();
+                            break;
+                        }
+
                         case SPHERE:
                         {
                             System.out.println("SPHERE");

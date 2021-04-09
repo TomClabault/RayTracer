@@ -46,3 +46,8 @@ box
         specular 1.2
     }
 }
+
+light_source
+{
+    <1, 2 ,3>, 0.5
+}

@@ -7,6 +7,7 @@ public enum State
     TRIANGLE,
     PLANE,
     BOX, //correspond à un rectangle
+    LIGHT_SOURCE,
 
    /*     SPHERE,
         SPHERE_OPENING_BRACKET,
