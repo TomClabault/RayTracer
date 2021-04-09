@@ -19,6 +19,7 @@ public class Material
 {	
 	private Color color;
 	
+	private double ambientCoeff;
 	private double diffuseCoeff;
 	private double reflectiveCoeff;
 	private double specularCoeff;
@@ -32,15 +33,19 @@ public class Material
 	 * Crée un matériau de A à Z
 	 * 
 	 * @param color Couleur du matériau
+	 * @param ambientCoeff Réel entre 0 et 1. Coefficient représentant la quantité de lumière ambiante que le matériau réfléchi
 	 * @param diffuseCoeff Réel entre 0 et 1. Coefficient modulant la diffusion de lumière du matériau
 	 * @param reflectiveCoeff Réel entre 0 et 1. Coefficient qui gère la réflectivité du matériau. Plus ce coefficient se rapproche de 1 et plus le matériau se rapprochera d'un matériau "mirroir"
 	 * @param specularCoeff Réel entre 0 et 1. Coefficient permettant de jouer sur l'intensité des tâches spéculaires du matériau. Plus ce coefficient se rapproche de 1 plus les tâches spéculaires seront marquées. A 0, le matériau n'est pas spéculaire
 	 * @param shininess Entier positif non nul. Permet de jouer sur la taille des tâches spéculaires du matériau. Plus ce nombre est grand plus les tâches seront petites
+	 * @param isTransparent True pour indiquer que le matériau est transparent, false pour indiquer qu'il n'est pas transparent
+	 * @param refractionIndex Indice de réfraction du matériau. Doit être 0 pour indiquer que le matériau n'est pas réfractif 
 	 */
-	public Material(Color color, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess, boolean isTransparent, double refractionIndex)
+	public Material(Color color, double ambientCoeff, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess, boolean isTransparent, double refractionIndex)
 	{
 		this.color = color;
 		
+		this.ambientCoeff = ambientCoeff;
 		this.diffuseCoeff = diffuseCoeff;
 		this.reflectiveCoeff = reflectiveCoeff;
 		this.specularCoeff = specularCoeff;
@@ -55,16 +60,20 @@ public class Material
 	 * Crée un matériau de A à Z
 	 * 
 	 * @param color Couleur du matériau
+	 * @param ambientCoeff Réel entre 0 et 1. Coefficient représentant la quantité de lumière ambiante que le matériau réfléchi
 	 * @param diffuseCoeff Réel entre 0 et 1. Coefficient modulant la diffusion de lumière du matériau
 	 * @param reflectiveCoeff Réel entre 0 et 1. Coefficient qui gère la réflectivité du matériau. Plus ce coefficient se rapproche de 1 et plus le matériau se rapprochera d'un matériau "mirroir"
 	 * @param specularCoeff Réel entre 0 et 1. Coefficient permettant de jouer sur l'intensité des tâches spéculaires du matériau. Plus ce coefficient se rapproche de 1 plus les tâches spéculaires seront marquées. A 0, le matériau n'est pas spéculaire
 	 * @param shininess Entier positif non nul. Permet de jouer sur la taille des tâches spéculaires du matériau. Plus ce nombre est grand plus les tâches seront petites
+	 * @param isTransparent True pour indiquer que le matériau est transparent, false pour indiquer qu'il n'est pas transparent
+	 * @param refractionIndex Indice de réfraction du matériau. Doit être 0 pour indiquer que le matériau n'est pas réfractif 
 	 * @param proceduralTexture La texture procédurale de l'objet
 	 */
-	public Material(Color color, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess, boolean isTransparent, double refractionIndex, ProceduralTexture proceduralTexture)
+	public Material(Color color, double ambientCoeff, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess, boolean isTransparent, double refractionIndex, ProceduralTexture proceduralTexture)
 	{
 		this.color = color;
 		
+		this.ambientCoeff = ambientCoeff;
 		this.diffuseCoeff = diffuseCoeff;
 		this.reflectiveCoeff = reflectiveCoeff;
 		this.specularCoeff = specularCoeff;
@@ -83,6 +92,16 @@ public class Material
 	public Color getColor()
 	{
 		return this.color;
+	}
+	
+	/*
+	 * Permet de récupérer le coefficient de réflexion de la lumière ambiante du matériau
+	 * 
+	 * @return Retourne un réel entre 0 et 1 représentant le coefficient dit 'ambiant' du matériau
+	 */
+	public double getAmbientCoeff()
+	{
+		return this.ambientCoeff;
 	}
 	
 	/*
@@ -181,6 +200,16 @@ public class Material
 		this.color = color;
 	}
 
+	/*
+	 * Permet de defénir un coefficient de réflexion de la lumière ambiante pour le matériau
+	 * 
+	 * @param ambientCoeff Le nouveau coefficient ambiant du matériau
+	 */
+	public void setAmbientCoeff(double ambientCoeff)
+	{
+		this.ambientCoeff = ambientCoeff;
+	}
+	
 	/*
 	 * Permet de définir le coefficient de diffusion du matériau
 	 * 
