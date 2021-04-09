@@ -40,9 +40,13 @@ public class DoImageTask extends Task {
         CameraTimer cameraTimer = new CameraTimer(this.mainAppScene, rts);
 		windowTimer.start();
         cameraTimer.start();
-			pixelBuffer = rayTracer.renderImage(rts);
-			ImageWriter.doImage(pixelBuffer, pw, pixelFormat);
-		}
-		
+		pixelBuffer = rayTracer.renderImage(rts);
+		ImageWriter.doImage(pixelBuffer, pw, pixelFormat);
+			
+		return null;
 	}
+		
+	
 }
+
+
