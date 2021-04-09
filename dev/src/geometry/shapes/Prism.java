@@ -77,28 +77,7 @@ public class Prism extends ShapeTriangle
         this.E = new Vector3D(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ());
         this.F = new Vector3D(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ() + width);
 
-        /*
-        this.B.setX(this.A.getX() + width);
-        this.B.setY(this.A.getY());
-        this.B.setZ(this.A.getZ());
-
-        this.C.setX(this.A.getX() + width);
-        this.C.setY(this.A.getY());
-        this.C.setZ(this.A.getZ() + width);
-
-        this.D.setX(this.A.getX());
-        this.D.setY(this.A.getY());
-        this.D.setZ(this.A.getZ() + width);
-
-        this.E.setX(this.A.getX() + width/2);
-        this.E.setY(this.A.getY() + height);
-        this.E.setZ(this.A.getZ());
-
-        this.F.setX(this.A.getX() + width/2);
-        this.F.setY(this.A.getY() + height);
-        this.F.setZ(this.A.getZ() + width);
-         */
-
+        
         this.material = material;
 
         buildPrism();

@@ -63,21 +63,7 @@ public class PyramideTriangulaire extends ShapeTriangle
         this.B = new Vector3D(this.A.getX() + width, this.A.getY(), this.A.getZ() + width);
         this.C = new Vector3D(this.A.getX(), this.A.getY(), this.A.getZ() + width);
 
-        /*
-        this.D.setX(this.A.getX() + width/4);
-        this.D.setY(this.A.getY() + height);
-        this.D.setZ(this.A.getZ() + width*3/4);
-
-
-        this.B.setX(this.A.getX() + width);
-        this.B.setY(this.A.getY());
-        this.B.setZ(this.A.getZ() + width);
-
-        this.C.setX(this.A.getX());
-        this.C.setY(this.A.getY());
-        this.C.setZ(this.A.getZ() + width);
-        */
-
+       
         this.material = material;
 
         this.buildPyramide();

@@ -113,7 +113,7 @@ public class ImageWriter {
         shapeList.add(new SphereMaths(new Vector3D(1.5, -0.65, -5), 0.35, new MetallicMaterial(Color.rgb(255, 211, 0))));
         shapeList.add(new SphereMaths(new Vector3D(1.25, 0.5, -6), 1, new GlassMaterial()));
         shapeList.add(new Icosphere(new Vector3D(0, 2, -6), 1, 1, new MatteMaterial(Color.RED)));
-        
+        shapeList.add(new PyramideTriangulaire(new Vector3D(2,1,-5),1,1,new MetallicMaterial(Color.BLUE)));
         
 
         Image skybox = null;
