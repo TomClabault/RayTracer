@@ -3,7 +3,10 @@ package render;
 import java.net.URL;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import javafx.concurrent.Task;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -13,6 +16,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 
 import povParser.Automat;
@@ -100,6 +104,10 @@ public class ImageWriter {
     public void ImageWriterMain(int height, int width) {
         windowTimer.start();
         cameraTimer.start();
+        DoImageTask task = new DoImageTask(new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 1).renderImage(MyGlobalScene), pw, PixelFormat.getIntArgbPreInstance(), MyGlobalScene);
+        ExecutorService es = Executors.newFixedThreadPool(1);
+        es.execute(task);
+        
         //this.updateCamera.run();
         //this.updateWindow.run();
     }
@@ -199,4 +207,27 @@ public class ImageWriter {
 
         return  sceneRT;
     }
+}
+
+class DoImageTask extends Task {
+	
+	IntBuffer pixelBuffer;
+	PixelWriter pw;
+	WritablePixelFormat<IntBuffer> pixelFormat;
+	RayTracingScene rts;
+	DoImageTask(IntBuffer pixelBuffer, PixelWriter pw, WritablePixelFormat<IntBuffer> pixelFormat, RayTracingScene rts) {
+		this.pixelBuffer = pixelBuffer;
+		this.pw = pw;
+		this.pixelFormat = pixelFormat;
+		this.rts = rts;
+		
+	}
+	@Override
+	public Object call() {
+		RayTracer rayTracer = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 1);
+		while(true) {
+			ImageWriter.doImage(pixelBuffer, pw, pixelFormat);
+		}
+		
+	}
 }
