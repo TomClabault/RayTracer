@@ -20,17 +20,6 @@ public class SphereMaths extends ShapeUtil implements Shape
 	private double radius;
 	
 	/*
-	 * Crée une sphère blanche à partie de son centre et de son rayon
-	 * 
-	 * @param center Vector3D représentant le centre de la sphère
-	 * @param radius Rayon de la sphère 
-	 */
-	public SphereMaths(Point center, double radius)
-	{
-		this(center, radius, new MatteMaterial(Color.rgb(255, 255, 255)));
-	}
-	
-	/*
 	 * Crée une sphère blanche à partie de son centre, de son rayon et de son matériau
 	 * 
 	 * @param center Vector3D représentant le centre de la sphère

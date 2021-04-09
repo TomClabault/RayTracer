@@ -18,28 +18,6 @@ public class PlaneMaths extends ShapeUtil implements Shape
 	/*
 	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan
 	 * 
-	 * @param normal Vecteur normal au plan
-	 * @param point Vector3D par lequel passe le plan
-	 */
-	public PlaneMaths(Vector normal, Point point)
-	{
-		this(normal, point, new MatteMaterial(Color.rgb(128, 128, 128)));
-	}
-	
-	/*
-	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan
-	 * 
-	 * @param normal 	Vecteur normal au plan
-	 * @param distance 	Distance du plan par rapport à l'origine dans la direction du vecteur 'normal'
-	 */
-	public PlaneMaths(Vector normal, double distance)
-	{
-		this(normal, Point.translateMul(new Point(0, 0, 0), Vector.normalizeV(normal), distance), new MatteMaterial(Color.rgb(128, 128, 128)));
-	}
-	
-	/*
-	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan
-	 * 
 	 * @param normal 	Vecteur normal au plan
 	 * @param distance 	Distance du plan par rapport à l'origine dans la direction du vecteur 'normal'
 	 * @param material Matériau qui sera utilisé pour le rendu du plan
