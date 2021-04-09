@@ -3,13 +3,8 @@ package render;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
-import scene.RayTracingScene;
-import javafx.concurrent.*;
 
 /**
  * La classe contenant le Main qui gère la totalité de l'application

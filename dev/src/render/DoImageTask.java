@@ -35,10 +35,6 @@ public class DoImageTask extends Task<IntBuffer> {
 	@Override
 	protected IntBuffer call() {
 		RayTracer rayTracer = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 1);
-		
-
-        CameraTimer cameraTimer = new CameraTimer(this.mainAppScene, rts);
-		cameraTimer.start();
 
 		pixelBuffer = rayTracer.renderImage(rts);
 			

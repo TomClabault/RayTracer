@@ -45,6 +45,7 @@ public class CameraTimer extends AnimationTimer {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.E) {
+                	System.out.println("E PUSHED");
                     upCamera();
                 } else if (event.getCode() == KeyCode.A) {
                     downCamera();

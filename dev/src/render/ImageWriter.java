@@ -3,10 +3,7 @@ package render;
 import java.net.URL;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import javafx.concurrent.Task;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -16,7 +13,6 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 
 import povParser.Automat;
@@ -81,6 +77,7 @@ public class ImageWriter {
 
         //this.task = new DoImageTask(mainAppScene, pw, PixelFormat.getIntArgbPreInstance(), MyGlobalScene);
         this.windowTimer = new WindowTimer(mainAppScene, MyGlobalScene, pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 1));
+        this.cameraTimer = new CameraTimer(this.mainAppScene, MyGlobalScene);
     }
 
     public void setRayTracingScene(RayTracingScene rayTracingScene) {
@@ -104,14 +101,12 @@ public class ImageWriter {
     }
 
     public void ImageWriterMain(int height, int width) {
-    	while(true) {
-    		windowTimer.start();
-    	}
+    	windowTimer.start();
 
-        //cameraTimer.start();
+        cameraTimer.start();
 
-        ExecutorService es = Executors.newFixedThreadPool(1);
-        es.execute(task);
+        //ExecutorService es = Executors.newFixedThreadPool(1);
+        //es.execute(task);
 
         //this.updateCamera.run();
         //this.updateWindow.run();

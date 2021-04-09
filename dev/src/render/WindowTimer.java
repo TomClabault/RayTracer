@@ -65,7 +65,7 @@ public class WindowTimer extends AnimationTimer {
             this.oldFrameTime = actualFrameTime;
         	IntBuffer intBuffer = task.getValue();
         	ImageWriter.doImage(intBuffer, pixelWriter, pixelFormat);
-            cameraTimer.start();
+            //cameraTimer.start();
             fpsLabel.setText(String.format("FPS : %d\n%s\nH: %.2f°\nV: %.2f°", dif, this.rayTracingScene.getCamera().getPosition().toString(), this.rayTracingScene.getCamera().getAngleHori(), this.rayTracingScene.getCamera().getAngleVerti()));
          });
 
