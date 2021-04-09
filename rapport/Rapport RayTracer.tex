@@ -51,69 +51,104 @@ showstringspaces=false}
 
 
 
-\author{}
+\author{Baptiste CLOCHARD \\
+    Tom CLABAULT\\
+    Thibault LETOURNEUR\\
+    Willie TANZIL}
 \title{Ray-Tracer}
 \date{}
 \geometry{hmargin=3cm, vmargin=2cm}
 
 \begin{document}
+\maketitle
+\newpage
 \tableofcontents
 \newpage
 
 \maketitle
 
-\section{Mode d'emploi}
-\input{latex/render.javafx/modeEmploi.tex}
+\section{Introduction}
+
+    \subsection{Présentation du sujet}
+    \subsection{Forme finale du projet}
+    \subsection{Répartition du travail}
+
+%\section{Mode d'emploi}
+%\input{latex/render.javafx/modeEmploi.tex}
+%a déplacer dans readMe.txt
+
+\section{Structuration du projet}
+    \subsection{Les packages}
+        \subsubsection{Le parser}
+        \subsubsection{Liés au Ray Tracer}
+
+            \subfile{latex/packages/RTpackages.tex}
+
+        \subsubsection{Le package materials}
+
+            \subfile{latex/packages/materials.tex}
+
+        \subsection{Le package render}
+
+
+
 \section{Détail des parties techniques}
-\subsection{Le Ray Tracer}
-\subsubsection{L'algorithme de base}
-\label{rayTracingBase}
+    \subsection{Le Ray Tracer}
+        \subsubsection{L'algorithme de base}
+            \label{rayTracingBase}
 
-\subfile{latex/RT/algoBase.tex}
+            \subfile{latex/RT/algoBase.tex}
 
-\subsubsection{L'ombrage de Phong}
-\label{ombragePhong}
+        \subsubsection{L'ombrage de Phong}
+            \label{ombragePhong}
 
-\subfile{latex/RT/ombragePhong.tex}
+            \subfile{latex/RT/ombragePhong.tex}
 
-\subsubsection{Les réflexions}
+        \subsubsection{Les réflexions}
 
-\subfile{latex/RT/reflections.tex}
+            \subfile{latex/RT/reflections.tex}
 
-\subsubsection{Les réfractions}
-\label{refractions}
+        \subsubsection{Les réfractions}
+            \label{refractions}
 
-\subsubsection{Le damier et le ciel (skybox)}
-\label{checkerboardSkybox}
+        \subsubsection{Le damier et le ciel (skybox)}
+            \label{checkerboardSkybox}
 
-\subfile{latex/RT/checkerboardSkybox.tex}
+            \subfile{latex/RT/checkerboardSkybox.tex}
 
-\subsection{Le multithreading}
+    \subsection{Le multithreading}
 
-\subfile{latex/RT/multithreading.tex}
+        \subfile{latex/RT/multithreading.tex}
 
-\subsection{Les mouvements de caméra}
-\label{mouvementsCamera}
+    \subsection{Les mouvements de caméra}
+        \label{mouvementsCamera}
 
-\subfile{latex/RT/mouvementsCam.tex}
+        \subfile{latex/RT/mouvementsCam.tex}
 
     \subsection{L'interface graphique}
 
     \input{latex/render.javafx/GUI.tex}
 
-\section{Structuration du projet}
-\subsection{Les packages}
-\subsubsection{Liés au Ray Tracer}
+    \subsection{Le parser}
+        \subsubsection{Structure d'un fichier POV}
+        \subsubsection{Implémentation du partern state}
+        \subsubsection{Implémentation du patern template méthode}
+        \subsubsection{Automate à état finit}
 
-\subfile{latex/packages/RTpackages.tex}
 
-\subsubsection{Le package materials}
+    \subsection{Les formes géométriques}
 
-\subfile{latex/packages/materials.tex}
 
-\section{Mesures de performance}
 
-\subfile{latex/other/mesuresPerf.tex}
+
+\section{Analyse des résultats}
+    \subsection{Mesure des performances}
+        \subfile{latex/other/mesuresPerf.tex}
+
+    \subsection{Comparaison avec povRay}
+\section{Idées d'améliorations}
+TODO BUG PREMIERE TILE MUTLITHREADING
+\section{Conclusion}
 
 
 
