@@ -26,7 +26,7 @@ public class WindowTimer extends AnimationTimer {
     private Label fpsLabel;
 
     private WritablePixelFormat<IntBuffer> pixelFormat;
-    private DoImageTask task;
+    //private DoImageTask task;
     private ExecutorService es;
     private CameraTimer cameraTimer;
 
@@ -41,9 +41,9 @@ public class WindowTimer extends AnimationTimer {
         Label fpsLabel = new Label("");
         this.fpsLabel = fpsLabel;
         fpsLabel.setId("fpsLabel");
-
+        this.mainAppScene = mainAppScene;
         this.pixelFormat = PixelFormat.getIntArgbPreInstance();
-        this.task = new DoImageTask(mainAppScene, pixelWriter, PixelFormat.getIntArgbPreInstance(), rayTracingScene);
+        //this.task = new DoImageTask(mainAppScene, pixelWriter, PixelFormat.getIntArgbPreInstance(), rayTracingScene);
         this.es = Executors.newFixedThreadPool(1);
         this.cameraTimer = new CameraTimer(mainAppScene, rayTracingScene);
 
@@ -55,17 +55,17 @@ public class WindowTimer extends AnimationTimer {
 
 
     public void handle(long actualFrameTime){
-
+    	DoImageTask task = new DoImageTask(mainAppScene, pixelWriter, PixelFormat.getIntArgbPreInstance(), rayTracingScene);
         es.execute(task);
 
         task.setOnSucceeded((succeededEvent) -> {
-        	System.out.println("I DO A FRAME");
-        	long dif = actualFrameTime - oldFrameTime;
-            dif  = (long)1000000000.0 / dif;
-            this.oldFrameTime = actualFrameTime;
+
         	IntBuffer intBuffer = task.getValue();
         	ImageWriter.doImage(intBuffer, pixelWriter, pixelFormat);
             //cameraTimer.start();
+        	long dif = actualFrameTime - oldFrameTime;
+            dif  = (long)1000000000.0 / dif;
+            this.oldFrameTime = actualFrameTime;
             fpsLabel.setText(String.format("FPS : %d\n%s\nH: %.2f°\nV: %.2f°", dif, this.rayTracingScene.getCamera().getPosition().toString(), this.rayTracingScene.getCamera().getAngleHori(), this.rayTracingScene.getCamera().getAngleVerti()));
          });
 

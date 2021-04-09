@@ -102,7 +102,6 @@ public class ImageWriter {
 
     public void ImageWriterMain(int height, int width) {
     	windowTimer.start();
-
         cameraTimer.start();
 
         //ExecutorService es = Executors.newFixedThreadPool(1);
@@ -170,24 +169,17 @@ public class ImageWriter {
         PositionnalLight l = new LightBulb(new Point(-2, 6, 0), 1);
 
         ArrayList<Shape> shapeList = new ArrayList<>();
-        shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
+        shapeList.add(new PlaneMaths(new Vector3D(0, 1, 0), new Vector3D(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0/2.0))));
 
-        double roughnessTab[] = new double[] {0.5, 0.75, 0.9, 1};
-        for(int y = 0; y < 4; y++)
-        {
-        	for(int x = 0; x < 4; x++)
-        	{
-        		Color sphereColor = ColorOperations.sRGBGamma2_2ToLinear(Color.web("D4AF37").interpolate(Color.rgb(32, 32, 32), 1.0/4.0*x));
+        shapeList.add(new SphereMaths(new Vector3D(-1.25, 0.5, -6), 1, new MirrorMaterial(0.75)));
+        shapeList.add(new SphereMaths(Vector3D.add(new Vector3D(-0.25, 0.5, -0.1), Vector3D.scalarMul(new Vector3D(1.250, 0.000, -4.500), 1.5625)), 0.2, new MetallicMaterial(Color.RED)));
+        shapeList.add(new SphereMaths(new Vector3D(-1.25, 1, -6.5), 0.2, new MetallicMaterial(Color.LIGHTSKYBLUE)));
+        shapeList.add(new SphereMaths(new Vector3D(-2, -0.65, -5), 0.35, new MatteMaterial(Color.ORANGERED, new ProceduralTextureCheckerboard(Color.BLACK, Color.YELLOW, 12))));
+        shapeList.add(new SphereMaths(new Vector3D(1.5, -0.65, -5), 0.35, new MetallicMaterial(Color.rgb(255, 211, 0))));
+        shapeList.add(new SphereMaths(new Vector3D(1.25, 0.5, -6), 1, new GlassMaterial()));
+        shapeList.add(new Icosphere(new Vector3D(0, 2, -6), 1, 1, new MatteMaterial(Color.RED)));
 
-//        		System.out.println(
-//        				"Position:" + new Point(-5 + x * 2, -0.5, -15 + y * 3)
-//        				+ String.format("Color: [%.3f, %.3f, %.3f]", sphereColor.getRed(), sphereColor.getGreen(), sphereColor.getBlue())
-//        				+ " Roughness: " + roughnessTab[y]
-//        				+ String.format(" Specular Size/Intensity: %d/%.3f", RoughMaterial.computeSpecularSize(roughnessTab[y]), RoughMaterial.computeSpecularIntensity(roughnessTab[y])) );
 
-                shapeList.add(new Sphere(new Point(-5 + x * 2, -0.5, -15 + y * 3), 0.5, new RoughMaterial(sphereColor, roughnessTab[y])));
-        	}
-        }
 
         Image skybox = null;
         URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
