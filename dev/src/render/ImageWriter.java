@@ -36,13 +36,14 @@ import scene.lights.*;
 public class ImageWriter {
 
     private RayTracingScene myGlobalScene;
-    
+
     private WritableImage writableImage;
-    private PixelWriter pw;
+    private volatile PixelWriter pw;
     private Pane pane;
     private Scene mainAppScene;
     private CameraTimer cameraTimer;
     private WindowTimer windowTimer;
+    private DoImageTask task;
 
     /**
      *
@@ -51,21 +52,21 @@ public class ImageWriter {
     public ImageWriter(Scene mainAppScene)
     {
         this.mainAppScene = mainAppScene;
-        {
-        	Image skybox = null;
-            URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
-            if(skyboxURL != null)
-            		skybox = new Image(skyboxURL.toExternalForm());
-
-        	this.myGlobalScene = Automat.parsePov("dev/src/povParser/sphere.pov");
-        	this.myGlobalScene.setSkybox(skybox);
-        }
-        //this.myGlobalScene = generateRoughnessDemoScene();
+//        {
+//        	Image skybox = null;
+//            URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
+//            if(skyboxURL != null)
+//            		skybox = new Image(skyboxURL.toExternalForm());
+//
+//        	this.myGlobalScene = Automat.parsePov("dev/src/povParser/roughScene.pov");
+//        	this.myGlobalScene.setSkybox(skybox);
+//        }
+        this.myGlobalScene = generateRoughnessDemoScene();
         //this.myGlobalScene = generateUsualScene();
         this.writableImage = new WritableImage(MainApp.WIDTH,MainApp.HEIGHT);
-        
+
         this.pw = writableImage.getPixelWriter();
-        
+
         ImageView imageView = new ImageView();
         imageView.setImage(writableImage);
         if(MainApp.AUTO_MODE == true) {
@@ -73,16 +74,12 @@ public class ImageWriter {
 			imageView.setFitHeight(primaryScreenBounds.getHeight());
 	        imageView.setFitWidth(primaryScreenBounds.getWidth());
         }
-        
+
         Pane pane = new Pane();
         pane.getChildren().add(imageView);
         this.pane = pane;
 
-        WindowTimer windowTimer = new WindowTimer(this.myGlobalScene, this.pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT));
-        this.windowTimer = windowTimer;
-
-        CameraTimer cameraTimer = new CameraTimer(this.mainAppScene, this.myGlobalScene);
-        this.cameraTimer = cameraTimer;
+        this.task = new DoImageTask(mainAppScene, pw, PixelFormat.getIntArgbPreInstance(), MyGlobalScene);
     }
 
     public void setRayTracingScene(RayTracingScene rayTracingScene) {
@@ -97,17 +94,21 @@ public class ImageWriter {
         return this.windowTimer;
     }
 
+    public DoImageTask getTask() {
+    	return this.task;
+    }
+
     public Pane getPane() {
     	return pane;
     }
 
     public void ImageWriterMain(int height, int width) {
-        windowTimer.start();
-        cameraTimer.start();
-        DoImageTask task = new DoImageTask(new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 1).renderImage(MyGlobalScene), pw, PixelFormat.getIntArgbPreInstance(), MyGlobalScene);
+        //windowTimer.start();
+        //cameraTimer.start();
+
         ExecutorService es = Executors.newFixedThreadPool(1);
         es.execute(task);
-        
+
         //this.updateCamera.run();
         //this.updateWindow.run();
     }
@@ -117,7 +118,7 @@ public class ImageWriter {
     	pw.setPixels(0, 0, MainApp.WIDTH, MainApp.HEIGHT, pixelFormat, pixelBuffer, MainApp.WIDTH);
     }
 
-    public RayTracingScene generateUsualScene() 
+    public RayTracingScene generateUsualScene()
     {
 
     	Camera cameraRT = new Camera(new Point(0.000, 0.5, 0.320), 0, 0, 40);//Magic camera
@@ -132,23 +133,23 @@ public class ImageWriter {
         shapeList.add(new Sphere(new Point(-1.25, 0.5, -6), 1, new MirrorMaterial(0.75)));
         shapeList.add(new Sphere(new Point(0, 1.5, -6), 0.5, new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(Color.web("D4AF37")), 0.75)));
         shapeList.add(new Sphere(new Point(1.25, 0.5, -6), 1, new GlassMaterial()));
-        
+
         shapeList.add(new Sphere(Point.translateMul(new Point(-0.3, 0.5, -0.1), new Vector(1.250, 0.000, -4.500), 1.5625), 0.2, new GlassyMaterial(Color.GREEN)));
         shapeList.add(new Sphere(new Point(-2, -0.65, -5), 0.35, new MatteMaterial(Color.BLACK, new ProceduralTextureCheckerboard(Color.BLACK, Color.YELLOW, 12))));
         shapeList.add(new Sphere(new Point(2, -0.65, -5), 0.35, new MatteMaterial(Color.BLACK, new ProceduralTextureCheckerboard(Color.RED, Color.DARKRED.darker(), 12))));
-        
+
         shapeList.add(new Sphere(new Point(0, -0.5, -6), 0.5, new GlassyMaterial(Color.RED)));
         shapeList.add(new Sphere(new Point(-0.75, -0.75, -6), 0.25, new GlassyMaterial(Color.rgb(255, 64, 0))));
         shapeList.add(new Sphere(new Point(0.75, -0.75, -6), 0.25, new GlassyMaterial(Color.rgb(255, 64, 0))));
         //shapeList.add(new Icosphere(new Point(0, 2, -6), 1, 2, new GlassyMaterial(Color.rgb(0, 128, 255))));
         //shapeList.add(new Rectangle(new Point(-1.25, 1.5, -6), new Point(-0.25, 2.5, -7), new GlassyMaterial(Color.RED)));
-        
-        
+
+
         Image skybox = null;
         URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
         if(skyboxURL != null)
         		skybox = new Image(skyboxURL.toExternalForm());
-        
+
         RayTracingScene sceneRT = null;
         try
         {
@@ -163,8 +164,8 @@ public class ImageWriter {
         sceneRT.addLight(new LightBulb(new Point(-2, 2.5, 1.440), 1));
         return  sceneRT;
     }
-    
-    public RayTracingScene generateRoughnessDemoScene() 
+
+    public RayTracingScene generateRoughnessDemoScene()
     {
     	Camera cameraRT = new Camera(new Point(-2.000, 4, -1), new Point(-2, 0, -8), 40);
         PositionnalLight l = new LightBulb(new Point(-2, 6, 0), 1);
@@ -178,22 +179,22 @@ public class ImageWriter {
         	for(int x = 0; x < 4; x++)
         	{
         		Color sphereColor = ColorOperations.sRGBGamma2_2ToLinear(Color.web("D4AF37").interpolate(Color.rgb(32, 32, 32), 1.0/4.0*x));
-        		
+
 //        		System.out.println(
-//        				"Position:" + new Point(-5 + x * 2, -0.5, -15 + y * 3) 
-//        				+ String.format("Color: [%.3f, %.3f, %.3f]", sphereColor.getRed(), sphereColor.getGreen(), sphereColor.getBlue()) 
+//        				"Position:" + new Point(-5 + x * 2, -0.5, -15 + y * 3)
+//        				+ String.format("Color: [%.3f, %.3f, %.3f]", sphereColor.getRed(), sphereColor.getGreen(), sphereColor.getBlue())
 //        				+ " Roughness: " + roughnessTab[y]
 //        				+ String.format(" Specular Size/Intensity: %d/%.3f", RoughMaterial.computeSpecularSize(roughnessTab[y]), RoughMaterial.computeSpecularIntensity(roughnessTab[y])) );
-        		
+
                 shapeList.add(new Sphere(new Point(-5 + x * 2, -0.5, -15 + y * 3), 0.5, new RoughMaterial(sphereColor, roughnessTab[y])));
         	}
         }
-        
+
         Image skybox = null;
         URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
         if(skyboxURL != null)
         		skybox = new Image(skyboxURL.toExternalForm());
-        
+
         RayTracingScene sceneRT = null;
         try
         {
@@ -210,24 +211,31 @@ public class ImageWriter {
 }
 
 class DoImageTask extends Task {
-	
+
 	IntBuffer pixelBuffer;
 	PixelWriter pw;
 	WritablePixelFormat<IntBuffer> pixelFormat;
 	RayTracingScene rts;
-	DoImageTask(IntBuffer pixelBuffer, PixelWriter pw, WritablePixelFormat<IntBuffer> pixelFormat, RayTracingScene rts) {
-		this.pixelBuffer = pixelBuffer;
+	Scene mainAppScene;
+	DoImageTask(Scene mainAppScene, PixelWriter pw, WritablePixelFormat<IntBuffer> pixelFormat, RayTracingScene rts) {
+		this.mainAppScene = mainAppScene;
 		this.pw = pw;
 		this.pixelFormat = pixelFormat;
 		this.rts = rts;
-		
+
 	}
 	@Override
 	public Object call() {
 		RayTracer rayTracer = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 1);
+		WindowTimer windowTimer = new WindowTimer(rts, this.pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 1));
+
+        CameraTimer cameraTimer = new CameraTimer(this.mainAppScene, rts);
+		windowTimer.start();
+        cameraTimer.start();
 		while(true) {
+			pixelBuffer = rayTracer.renderImage(rts);
 			ImageWriter.doImage(pixelBuffer, pw, pixelFormat);
 		}
-		
+
 	}
 }
