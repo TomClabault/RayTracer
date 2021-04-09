@@ -23,31 +23,25 @@ import scene.RayTracingScene;
  */
 public class RayTracer
 {
-	public static final double AIR_REFRACTION_INDEX = 1.000393;
+	public static final double AIR_REFRACTION_INDEX = 1.000293;
 
-	private int renderHeight;
-	private int renderWidth;
+	RayTracerSettings settings;
+
 	private ThreadsTaskList threadTaskList;
-	private int nbCore;
-	private int maxDepth;
-
 	private IntBuffer renderedPixels;
 
 	private PixelReader skyboxPixelReader = null;
 
-	public RayTracer(int renderWidth, int renderHeight, int maxDepth, int nbCore)
+	public RayTracer(RayTracerSettings settings)
 	{
-		this.renderWidth = renderWidth;
-		this.renderHeight = renderHeight;
-		this.maxDepth = maxDepth;
+		this.settings = settings;
 		
-		this.renderedPixels = IntBuffer.allocate(renderWidth*renderHeight);
-		for(int i = 0; i < renderWidth*renderHeight; i++)
-			this.renderedPixels.put(i, ColorOperations.aRGB2Int(Color.rgb(255, 0, 0)));
+		this.renderedPixels = IntBuffer.allocate(settings.getRenderWidth()*settings.getRenderHeight());
+//		for(int i = 0; i < renderWidth*renderHeight; i++)
+//			this.renderedPixels.put(i, ColorOperations.aRGB2Int(Color.rgb(255, 0, 0)));
 		
 		this.threadTaskList = new ThreadsTaskList();
-		this.nbCore = nbCore;
-		threadTaskList.initTaskList(nbCore, this.renderWidth, this.renderHeight);
+		this.threadTaskList.initTaskList(settings.getNbCore(), settings.getRenderWidth(), settings.getRenderHeight());
 	}
 	
 	/*
@@ -319,10 +313,10 @@ public class RayTracer
 				Ray cameraRay = new Ray(MatrixD.mulPoint(new Vector3D(0, 0, 0), ctwMatrix), rayDirection);
 				cameraRay.normalize();
 
-				Color pixelColor = this.computePixel(x,y,renderScene, cameraRay, maxDepth);
+				Color pixelColor = this.computePixel(x,y,renderScene, cameraRay, settings.getRecursionDepth());
 				pixelColor = ColorOperations.linearTosRGBGamma2_2(pixelColor);
 				
-				this.renderedPixels.put(y*renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
+				this.renderedPixels.put(y*settings.getRenderWidth() + x, ColorOperations.aRGB2Int(pixelColor));
 			}
 		}
 	}
@@ -440,22 +434,22 @@ public class RayTracer
 		Integer taskNumber = 0;
 		TileTask currentTileTask = null;
 
-		synchronized(taskNumber)
-		{
+		//synchronized(taskNumber)
+		//{
 			taskNumber = taskList.getTotalTaskGiven();
 			if(taskNumber >= taskList.getTotalTaskCount())
 				return false;
 
 			currentTileTask = taskList.getTask(taskList.getTotalTaskGiven());
 			taskList.incrementTaskGiven();
-		}
+		//}
 		this.computePartialImage(renderScene, currentTileTask.getStartX(), currentTileTask.getStartY(), currentTileTask.getEndX(), currentTileTask.getEndY());
 
 		Integer lockVariable = 0;
-		synchronized(lockVariable)
-		{
+		//synchronized(lockVariable)
+		//{
 			taskList.incrementTaskFinished();
-		}
+		//}
 		
 		return true;//Encore des tuiles à calculer
 	}
@@ -474,15 +468,15 @@ public class RayTracer
 		double xWorld = (double)x;
 		double yWorld = (double)y;
 
-		double aspectRatio = (double)this.renderWidth / (double)this.renderHeight;
+		double aspectRatio = (double)settings.getRenderWidth() / (double)settings.getRenderHeight();
 		double demiHeightPlane = Math.tan(Math.toRadians(FOV/2));
 
-		xWorld = (xWorld + 0.5) / this.renderWidth;//Normalisation des pixels. Maintenant dans [0, 1]
+		xWorld = (xWorld + 0.5) / settings.getRenderWidth();//Normalisation des pixels. Maintenant dans [0, 1]
 		xWorld = xWorld * 2 - 1;//Décalage des pixels dans [-1, 1]
 		xWorld *= aspectRatio;//Prise en compte de l'aspect ratio. Maintenant dans [-aspectRatio; aspectRatio]
 		xWorld *= demiHeightPlane;
 
-		yWorld = (yWorld + 0.5) / this.renderHeight;//Normalisation des pixels. Maintenant dans [0, 1]
+		yWorld = (yWorld + 0.5) / settings.getRenderHeight();//Normalisation des pixels. Maintenant dans [0, 1]
 		yWorld = 1 - yWorld * 2;//Décalage des pixels dans [-1, 1]
 		yWorld *= demiHeightPlane;
 
@@ -600,7 +594,7 @@ public class RayTracer
 		if(renderScene.hasSkybox())
 			this.skyboxPixelReader = renderScene.getSkyboxPixelReader();
 
-		for(int i = 1; i < this.nbCore; i++)//Création des threads sauf 1, le thread principal, qui est déjà créé
+		for(int i = 1; i < settings.getNbCore(); i++)//Création des threads sauf 1, le thread principal, qui est déjà créé
 			new Thread(new TileThread(threadTaskList, this, renderScene), String.format("RT-Thread %d", i)).start();
 
 		while(threadTaskList.getTotalTaskFinished() < threadTaskList.getTotalTaskCount())

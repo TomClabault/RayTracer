@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 
 import rayTracer.RayTracer;
+import rayTracer.RayTracerSettings;
 import geometry.shapes.*;
 import geometry.*;
 import materials.*;
@@ -31,6 +32,8 @@ import scene.lights.*;
 public class ImageWriter {
 
     private RayTracingScene MyGlobalScene = addObjectsToScene();
+    private RayTracerSettings RTsettings;
+    
     private WritableImage writableImage;
     private PixelWriter pw;
     private Pane pane;
@@ -44,6 +47,8 @@ public class ImageWriter {
     */
     public ImageWriter(Scene mainAppScene)
     {
+    	this.RTsettings = new RayTracerSettings(MainApp.WIDTH, MainApp.HEIGHT, 4, 8, 0);
+    	
         this.mainAppScene = mainAppScene;
         this.writableImage = new WritableImage(MainApp.WIDTH,MainApp.HEIGHT);
 
@@ -61,7 +66,7 @@ public class ImageWriter {
         pane.getChildren().add(imageView);
         this.pane = pane;
 
-        WindowTimer windowTimer = new WindowTimer(this.MyGlobalScene, this.pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 8));
+        WindowTimer windowTimer = new WindowTimer(this.MyGlobalScene, this.pw, new RayTracer(RTsettings));
         this.windowTimer = windowTimer;
 
         CameraTimer cameraTimer = new CameraTimer(this.mainAppScene, this.MyGlobalScene);
