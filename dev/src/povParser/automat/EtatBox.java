@@ -33,6 +33,7 @@ public class EtatBox extends EtatUtil implements EtatToken
 
         while(state != Boxcontent.OUTSIDE)
         {
+            System.out.println("STATE IN BOX: " + state);
             switch (state)
             {
                 case OPENING_BRACKET:
@@ -61,7 +62,7 @@ public class EtatBox extends EtatUtil implements EtatToken
                     context.callNextToken(); //passe le chevron fermant
                     if(coordNb == 2)
                     {
-                        state = Boxcontent.ENDING_BRACKET;
+                        state = Boxcontent.ATTRIBUTE;
                     }
                     else
                     {

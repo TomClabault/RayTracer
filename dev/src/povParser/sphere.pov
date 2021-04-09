@@ -6,7 +6,7 @@ sphere { <0.5, 1.5, 2.5>, 0.7
     reflection 0.2
   }
 }
-/*
+
 triangle
 {
     <1, 2, 3>, <4, 5, 6>, <7, 8, 9>
@@ -35,7 +35,13 @@ plane
 
 box
 {
-    <1, 1, 1> <2, 2, 2>
+    <1, 1, 1>, <2, 2, 2>
+    pigment
+    {
+        color rgb 1
+    }
+    finish
+    {
+        specular 1.2
+    }
 }
-
-*/

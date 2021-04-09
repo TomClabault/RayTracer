@@ -6,8 +6,6 @@ import java.io.*;
 public class Automat
 {
     /*TODO
-    -trouver un moyen de factoriser les object modifiers (finish et pigment) de chaque sous classe (classe mère des attributs)
-    -rajouter le parsing de couleur sous forme <r, g, b> (voir EtatTriangle) pour chaque sous classe (puis factoriser)
     -remplacer les add de liste par l'instanciation de la bonne classe et ses setters
     -réparer EtatPlane (sphere plane) probleme de boucle infinie ?
     -réparer problème sémantique dans etatsphereplane (ending chevron utilisé après <, , > d <--- après le d alors que ce n'est n'est pas un ending chevron
@@ -134,6 +132,7 @@ public class Automat
             StreamTokenizer streamTokenizer = new StreamTokenizer(fileReader);
             streamTokenizer.wordChars('_', '_'); //permet d'avoir des noms contenant un underscore
             streamTokenizer.commentChar('#');
+            streamTokenizer.slashStarComments(true);
 
             Automat automat = new Automat(streamTokenizer);
 

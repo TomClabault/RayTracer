@@ -25,7 +25,7 @@ enum Attribute
 public abstract class EtatUtil
 {
 
-    int nbBracket = 0;
+    int nbBracket = 1;
 
     public Attribute parsePropertryAndGetState(Automat context)
     {
@@ -70,19 +70,38 @@ public abstract class EtatUtil
 
     public Attribute checkEndingBracket(Automat context)
     {
+        /*this.nbBracket--;
+        Attribute state = parsePropertryAndGetState(context);
         int token = context.callNextToken();
-        Attribute state  = parsePropertryAndGetState(context);
-        if(state == null)
-        {
+
+            System.out.println(context.getStreamTokenizer());
             if ((char) token == '}')
             {
+                System.out.println("NB DE BRACKETS : " + this.nbBracket);
                 this.nbBracket --;
                 if (this.nbBracket == 0)
                 {
+                    System.out.println("check ending bracket function : OUTSIDE");
                     return Attribute.OUTSIDE;
                 }
-                state = parsePropertryAndGetState(context);
-            }
+                System.out.println("check ending bracket function : " + state);
+                state = checkEndingBracket(context);
+        }
+        return state;*/
+        Attribute state = null;
+        System.out.println("nb bracket : " + this.nbBracket);
+        this.nbBracket--;//'}'
+        if(this.nbBracket == 0)
+        {
+            System.out.println("STATE in check function: " + state);
+            return Attribute.OUTSIDE;
+        }
+        context.callNextToken();
+        state = parsePropertryAndGetState(context);
+        System.out.println("STATE IN CHEcK: " + state);
+        if(state == null)
+        {
+            state = checkEndingBracket(context);
         }
         return state;
     }
@@ -91,17 +110,19 @@ public abstract class EtatUtil
     {
         Material material = new Material(null, 0, 0, 0, 0, false, 0);
         Attribute state = parsePropertryAndGetState(context);
+        System.out.println("ICIIIIIIII : " + state);
         int token = 0;
         boolean color = false;
         double phong_value = 0;
 
         while(state != Attribute.OUTSIDE)
         {
-            System.out.println(context.getStreamTokenizer());
             switch (state)
             {
                 case AMBIENT:
                 {
+                    System.out.println("ambient");
+                    System.out.println(context.getStreamTokenizer());
                     context.callNextToken(); // skip ambient
                     //appeler le setter material correspondant à l'ambient
                     token = context.callNextToken(); // skip ambient coeff
@@ -110,11 +131,16 @@ public abstract class EtatUtil
                     {
                         state = this.checkEndingBracket(context);
                     }
+                    System.out.println("state : " + state);
+                    System.out.println(context.getStreamTokenizer());
                     break;
                 }
 
                 case SPECULAR:
                 {
+                    System.out.println("specular");
+                    System.out.println(context.getStreamTokenizer());
+
                     context.callNextToken(); // skip specular
                     material.setSpecularCoeff(context.getNumberValue());
                     context.callNextToken();
@@ -123,11 +149,16 @@ public abstract class EtatUtil
                     {
                         state = this.checkEndingBracket(context);
                     }
+                    System.out.println("state : " + state);
+                    System.out.println(context.getStreamTokenizer());
                     break;
                 }
 
                 case DIFFUSE:
                 {
+                    System.out.println("specular");
+                    System.out.println(context.getStreamTokenizer());
+
                     context.callNextToken(); //skip diffuse
                     material.setDiffuseCoeff(context.getNumberValue());
                     context.callNextToken();
@@ -136,11 +167,16 @@ public abstract class EtatUtil
                     {
                         state = this.checkEndingBracket(context);
                     }
+                    System.out.println("state : " + state);
+                    System.out.println(context.getStreamTokenizer());
                     break;
                 }
 
                 case FINISH:
                 {
+                    System.out.println("finish");
+                    System.out.println(context.getStreamTokenizer());
+
                     context.callNextToken(); // skip finish
                     context.callNextToken(); // skip '{'
                     nbBracket++;
@@ -149,13 +185,18 @@ public abstract class EtatUtil
                     {
                         throw new RuntimeException("fichier pov non valide\n");
                     }
+                    System.out.println("state : " + state);
+                    System.out.println(context.getStreamTokenizer());
                     break;
                 }
                 case PIGMENT:
                 {
+                    System.out.println("pigment");
+                    System.out.println(context.getStreamTokenizer());
+
                     context.callNextToken(); //skip pigment
                     context.callNextToken(); //skip '{'
-                    nbBracket++;
+                    this.nbBracket++;
                     if (context.currentWord("color"))
                     {
                         color = true;
@@ -173,21 +214,29 @@ public abstract class EtatUtil
                                 int colorAttribute = (int)context.getNumberValue() * 255;
                                 material.setColor(Color.rgb(colorAttribute, colorAttribute, colorAttribute));
                             }
+                            System.out.println("STREAM !! : " + context.getStreamTokenizer());
+
                             context.callNextToken(); // skip color value
-                            context.callNextToken(); // skip '}'
-                            nbBracket--;
+                            //nbBracket--;
+                            System.out.println(context.getStreamTokenizer());
                             state = parsePropertryAndGetState(context);
+                            System.out.println("STATE : " + state);
                             if(state == null)
                             {
                                 state = this.checkEndingBracket(context);
+                                System.out.println("STATE : " + state);
                             }
 
                         }
                     }
+                    System.out.println("state : " + state);
+                    System.out.println(context.getStreamTokenizer());
                     break;
                 }
                 case PHONG:
                 {
+                    System.out.println("phong");
+                    System.out.println(context.getStreamTokenizer());
                     context.callNextToken(); //skip phong
                     phong_value = context.getNumberValue();
                     context.callNextToken();
@@ -196,11 +245,15 @@ public abstract class EtatUtil
                     {
                         state = this.checkEndingBracket(context);
                     }
+                    System.out.println("state : " + state);
+                    System.out.println(context.getStreamTokenizer());
                     break;
                 }
 
                 case PHONG_SIZE:
                 {
+                    System.out.println("phong_size");
+                    System.out.println(context.getStreamTokenizer());
                     context.callNextToken(); //skip phong_size
                     material.setShininess((int)context.getNumberValue());
                     context.callNextToken();
@@ -209,49 +262,67 @@ public abstract class EtatUtil
                     {
                         state = this.checkEndingBracket(context);
                     }
+                    System.out.println("state : " + state);
+                    System.out.println(context.getStreamTokenizer());
                     break;
                 }
 
                 case REFLECTION:
                 {
+                    System.out.println("reflection");
+                    System.out.println(context.getStreamTokenizer());
                     context.callNextToken(); //skip reflexion
                     material.setReflectiveCoeff(context.getNumberValue());
                     context.callNextToken();
                     state = parsePropertryAndGetState(context);
+
                     if(state == null)
                     {
                         state = this.checkEndingBracket(context);
                     }
+                    System.out.println("state : " + state);
+                    System.out.println(context.getStreamTokenizer());
                     break;
                 }
 
                 case OPENING_CHEVRON:
                 {
+                    System.out.println("IN OPENING CHEVRON : " + context.getStreamTokenizer());
                     context.callNextToken(); //skip '<'
                     int[] colorTab = new int[3];
                     for(int i = 0; i < 3; i++)
                     {
-
+                        System.out.println(context.getNumberValue());
                         colorTab[i] = (int)(context.getNumberValue() * 255);
                         context.callNextToken();
                         if(i < 2)
                             context.callNextToken();
                     }
+                    System.out.println("AFTER FOR LOOP " + context.getStreamTokenizer());
                     material.setColor(Color.rgb(colorTab[0], colorTab[1], colorTab[2]));
-                    state = Attribute.ENDING_CHEVRON;
+                    context.callNextToken(); //skip '>'
+                    state = this.parsePropertryAndGetState(context);
+                    System.out.println("STATE AFTER >: " + state);
+                    if (state == null)
+                    {
+                        state = this.checkEndingBracket(context);
+                        System.out.println("STATE AFTER NULL: " + state);
+                    }
                     break;
                 }
                 case ENDING_CHEVRON:
                 {
                     context.callNextToken(); // skip '>'
-                    state = parsePropertryAndGetState(context);
+                    /*state = parsePropertryAndGetState(context);
                     if(state == null)
                     {
-                        state = Attribute.OUTSIDE;
-                    }
+                        //state = this.checkEndingBracket(context);
+                    }*/
+                    break;
                 }
             }
         }
+        System.out.println(material);
         return material;
     }
 }
