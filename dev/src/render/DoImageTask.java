@@ -1,6 +1,7 @@
 package render;
 
 import java.nio.IntBuffer;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
@@ -11,20 +12,16 @@ import scene.RayTracingScene;
 
 public class DoImageTask extends Task<IntBuffer> {
 	
-	IntBuffer pixelBuffer;
-	PixelWriter pw;
-	WritablePixelFormat<IntBuffer> pixelFormat;
-	RayTracingScene rts;
-	Scene mainAppScene;
-	//WindowTimer windowTimer;
+	private IntBuffer pixelBuffer;
+	private RayTracingScene rts;
+	private RayTracer rayTracerInstance;
+	private Scene mainAppScene;
 	
 	DoImageTask(Scene mainAppScene, PixelWriter pw, WritablePixelFormat<IntBuffer> pixelFormat, RayTracingScene rts) {
 		this.mainAppScene = mainAppScene;
-		this.pw = pw;
-		this.pixelFormat = pixelFormat;
 		this.rts = rts;
-		//this.windowTimer = new WindowTimer(mainAppScene, rts, this.pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 1));
 		
+		this.rayTracerInstance = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 8);
 	}
 	
 	//public WindowTimer getWindowTimer() {
@@ -34,11 +31,11 @@ public class DoImageTask extends Task<IntBuffer> {
 	
 	@Override
 	protected IntBuffer call() {
-		RayTracer rayTracer = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 1);
-
-		pixelBuffer = rayTracer.renderImage(rts);
+		synchronized(mainAppScene)
+		{
+			pixelBuffer = rayTracerInstance.renderImage(rts);
+		}
 			
 		return pixelBuffer;
-		
 	}
 }
