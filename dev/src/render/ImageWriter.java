@@ -79,7 +79,8 @@ public class ImageWriter {
         pane.getChildren().add(imageView);
         this.pane = pane;
 
-        this.task = new DoImageTask(mainAppScene, pw, PixelFormat.getIntArgbPreInstance(), MyGlobalScene);
+        //this.task = new DoImageTask(mainAppScene, pw, PixelFormat.getIntArgbPreInstance(), MyGlobalScene);
+        this.windowTimer = new WindowTimer(mainAppScene, MyGlobalScene, pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 1));
     }
 
     public void setRayTracingScene(RayTracingScene rayTracingScene) {
@@ -103,7 +104,10 @@ public class ImageWriter {
     }
 
     public void ImageWriterMain(int height, int width) {
-        //windowTimer.start();
+    	while(true) {
+    		windowTimer.start();
+    	}
+
         //cameraTimer.start();
 
         ExecutorService es = Executors.newFixedThreadPool(1);
