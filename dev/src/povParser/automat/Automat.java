@@ -6,9 +6,6 @@ import java.io.*;
 public class Automat
 {
     /*TODO
-    -remplacer les add de liste par l'instanciation de la bonne classe et ses setters
-    -réparer EtatPlane (sphere plane) probleme de boucle infinie ?
-    -réparer problème sémantique dans etatsphereplane (ending chevron utilisé après <, , > d <--- après le d alors que ce n'est n'est pas un ending chevron
     -parse les lumières (une seule: Point Light)
     -parse les textures spéciales
     -parse cheker dans pigment

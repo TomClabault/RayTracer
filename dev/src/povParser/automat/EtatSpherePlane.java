@@ -1,7 +1,8 @@
 package povParser.automat;
 
+import javafx.scene.paint.Color;
 import materials.Material;
-
+import maths.Vector3D;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 
@@ -17,7 +18,7 @@ enum SpherePlanecontent
 
 public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
 {
-    protected abstract void createInstance(ArrayList<String> list);
+    protected abstract void createInstance(Vector3D coord, Double dist, Material material);
 
     @Override
     public void action(Automat context)
@@ -31,7 +32,10 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
         boolean color = false;
         boolean coord = false;
         int nextToken = 0;
-        Material material = null;
+        Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0);
+        Vector3D vect = null;
+
+        Double dist = null;
 
         SpherePlanecontent state = SpherePlanecontent.OPENING_BRACKET;
 
@@ -59,13 +63,15 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
                     break;
                 }
                 case OPENING_CHEVRON: {
+                    double[] coordArray = new double[3];
                     if (coord) {
                         for (int i = 0; i < 3; i++) {
                             context.callNextToken(); // la virgule
                             context.callNextToken();
-                            list.add(String.valueOf(st.nval));
+                            coordArray[i] = context.getNumberValue();
                         }
                     }
+                    vect = new Vector3D(coordArray[0], coordArray[1], coordArray[2]);
                     //coord = false;
                     state = SpherePlanecontent.ENDING_CHEVRON;
                     break;
@@ -77,7 +83,7 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
                     } else {
                         if ((char) nextToken == ',') {
                             context.callNextToken();
-                            list.add(String.valueOf(context.getNumberValue()));
+                            dist = context.getNumberValue();
                             context.callNextToken();
                             if (context.isCurrentTokenAWord()) {
                                 state = SpherePlanecontent.ATTRIBUTE;
@@ -96,6 +102,6 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
                 }
             }
         }
-        createInstance(list);
+        createInstance(vect, dist, material);
     }
 }

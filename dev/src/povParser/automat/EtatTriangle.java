@@ -1,6 +1,9 @@
 package povParser.automat;
 
+import geometry.shapes.Triangle;
+import javafx.scene.paint.Color;
 import materials.Material;
+import maths.Vector3D;
 
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
@@ -21,7 +24,6 @@ public class EtatTriangle extends EtatUtil implements EtatToken
     public void action(Automat context)
     {
         int nextToken = context.callNextToken(); //accolade ouvrante après le mot triangle
-        ArrayList<String> list = new ArrayList<>();
 
         StreamTokenizer st = context.getStreamTokenizer();
         context.callNextToken();
@@ -29,7 +31,11 @@ public class EtatTriangle extends EtatUtil implements EtatToken
         int coordNb = 0;
         boolean color = false;
         boolean triangleCoord = false;
-        Material material = null;
+        Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0);
+        Triangle triangle = null;
+        Vector3D vectA = null;
+        Vector3D vectB = null;
+        Vector3D vectC = null;
 
         Trianglecontent state = Trianglecontent.OPENING_BRACKET;
 
@@ -49,6 +55,7 @@ public class EtatTriangle extends EtatUtil implements EtatToken
                 case OPENING_CHEVRON:
                 {
                     context.callNextToken(); //skip '<'
+                    double[][] coordArray = new double[3][3];
                     if(triangleCoord)
                     {
                         for(int point = 0; point < 3; point++)
@@ -57,7 +64,7 @@ public class EtatTriangle extends EtatUtil implements EtatToken
                                 context.callNextToken();
                             for (int coord = 0; coord < 3; coord++)
                             {
-                                list.add(String.valueOf(context.getNumberValue()));
+                                coordArray[point][coord] = context.getNumberValue();
 
                                 context.callNextToken();
 
@@ -72,19 +79,14 @@ public class EtatTriangle extends EtatUtil implements EtatToken
                                 context.callNextToken();
                             }
                         }
+                        vectA = new Vector3D(coordArray[0][0], coordArray[0][1], coordArray[0][2]);
+                        vectB = new Vector3D(coordArray[1][0], coordArray[1][1], coordArray[1][2]);
+                        vectC = new Vector3D(coordArray[2][0], coordArray[2][1], coordArray[2][2]);
+
                         triangleCoord = false;
                     }
 
-                    if(!color)
-                        coordNb++;
-                    else // color == true
-                    {
-                        for (int i = 0; i < 3; i++) {
-                            list.add(String.valueOf(st.nval));
-                            context.callNextToken(); // la virgule
-                            context.callNextToken();
-                        }
-                    }
+                    coordNb++;
                     state = Trianglecontent.ENDING_CHEVRON;
                     break;
                 }
@@ -126,7 +128,6 @@ public class EtatTriangle extends EtatUtil implements EtatToken
                 }
             }
         }
-        System.out.println(material);
-        System.out.println(list);
+        triangle = new Triangle(vectA, vectB, vectC, material);
     }
 }

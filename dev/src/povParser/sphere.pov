@@ -1,9 +1,10 @@
 sphere { <0.5, 1.5, 2.5>, 0.7
   pigment { color rgb <0.1, 0.2, 0.3>}
   finish {
-    ambient 0 diffuse 0
+    ambient 0.5 diffuse 0.3
     specular 0.7
-    reflection 0.2
+    reflection 0.6
+    phong_size 60
   }
 }
 

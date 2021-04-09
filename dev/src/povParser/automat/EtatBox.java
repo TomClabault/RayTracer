@@ -1,6 +1,9 @@
 package povParser.automat;
 
+import geometry.shapes.Rectangle;
+import javafx.scene.paint.Color;
 import materials.Material;
+import maths.Vector3D;
 
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
@@ -21,19 +24,20 @@ public class EtatBox extends EtatUtil implements EtatToken
     public void action(Automat context)
     {
         int nextToken = context.callNextToken();
-        ArrayList<String> list = new ArrayList<>();
 
         StreamTokenizer st = context.getStreamTokenizer();
         context.callNextToken();
         int bracketNb = 0;
         int coordNb = 0;
-        Material material = null;
+        Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0);
+        Rectangle rectangle = null;
+        Vector3D vector1 = null;
+        Vector3D vector2 = null;
 
         Boxcontent state = Boxcontent.OPENING_BRACKET;
 
         while(state != Boxcontent.OUTSIDE)
         {
-            System.out.println("STATE IN BOX: " + state);
             switch (state)
             {
                 case OPENING_BRACKET:
@@ -46,12 +50,17 @@ public class EtatBox extends EtatUtil implements EtatToken
                 }
                 case OPENING_CHEVRON:
                 {
+                    double[] coordArray = new double[3];
                     for(int i = 0; i < 3; i++)
                     {
                         context.callNextToken(); // la virgule
                         context.callNextToken();
-                        list.add(String.valueOf(st.nval));
+                        coordArray[i] = context.getNumberValue();
                     }
+                    if(vector1 == null)
+                        vector1 = new Vector3D(coordArray[0], coordArray[1], coordArray[2]);
+                    else
+                        vector2 = new Vector3D(coordArray[0], coordArray[1], coordArray[2]);
                     state = Boxcontent.ENDING_CHEVRON;
                     coordNb++;
 
@@ -93,7 +102,6 @@ public class EtatBox extends EtatUtil implements EtatToken
                 }
             }
         }
-        System.out.println(material);
-        System.out.println(list);
+        rectangle = new Rectangle(vector1, vector2, material);
     }
 }
