@@ -115,12 +115,13 @@ public class RayTracer
 	/*
 	 * Calcule le premier point d'intersection du rayon passé en argument avec les objets de la scène
 	 *
-	 * @param objectList Liste des objets de la scène. Obtenable avec MyScene.getSceneObjects()
-	 * @param ray Rayon duquel chercher les points d'intersection avec les objets de la scène
-	 * @param outClosestInterPoint Ce paramètre reçoit les coordonnées du point d'intersection le plus proche de la caméra trouvé. Il est inchangé si aucun point d'intersection n'est trouvé
-	 * @param outNormalAtInter 	   Ce paramètre reçoit la normale au point d'intersection trouvé. Inchangé si aucun point d'intersection n'a été trouvé. Si ce paramètre est null, la normale au point d'intersection ne sera pas automatiquement calculée
+	 * @param objectList 			Liste des objets de la scène. Obtenable avec MyScene.getSceneObjects()
+	 * @param ray 					Rayon duquel chercher les points d'intersection avec les objets de la scène
+	 * @param intInfos 				Référence vers les informations sur le point d'intersection qui sera éventuellement trouvé par un appel à computeClosestInterPoint. Si un point d'intersection est trouvé, une partie de l'ensemble des informations relatives sera mise à jour 
+	 * @param getNormalAtInter 		True pour récupérer la normale au point d'intersection dans intInfos passé en argument. Si false, la normale ne sera pas récupérer et l'attribut 'normalAtIntersection' de intInfos restera inchangé
+	 * @param outClosestInterPoint	Référence vers une instance de Point. Si cette instance est non nulle, elle sera mise à jour si computeClosestInterPoint trouve un point d'intersection entre le rayon et la scène. Si aucun point d'intersection n'est trouvé, l'instance restera inchangée
 	 *
-	 * @return Retourne l'objet avec lequel le rayon a fait son intersection. 'outClosestInterPoint' est un point de l'objet retourné
+	 * @return Retourne l'objet avec lequel le rayon a fait son intersection. Si 'outClosestInterPoint' était non nulle à l'appel de la méthode alors outClosestInterPoint contient maintenant le point d'intersection entre le rayon et l'objet renvoyé par la méthode
 	 */
 	protected Shape computeClosestInterPoint(ArrayList<Shape> objectList, Ray ray, RayTracerInterInfos intInfos, boolean getNormalAtInter, Point outClosestInterPoint)
 	{
@@ -160,17 +161,13 @@ public class RayTracer
 	}
 
 	/*
-	 * A partir d'une couleur donnée en entrée, calcule et renvoie la couleur après application de la composante diffuse de l'ombrage de Phong pour un matériau et des directions de rayons donnés
-	 * Si l'objet n'est pas diffus, la couleur est renvoyée inchangée par la fonction
-	 * 
-	 * @param rayIntObjMaterial Le matériau qui va être utilisé pour calculer la composante diffuse
-	 * @param finalColorBefore La couleur "sur" laquelle va être appliquée le calcul de la composante diffuse
-	 * @param objectColor La couleur du matériau de l'objet
-	 * @param toLightVector Vecteur indiquant la direction vers la source de lumière
-	 * @param normalAtIntersection Le vecteur normal de la surface de l'objet au point d'intersection
-	 * @param lightIntensity Intensité lumineuse de la source de lumière
+	 * A partir des informations sur le point d'intersection données en entrée, calcule et renvoie la couleur de la composante diffuse de l'ombrage de Phong au point d'intersection
+	 * Si le matériau de l'objet n'est pas diffus, la couleur noire rgb(0, 0, 0) est renvoyée
+	 *
+	 * @param intInfos 			Ensemble des informations sur le point d'intersection entre le rayon incident et l'objet qui a été intersecté et dont on souhaite obtenir la couleur diffuse
+	 * @param lightIntensity 	Intensité lumineuse de la source de lumière
 	 *  
-	 * @return La couleur passée en argument affectée de la composante diffuse de l'ombrage de Phong. Si l'objet n'est pas diffus, la couleur est renvoyée inchangée.
+	 * @return La couleur de la composante diffuse de l'ombrage de Phong au point d'intersection contenu dans intInfos. Si l'objet n'est pas spéculaire, renvoie la couleur noire rgb(0, 0, 0)
 	 */
 	protected Color computeDiffuseColor(RayTracerInterInfos intInfos, double lightIntensity)
 	{
@@ -187,16 +184,12 @@ public class RayTracer
 	
 	/*
 	 * A partir d'une couleur donnée en entrée, calcule et renvoie la couleur après application de la composante spéculaire de l'ombrage de Phong pour un matériau et des directions de rayons donnés
-	 * Si l'objet n'est pas spéculaire, la couleur renvoyée est inchangée
+	 * Si le matériau de l'objet n'est pas spéculaire, la couleur noire rgb(0, 0, 0) est renvoyée
 	 * 
-	 * @param rayIntObjMaterial Le matériau qui va être utilisé pour calculer la composante diffuse
-	 * @param finalColorBefore La couleur "sur" laquelle va être appliquée le calcul de la composante diffuse
-	 * @param incidentRay Le rayon incident au point d'intersection de l'objet
-	 * @param toLightVector Vecteur indiquant la direction vers la source de lumière
-	 * @param normalAtIntersection Le vecteur normal de la surface de l'objet au point d'intersection
+	 * @param intInfos Ensemble des informations sur le point d'intersection entre le rayon incident et l'objet qui a été intersecté et dont on souhaite obtenir la couleur spéculaire
 	 * @param lightIntensity Intensité lumineuse de la source de lumière
 	 *  
-	 * @return La couleur passée en argument affectée de la composante spéculaire de l'ombrage de Phong. Si l'objet n'est pas spéculaire, la couleur est renvoyée inchangée
+	 * @return La couleur de la composante spéculaire de l'ombrage de Phong au point d'intersection contenu dans intInfos. Si l'objet n'est pas spéculaire, renvoie la couleur noire rgb(0, 0, 0)
 	 */
 	protected Color computeSpecularColor(RayTracerInterInfos intInfos, double lightIntensity)
 	{
@@ -215,19 +208,13 @@ public class RayTracer
 	
 	/*
 	 * A partir d'une couleur donnée en entrée, calcule et renvoie la couleur après application de la réflectivité du matériau.
-	 * Si l'objet n'est pas réflexif, la couleur renvoyée est inchangée
+	 * Si le matériau de l'objet n'est pas réflexif, la couleur noire rgb(0, 0, 0) est renvoyée
 	 * 
 	 * @param renderScene La scène utilisée pour le rendu
-	 * @param rayIntObjMaterial Le matériau qui va être utilisé pour calculer la composante diffuse
-	 * @param finalColorBefore La couleur "sur" laquelle va être appliquée le calcul de la composante diffuse
-	 * @param objectColor La couleur du matériau de l'objet
-	 * @param rayDirection Direction du rayon incident au point d'intersection de l'objet
-	 * @param toLightVector Vecteur indiquant la direction vers la source de lumière
-	 * @param normalAtIntersection Le vecteur normal de la surface de l'objet au point d'intersection
-	 * @param interPointShift Le point d'intersection du rayon incident avec l'objet légèrement décalé dans le sens du rayon incident parfaitement réfléchi par la surface de l'objet
+	 * @param intInfos Ensemble des informations sur le point d'intersection entre le rayon incident et l'objet qui a été intersecté et dont on souhaite obtenir la couleur de réflexion
 	 * @param depth La profondeur de récursion actuelle de l'algorithme
 	 *  
-	 * @return La couleur passée en argument affectée des couleurs qui se réfléchissent dans l'objet. Si l'objet n'est pas réflexif, la couleur est renvoyée inchangée
+	 * @return La couleur réfléchie par le matériau au point d'intersection contenu dans intInfos. Si l'objet n'est pas réflexif, renvoie la couleur noire rgb(0, 0, 0)
 	 */
 	protected Color computeReflectionsColor(RayTracingScene renderScene, RayTracerInterInfos intInfos, int depth)
 	{
@@ -246,18 +233,14 @@ public class RayTracer
 	}
 	
 	/*
-	 * Calcule les couleurs venant des réfractions et des réflexions d'un objet transparent. 
+	 * Calcule les couleurs venant des réfractions et des réflexions d'un objet transparent.
+	 * Si le matériau de l'objet n'est pas réfractif, la couleur noire rgb(0, 0, 0) est renvoyée 
 	 * 
 	 * @param renderScene La scène utilisée pour le rendu
-	 * @param rayIntObjMaterial Le matériau qui va être utilisé pour calculer la composante diffuse
-	 * @param finalColorBefore La couleur "sur" laquelle va être appliquée le calcul de la composante diffuse
-	 * @param incidentRay Le rayon incident au point d'intersection de l'objet
-	 * @param normalAtIntersection Le vecteur normal de la surface de l'objet au point d'intersection
-	 * @param rayInterPoint Le point d'intersection du rayon incident avec l'objet
-	 * @param interPointShift Le point d'intersection du rayon incident avec l'objet légèrement décalé dans le sens du rayon incident parfaitement réfléchi par la surface de l'objet
+	 * @param intInfos Ensemble des informations sur le point d'intersection entre le rayon incident et l'objet qui a été intersecté et dont on souhaite obtenir la couleur de réfraction
 	 * @param depth La profondeur de récursion actuelle de l'algorithme
 	 * 
-	 * @return Retourne la couleur donnée en argument "mixée" avec les couleurs des réfractions et des réflexions de l'objet. Si l'objet n'est pas transparent, la couleur retournée est inchangée par rapport à celle passée en argument
+	 * @return Le mix de couleur réfléchie et réfractée par le matériau au point d'intersection contenu dans intInfos. Si l'objet n'est pas réfractif, renvoie la couleur noire rgb(0, 0, 0)
 	 */
 	protected Color computeRefractionsColor(RayTracingScene renderScene, RayTracerInterInfos intInfos, int depth)
 	{
@@ -303,17 +286,12 @@ public class RayTracer
 	/*
 	 * Calcule la couleur d'un point de la scène ombragé 
 	 * 
-	 * @param renderScene La scène utilisée pour le rendu
-	 * @param rayIntObjMaterial Le matériau qui va être utilisé pour calculer la composante diffuse
-	 * @param objectColor La couleur du matériau de l'objet
-	 * @param normalAtIntersection Le vecteur normal de la surface de l'objet au point d'intersection
-	 * @param rayDirection La direction du rayon incident
-	 * @param rayInterPoint Le point d'intersection du rayon incident avec l'objet
-	 * @param rayInterPointShift Le point d'intersection du rayon incident avec l'objet légèrement décalé dans le sens du rayon incident parfaitement réfléchi par la surface de l'objet
-	 * @param ambientLighting L'intensité de la lumière ambiante de la scène
-	 * @param depth La profondeur de récursion actuelle de l'algorithme
+	 * @param renderScene 		La scène utilisée pour le rendu
+	 * @param intInfos 			Ensemble des informations sur le point d'intersection entre le rayon incident et l'objet qui a été intersecté et dont on souhaite obtenir la couleur du point ombragé de l'objet
+	 * @param ambientLighting 	L'intensité de la lumière ambiante de la scène
+	 * @param depth 			La profondeur de récursion actuelle de l'algorithme
 	 * 
-	 * @return Retourne la couleur ombragée
+	 * @return Retourne la couleur ombragée au point d'intersection contenu dans intInfos
 	 */
 	protected Color computeShadow(RayTracingScene renderScene, RayTracerInterInfos intInfos, double ambientLighting, int depth)
 	{
@@ -327,7 +305,7 @@ public class RayTracer
 	}
 	
 	/*
-	 * Calcule la luminosité ambiante de la scène à partir de l'intensité de la source de lumière et de l'intensité de la lumière ambiante
+	 * Calcule la luminosité ambiante de la scène à partir de l'intensité de la source de lumière et du coefficient de réflexion ambiant du matériau de l'objet
 	 *
 	 * @param ambientLightIntensity Intensité de la luminosité ambiante de la scène
 	 * @param materialAmbientCoeff Coefficient de réflexion de la lumière ambiante du matériau
@@ -342,9 +320,9 @@ public class RayTracer
 	/*
 	 * Calcule l'intensité lumineuse diffuse en un point donné de l'image à la surface d'un objet
 	 *
-	 *  @param toLightDirection Vecteur indiquant la direction de la source de lumière
+	 *  @param toLightDirection 	Vecteur indiquant la direction de la source de lumière
 	 *  @param normalAtIntersection Vecteur normal à la surface de l'objet
-	 *  @param lightIntensity Intensité lumineuse de la source de lumière
+	 *  @param lightIntensity 		Intensité lumineuse de la source de lumière
 	 *
 	 *  @return La composante diffuse en un point donné de la scène vis à vis de la surface d'un objet. Réel entre 0 et 1
 	 */
@@ -359,11 +337,11 @@ public class RayTracer
 	/*
 	 * Calcule l'intensité lumineuse spéculaire en un point donné de l'image à la surface d'un objet
 	 *
-	 *  @param incidentRay Ray incident au point dont on souhaite l'intensité spéculaire
-	 *  @param toLightDirection Vecteur indiquant la direction de la source de lumière
+	 *  @param incidentRay 			Ray incident au point dont on souhaite l'intensité spéculaire
+	 *  @param toLightDirection 	Vecteur indiquant la direction de la source de lumière
 	 *  @param normalAtIntersection Vecteur normal à la surface de l'objet
-	 *  @param lightIntensity Intensité lumineuse de la source de lumière
-	 *  @param objectShininess Brillance de l'objet obtenable avec Shape.getShininess()
+	 *  @param lightIntensity 		Intensité lumineuse de la source de lumière
+	 *  @param objectShininess 		Brillance de l'objet obtenable avec Shape.getShininess()
 	 *
 	 *  @return La composante spéculaire en un point donné de la scène vis à vis de la surface d'un objet. Réel entre 0 et 1.
 	 */
@@ -379,7 +357,7 @@ public class RayTracer
 	}
 	
 	/*
-	 * Calcule un partie de la scène représentée par un pixel de départ X et Y et un pixel d'arrivée X et Y. Le rectangle de pixel définit par ces valeurs est alors calculé
+	 * Calcule un partie de la scène représentée par un pixel de départ X et Y et un pixel d'arrivée X et Y. Le rendu du rectangle de pixel définit par ces valeurs est alors effectué
 	 *
 	 * @param renderScene La scène de rendu contenant les informations pour rendre l'image
 	 * @param startX Le pixel de départ horizontal de la zone de l'image qui doit être calculée. Entre 0 et renderWidth - 1 inclus
@@ -541,11 +519,12 @@ public class RayTracer
 	}
 
 	/*
-	 * Convertit les coordonnées d'un pixel sur l'image (un pixel de l'image 1920x1080 par exemple) en coordonnées 3D dans la scène à rendre
+	 * Convertit les coordonnées d'un pixel sur le plan de la caméra en coordonnées 3D dans la scène à rendre
 	 *
-	 * @param camera La caméra selon laquelle on souhaite obtenir les coordonnées du pixel
+	 * @param FOV Champ de vision de la caméra. Entier entre 1 et 189
 	 * @param x Coordonnées x du pixel sur l'image (de 0 à 1919 pour une résolution de 1920 de large par exemple)
 	 * @param y Coordonnées y du pixel sur l'image (de 0 à 1079 pour une résolution de 1080 de haut par exemple)
+	 * @param ctwMatrix La matrice de passage entre l'espace de la caméra et l'espace de la scène
 	 *
 	 * @return Un point de cooordonnées (x, y, z) tel que x, y et z représentent les coordonnées du pixel dans la scène
 	 */
@@ -575,10 +554,10 @@ public class RayTracer
 	/*
 	 * Calcule le rayon réfléchi par la surface en fonction de la position de la lumière par rapport au point d'intersection
 	 *
-	 * @param normalToSurface N, le vecteur normal normalisé de la surface au point d'intersection
-	 * @param intersectToLightVec L, le vecteur normalisé d'origine le point d'intersection et de direction la source de lumière
+	 * @param normalToSurface Le vecteur normal normalisé de la surface au point d'intersection
+	 * @param intersectToLightVec Le vecteur normalisé indiquant la direction vers la source de lumière depuis le point d'intersection avec l'objet
 	 *
-	 * @return R, le vecteur d'origine le point d'intersection et de direction la direction de réflexion calculée par cette méthode
+	 * @return Le vecteur indiquant la direction d'un rayon de lumière parfaitement réfléchi par la surface de l'objet
 	 */
 	protected Vector computeReflectionVector(Vector normalToSurface, Vector rayDirection)
 	{
@@ -586,9 +565,9 @@ public class RayTracer
 	}
 
 	/*
-	 * Calcule le rayon réfracté par un matériau transparent ayant un indice de réfraction différent de celui de l'air
+	 * Calcule le rayon réfracté par un matériau pour un indice de réfraction donné
 	 * 
-	 *  @param rayDirection La directio, du rayon incident au point d'intersection avec le matériau
+	 *  @param rayDirection La direction du rayon incident au point d'intersection avec l'objet
 	 *  @param normalAtIntersection Le vecteur normal de la surface au point d'intersection
 	 *  @param specialMediumIndex L'indice de réfraction du matériau réfractif
 	 *  
@@ -632,7 +611,7 @@ public class RayTracer
 	 * @param specialMediumRefractionIndex L'indice de réfraction du matériau réfractif
 	 * 
 	 * @return Retourne la proportion de lumière réfléchie par le matériau étant donne le rayon incident.
-	 * La proportion de lumière réfractée peut être déduite: réfractée = 1 - réfléchie
+	 * La proportion de lumière réfractée peut être déduite comme suit: réfractée = 1 - réfléchie
 	 */
 	protected double fresnel(Vector incidentRayDirection, Vector normalAtIntersection, double specialMediumRefIndex) 
 	{
