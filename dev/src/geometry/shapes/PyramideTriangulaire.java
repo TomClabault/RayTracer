@@ -2,11 +2,12 @@ package geometry.shapes;
 
 import materials.Material;
 import maths.Point;
-import geometry.ShapeUtil;
+import geometry.Shape;
+import geometry.ShapeTriangleUtil;
 
 import java.util.ArrayList;
 
-public class PyramideTriangulaire extends ShapeUtil
+public class PyramideTriangulaire extends ShapeTriangleUtil implements Shape
 {
 
     /*
@@ -98,13 +99,4 @@ public class PyramideTriangulaire extends ShapeUtil
         super.listeTriangle.add(tr4);
 
     }
-
-    /*
-	 * @link{geometry.shapes.Shape#getUVCoords}
-	 */
-	@Override
-	public Point getUVCoords(Point point)
-	{
-		return null;
-	}
 }

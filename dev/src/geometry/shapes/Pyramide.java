@@ -2,12 +2,13 @@ package geometry.shapes;
 
 import materials.Material;
 import maths.Point;
-import geometry.ShapeUtil;
+import geometry.Shape;
+import geometry.ShapeTriangleUtil;
 
 import java.util.ArrayList;
 
 
-public class Pyramide extends ShapeUtil
+public class Pyramide extends ShapeTriangleUtil implements Shape
 {
     /*Imagine une pyramide ABCDE
 
@@ -101,13 +102,4 @@ public class Pyramide extends ShapeUtil
         super.listeTriangle.add(tr6);
 
     }
-
-    /*
-	 * @link{geometry.shapes.Shape#getUVCoords}
-	 */
-	@Override
-	public Point getUVCoords(Point point)
-	{
-		return null;
-	}
 }

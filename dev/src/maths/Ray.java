@@ -49,7 +49,7 @@ public class Ray
 	 */
 	public Vector getNegatedDirection()
 	{
-		return this.direction.negate();
+		return this.direction.getNegated();
 	}
 	
 	/*

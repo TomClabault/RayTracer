@@ -2,32 +2,20 @@ package geometry;
 
 import java.util.ArrayList;
 
-import materials.Material;
 import geometry.shapes.Triangle;
+import materials.Material;
 import maths.Point;
 import maths.Ray;
 import maths.Vector;
 
-/*
- * Interface permettant d'implémenter des formes géomtriques construites à partir de triangles telles que les ico-sphère par exemple
- */
-public abstract class ShapeTriangle implements Shape
+public abstract class ShapeTriangleUtil
 {
 	protected Material material;
 	protected ArrayList<Triangle> listeTriangle;
 
-
 	/*
-	 * Permet d'obtenir la liste des triangles composant la forme
-	 * 
-	 * @return ArrayList<Triangle> contenant tous les triangles composant la forme
+	 * @link{geometry.Shape#intersect} 
 	 */
-
-	public ArrayList<Triangle> getTriangleList()
-	{
-		return listeTriangle;
-	}
-
 	public Point intersect(Ray ray, Vector outNormalAtInter)
 	{
 		Double distancemin = null;
@@ -64,6 +52,10 @@ public abstract class ShapeTriangle implements Shape
 		return closestInterPoint;
 
 	}
+	
+	/*
+	 * @link{geometry.Shape#getNormal} 
+	 */
 	public Vector getNormal(Point point)
 	{
 		for (int i = 0 ; i < listeTriangle.size() ;i++)
@@ -76,11 +68,28 @@ public abstract class ShapeTriangle implements Shape
 		return null;
 	}
 
+	/*
+	 * @link{geometry.Shape#getMaterial} 
+	 */
 	public Material getMaterial()
 	{
 		return material;
 	}
-
-
-
+	
+	/*
+	 * @link{geometry.Shape#getUVCoords}
+	 */
+	@Override
+	public Point getUVCoords(Point point)
+	{
+		return null;
+	}
+	
+	/*
+	 * @link{geometry.Shape#setMaterial} 
+	 */
+	public void setMaterial(Material material)
+	{
+		this.material = material;
+	}
 }

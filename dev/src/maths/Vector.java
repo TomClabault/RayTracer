@@ -149,6 +149,16 @@ public class Vector implements CoordinateObject
 		return true;
 	}
 	
+	/*
+	 * Calcule et retourne un nouveau vecteur de direction opposée au vetceur représenté par l'instance appelante
+	 * 
+	 * @return Si le vecteur de l'instance appelante est de coordonnées (x, y, z), retourne le vecteur de coordonnées (-x, -y , -z) 
+	 */
+	public Vector getNegated()
+	{
+		return new Vector(-this.x, -this.y, -this.z);
+	}
+	
 	public double getX()
 	{
 		return this.x;
@@ -172,16 +182,6 @@ public class Vector implements CoordinateObject
 	public double length()
 	{
 		return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z);
-	}
-
-	/*
-	 * Calcule et retourne l'opposé du vecteur de l'instance appelante. Ne modifie pas l'instance appelante
-	 *
-	 * @return Si le vecteur de l'instance appelante est de coordonnée (x, y, z), retourne un vecteur de coordoonnées (-x, -y, -z)
-	 */
-	public Vector negate()
-	{
-		return new Vector(-this.x, -this.y, -this.z);
 	}
 
 	/*

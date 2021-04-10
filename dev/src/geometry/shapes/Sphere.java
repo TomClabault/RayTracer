@@ -1,10 +1,8 @@
 package geometry.shapes;
 
 import materials.Material;
-import materials.MatteMaterial;
 import geometry.Shape;
 import geometry.ShapeUtil;
-import javafx.scene.paint.Color;
 import maths.CoordinateObject;
 import maths.Point;
 import maths.Ray;
@@ -14,7 +12,7 @@ import maths.Vector;
  * Classe représentant une sphère décrite par son centre ainsi que son rayon. Représente la "version" mathématique d'une sphère. 
  * Pour une représentation polygonale d'une sphère, voir SphereTriangle
  */
-public class SphereMaths extends ShapeUtil implements Shape
+public class Sphere extends ShapeUtil implements Shape
 {
 	private Point center;
 	private double radius;
@@ -26,7 +24,7 @@ public class SphereMaths extends ShapeUtil implements Shape
 	 * @param radius Rayon de la sphère 
 	 * @param material Matériau utilisé pour le rendu de la sphère
 	 */
-	public SphereMaths(Point center, double radius, Material material)
+	public Sphere(Point center, double radius, Material material)
 	{
 		this.center = center;
 		this.radius = radius;

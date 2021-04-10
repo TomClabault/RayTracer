@@ -7,6 +7,11 @@ import maths.Vector;
 
 public interface Shape
 {
+	/*
+	 * Permet de récupérer le matériau de la forme
+	 * 
+	 * @return Le matériau de la forme caractérisant son aspect visuel
+	 */
 	public Material getMaterial();
 	
 	/*
@@ -36,4 +41,12 @@ public interface Shape
 	 * @return Renvoie le point d'intersection du rayon et de l'objet. Null s'il n'y a pas de point d'intersection
 	 */
 	public Point intersect(Ray ray, Vector outNormalAtInter);
+	
+	/*
+	 * Permet de redéfinir le matériau qui sera utilisé pour le rendu de l'objet
+	 * 
+	 * @param newMaterial Le nouveau matériau de l'objet
+	 */
+	public void setMaterial(Material newMaterial);
+	
 }

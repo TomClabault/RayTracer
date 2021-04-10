@@ -4,12 +4,13 @@ import materials.Material;
 import materials.MatteMaterial;
 import javafx.scene.paint.Color;
 import maths.Point;
-import geometry.ShapeUtil;
+import geometry.Shape;
+import geometry.ShapeTriangleUtil;
 
 import java.util.ArrayList;
 
 
-public class Rectangle extends ShapeUtil
+public class Rectangle extends ShapeTriangleUtil implements Shape
 {
 
 	private double height,width,length;
@@ -113,14 +114,5 @@ public class Rectangle extends ShapeUtil
 
 		/*on retourne la liste des triangles*/
 		/*return listeTriangle;*/
-	}
-
-	/*
-	 * @link{geometry.shapes.Shape#getUVCoords}
-	 */
-	@Override
-	public Point getUVCoords(Point point)
-	{
-		return null;
 	}
 }

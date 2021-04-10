@@ -2,11 +2,12 @@ package geometry.shapes;
 
 import materials.Material;
 import maths.Point;
-import geometry.ShapeUtil;
+import geometry.Shape;
+import geometry.ShapeTriangleUtil;
 
 import java.util.ArrayList;
 
-public class Prism extends ShapeUtil
+public class Prism extends ShapeTriangleUtil implements Shape
 {
 
 
@@ -109,14 +110,5 @@ public class Prism extends ShapeUtil
         super.listeTriangle.add(tr8);
 
     }
-
-    /*
-	 * @link{geometry.shapes.Shape#getUVCoords}
-	 */
-	@Override
-	public Point getUVCoords(Point point)
-	{
-		return null;
-	}
 }
 

@@ -1,10 +1,10 @@
 package geometry.shapes;
 
 import materials.Material;
-import maths.CoordinateObject;
 import maths.Point;
 import maths.Vector;
-import geometry.ShapeUtil;
+import geometry.Shape;
+import geometry.ShapeTriangleUtil;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /*
 	Les positions des points de l'icosphere de subdivision 1 viennent de: http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
 */
-public class Icosphere extends ShapeUtil
+public class Icosphere extends ShapeTriangleUtil implements Shape
 {
     private Point A,B,C,D,E,F,G,H,I,J,K,L;
     private double t = ((1 + Math.sqrt(5))/2);
@@ -158,13 +158,4 @@ public class Icosphere extends ShapeUtil
         	
         }
     }
-
-    /*
-	 * @link{geometry.shapes.Shape#getUVCoords}
-	 */
-	@Override
-	public Point getUVCoords(Point point)
-	{
-		return null;
-	}
 }

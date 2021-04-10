@@ -1,13 +1,13 @@
 package geometry.shapes;
 
 import geometry.Shape;
-import geometry.ShapeUtil;
+import geometry.ShapeTriangleUtil;
 import materials.Material;
 import maths.Point;
 import maths.Ray;
 import maths.Vector;
 
-public class Triangle extends ShapeUtil implements Shape
+public class Triangle extends ShapeTriangleUtil implements Shape
 {
 	private Point A, B, C;
 	
@@ -113,16 +113,7 @@ public class Triangle extends ShapeUtil implements Shape
 		else//Cela veut dire que le rayon intersecte le plan formé par le triangle mais pas le triangle lui même
 			return null;
 	}
-	
-	/*
-	 * @link{geometry.shapes.Shape#getUVCoords}
-	 */
-	@Override
-	public Point getUVCoords(Point point)
-	{
-		return null;//Non implémenté
-	}
-	
+		
 	/*
 	 * Permet de redéfinir le point A du triangle
 	 * 
