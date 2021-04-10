@@ -431,7 +431,7 @@ public class RayTracer
 	 *  
 	 *  @return Retourne true si le thread à calculé une tâche avec succès. false sinon, i.e., le thread n'a pas calculé de tâche car il n'y en avait plus à calcuelr
 	 */
-	public boolean computeTask(RayTracingScene renderScene, ThreadsTaskList taskList)
+	protected boolean computeTask(RayTracingScene renderScene, ThreadsTaskList taskList)
 	{
 		Integer taskNumber = 0;
 		TileTask currentTileTask = null;
