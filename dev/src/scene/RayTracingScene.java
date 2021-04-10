@@ -6,7 +6,7 @@ import geometry.Shape;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
-import scene.lights.Light;
+import scene.lights.PositionnalLight;
 import util.ImageUtil;
 
 /*
@@ -15,7 +15,7 @@ import util.ImageUtil;
 public class RayTracingScene
 {
 	private Camera camera;
-	private Light light;
+	private PositionnalLight light;
 
 	private ArrayList<Shape> shapes;
 
@@ -36,7 +36,7 @@ public class RayTracingScene
 	 * @param backgroundColor La couleur de fond qui sera utilisée pour la scène. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scène
 	 * @param ambientLightIntensity L'intensité de la luminosité ambiante de la scène. Défini l'intensité lumineuse minimale par laquelle seront éclairés tous les points de la scène
 	 */
-	public RayTracingScene(Camera camera, Light light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity) 
+	public RayTracingScene(Camera camera, PositionnalLight light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity) 
 	{
 		this(camera, light, shapes, backgroundColor, ambientLightIntensity, (Image)null);
 	}
@@ -51,7 +51,7 @@ public class RayTracingScene
 	 * @param ambientLightIntensity L'intensité de la luminosité ambiante de la scène. Défini l'intensité lumineuse minimale par laquelle seront éclairés tous les points de la scène
 	 * @param skyboxTexturePath Chemin vers la texture de la skybox a utiliser
 	 */
-	public RayTracingScene(Camera camera, Light light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, String skyboxTexturePath) 
+	public RayTracingScene(Camera camera, PositionnalLight light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, String skyboxTexturePath) 
 	{
 		this(camera, light, shapes, backgroundColor, ambientLightIntensity, new Image(skyboxTexturePath));
 	}
@@ -68,7 +68,7 @@ public class RayTracingScene
 	 * 
 	 * @throws IllegalArgumentException quand l'argument skyboxTexture passé ne constitue pas une image correcte. i.e. l'image n'a peut être pas été ouverte correctement, introuvable, format non supporté, ...
 	 */
-	public RayTracingScene(Camera camera, Light light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, Image skyboxTexture) throws IllegalArgumentException
+	public RayTracingScene(Camera camera, PositionnalLight light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, Image skyboxTexture) throws IllegalArgumentException
 	{
 		if(skyboxTexture != null)
 		{
@@ -134,7 +134,7 @@ public class RayTracingScene
 	 * 
 	 * @return La source de lumière de la scène
 	 */
-	public Light getLight() 
+	public PositionnalLight getLight() 
 	{
 		return this.light;
 	}

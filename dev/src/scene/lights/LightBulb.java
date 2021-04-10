@@ -2,7 +2,7 @@ package scene.lights;
 
 import maths.Point;
 
-public class LightBulb implements Light 
+public class LightBulb implements PositionnalLight 
 {
 	Point center;
 	
