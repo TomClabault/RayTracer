@@ -1,7 +1,7 @@
 package povParser.automat;
 
 /**
- * différents attributs que peut prendre la caméra
+ * différents attributs que peut prendre la caméra ainsi que les éléments de syntaxe qui représentent différents états
  */
 enum CameraContent
 {

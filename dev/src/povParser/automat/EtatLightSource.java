@@ -4,7 +4,7 @@ import maths.Vector3D;
 import scene.lights.LightBulb;
 
 /**
- * différents attributs que peut prendre la lumière
+ * différents attributs que peut prendre la lumière ainsi que les éléments de syntaxe qui représentent différents états
  */
 enum LightContent
 {
@@ -24,7 +24,7 @@ public class EtatLightSource implements EtatToken
 
     /**
      * @param context contexte courant de l'automate
-     * Cette méthode effectue le parsing d'un objet light_source (poin light)
+     * Cette méthode effectue le parsing d'un objet light_source (point light)
      */
     @Override
     public void action(Automat context)
