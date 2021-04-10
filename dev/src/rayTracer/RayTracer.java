@@ -568,7 +568,7 @@ public class RayTracer
 	 * 
 	 *  @param rayDirection La direction du rayon incident au point d'intersection avec l'objet
 	 *  @param normalAtIntersection Le vecteur normal de la surface au point d'intersection
-	 *  @param specialMediumIndex L'indice de réfraction du matériau réfractif
+	 *  @param specialMediumRefIndex L'indice de réfraction du matériau réfractif
 	 *  
 	 *  @return Retourne la direction du rayon réfracté
 	 */
