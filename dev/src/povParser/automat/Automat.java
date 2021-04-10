@@ -87,6 +87,7 @@ public class Automat
                     this.streamTokenizer.sval.equals("triangle") ||
                     this.streamTokenizer.sval.equals("box") ||
                     this.streamTokenizer.sval.equals("plane") ||
+                    this.streamTokenizer.sval.equals("camera") ||
                     this.streamTokenizer.sval.equals("light_source")) {
                 return true;
             }
@@ -120,6 +121,10 @@ public class Automat
         else if(this.streamTokenizer.sval.equals("plane"))
         {
             return State.PLANE;
+        }
+        else if(this.streamTokenizer.sval.equals("camera"))
+        {
+            return State.CAMERA;
         }
         return State.OUTSIDE;
     }
@@ -184,6 +189,14 @@ public class Automat
                         {
                             System.out.println("PLANE");
                             automat.setState(new EtatPlane());
+                            automat.action();
+                            break;
+                        }
+
+                        case CAMERA:
+                        {
+                            System.out.println("CAMERA");
+                            automat.setState(new EtatCamera());
                             automat.action();
                             break;
                         }

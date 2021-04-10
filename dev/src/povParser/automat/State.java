@@ -8,6 +8,7 @@ public enum State
     PLANE,
     BOX, //correspond à un rectangle
     LIGHT_SOURCE,
+    CAMERA,
 
    /*     SPHERE,
         SPHERE_OPENING_BRACKET,
