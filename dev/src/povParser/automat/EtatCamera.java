@@ -6,6 +6,7 @@ enum CameraContent
     ENDING_BRACKET,
     LOCATION, //position
     DIRECTION,
+    LOOK_AT,
     
 }
 
