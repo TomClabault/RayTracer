@@ -203,7 +203,7 @@ public class RayTracer
 	{
 		Material intObjMat = intInfos.getIntObjMat();
 		
-		Color specularColor = Color.rgb(1, 1, 1);//TODO bonus: ne pas faire une couleur fixe comme ça mais ajouter une couleur spéculaire pour chaque matériaux
+		Color specularColor = Color.rgb(255, 255, 255);//TODO bonus: ne pas faire une couleur fixe comme ça mais ajouter une couleur spéculaire pour chaque matériaux
 		
 		if(intObjMat.getSpecularCoeff() > 0)//Si le matériau est spéculaire
 		{
@@ -263,7 +263,6 @@ public class RayTracer
 	protected Color computeRefractionsColor(RayTracingScene renderScene, RayTracerInterInfos intInfos, int depth)
 	{
 		Material intObjMat = intInfos.getIntObjMat();
-		Color currentPixelColor = intInfos.getCurPixCol();
 		
 		Vector incidentRayDir = intInfos.getRayDir();
 		Vector normalAtInter = intInfos.getNormInt();
@@ -295,8 +294,8 @@ public class RayTracer
 			
 			Color reflectedColor = computePixel(renderScene, reflectedRay, depth -1);
 			
-			currentPixelColor = ColorOperations.addColors(currentPixelColor, ColorOperations.mulColor(refractedColor, ft));
-			return ColorOperations.addColors(currentPixelColor, ColorOperations.mulColor(reflectedColor, fr));
+			Color finalColor = ColorOperations.mulColor(refractedColor, ft);
+			return ColorOperations.addColors(finalColor, ColorOperations.mulColor(reflectedColor, fr));
 		}
 		else//L'objet n'est pas réfractif
 			return Color.rgb(0, 0, 0);
