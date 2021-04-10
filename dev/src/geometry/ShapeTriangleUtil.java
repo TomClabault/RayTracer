@@ -79,7 +79,6 @@ public abstract class ShapeTriangleUtil
 	/*
 	 * @link{geometry.Shape#getUVCoords}
 	 */
-	@Override
 	public Point getUVCoords(Point point)
 	{
 		return null;

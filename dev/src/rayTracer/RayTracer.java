@@ -175,7 +175,6 @@ public class RayTracer
 	protected Color computeDiffuseColor(RayTracerInterInfos intInfos, double lightIntensity)
 	{
 		Material intObjMat = intInfos.getIntObjMat();
-		Color currentPixelColor = intInfos.getCurPixCol(); 
 		
 		if(intObjMat.getDiffuseCoeff() > 0)//Si le matériau est diffus
 		{
