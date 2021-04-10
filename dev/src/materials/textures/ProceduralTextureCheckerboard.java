@@ -1,7 +1,7 @@
 package materials.textures;
 
 import javafx.scene.paint.Color;
-import maths.Vector3D;
+import maths.Point;
 
 public class ProceduralTextureCheckerboard implements ProceduralTexture 
 {
@@ -40,7 +40,7 @@ public class ProceduralTextureCheckerboard implements ProceduralTexture
 	 * @link{textures.ProceduralTexture#getColorAt}
 	 */
 	@Override
-	public Color getColorAt(Vector3D point) 
+	public Color getColorAt(Point point) 
 	{
 		int xInt = (int)Math.floor(point.getX() * size);
 		int yInt = (int)Math.floor(point.getY() * size);

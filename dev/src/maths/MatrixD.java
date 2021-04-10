@@ -91,24 +91,43 @@ public class MatrixD
 		return new MatrixD(m1.m, m2.n, newCoeffs);
 	}
 	
-	/*
-	 * Change la base du point pointToConvert vers la base de la caméra
-	 * 
-	 * @param pointToConvert Vecteur à convertir vers la base de l'espace vectoriel de la caméra.
-	 * 
-	 * @param Crée un nouveau point dont les coordoonnées (initialement de pointToConvert) sont exprimées selon l'orientation de la caméra 
-	 */
-	public static Vector3D mulPoint(Vector3D pointToConvert, MatrixD transformMatrix)
+	protected static Point mulPoint(CoordinateObject objectToConvert, MatrixD transformMatrix)
 	{
-		double[] pointToConvertCoords = new double[] {pointToConvert.getX(), pointToConvert.getY(), pointToConvert.getZ(), 1};
+		double[] pointToConvertCoords = new double[] {objectToConvert.getX(), objectToConvert.getY(), objectToConvert.getZ(), 1};
 		double[] convertedPointCoords = new double[] {0, 0, 0, 0};
 		
-		for(int i = 0; i < 4; i++)//< 3 car on convertit des points 3D. Cette fonction n'est pas flexible
+		for(int i = 0; i < 4; i++)
 			for(int j = 0; j < 4; j++)
 				convertedPointCoords[i] += pointToConvertCoords[j] * transformMatrix.matrix[j][i];
 		
 		//On retourne le point de coordoonées exprimées dans la base de la matrice passée en paramètre 
-		return new Vector3D(convertedPointCoords[0], convertedPointCoords[1], convertedPointCoords[2]);
+		return new Point(convertedPointCoords[0], convertedPointCoords[1], convertedPointCoords[2]);
+	}
+	
+	/*
+	 * Change la base de l'objet 'objectToConvert' vers la base de l'espace vectoriel de la caméra
+	 * 
+	 * @param objectToConvert Object dont les coordonnées doivent être converties vers la base de l'espace vectoriel de la caméra.
+	 * 
+	 * @param Crée un nouveau point dont les coordoonnées (initialement de objectToConvert) sont exprimées dans la base de l'espace vectoriel de la caméra 
+	 */
+	public static Point mulPointP(CoordinateObject objectToConvert, MatrixD transformMatrix)
+	{
+		return mulPoint(objectToConvert, transformMatrix);
+	}
+	
+	/*
+	 * Change la base de l'objet 'objectToConvert' vers la base de l'espace vectoriel de la caméra
+	 * 
+	 * @param objectToConvert Object dont les coordonnées doivent être converties vers la base de l'espace vectoriel de la caméra.
+	 * 
+	 * @param Crée un nouveau vecteur dont les coordoonnées (initialement de objectToConvert) sont exprimées dans la base de l'espace vectoriel de la caméra 
+	 */
+	public static Vector mulPointV(CoordinateObject objectToConvert, MatrixD transformMatrix)
+	{
+		Point pointMul = mulPoint(objectToConvert, transformMatrix);
+		//On retourne le point de coordoonées exprimées dans la base de la matrice passée en paramètre 
+		return new Vector(pointMul.getX(), pointMul.getY(), pointMul.getZ());
 	}
 	
 	/*

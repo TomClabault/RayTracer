@@ -79,7 +79,7 @@ public class RotationMatrix extends MatrixD
 		super.matrix[3][2] = 0;
 	}
 	
-	public RotationMatrix(Vector3D axis, double degreeAngle) 
+	public RotationMatrix(Vector axis, double degreeAngle) 
 	{
 		super(4, 4);
 		

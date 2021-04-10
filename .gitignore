@@ -19,6 +19,7 @@ dev/RayTracer.jar
 Rapport RayTracer.pdf
 Rapport RayTracer.synctex.gz
 *.dia~
+*.dia.autosave
 
 #Fichiers geogebra
 *.ggb

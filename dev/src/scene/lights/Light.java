@@ -1,10 +1,10 @@
 package scene.lights;
 
-import maths.Vector3D;
+import maths.Point;
 
 public interface Light 
 {
-	public abstract Vector3D getCenter();
+	public abstract Point getCenter();
 	
 	public abstract double getIntensity();
 }

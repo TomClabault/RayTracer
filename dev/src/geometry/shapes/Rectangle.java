@@ -3,17 +3,18 @@ package geometry.shapes;
 import materials.Material;
 import materials.MatteMaterial;
 import javafx.scene.paint.Color;
-import maths.Vector3D;
-import geometry.ShapeUtil;
+import maths.Point;
+import geometry.Shape;
+import geometry.ShapeTriangleUtil;
 
 import java.util.ArrayList;
 
 
-public class Rectangle extends ShapeUtil
+public class Rectangle extends ShapeTriangleUtil implements Shape
 {
 
 	private double height,width,length;
-	private Vector3D A,B,C,D,E,F,G,H;
+	private Point A,B,C,D,E,F,G,H;
 
 	/*
 
@@ -39,7 +40,7 @@ public class Rectangle extends ShapeUtil
 
 	 */
 
-	public Rectangle(Vector3D coin1, Vector3D coin2, Material material)
+	public Rectangle(Point coin1, Point coin2, Material material)
 	{
 		this.A = coin1;
 		this.G = coin2;
@@ -52,7 +53,7 @@ public class Rectangle extends ShapeUtil
 		this.buildRectangle();
 	}
 
-	public Rectangle(Vector3D A, double height, double length, double width, Material material)
+	public Rectangle(Point A, double height, double length, double width, Material material)
 	{	/*ici coin1 peut etre considere comme le point de depart*/
 		this.A = A;
 		this.height = height;
@@ -75,12 +76,12 @@ public class Rectangle extends ShapeUtil
 	{
 
 		/*on localise les points selon les coordonnees de depart */
-		this.B = new Vector3D(A.getX() + length, A.getY(), A.getZ());
-		this.C = new Vector3D(A.getX()+ length, A.getY(), A.getZ() + width);
-		this.D = new Vector3D(A.getX(),A.getY(), A.getZ() + width);
-		this.E = new Vector3D(A.getX(),A.getY() + height, A.getZ());
-		this.F = new Vector3D(A.getX() + length,A.getY() + height, A.getZ());
-		this.H = new Vector3D(A.getX(), A.getY() + height, A.getZ() + width);
+		this.B = new Point(A.getX() + length, A.getY(), A.getZ());
+		this.C = new Point(A.getX()+ length, A.getY(), A.getZ() + width);
+		this.D = new Point(A.getX(),A.getY(), A.getZ() + width);
+		this.E = new Point(A.getX(),A.getY() + height, A.getZ());
+		this.F = new Point(A.getX() + length,A.getY() + height, A.getZ());
+		this.H = new Point(A.getX(), A.getY() + height, A.getZ() + width);
 
 		/*on va construire les 12 triangles*/
 		Triangle tr1 = new Triangle(E,A,B, material);
@@ -113,14 +114,5 @@ public class Rectangle extends ShapeUtil
 
 		/*on retourne la liste des triangles*/
 		/*return listeTriangle;*/
-	}
-
-	/*
-	 * @link{geometry.shapes.Shape#getUVCoords}
-	 */
-	@Override
-	public Vector3D getUVCoords(Vector3D point)
-	{
-		return null;
 	}
 }

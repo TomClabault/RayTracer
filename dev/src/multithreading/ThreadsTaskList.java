@@ -24,27 +24,27 @@ public class ThreadsTaskList
 		return this.taskList.get(index);
 	}
 	
-	public int getTotalTaskCount()
+	synchronized public int getTotalTaskCount()
 	{
 		return this.totalTaskCount;
 	}
 	
-	public int getTotalTaskFinished()
+	synchronized public int getTotalTaskFinished()
 	{
 		return this.totalTaskFinished;
 	}
 	
-	public int getTotalTaskGiven()
+	synchronized public int getTotalTaskGiven()
 	{
 		return this.totalTaskGiven;
 	}
 	
-	public void incrementTaskFinished()
+	synchronized public void incrementTaskFinished()
 	{
 		this.totalTaskFinished++;
 	}
 	
-	public void incrementTaskGiven()
+	synchronized public void incrementTaskGiven()
 	{
 		this.totalTaskGiven++;
 	}
@@ -58,6 +58,9 @@ public class ThreadsTaskList
 	 */
 	public void initTaskList(int nbCore, int renderWidth, int renderHeight)
 	{
+		this.taskList = new ArrayList<>();
+		this.totalTaskCount = 0;
+		
 		int tilesWidth = renderWidth / nbCore;
 		int tilesHeight = renderHeight / nbCore;
 		

@@ -1,24 +1,25 @@
 package geometry.shapes;
 
 import materials.Material;
-import maths.Vector3D;
-import geometry.ShapeUtil;
+import maths.Point;
+import maths.Vector;
+import geometry.Shape;
+import geometry.ShapeTriangleUtil;
 
 import java.util.ArrayList;
-import java.lang.Math;
 
 
 
 /*
 	Les positions des points de l'icosphere de subdivision 1 viennent de: http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
 */
-public class Icosphere extends ShapeUtil
+public class Icosphere extends ShapeTriangleUtil implements Shape
 {
-    private Vector3D A,B,C,D,E,F,G,H,I,J,K,L;
+    private Point A,B,C,D,E,F,G,H,I,J,K,L;
     private double t = ((1 + Math.sqrt(5))/2);
     private int subdivision;
 
-    public Icosphere(Vector3D depart, double size,int subdivision, Material material)
+    public Icosphere(Point depart, double size,int subdivision, Material material)
     {
         if (subdivision > 0)
             this.subdivision = subdivision;
@@ -29,25 +30,20 @@ public class Icosphere extends ShapeUtil
 
         super.material = material;
 
-    
-        //On va construire des Points
+        this.A = Vector.normalizeP(new Point(-1 , t*1 ,0 ));
+        this.B = Vector.normalizeP(new Point(1 ,t*1 ,0 ));
+        this.C = Vector.normalizeP(new Point(-1 ,-t*1 ,0 ));
+        this.D = Vector.normalizeP(new Point(1 ,-t*1 ,0 ));
 
+        this.E = Vector.normalizeP(new Point(0 ,-1 ,t*1 ));
+        this.F = Vector.normalizeP(new Point(0 ,1 ,t*1 ));
+        this.G = Vector.normalizeP(new Point(0 ,-1 ,-t*1 ));
+        this.H = Vector.normalizeP(new Point(0 ,1 ,-t*1 ));
 
-
-        this.A = Vector3D.normalize(new Vector3D(-1 , t*1 ,0 ));
-        this.B = Vector3D.normalize(new Vector3D(1 ,t*1 ,0 ));
-        this.C = Vector3D.normalize(new Vector3D(-1 ,-t*1 ,0 ));
-        this.D = Vector3D.normalize(new Vector3D(1 ,-t*1 ,0 ));
-
-        this.E = Vector3D.normalize(new Vector3D(0 ,-1 ,t*1 ));
-        this.F = Vector3D.normalize(new Vector3D(0 ,1 ,t*1 ));
-        this.G = Vector3D.normalize(new Vector3D(0 ,-1 ,-t*1 ));
-        this.H = Vector3D.normalize(new Vector3D(0 ,1 ,-t*1 ));
-
-        this.I = Vector3D.normalize(new Vector3D(t*1 ,0 ,-1 ));
-        this.J = Vector3D.normalize(new Vector3D(t*1 ,0 ,1 ));
-        this.K = Vector3D.normalize(new Vector3D(-t*1 ,0 ,-1 ));
-        this.L = Vector3D.normalize(new Vector3D(-t*1 ,0 ,1 ));
+        this.I = Vector.normalizeP(new Point(t*1 ,0 ,-1 ));
+        this.J = Vector.normalizeP(new Point(t*1 ,0 ,1 ));
+        this.K = Vector.normalizeP(new Point(-t*1 ,0 ,-1 ));
+        this.L = Vector.normalizeP(new Point(-t*1 ,0 ,1 ));
 
 
 
@@ -107,20 +103,14 @@ public class Icosphere extends ShapeUtil
             for (int i = 0; i < listsize; i++)
             {
             // on recupere les points du triangle a chaque bouclage
-            Vector3D A = listeTriangle.get(i).getA();
-            Vector3D B = listeTriangle.get(i).getB();
-            Vector3D C = listeTriangle.get(i).getC();
+            Point A = listeTriangle.get(i).getA();
+            Point B = listeTriangle.get(i).getB();
+            Point C = listeTriangle.get(i).getC();
 
-            // formule : (A+B)/2 , (B+C)/2 , (C+A)/2
-            // on ajout les deux points
-            Vector3D AB = Vector3D.add(A,B);
-            Vector3D BC = Vector3D.add(B,C);
-            Vector3D CA = Vector3D.add(C,A);
-
-            // on multiplie les points par 0.5
-            Vector3D ABmid = Vector3D.normalize(Vector3D.scalarMul(AB, 0.5));
-            Vector3D BCmid = Vector3D.normalize(Vector3D.scalarMul(BC, 0.5));
-            Vector3D CAmid = Vector3D.normalize(Vector3D.scalarMul(CA, 0.5));
+            // on trouve le milieu de chaque segment du triangle
+            Point ABmid = Vector.normalizeP(Point.midPoint(A, B));
+            Point BCmid = Vector.normalizeP(Point.midPoint(B, C));
+            Point CAmid = Vector.normalizeP(Point.midPoint(C, A));
            
             // on fait des triangles dans un triangle
             Triangle trimid = new Triangle(ABmid, BCmid, CAmid, material);
@@ -150,36 +140,22 @@ public class Icosphere extends ShapeUtil
         //On va multiplier les triangles avec la taille souhaitee puis additioner avec le point de depart
         for(Triangle triangle:listeTriangle) 
         {
-        	Vector3D A = triangle.getA();
-        	Vector3D B = triangle.getB();
-        	Vector3D C = triangle.getC();
+        	Point A = triangle.getA();
+        	Point B = triangle.getB();
+        	Point C = triangle.getC();
         	
-        	A = Vector3D.scalarMul(A, size);
-        	B = Vector3D.scalarMul(B, size);
-        	C = Vector3D.scalarMul(C, size);
+        	A = Point.scalarMul(A, size);
+        	B = Point.scalarMul(B, size);
+        	C = Point.scalarMul(C, size);
         	
-        	A = Vector3D.add(A, depart);
-        	B = Vector3D.add(B, depart);
-        	C = Vector3D.add(C, depart);
+        	A = Point.add(A, depart);
+        	B = Point.add(B, depart);
+        	C = Point.add(C, depart);
         	
         	triangle.setA(A);
         	triangle.setB(B);
         	triangle.setC(C);
         	
         }
-
     }
-
-
-
-
-
-    /*
-	 * @link{geometry.shapes.Shape#getUVCoords}
-	 */
-	@Override
-	public Vector3D getUVCoords(Vector3D point)
-	{
-		return null;
-	}
 }
