@@ -11,6 +11,6 @@ public class MirrorMaterial extends Material
 	 */
 	public MirrorMaterial(double reflectiveness)
 	{
-		super(Color.rgb(0, 0, 0), 1.0, reflectiveness, reflectiveness, 192, false, 0);
+		super(Color.rgb(0, 0, 0), 1, 1.0, reflectiveness, reflectiveness, 192, false, 0);
 	}
 }

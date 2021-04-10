@@ -1,18 +1,18 @@
 package geometry.shapes;
 
 import materials.Material;
-import maths.Vector3D;
-import geometry.ShapeTriangle;
+import maths.Point;
+import geometry.ShapeUtil;
 
 import java.util.ArrayList;
 
-public class Prism extends ShapeTriangle
+public class Prism extends ShapeUtil
 {
 
 
     /*
 
-    Imagine une prism
+    Imagine un prism
 
                          F
                         /\
@@ -48,11 +48,10 @@ public class Prism extends ShapeTriangle
 
     */
 
-    protected double height,width;
-    protected Vector3D A,B,C,D,E,F;
+	private Point A,B,C,D,E,F;
 
 
-    public Prism(Vector3D A, Vector3D B, Vector3D C, Vector3D D, Vector3D E, Vector3D F, Material material)
+    public Prism(Point A, Point B, Point C, Point D, Point E, Point F, Material material)
     {
         this.A = A;
         this.B = B;
@@ -61,45 +60,23 @@ public class Prism extends ShapeTriangle
         this.E = E;
         this.F = F;
 
-        this. material = material;
+        super. material = material;
 
         buildPrism();
 
     }
 
-    public Prism(Vector3D depart, double height, double width, Material material)
+    public Prism(Point depart, double height, double width, Material material)
     {
         this.A = depart;
 
-        this.B = new Vector3D(this.A.getX() + width, this.A.getY(), this.A.getZ());
-        this.C = new Vector3D(this.A.getX() + width, this.A.getY(), this.A.getZ() + width);
-        this.D = new Vector3D(this.A.getX(), this.A.getY(), this.A.getZ() + width);
-        this.E = new Vector3D(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ());
-        this.F = new Vector3D(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ() + width);
+        this.B = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ());
+        this.C = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ() + width);
+        this.D = new Point(this.A.getX(), this.A.getY(), this.A.getZ() + width);
+        this.E = new Point(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ());
+        this.F = new Point(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ() + width);
 
-        /*
-        this.B.setX(this.A.getX() + width);
-        this.B.setY(this.A.getY());
-        this.B.setZ(this.A.getZ());
-
-        this.C.setX(this.A.getX() + width);
-        this.C.setY(this.A.getY());
-        this.C.setZ(this.A.getZ() + width);
-
-        this.D.setX(this.A.getX());
-        this.D.setY(this.A.getY());
-        this.D.setZ(this.A.getZ() + width);
-
-        this.E.setX(this.A.getX() + width/2);
-        this.E.setY(this.A.getY() + height);
-        this.E.setZ(this.A.getZ());
-
-        this.F.setX(this.A.getX() + width/2);
-        this.F.setY(this.A.getY() + height);
-        this.F.setZ(this.A.getZ() + width);
-         */
-
-        this.material = material;
+        super.material = material;
 
         buildPrism();
     }
@@ -137,7 +114,7 @@ public class Prism extends ShapeTriangle
 	 * @link{geometry.shapes.Shape#getUVCoords}
 	 */
 	@Override
-	public Vector3D getUVCoords(Vector3D point)
+	public Point getUVCoords(Point point)
 	{
 		return null;
 	}
