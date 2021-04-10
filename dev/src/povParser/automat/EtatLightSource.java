@@ -3,8 +3,9 @@ package povParser.automat;
 import maths.Vector3D;
 import scene.lights.LightBulb;
 
-import java.io.StreamTokenizer;
-
+/**
+ * différents attributs que peut prendre la lumière
+ */
 enum LightContent
 {
     OPENING_BRACKET,
@@ -14,10 +15,17 @@ enum LightContent
     OUTSIDE,
 }
 
-
+/**
+ * Classe représentant l'état lumière, c'est à dire que le jeton courant est le mot
+ * light_source dans le fichier pov. C'est ici que tout le parsing de la lumière est effectué.
+ */
 public class EtatLightSource implements EtatToken
 {
-    //vecteur couleur non implémenté
+
+    /**
+     * @param context contexte courant de l'automate
+     * Cette méthode effectue le parsing d'un objet light_source (poin light)
+     */
     @Override
     public void action(Automat context)
     {

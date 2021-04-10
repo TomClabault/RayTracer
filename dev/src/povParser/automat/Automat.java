@@ -9,6 +9,7 @@ public class Automat
     -parse les textures spéciales
     -parse cheker dans pigment
     -parse camera (attributs: locate, rotate, translate, look_at)
+    -ajout de la javadoc
      */
 
     private EtatToken etatToken;
