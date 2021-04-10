@@ -2,41 +2,15 @@ package rayTracer;
 
 public class RayTracerSettings 
 {
-	private int renderWidth;
-	private int renderHeight;
-	
 	private int nbCore;
 	private int recursionDepth;
 	private int antialiasingSampling;
 	
-	public RayTracerSettings(int renderWidth, int renderHeight, int maxRecursionDepth, int nbCore, int antialiasingSampling)
+	public RayTracerSettings(int maxRecursionDepth, int nbCore, int antialiasingSampling)
 	{
-		this.renderWidth = renderWidth;
-		this.renderHeight = renderHeight;
-		
 		this.recursionDepth = maxRecursionDepth;
 		this.nbCore = nbCore;
 		this.antialiasingSampling = antialiasingSampling;
-	}
-	
-	public int getRenderWidth() 
-	{
-		return renderWidth;
-	}
-	
-	public void setRenderWidth(int renderWdith) 
-	{
-		this.renderWidth = renderWdith;
-	}
-	
-	public int getRenderHeight() 
-	{
-		return renderHeight;
-	}
-	
-	public void setRenderHeight(int renderHeight) 
-	{
-		this.renderHeight = renderHeight;
 	}
 	
 	public int getNbCore() 

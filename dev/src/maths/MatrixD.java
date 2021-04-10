@@ -1,7 +1,5 @@
 package maths;
 
-import javax.swing.plaf.multi.MultiPopupMenuUI;
-
 import exceptions.IncompatibleMatricesException;
 
 /*

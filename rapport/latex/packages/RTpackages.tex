@@ -12,12 +12,12 @@ Pour rendre une image, le RayTracer a besoin de:
 	\item{Une profondeur maximale de récursion}
 	\item{Un nombre de thread sur lequel le rendu sera effectué}
 \end{itemize}
-La résolution de rendu est fixe et est donnée au constructeur du RayTracer. La scène est les sources de lumière sont, quant à elles, dynamiques. La scène peut très bien être modifiée pendant le rendu et le RayTracer rendra les nouvelles images en conséquence.
+La résolution de rendu est fixe et est donnée au constructeur du RayTracer. Les autres réglages sont quant à eux dynamiques. S'ils sont modifiés, le ray tracer adaptera alors son rendu en conséquence.
 
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=\textwidth]{diagrammes/diagramme_RayTracer.png}}
 	
-	\caption{Diagramme de la classe RayTracer et de ses principales méthodes}
+	\caption{Diagramme du package RayTracer}
 	\label{diagrammeRayTracer}
 \end{figure}
 \FloatBarrier

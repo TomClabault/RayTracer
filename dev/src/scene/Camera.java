@@ -16,8 +16,8 @@ public class Camera
 	private double angleVerti;/* Angle de rotation de caméra sur le plan x, y en degré */
 	
 	private static final int X_AXIS = 0;
-	private static final int Y_AXIS = 0;
-	private static final int Z_AXIS = 0;
+	private static final int Y_AXIS = 1;
+	private static final int Z_AXIS = 2;
 	/*
 	 * Deux angles horizontal et vertical
 	 * 

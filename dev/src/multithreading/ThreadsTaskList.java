@@ -58,6 +58,9 @@ public class ThreadsTaskList
 	 */
 	public void initTaskList(int nbCore, int renderWidth, int renderHeight)
 	{
+		this.taskList = new ArrayList<>();
+		this.totalTaskCount = 0;
+		
 		int tilesWidth = renderWidth / nbCore;
 		int tilesHeight = renderHeight / nbCore;
 		
