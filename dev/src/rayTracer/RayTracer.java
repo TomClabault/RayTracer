@@ -93,23 +93,22 @@ public class RayTracer
 	public static final double AIR_REFRACTION_INDEX = 1.000293;
 	public static final double EPSILON_SHIFT = 0.0001;
 	
-	RayTracerSettings settings;
-
+	private int renderWidth;
+	private int renderHeight;
+	
+	private RayTracerSettings settings;
 	private ThreadsTaskList threadTaskList;
 	private IntBuffer renderedPixels;
-
 	private PixelReader skyboxPixelReader = null;
 
-	public RayTracer(RayTracerSettings settings)
+	public RayTracer(int renderWidth, int renderHeight)
 	{
-		this.settings = settings;
+		this.renderWidth = renderWidth;
+		this.renderHeight = renderHeight;
 		
-		this.renderedPixels = IntBuffer.allocate(settings.getRenderWidth()*settings.getRenderHeight());
-//		for(int i = 0; i < renderWidth*renderHeight; i++)
-//			this.renderedPixels.put(i, ColorOperations.aRGB2Int(Color.rgb(255, 0, 0)));
+		this.renderedPixels = IntBuffer.allocate(renderWidth*renderHeight);
 		
 		this.threadTaskList = new ThreadsTaskList();
-		this.threadTaskList.initTaskList(settings.getNbCore(), settings.getRenderWidth(), settings.getRenderHeight());
 	}
 	
 	/*
@@ -384,7 +383,7 @@ public class RayTracer
 				Color pixelColor = this.computePixel(renderScene, cameraRay, settings.getRecursionDepth());
 				pixelColor = ColorOperations.linearTosRGBGamma2_2(pixelColor);
 				
-				this.renderedPixels.put(y*settings.getRenderWidth() + x, ColorOperations.aRGB2Int(pixelColor));
+				this.renderedPixels.put(y*this.renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
 			}
 		}
 	}
@@ -533,15 +532,15 @@ public class RayTracer
 		double xWorld = (double)x;
 		double yWorld = (double)y;
 
-		double aspectRatio = (double)settings.getRenderWidth() / (double)settings.getRenderHeight();
+		double aspectRatio = (double)this.renderWidth / (double)this.renderHeight;
 		double demiHeightPlane = Math.tan(Math.toRadians(FOV/2));
 
-		xWorld = (xWorld + 0.5) / settings.getRenderWidth();//Normalisation des pixels. Maintenant dans [0, 1]
+		xWorld = (xWorld + 0.5) / this.renderWidth;//Normalisation des pixels. Maintenant dans [0, 1]
 		xWorld = xWorld * 2 - 1;//Décalage des pixels dans [-1, 1]
 		xWorld *= aspectRatio;//Prise en compte de l'aspect ratio. Maintenant dans [-aspectRatio; aspectRatio]
 		xWorld *= demiHeightPlane;
 
-		yWorld = (yWorld + 0.5) / settings.getRenderHeight();//Normalisation des pixels. Maintenant dans [0, 1]
+		yWorld = (yWorld + 0.5) / this.renderHeight;//Normalisation des pixels. Maintenant dans [0, 1]
 		yWorld = 1 - yWorld * 2;//Décalage des pixels dans [-1, 1]
 		yWorld *= demiHeightPlane;
 
@@ -645,7 +644,7 @@ public class RayTracer
 	
 	/*
 	 * Permet d'obtenir le tableau de pixels correspondant à la dernière image rendue par le RayTracer
-	 * Si aucune image n'a été rendue, renvoie null
+	 * Si aucune image n'a été rendue au préalable, renvoie null
 	 *
 	 * @param Un tableau de Color.RGB(r, g, b) de dimension renderHeight*renderLength. Renvoie null si encore aucune image n'a été rendue
 	 */
@@ -654,8 +653,19 @@ public class RayTracer
 		return this.renderedPixels;
 	}
 
-	public IntBuffer renderImage(RayTracingScene renderScene)
+	/*
+	 * Calcule le rendu de la scène donnée avec les réglages donnés
+	 * 
+	 * @param renderScene La scène à rendre
+	 * @param renderSettings Les réglages techniques du rendu
+	 * 
+	 * @return Un IntBuffer de taille renderWidth*renderHeight (spécifiées à la construction du RayTracer) contenant les pixels de l'image rendue
+	 */
+	public IntBuffer renderImage(RayTracingScene renderScene, RayTracerSettings renderSettings)
 	{
+		this.settings = renderSettings;
+		this.threadTaskList.initTaskList(settings.getNbCore(), renderWidth, renderHeight);
+		
 		if(renderScene.hasSkybox())
 			this.skyboxPixelReader = renderScene.getSkyboxPixelReader();
 

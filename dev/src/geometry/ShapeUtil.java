@@ -1,6 +1,5 @@
 package geometry;
 
-import javafx.scene.paint.Color;
 import materials.Material;
 import maths.Point;
 
