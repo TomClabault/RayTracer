@@ -12,5 +12,6 @@ Les algorithmes de ray tracing sont réputés pour être lents à exécuter. Cep
 A partir de toutes ces tâches est ensuite construite une liste de tâche. Cette dernière servira aux threads. Ils viendront en effet piocher dans la liste afin de récupérer les informations sur la zone de l'image qu'ils ont à rendre.
 Un diagramme de classe illustre le fonctionnement du package multithreading dans la section \ref{packageMultithreading}.
 
+Afin d'éviter les situations de concurrences entre les threads, la plupart des méthodes de la classe \textit{ThreadsTaskList} sont \textit{\textbf{synchronized}}. Grâce à ce mot clé, seulement un thread du programme peut accéder à la méthode à un instant t et nous évitons ainsi les problèmes de concurrence.
 
 \end{document}
