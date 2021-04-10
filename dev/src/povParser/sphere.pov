@@ -8,6 +8,18 @@ sphere { <0.5, 1.5, 2.5>, 0.7
   }
 }
 
+camera
+{
+  location <3,5,-10>
+  look_at <0,2,1>
+}
+
+light_source
+{
+    <1, 2, 3>, 5
+}
+
+/*
 triangle
 {
     <1, 2, 3>, <4, 5, 6>, <7, 8, 9>
@@ -50,4 +62,4 @@ box
 light_source
 {
     <1, 2 ,3>, 0.5
-}
+}*/
