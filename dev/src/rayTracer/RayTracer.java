@@ -273,7 +273,9 @@ public class RayTracer
 				}
 			}
 			
-			Color reflectedColor = computePixel(renderScene, reflectedRay, depth -1);
+			Color reflectedColor = Color.rgb(0, 0, 0);
+			if(this.settings.isEnableFresnel())
+				reflectedColor = computePixel(renderScene, reflectedRay, depth -1);
 			
 			Color finalColor = ColorOperations.mulColor(refractedColor, ft);
 			return ColorOperations.addColors(finalColor, ColorOperations.mulColor(reflectedColor, fr));
@@ -294,10 +296,12 @@ public class RayTracer
 	 */
 	protected Color computeShadow(RayTracingScene renderScene, RayTracerInterInfos intInfos, double ambientLighting, int depth)
 	{
-		Color finalColor = null;
+		Color finalColor = Color.rgb(0, 0, 0);
 
 		finalColor = ColorOperations.mulColor(intInfos.getObjCol(), ambientLighting);
-		finalColor = ColorOperations.addColors(finalColor, computeReflectionsColor(renderScene, intInfos, depth));
+		if(this.settings.isEnableReflections())
+			finalColor = ColorOperations.addColors(finalColor, computeReflectionsColor(renderScene, intInfos, depth));
+		if(this.settings.isEnableRefractions())
 		finalColor = ColorOperations.addColors(finalColor, computeRefractionsColor(renderScene, intInfos, depth));
 		
 		return finalColor;
@@ -414,7 +418,9 @@ public class RayTracer
 			
 			double lightIntensity = renderScene.getLight().getIntensity();
 			double ambientLighting = computeAmbient(renderScene.getAmbientLightIntensity(), interInfos.getIntObjMat().getAmbientCoeff());
-
+			if(!this.settings.isEnableAmbient())//Si le calcul de l'ambient n'est pas activé
+				ambientLighting = 0;//On définit l'ambient à 0
+			
 			interInfos.setToLightVec(Vector.normalizeV(new Vector(interInfos.getIntP(), renderScene.getLight().getCenter())));
 
 			Color currentPixelColor = Color.rgb(0, 0, 0);
@@ -459,13 +465,18 @@ public class RayTracer
 
 			if(shadowInterObject == null || interToShadowInterDist > interToLightDist || shadowInterObject.getMaterial().getIsTransparent())//Aucune intersection trouvée pour aller jusqu'à la lumière, on peut calculer la couleur directe de l'objet
 			{
-				interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeDiffuseColor(interInfos, lightIntensity)));
-				interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeSpecularColor(interInfos, lightIntensity)));
-				interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeReflectionsColor(renderScene, interInfos, depth)));
-				interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeRefractionsColor(renderScene, interInfos, depth)));
+				if(this.settings.isEnableDiffuse())
+					interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeDiffuseColor(interInfos, lightIntensity)));
+				if(this.settings.isEnableSpecular())
+					interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeSpecularColor(interInfos, lightIntensity)));
+				if(this.settings.isEnableReflections())
+					interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeReflectionsColor(renderScene, interInfos, depth)));
+				if(this.settings.isEnableRefractions())
+					interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeRefractionsColor(renderScene, interInfos, depth)));
 			}
 			else//Une intersection a été trouvée et l'objet intersecté est entre la lumière et le départ du shadow ray. De plus, l'objet bloquant la vue à la lumière n'est pas transparent
 				interInfos.setCurPixCol(computeShadow(renderScene, interInfos, ambientLighting, depth));
+
 
 			return interInfos.getCurPixCol();
 		}
