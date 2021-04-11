@@ -28,6 +28,15 @@ public class RayTracingScene
 	private double ambientLightIntensity;
 	
 	/*
+	 * Crée une scène vide
+	 */
+	public RayTracingScene()
+	{
+		this(null, null, new ArrayList<Shape>(), Color.rgb(0, 0, 0), 0);
+	}
+
+
+	/*
 	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
 	 * 
 	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
@@ -98,7 +107,17 @@ public class RayTracingScene
 		this.backgroundColor = backgroundColor;
 		this.ambientLightIntensity = ambientLightIntensity;
 	}
-
+	
+	/*
+	 * Permet d'ajouter un objet à la scène
+	 * 
+	 * @param shape La forme à ajouter
+	 */
+	public void addShape(Shape shape)
+	{
+		this.shapes.add(shape);
+	}
+	
 	/*
 	 * Permet d'obtenir l'intensité de la lumière ambiante de la scène
 	 * 
@@ -187,5 +206,30 @@ public class RayTracingScene
 	public boolean hasSkybox()
 	{
 		return !(this.skyboxTexture == null);
+	}
+	
+	public void setAmbientLightIntensity(double ambientLightIntensity) 
+	{
+		this.ambientLightIntensity = ambientLightIntensity;
+	}
+	
+	public void setBackgroundColor(Color backgroundColor) 
+	{
+		this.backgroundColor = backgroundColor;
+	}
+	
+	public void setCamera(Camera camera) 
+	{
+		this.camera = camera;
+	}
+
+	public void setLight(PositionnalLight light) 
+	{
+		this.light = light;
+	}
+
+	public void setShapes(ArrayList<Shape> shapes) 
+	{
+		this.shapes = shapes;
 	}
 }
