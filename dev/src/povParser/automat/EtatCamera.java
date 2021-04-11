@@ -117,7 +117,6 @@ public class EtatCamera implements EtatToken
                     System.out.println("ANGLE");
                     context.callNextToken(); // skip "angle"
                     angle = context.getNumberValue();
-                    camera.setFOV(angle * 2);
                     System.out.println("angle value: " + angle);
                     context.callNextToken();
                     state = this.getNextAttribute(context);
@@ -155,7 +154,8 @@ public class EtatCamera implements EtatToken
                 }
             }
         }
-        return camera;
+        
+        return new Camera(position, orientation, angle);
     }
 
 }

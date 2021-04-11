@@ -1,17 +1,19 @@
-sphere { <0.5, 1.5, 2.5>, 0.7
-  pigment { color rgb <0.1, 0.2, 0.3>}
+sphere { <-1.25, 0.5, -6>, 1
+  pigment { color rgb 0}
   finish {
-    ambient 0.5 diffuse 0.3
-    specular 0.7
-    reflection 0.6
-    phong_size 60
+    ambient 1 
+	diffuse 1
+    specular 1
+    reflection 0.75
+    phong_size 192
   }
 }
 
 camera
 {
   location <0, 0.5, -1.5>
-  look_at <0.5, 1.5, 2.5>
+  look_at <0.000, 0.5, -2.5>
+  angle 60
 }
 
 light_source
@@ -31,8 +33,8 @@ triangle
         phong 5
     }
 }
-*/
 
+*/
 plane
 {
     <0, 1, 0>, -1
@@ -43,10 +45,10 @@ plane
     }
     pigment
     {
-        color rgb <0.2, 0.2, 0.2>
+        color rgb 1
     }
 }
-
+/*
 box
 {
     <1, 1, -1>, <2, 2, -2>
@@ -60,3 +62,5 @@ box
         phong_size 64
     }
 }
+*/
+

@@ -90,4 +90,10 @@ public class PlaneMaths extends ShapeUtil implements Shape
 	    else
 			return null;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("[Plane Shape] Normal: %s | Point: %s | Material: %s", this.normal, this.point, this.material);
+	}
 }

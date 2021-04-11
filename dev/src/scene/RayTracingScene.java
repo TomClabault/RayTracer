@@ -32,7 +32,7 @@ public class RayTracingScene
 	 */
 	public RayTracingScene()
 	{
-		this(null, null, new ArrayList<Shape>(), Color.rgb(0, 0, 0), 0);
+		this(null, null, new ArrayList<Shape>(), Color.rgb(0, 0, 0), 0.1);
 	}
 
 
@@ -231,5 +231,20 @@ public class RayTracingScene
 	public void setShapes(ArrayList<Shape> shapes) 
 	{
 		this.shapes = shapes;
+	}
+	
+	@Override
+	public String toString()
+	{
+		String output = "";
+		
+		output += ("Camera: " + camera.toString() + System.lineSeparator());
+		output += ("Light: " + light.toString() + System.lineSeparator());
+		output += ("Ambient light: " + ambientLightIntensity + System.lineSeparator());
+		output += ("Formes: " + System.lineSeparator());
+		for(Shape object : this.shapes)
+			output += (object.toString() + System.lineSeparator());
+		
+		return output;
 	}
 }

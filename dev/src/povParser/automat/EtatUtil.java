@@ -99,7 +99,7 @@ public abstract class EtatUtil
                 case AMBIENT:
                 {
                     context.callNextToken(); // skip ambient
-                    //appeler le setter material correspondant à l'ambient
+                    material.setAmbientCoeff(context.getNumberValue());
                     token = context.callNextToken(); // skip ambient coeff
                     state  = parsePropertryAndGetState(context);
                     if(state == null)

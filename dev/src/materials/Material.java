@@ -253,7 +253,7 @@ public class Material
 	@Override
 	public String toString() {
 		return "Material:"
-				+ " [color=" + color + ", diffuseCoeff=" + diffuseCoeff + ", reflectiveCoeff=" + reflectiveCoeff
+				+ "[color=" + color + "ambientCoeff=" + ambientCoeff + ", diffuseCoeff=" + diffuseCoeff + ", reflectiveCoeff=" + reflectiveCoeff
 				+ ", specularCoeff=" + specularCoeff + ", shininess=" + shininess + ", isTransparent=" + isTransparent
 				+ ", refractionIndex=" + refractionIndex + ", proceduralTexture=" + proceduralTexture + "]";
 	}

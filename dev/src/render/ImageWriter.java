@@ -50,6 +50,8 @@ public class ImageWriter {
         this.myGlobalScene = Automat.parsePov("dev/src/povParser/sphere.pov");
         this.writableImage = new WritableImage(MainApp.WIDTH,MainApp.HEIGHT);
 
+        System.out.println(myGlobalScene);
+        
         this.pw = writableImage.getPixelWriter();
         
         ImageView imageView = new ImageView();

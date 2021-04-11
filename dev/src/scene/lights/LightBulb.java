@@ -29,4 +29,10 @@ public class LightBulb implements PositionnalLight
 	{
 		return this.intensity;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("Centre: %s | Intensity: %.3f", center, intensity);
+	}
 }
