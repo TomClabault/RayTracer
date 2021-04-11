@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 
+import povParser.automat.Automat;
 import rayTracer.RayTracer;
 import geometry.shapes.*;
 import geometry.*;
@@ -30,7 +31,7 @@ import scene.lights.*;
 */
 public class ImageWriter {
 
-    private RayTracingScene MyGlobalScene = addObjectsToScene();
+    private RayTracingScene myGlobalScene;
     
     private WritableImage writableImage;
     private PixelWriter pw;
@@ -46,6 +47,7 @@ public class ImageWriter {
     public ImageWriter(Scene mainAppScene)
     {
         this.mainAppScene = mainAppScene;
+        this.myGlobalScene = Automat.parsePov("dev/src/povParser/sphere.pov");
         this.writableImage = new WritableImage(MainApp.WIDTH,MainApp.HEIGHT);
 
         this.pw = writableImage.getPixelWriter();
@@ -62,19 +64,19 @@ public class ImageWriter {
         pane.getChildren().add(imageView);
         this.pane = pane;
 
-        WindowTimer windowTimer = new WindowTimer(this.MyGlobalScene, this.pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT));
+        WindowTimer windowTimer = new WindowTimer(this.myGlobalScene, this.pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT));
         this.windowTimer = windowTimer;
 
-        CameraTimer cameraTimer = new CameraTimer(this.mainAppScene, this.MyGlobalScene);
+        CameraTimer cameraTimer = new CameraTimer(this.mainAppScene, this.myGlobalScene);
         this.cameraTimer = cameraTimer;
     }
 
     public void setRayTracingScene(RayTracingScene rayTracingScene) {
-        this.MyGlobalScene = rayTracingScene;
+        this.myGlobalScene = rayTracingScene;
     }
 
     public RayTracingScene getRayTracingScene() {
-        return this.MyGlobalScene;
+        return this.myGlobalScene;
     }
 
     public WindowTimer getWindowTimer() {

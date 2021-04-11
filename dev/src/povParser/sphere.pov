@@ -10,13 +10,13 @@ sphere { <0.5, 1.5, 2.5>, 0.7
 
 camera
 {
-  location <3,5,-10>
-  look_at <0,2,1>
+  location <0, 0.5, -1.5>
+  look_at <0.5, 1.5, 2.5>
 }
 
 light_source
 {
-    <1, 2, 3>, 5
+    <2, 2, 1>, 1
 }
 
 /*
@@ -31,14 +31,15 @@ triangle
         phong 5
     }
 }
+*/
 
 plane
 {
-    <0, 0, 0>, 1
+    <0, 1, 0>, -1
     finish
     {
-        ambient 2.0
-        diffuse 988
+        ambient 1
+        diffuse 1
     }
     pigment
     {
@@ -48,18 +49,14 @@ plane
 
 box
 {
-    <1, 1, 1>, <2, 2, 2>
+    <1, 1, -1>, <2, 2, -2>
     pigment
     {
         color rgb 1
     }
     finish
     {
-        specular 1.2
+        specular 1
+        phong_size 64
     }
 }
-
-light_source
-{
-    <1, 2 ,3>, 0.5
-}*/

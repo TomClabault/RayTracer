@@ -135,7 +135,7 @@ public class Automat
         return State.OUTSIDE;
     }
 
-    public RayTracingScene parsePov(String pathToFile)
+    public static RayTracingScene parsePov(String pathToFile)
     {
         RayTracingScene scene = new RayTracingScene();
 

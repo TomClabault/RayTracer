@@ -4,7 +4,7 @@ import geometry.Shape;
 import geometry.shapes.Rectangle;
 import javafx.scene.paint.Color;
 import materials.Material;
-import maths.Vector3D;
+import maths.Point;
 
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
@@ -32,8 +32,8 @@ public class EtatBox extends EtatUtil implements EtatToken
         int coordNb = 0;
         Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0);
         Rectangle rectangle = null;
-        Vector3D vector1 = null;
-        Vector3D vector2 = null;
+        Point vector1 = null;
+        Point vector2 = null;
 
         Boxcontent state = Boxcontent.OPENING_BRACKET;
 
@@ -59,9 +59,9 @@ public class EtatBox extends EtatUtil implements EtatToken
                         coordArray[i] = context.getNumberValue();
                     }
                     if(vector1 == null)
-                        vector1 = new Vector3D(coordArray[0], coordArray[1], coordArray[2]);
+                        vector1 = new Point(coordArray[0], coordArray[1], coordArray[2]);
                     else
-                        vector2 = new Vector3D(coordArray[0], coordArray[1], coordArray[2]);
+                        vector2 = new Point(coordArray[0], coordArray[1], coordArray[2]);
                     state = Boxcontent.ENDING_CHEVRON;
                     coordNb++;
 

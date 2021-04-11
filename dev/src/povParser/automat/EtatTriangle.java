@@ -4,7 +4,8 @@ import geometry.Shape;
 import geometry.shapes.Triangle;
 import javafx.scene.paint.Color;
 import materials.Material;
-import maths.Vector3D;
+import maths.Point;
+import maths.Vector;
 
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
@@ -34,9 +35,9 @@ public class EtatTriangle extends EtatUtil implements EtatToken
         boolean triangleCoord = false;
         Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0);
         Triangle triangle = null;
-        Vector3D vectA = null;
-        Vector3D vectB = null;
-        Vector3D vectC = null;
+        Point vectA = null;
+        Point vectB = null;
+        Point vectC = null;
 
         Trianglecontent state = Trianglecontent.OPENING_BRACKET;
 
@@ -80,9 +81,9 @@ public class EtatTriangle extends EtatUtil implements EtatToken
                                 context.callNextToken();
                             }
                         }
-                        vectA = new Vector3D(coordArray[0][0], coordArray[0][1], coordArray[0][2]);
-                        vectB = new Vector3D(coordArray[1][0], coordArray[1][1], coordArray[1][2]);
-                        vectC = new Vector3D(coordArray[2][0], coordArray[2][1], coordArray[2][2]);
+                        vectA = new Point(coordArray[0][0], coordArray[0][1], coordArray[0][2]);
+                        vectB = new Point(coordArray[1][0], coordArray[1][1], coordArray[1][2]);
+                        vectC = new Point(coordArray[2][0], coordArray[2][1], coordArray[2][2]);
 
                         triangleCoord = false;
                     }

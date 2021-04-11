@@ -3,7 +3,8 @@ package povParser.automat;
 import geometry.Shape;
 import javafx.scene.paint.Color;
 import materials.Material;
-import maths.Vector3D;
+import maths.CoordinateObject;
+
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 
@@ -19,7 +20,7 @@ enum SpherePlanecontent
 
 public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
 {
-    protected abstract Shape createInstance(Vector3D coord, Double dist, Material material);
+    protected abstract Shape createInstance(double[] coord, Double dist, Material material);
 
     @Override
     public Shape action(Automat context)
@@ -33,8 +34,9 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
         boolean color = false;
         boolean coord = false;
         int nextToken = 0;
+        double[] coordArray = {0};
         Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0);
-        Vector3D vect = null;
+        CoordinateObject vect = null;
 
         Double dist = null;
 
@@ -64,7 +66,7 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
                     break;
                 }
                 case OPENING_CHEVRON: {
-                    double[] coordArray = new double[3];
+                    coordArray = new double[3];
                     if (coord) {
                         for (int i = 0; i < 3; i++) {
                             context.callNextToken(); // la virgule
@@ -72,7 +74,6 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
                             coordArray[i] = context.getNumberValue();
                         }
                     }
-                    vect = new Vector3D(coordArray[0], coordArray[1], coordArray[2]);
                     //coord = false;
                     state = SpherePlanecontent.ENDING_CHEVRON;
                     break;
@@ -103,6 +104,6 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
                 }
             }
         }
-        return createInstance(vect, dist, material);
+        return createInstance(coordArray, dist, material);
     }
 }
