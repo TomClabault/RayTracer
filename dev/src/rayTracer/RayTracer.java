@@ -101,6 +101,7 @@ public class RayTracer
 	private ThreadsTaskList threadTaskList;
 	private IntBuffer renderedPixels;
 	private PixelReader skyboxPixelReader = null;
+	private Random randomGenerator;
 	
 	public RayTracer(int renderWidth, int renderHeight)
 	{
@@ -223,10 +224,42 @@ public class RayTracer
 		//Si l'objet est réfléchissant
 		if(intObjMat.getReflectiveCoeff() > 0)
 		{
-			Vector reflectDirection = intInfos.getReflVec();
-			Color reflectionColor = computePixel(renderScene, new Ray(intInfos.getIntPShift(), Vector.normalizeV(reflectDirection)), depth - 1);
+			Vector perfectReflectDirection = intInfos.getReflVec();
+			perfectReflectDirection = Vector.normalizeV(perfectReflectDirection);
+			
+			int summedRed = 0;
+			int summedGreen = 0;
+			int summedBlue = 0;
+			
+			int blurSampleCount = (this.settings.isEnableBlurryReflections() && intInfos.getIntObjMat().getScatteringCoeff() > 0) ? this.settings.getBlurryReflectionsSampleCount() : 1;
+			for(int blurSample = 0; blurSample < blurSampleCount; blurSample++)
+			{
+				Vector reflectDirection = null;
+				
+				if(!this.settings.isEnableBlurryReflections() || intInfos.getIntObjMat().getScatteringCoeff() == 0)
+					reflectDirection = perfectReflectDirection;
+				else
+				{
+					double randomX = randomGenerator.nextDouble() * 2 - 1;
+					double randomY = randomGenerator.nextDouble() * 2 - 1;
+					double randomZ = randomGenerator.nextDouble() * 2 - 1;
+					
+					Vector randomBounce = Vector.add(new Vector(randomX, randomY, randomZ), intInfos.getNormInt());
+					//Vector randomBounceSample = Vector.normalizeV(Vector.add(new Vector(randomX, randomY, randomZ), Vector.scalarMul(intInfos.getNormInt(), 2)));
+					Vector randomBounceDirection = Vector.normalizeV(Vector.add(perfectReflectDirection, Vector.scalarMul(new Vector(randomX, randomY, randomZ), intInfos.getIntObjMat().getScatteringCoeff())));//Vector.interpolate(randomBounceSample, perfectReflectDirection, intInfos.getIntObjMat().getScatteringCoeff());
+					
+					reflectDirection = randomBounceDirection;
+				}
+					
+				Color reflectionColor = computePixel(renderScene, new Ray(intInfos.getIntPShift(), reflectDirection), depth - 1);
+				
+				summedRed += (int)(reflectionColor.getRed()*255);
+				summedGreen += (int)(reflectionColor.getGreen()*255);
+				summedBlue += (int)(reflectionColor.getBlue()*255);
+			}
 
-			return ColorOperations.mulColor(reflectionColor, intObjMat.getReflectiveCoeff());
+			Color summedColor = Color.rgb(summedRed / blurSampleCount, summedGreen / blurSampleCount, summedBlue / blurSampleCount);
+			return ColorOperations.mulColor(summedColor, intObjMat.getReflectiveCoeff());
 		}
 		else//Si l'objet n'est pas réfléchissant, on ne renvoie pas de couleur de réflexion --> noir
 			return Color.rgb(0, 0, 0);
@@ -578,12 +611,12 @@ public class RayTracer
 		double aspectRatio = (double)this.renderWidth / (double)this.renderHeight;
 		double demiHeightPlane = Math.tan(Math.toRadians(FOV/2));
 
-		xWorld = (xWorld + 0.5) / this.renderWidth;//Normalisation des pixels. Maintenant dans [0, 1]
+		xWorld = xWorld / this.renderWidth;//Normalisation des pixels. Maintenant dans [0, 1]
 		xWorld = xWorld * 2 - 1;//Décalage des pixels dans [-1, 1]
 		xWorld *= aspectRatio;//Prise en compte de l'aspect ratio. Maintenant dans [-aspectRatio; aspectRatio]
 		xWorld *= demiHeightPlane;
 
-		yWorld = (yWorld + 0.5) / this.renderHeight;//Normalisation des pixels. Maintenant dans [0, 1]
+		yWorld = yWorld / this.renderHeight;//Normalisation des pixels. Maintenant dans [0, 1]
 		yWorld = 1 - yWorld * 2;//Décalage des pixels dans [-1, 1]
 		yWorld *= demiHeightPlane;
 
@@ -727,6 +760,7 @@ public class RayTracer
 	 */
 	public IntBuffer renderImage(RayTracingScene renderScene, RayTracerSettings renderSettings)
 	{
+		this.randomGenerator = new Random(0);//On réinitialise le random generator avec la seed 0 pour réobtenir les mêmes aléatoires et donc la même image que précédemment (si la caméra n'a pas bougé bien sûr)  
 		this.settings = renderSettings;
 		this.threadTaskList.initTaskList(settings.getNbCore(), renderWidth, renderHeight);
 		

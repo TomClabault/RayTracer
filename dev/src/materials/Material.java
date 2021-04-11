@@ -27,6 +27,7 @@ public class Material
 	private int shininess;
 	private boolean isTransparent;
 	private double refractionIndex;
+	private double scatteringCoeff;
 	
 	private ProceduralTexture proceduralTexture;//Attribut special qui spécifie la texture du matériau. Utilisé pour le damier par exemple
 	
@@ -40,9 +41,10 @@ public class Material
 	 * @param specularCoeff Réel entre 0 et 1. Coefficient permettant de jouer sur l'intensité des tâches spéculaires du matériau. Plus ce coefficient se rapproche de 1 plus les tâches spéculaires seront marquées. A 0, le matériau n'est pas spéculaire
 	 * @param shininess Entier positif non nul. Permet de jouer sur la taille des tâches spéculaires du matériau. Plus ce nombre est grand plus les tâches seront petites
 	 * @param isTransparent True pour indiquer que le matériau est transparent, false pour indiquer qu'il n'est pas transparent
-	 * @param refractionIndex Indice de réfraction du matériau. Doit être 0 pour indiquer que le matériau n'est pas réfractif 
+	 * @param refractionIndex Indice de réfraction du matériau. Doit être 0 pour indiquer que le matériau n'est pas réfractif
+	 * @param scaterringCoeff Le coefficient de dispersion des rayons de lumière à l'impact du matériau. Responsable de réflexions floues 
 	 */
-	public Material(Color color, double ambientCoeff, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess, boolean isTransparent, double refractionIndex)
+	public Material(Color color, double ambientCoeff, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess, boolean isTransparent, double refractionIndex, double scatteringCoeff)
 	{
 		this.color = color;
 		
@@ -53,6 +55,7 @@ public class Material
 		this.shininess = shininess;
 		this.isTransparent = isTransparent;
 		this.refractionIndex = refractionIndex;
+		this.scatteringCoeff = scatteringCoeff;
 		
 		this.proceduralTexture = null;//Pas de texture par défaut
 	}
@@ -67,10 +70,11 @@ public class Material
 	 * @param specularCoeff Réel entre 0 et 1. Coefficient permettant de jouer sur l'intensité des tâches spéculaires du matériau. Plus ce coefficient se rapproche de 1 plus les tâches spéculaires seront marquées. A 0, le matériau n'est pas spéculaire
 	 * @param shininess Entier positif non nul. Permet de jouer sur la taille des tâches spéculaires du matériau. Plus ce nombre est grand plus les tâches seront petites
 	 * @param isTransparent True pour indiquer que le matériau est transparent, false pour indiquer qu'il n'est pas transparent
-	 * @param refractionIndex Indice de réfraction du matériau. Doit être 0 pour indiquer que le matériau n'est pas réfractif 
+	 * @param refractionIndex Indice de réfraction du matériau. Doit être 0 pour indiquer que le matériau n'est pas réfractif
+	 * @param scaterringCoeff Le coefficient de dispersion des rayons de lumière à l'impact du matériau. Responsable de réflexions floues 
 	 * @param proceduralTexture La texture procédurale de l'objet
 	 */
-	public Material(Color color, double ambientCoeff, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess, boolean isTransparent, double refractionIndex, ProceduralTexture proceduralTexture)
+	public Material(Color color, double ambientCoeff, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess, boolean isTransparent, double refractionIndex, double scatteringCoeff, ProceduralTexture proceduralTexture)
 	{
 		this.color = color;
 		
@@ -81,10 +85,11 @@ public class Material
 		this.shininess = shininess;
 		this.isTransparent = isTransparent;
 		this.refractionIndex = refractionIndex;
+		this.scatteringCoeff = scatteringCoeff;
 		
 		this.proceduralTexture = proceduralTexture;
 	}
-	
+
 	/*
 	 * Retourne le couleur du matériau sous la forme d'un objet Color.RGB(r, g, b)
 	 * 
@@ -145,6 +150,11 @@ public class Material
 	public double getRefractionIndex()
 	{
 		return this.refractionIndex;
+	}
+	
+	public double getScatteringCoeff() 
+	{
+		return scatteringCoeff;
 	}
 	
 	/*
@@ -236,6 +246,11 @@ public class Material
 		this.refractionIndex = refractionIndex;
 	}
 	
+	public void setScatteringCoeff(double scatteringCoeff) 
+	{
+		this.scatteringCoeff = scatteringCoeff;
+	}
+	
 	public void setSpecularCoeff(double specularCoeff) 
 	{
 		this.specularCoeff = specularCoeff;
@@ -256,6 +271,6 @@ public class Material
 	{
 		String transparencyString = String.format("%b", isTransparent);
 		
-		return String.format("Color: %-15s | AmbientCoeff: %.3f | DiffuseCoeff: %.3f | ReflectiveCoeff: %.3f | SpecularCoeff: %.3f | Shininess: %-3d | Transparency: %-5s | RefractionIndex: %.3f | ProceduralTexture: %s", ColorOperations.colorToString(color), ambientCoeff, diffuseCoeff, reflectiveCoeff, specularCoeff, shininess, transparencyString, refractionIndex, proceduralTexture);
+		return String.format("Color: %-15s | AmbientCoeff: %.3f | DiffuseCoeff: %.3f | ReflectiveCoeff: %.3f | SpecularCoeff: %.3f | Shininess: %-3d | Transparency: %-5s | RefractionIndex: %.3f | ScaterringCoeff: %.3f | ProceduralTexture: %s", ColorOperations.colorToString(color), ambientCoeff, diffuseCoeff, reflectiveCoeff, specularCoeff, shininess, transparencyString, refractionIndex, scatteringCoeff, proceduralTexture);
 	}
 }

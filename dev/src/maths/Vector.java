@@ -175,6 +175,20 @@ public class Vector implements CoordinateObject
 	}
 	
 	/*
+	 * Permet d'interpoler linéairement un vecteur entre deux vecteurs donnés
+	 * 
+	 * @param u Le premier vecteur qui servira pour l'interpolation
+	 * @param v Le deuxième vecteur qui servira pour l'interpolation
+	 * @param coeff La coefficient d'interpolation. 1 donnera 'u' comme résultat d'interpolation. 0 donnera v. Un réel entre les deux donnera un vecteur entre u et v  
+	 *
+	 * @return Retourne le vecteur interpolé des deux vecteurs passé en arguments avec le coefficient donné 
+	 */
+	public static Vector interpolate(Vector u, Vector v, double coeff)
+	{
+		return new Vector(Vector.add(Vector.scalarMul(u, coeff), Vector.scalarMul(v, 1 - coeff)));
+	}
+	
+	/*
 	 * Calcule la longueur du vecteur
 	 *
 	 * @return Longueur du vecteur
