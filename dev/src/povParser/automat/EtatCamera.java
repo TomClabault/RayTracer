@@ -79,7 +79,7 @@ public class EtatCamera implements EtatToken
      * @param context contexte courant de l'automate
      */
     @Override
-    public void action(Automat context)
+    public Camera action(Automat context)
     {
         Camera camera = null;
         Vector3D position = null;
@@ -148,7 +148,6 @@ public class EtatCamera implements EtatToken
                 case DIRECTION:
                 {
                     context.callNextToken(); // skip "direction"
-                    System.out.println("DIRECTION");
                     double [] coordArray = this.parseAndGetCoord(context);
                     System.out.println("direction : " + coordArray);
                     state = this.getNextAttribute(context);
@@ -157,4 +156,5 @@ public class EtatCamera implements EtatToken
             }
         }
     }
+
 }

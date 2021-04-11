@@ -1,5 +1,6 @@
 package povParser.automat;
 
+import geometry.Shape;
 import javafx.scene.paint.Color;
 import materials.Material;
 import maths.Vector3D;
@@ -18,10 +19,10 @@ enum SpherePlanecontent
 
 public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
 {
-    protected abstract void createInstance(Vector3D coord, Double dist, Material material);
+    protected abstract Shape createInstance(Vector3D coord, Double dist, Material material);
 
     @Override
-    public void action(Automat context)
+    public Shape action(Automat context)
     {
         ArrayList<String> list = new ArrayList<>();
 
@@ -102,6 +103,6 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
                 }
             }
         }
-        createInstance(vect, dist, material);
+        return createInstance(vect, dist, material);
     }
 }

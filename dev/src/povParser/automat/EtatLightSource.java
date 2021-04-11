@@ -27,7 +27,7 @@ public class EtatLightSource implements EtatToken
      * Cette méthode effectue le parsing d'un objet light_source (point light)
      */
     @Override
-    public void action(Automat context)
+    public Light action(Automat context)
     {
         LightBulb light = null;
         Vector3D center = null;

@@ -1,6 +1,8 @@
 package povParser.automat;
 
 
+import scene.RayTracingScene;
+
 import java.io.*;
 
 public class Automat
@@ -133,6 +135,7 @@ public class Automat
     public static void main(String[] args)
     {
         String pathToTestFile = "dev/src/povParser/sphere.pov";
+        RayTracingScene scene = new RayTracingScene();
 
         try {
 

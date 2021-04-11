@@ -9,5 +9,5 @@ public interface EtatToken
      * @param context contexte courant de l'automate
      * Cette méthode effectue le parsing d'un objet light_source (point light)
      */
-    public void action(Automat context);
+    public Object action(Automat context);
 }

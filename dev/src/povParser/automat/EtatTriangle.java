@@ -1,5 +1,6 @@
 package povParser.automat;
 
+import geometry.Shape;
 import geometry.shapes.Triangle;
 import javafx.scene.paint.Color;
 import materials.Material;
@@ -21,7 +22,7 @@ enum Trianglecontent
 public class EtatTriangle extends EtatUtil implements EtatToken
 {
     @Override
-    public void action(Automat context)
+    public Shape action(Automat context)
     {
         int nextToken = context.callNextToken(); //accolade ouvrante après le mot triangle
 
@@ -129,5 +130,6 @@ public class EtatTriangle extends EtatUtil implements EtatToken
             }
         }
         triangle = new Triangle(vectA, vectB, vectC, material);
+        return triangle;
     }
 }

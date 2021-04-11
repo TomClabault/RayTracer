@@ -1,5 +1,6 @@
 package povParser.automat;
 
+import geometry.Shape;
 import geometry.shapes.Rectangle;
 import javafx.scene.paint.Color;
 import materials.Material;
@@ -21,7 +22,7 @@ enum Boxcontent
 public class EtatBox extends EtatUtil implements EtatToken
 {
     @Override
-    public void action(Automat context)
+    public Shape action(Automat context)
     {
         int nextToken = context.callNextToken();
 
@@ -103,5 +104,6 @@ public class EtatBox extends EtatUtil implements EtatToken
             }
         }
         rectangle = new Rectangle(vector1, vector2, material);
+        return rectangle;
     }
 }
