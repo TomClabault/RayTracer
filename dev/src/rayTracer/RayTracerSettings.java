@@ -73,7 +73,7 @@ public class RayTracerSettings
 		return enableAntialiasing;
 	}
 
-	public void setEnableAntialiasing(boolean enableAntialiasing) 
+	public void enableAntialiasing(boolean enableAntialiasing) 
 	{
 		this.enableAntialiasing = enableAntialiasing;
 	}

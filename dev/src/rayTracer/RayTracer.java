@@ -396,7 +396,8 @@ public class RayTracer
 				int summedGreen = 0;
 				int summedBlue = 0;
 				
-				for(int subpixel = 0; subpixel < this.settings.getAntialiasingSampling(); subpixel++)
+				int antialiasingSampleCount = this.settings.isEnableAntialiasing() ? this.settings.getAntialiasingSampling() : 1;
+				for(int subpixel = 0; subpixel < antialiasingSampleCount; subpixel++)
 				{
 					Point pixelWorldCoords = this.convPxCoToWorldCoords(FOV, (double)x + subpixelTab[subpixel][0], (double)y + subpixelTab[subpixel][1], ctwMatrix);
 	
@@ -411,9 +412,9 @@ public class RayTracer
 					summedBlue += (int)(subpixelColor.getBlue()*255);
 				}
 				
-				summedRed /= this.settings.getAntialiasingSampling();
-				summedGreen /= this.settings.getAntialiasingSampling();
-				summedBlue /= this.settings.getAntialiasingSampling();
+				summedRed /= antialiasingSampleCount;
+				summedGreen /= antialiasingSampleCount;
+				summedBlue /= antialiasingSampleCount;
 				
 				Color pixelColor = Color.rgb(summedRed, summedGreen, summedBlue);
 				pixelColor = ColorOperations.linearTosRGBGamma2_2(pixelColor);
