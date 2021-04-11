@@ -23,12 +23,31 @@ public class RayTracerSettings
 	{
 		this(nbCore, maxRecursionDepth, antialiasingSampling, true, true, true, true, true, true, true);
 	}
-	
-	public RayTracerSettings(int nbCore, int recursionDepth, int antialiasingSampling, boolean enableAmbient, boolean enableDiffuse, boolean enableReflections, boolean enableRefractions, boolean enableSpecular, boolean enableFresnel, boolean enableAntialiasing) 
+
+	/*
+	 * Initialise les réglages qui seront utiliés pour le rendu de la scène
+	 * 
+	 * @param nbCore Le nombre de threads sur lequel sera effectué le rendu
+	 * @param recursionDepth La profondeur de récursion maximale autorisée pour le rendu des réflexions / réfractions
+	 * @param antialiasingSampleCount Le nombre d'échantillons par pixel qui sera utilisé pour l'antialiasing de la scène. Doit être le carré d'un entier >= 2
+	 * @param enableAmbient Active ou désactive le calcule de la luminosité ambiante lors du rendu
+	 * @param enableDiffuse Active ou désactive le calcule de l'illumination diffuse lors du rendu
+	 * @param enableReflections Active ou désactive le calcule des réflexions lors du rendu
+	 * @param enableRefractions Active ou désactive le calcule des réfractions lors du rendu. Désactivera par exemple le rendu des matériaux tels que le verre i.e. les matériaux transparents qui réfractent les rayons de lumière
+	 * @param enableSpecular Active ou désactive le calcule de la spécularité lors du rendu
+	 * @param enableFresnel Active ou désactive le calcule des réflexions de Fresnel lors du rendu. Ce sont les réflexions à la surface des objets réfractifs sans pour autant s'agir de réfractions à part entière.
+	 * @param enableAntialiasing Active ou désactive l'antialiasing (anti-crénelage) du rendu. L'antialiasing évite les effets d'escaliers sur les bords des objets.
+	 * 
+	 * @throws IllegalArgumentException si "antialiasingSampleCount" n'est pas le carré d'un entier >= 2
+	 */
+	public RayTracerSettings(int nbCore, int recursionDepth, int antialiasingSampleCount, boolean enableAmbient, boolean enableDiffuse, boolean enableReflections, boolean enableRefractions, boolean enableSpecular, boolean enableFresnel, boolean enableAntialiasing) throws IllegalArgumentException 
 	{
+		if(!verifAntialiasingSampleCount(antialiasingSampleCount))
+			throw new IllegalArgumentException("Nombre d'échantillons d'antialiasing incorrect. Doit être le carré d'un entier >= 2");
+			
 		this.nbCore = nbCore;
 		this.recursionDepth = recursionDepth;
-		this.antialiasingSampling = antialiasingSampling;
+		this.antialiasingSampling = antialiasingSampleCount;
 		
 		this.enableAmbient = enableAmbient;
 		this.enableDiffuse = enableDiffuse;
@@ -134,8 +153,36 @@ public class RayTracerSettings
 		return antialiasingSampling;
 	}
 	
-	public void setAntialiasingSampling(int antialiasingSampling) 
+	/*
+	 * Permet de redéfinir le nombre d'échantillons calculés par pixels pour l'antiailiasing du rendu
+	 * 
+	 * @param sampleCount	Le nombre d'échantillons par pixel à utiliser pour l'antialiasing. Doit être le carré d'un entier >= 2.  
+	 * 
+	 * @throws IllegalArgumentException Si sampleCount n'est pas le carré d'un entier >= 2
+	 */
+	public void setAntialiasingSampling(int sampleCount) throws IllegalArgumentException
 	{
-		this.antialiasingSampling = antialiasingSampling;
+		if(!verifAntialiasingSampleCount(sampleCount))
+			throw new IllegalArgumentException("Nombre d'échantillons d'antialiasing incorrect. Doit être le carré d'un entier >= 2");
+			
+		this.antialiasingSampling = sampleCount;
+	}
+	
+	/*
+	 * Permet de vérifier si sampleCount est le carré d'un entier >= 2
+	 * 
+	 * @param sampleCount Le nombre d'échantillons par pixel à utliser pour l'antialiasing. Cette méthode détermine si c'est le carré d'un entier >= 2
+	 * 
+	 *  @return false si 'sampleCount' n'est pas le carré d'un entier >= 2, true si c'en est un
+	 */
+	private boolean verifAntialiasingSampleCount(double sampleCount)
+	{
+		double sqrtDouble = Math.sqrt(sampleCount);
+		int sqrtInt = (int)sqrtDouble;
+		
+		if(sqrtDouble - sqrtInt != 0 || sampleCount < 4)
+			return false;
+		
+		return true;
 	}
 }

@@ -101,7 +101,6 @@ public class RayTracer
 	private ThreadsTaskList threadTaskList;
 	private IntBuffer renderedPixels;
 	private PixelReader skyboxPixelReader = null;
-	private Random randomGenerator;
 	
 	public RayTracer(int renderWidth, int renderHeight)
 	{
@@ -111,7 +110,6 @@ public class RayTracer
 		this.renderedPixels = IntBuffer.allocate(renderWidth*renderHeight);
 		
 		this.threadTaskList = new ThreadsTaskList();
-		this.randomGenerator = new Random();
 	}
 	
 	/*
@@ -694,11 +692,23 @@ public class RayTracer
 	 */
 	protected void generateSubpixelsCoords(double[][] subpixelTab, int subpixelCount)
 	{
-		for(int subPixel = 0; subPixel < subpixelCount; subPixel++)
+		int sqrtSubpixelCount = (int)Math.sqrt(subpixelCount);//Le résultat est forcément entier. subpixelCount est un carré d'entier 
+		double subPixelSize = 1.0 / (double)sqrtSubpixelCount;
+
+		for(int subPixelY = 0; subPixelY < sqrtSubpixelCount; subPixelY++)
 		{
-			subpixelTab[subPixel][0] = this.randomGenerator.nextDouble();
-			subpixelTab[subPixel][1] = this.randomGenerator.nextDouble();
+			for(int subPixelX = 0; subPixelX < sqrtSubpixelCount; subPixelX++)
+			{
+				//System.out.println(String.format("%d", sqrtSubpixelCount * subPixelY + subPixelX));
+				subpixelTab[sqrtSubpixelCount * subPixelY + subPixelX][0] = (double)subPixelX*subPixelSize + subPixelSize/2;
+				subpixelTab[sqrtSubpixelCount * subPixelY + subPixelX][1] = (double)subPixelY*subPixelSize + subPixelSize/2;
+			}
 		}
+		
+//		for(double[] ligne : subpixelTab)
+//		{
+//			System.out.println(String.format("[%.3f, %.3f]", ligne[0], ligne[1]));
+//		}
 	}
 	
 	/*
