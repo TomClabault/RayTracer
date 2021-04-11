@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import geometry.Shape;
-import geometry.shapes.PlaneMaths;
+import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
 import materials.Material;
 import javafx.scene.image.PixelReader;
@@ -467,7 +467,7 @@ public class RayTracer
 			else
 				objectColor = interInfos.getIntObjMat().getColor();
 			
-			if(interInfos.getIntObj() instanceof PlaneMaths && interInfos.getIntObj().getMaterial().hasProceduralTexture())//Si le plan est un checkerboard
+			if(interInfos.getIntObj() instanceof Plane && interInfos.getIntObj().getMaterial().hasProceduralTexture())//Si le plan est un checkerboard
 				currentPixelColor = ColorOperations.addColors(currentPixelColor, ColorOperations.mulColor(objectColor, 1));//Cas spécial pour notre application pour que le plan soit plus illuminé que le reste. Non réaliste mais meilleur aspect visuel. On applique une ambient lighting fixe de 1
 			else
 				currentPixelColor = ColorOperations.addColors(currentPixelColor, ColorOperations.mulColor(objectColor, ambientLighting));
