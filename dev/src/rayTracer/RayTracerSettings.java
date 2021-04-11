@@ -11,19 +11,20 @@ public class RayTracerSettings
 	private boolean enableReflections;//Permet d'activer ou de désactiver les réflexions des matériaux du rendu
 	private boolean enableRefractions;//Permet d'activer ou de désactiver les réfractions des matériaux du rendu
 	private boolean enableSpecular;//Permet d'activer ou de désactiver l'effet de lumière spéculaire de l'ombrage de Phong
-	private boolean enableFresnel;//Permet d'activer ou de désactiver les reflets aux bords des objets réfractifs 
+	private boolean enableFresnel;//Permet d'activer ou de désactiver les reflets aux bords des objets réfractifs
+	private boolean enableAntialiasing;//Permet d'activer / désactiver l'antialiasing lors du rendu
 
 	public RayTracerSettings()
 	{
-		this(8, 5, 0, true, true, true, true, true, true);
+		this(8, 5, 0, true, true, true, true, true, true, true);
 	}
 	
 	public RayTracerSettings(int nbCore, int maxRecursionDepth, int antialiasingSampling)
 	{
-		this(nbCore, maxRecursionDepth, antialiasingSampling, true, true, true, true, true, true);
+		this(nbCore, maxRecursionDepth, antialiasingSampling, true, true, true, true, true, true, true);
 	}
 	
-	public RayTracerSettings(int nbCore, int recursionDepth, int antialiasingSampling, boolean enableAmbient, boolean enableDiffuse, boolean enableReflections, boolean enableRefractions, boolean enableSpecular, boolean enableFresnel) 
+	public RayTracerSettings(int nbCore, int recursionDepth, int antialiasingSampling, boolean enableAmbient, boolean enableDiffuse, boolean enableReflections, boolean enableRefractions, boolean enableSpecular, boolean enableFresnel, boolean enableAntialiasing) 
 	{
 		this.nbCore = nbCore;
 		this.recursionDepth = recursionDepth;
@@ -35,6 +36,7 @@ public class RayTracerSettings
 		this.enableRefractions = enableRefractions;
 		this.enableSpecular = enableSpecular;
 		this.enableFresnel = enableFresnel;
+		this.enableAntialiasing = enableAntialiasing;
 	}
 
 	public boolean isEnableAmbient() 
@@ -45,6 +47,16 @@ public class RayTracerSettings
 	public void setEnableAmbient(boolean enableAmbient) 
 	{
 		this.enableAmbient = enableAmbient;
+	}
+	
+	public boolean isEnableAntialiasing() 
+	{
+		return enableAntialiasing;
+	}
+
+	public void setEnableAntialiasing(boolean enableAntialiasing) 
+	{
+		this.enableAntialiasing = enableAntialiasing;
 	}
 	
 	public boolean isEnableDiffuse() 

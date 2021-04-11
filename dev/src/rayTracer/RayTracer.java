@@ -2,6 +2,7 @@ package rayTracer;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Random;
 
 import geometry.Shape;
 import geometry.shapes.PlaneMaths;
@@ -100,7 +101,8 @@ public class RayTracer
 	private ThreadsTaskList threadTaskList;
 	private IntBuffer renderedPixels;
 	private PixelReader skyboxPixelReader = null;
-
+	private Random randomGenerator;
+	
 	public RayTracer(int renderWidth, int renderHeight)
 	{
 		this.renderWidth = renderWidth;
@@ -109,6 +111,7 @@ public class RayTracer
 		this.renderedPixels = IntBuffer.allocate(renderWidth*renderHeight);
 		
 		this.threadTaskList = new ThreadsTaskList();
+		this.randomGenerator = new Random();
 	}
 	
 	/*
@@ -378,13 +381,43 @@ public class RayTracer
 		{
 			for(int x = startX; x < endX; x++)
 			{
-				Point pixelWorldCoords = this.convPxCoToWorldCoords(FOV, x, y, ctwMatrix);
+				double[][] subpixelTab;//Coordonnées de tous les sous pixels du pixel (x, y) actuel. subpixelTab[i][0] = CoordX, [i][1] = CoordY
+				if(this.settings.isEnableAntialiasing() && this.settings.getAntialiasingSampling() > 1)
+				{
+					subpixelTab = new double[this.settings.getAntialiasingSampling()][2];
+					generateSubpixelsCoords(subpixelTab, this.settings.getAntialiasingSampling());
+				}
+				else
+				{
+					subpixelTab = new double[1][2];//Un seul pixel sera calculé pour chaque pixel
+					subpixelTab[0][0] = 0;
+					subpixelTab[0][1] = 0;
+				}
+					
+				int summedRed = 0;
+				int summedGreen = 0;
+				int summedBlue = 0;
+				
+				for(int subpixel = 0; subpixel < this.settings.getAntialiasingSampling(); subpixel++)
+				{
+					Point pixelWorldCoords = this.convPxCoToWorldCoords(FOV, (double)x + subpixelTab[subpixel][0], (double)y + subpixelTab[subpixel][1], ctwMatrix);
+	
+					Vector rayDirection = new Vector(renderScene.getCamera().getPosition(), pixelWorldCoords);
+					Ray cameraRay = new Ray(MatrixD.mulPointP(new Vector(0, 0, 0), ctwMatrix), rayDirection);
+					cameraRay.normalize();
+	
+					Color subpixelColor = this.computePixel(renderScene, cameraRay, settings.getRecursionDepth());
 
-				Vector rayDirection = new Vector(renderScene.getCamera().getPosition(), pixelWorldCoords);
-				Ray cameraRay = new Ray(MatrixD.mulPointP(new Vector(0, 0, 0), ctwMatrix), rayDirection);
-				cameraRay.normalize();
-
-				Color pixelColor = this.computePixel(renderScene, cameraRay, settings.getRecursionDepth());
+					summedRed += (int)(subpixelColor.getRed()*255);
+					summedGreen += (int)(subpixelColor.getGreen()*255);
+					summedBlue += (int)(subpixelColor.getBlue()*255);
+				}
+				
+				summedRed /= this.settings.getAntialiasingSampling();
+				summedGreen /= this.settings.getAntialiasingSampling();
+				summedBlue /= this.settings.getAntialiasingSampling();
+				
+				Color pixelColor = Color.rgb(summedRed, summedGreen, summedBlue);
 				pixelColor = ColorOperations.linearTosRGBGamma2_2(pixelColor);
 				
 				this.renderedPixels.put(y*this.renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
@@ -538,10 +571,10 @@ public class RayTracer
 	 *
 	 * @return Un point de cooordonnées (x, y, z) tel que x, y et z représentent les coordonnées du pixel dans la scène
 	 */
-	protected Point convPxCoToWorldCoords(double FOV, int x, int y, MatrixD ctwMatrix)
+	protected Point convPxCoToWorldCoords(double FOV, double x, double y, MatrixD ctwMatrix)
 	{
-		double xWorld = (double)x;
-		double yWorld = (double)y;
+		double xWorld = x;
+		double yWorld = y;
 
 		double aspectRatio = (double)this.renderWidth / (double)this.renderHeight;
 		double demiHeightPlane = Math.tan(Math.toRadians(FOV/2));
@@ -651,6 +684,21 @@ public class RayTracer
 		double fpr = Math.pow(sup/inf, 2);
 		
 		return 0.5*(fpl+fpr);
+	}
+	
+	/*
+	 * Génère des coordonnées aléatoires entre 0 et 1 et rempli 'subpixelTab' avec ces coordonnées
+	 * 
+	 * @param subpixelTab 	Le tableau qui va contenir toutes les coordonnées générées. Ce tableau est modifié par la fonction
+	 * @param subpixelCount Le nombre de coordonnées de sous pixel à calculer
+	 */
+	protected void generateSubpixelsCoords(double[][] subpixelTab, int subpixelCount)
+	{
+		for(int subPixel = 0; subPixel < subpixelCount; subPixel++)
+		{
+			subpixelTab[subPixel][0] = this.randomGenerator.nextDouble();
+			subpixelTab[subPixel][1] = this.randomGenerator.nextDouble();
+		}
 	}
 	
 	/*
