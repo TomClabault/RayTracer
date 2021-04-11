@@ -21,7 +21,7 @@ public class RayTracerSettings
 	
 	public RayTracerSettings(int nbCore, int maxRecursionDepth, int antialiasingSampling)
 	{
-		this(nbCore, maxRecursionDepth, antialiasingSampling, true, true, true, true, true, true, true);
+		this(nbCore, maxRecursionDepth, antialiasingSampling, true, true, true, true, true, true, false);
 	}
 
 	/*

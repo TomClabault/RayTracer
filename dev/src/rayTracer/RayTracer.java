@@ -699,16 +699,10 @@ public class RayTracer
 		{
 			for(int subPixelX = 0; subPixelX < sqrtSubpixelCount; subPixelX++)
 			{
-				//System.out.println(String.format("%d", sqrtSubpixelCount * subPixelY + subPixelX));
 				subpixelTab[sqrtSubpixelCount * subPixelY + subPixelX][0] = (double)subPixelX*subPixelSize + subPixelSize/2;
 				subpixelTab[sqrtSubpixelCount * subPixelY + subPixelX][1] = (double)subPixelY*subPixelSize + subPixelSize/2;
 			}
 		}
-		
-//		for(double[] ligne : subpixelTab)
-//		{
-//			System.out.println(String.format("[%.3f, %.3f]", ligne[0], ligne[1]));
-//		}
 	}
 	
 	/*
