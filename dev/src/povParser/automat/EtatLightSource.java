@@ -1,7 +1,9 @@
 package povParser.automat;
 
-import maths.Vector3D;
+
+import maths.Point;
 import scene.lights.LightBulb;
+import scene.lights.PositionnalLight;
 
 /**
  * différents attributs que peut prendre la lumière ainsi que les éléments de syntaxe qui représentent différents états
@@ -27,10 +29,10 @@ public class EtatLightSource implements EtatToken
      * Cette méthode effectue le parsing d'un objet light_source (point light)
      */
     @Override
-    public Light action(Automat context)
+    public PositionnalLight action(Automat context)
     {
         LightBulb light = null;
-        Vector3D center = null;
+        Point center = null;
         double lightIntensity = 0;
 
         context.callNextToken(); //skip light_source
@@ -58,7 +60,7 @@ public class EtatLightSource implements EtatToken
                         context.callNextToken();
                     }
                     context.callNextToken(); // skip ','
-                    center = new Vector3D(coordArray[0], coordArray[1], coordArray[2]);
+                    center = new Point(coordArray[0], coordArray[1], coordArray[2]);
                     state = LightContent.INTENSITY;
                     break;
                 }
@@ -77,5 +79,6 @@ public class EtatLightSource implements EtatToken
             }
         }
         light = new LightBulb(center, lightIntensity);
+        return light;
     }
 }

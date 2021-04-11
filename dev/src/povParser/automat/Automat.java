@@ -1,7 +1,10 @@
 package povParser.automat;
 
 
+import geometry.Shape;
+import scene.Camera;
 import scene.RayTracingScene;
+import scene.lights.PositionnalLight;
 
 import java.io.*;
 
@@ -34,9 +37,9 @@ public class Automat
     {
         this.etatToken = etatToken;
     }
-    public void action()
+    public Object action()
     {
-        etatToken.action(this);
+        return etatToken.action(this);
     }
 
     public StreamTokenizer getStreamTokenizer()
@@ -132,14 +135,13 @@ public class Automat
         return State.OUTSIDE;
     }
 
-    public static void main(String[] args)
+    public RayTracingScene parsePov(String pathToFile)
     {
-        String pathToTestFile = "dev/src/povParser/sphere.pov";
         RayTracingScene scene = new RayTracingScene();
 
         try {
 
-            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(pathToTestFile));
+            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(pathToFile));
             BufferedReader fileReader = new BufferedReader(inputStreamReader);
 
             StreamTokenizer streamTokenizer = new StreamTokenizer(fileReader);
@@ -161,7 +163,8 @@ public class Automat
                         {
                             System.out.println("LIGHT_SOURCE");
                             automat.setState(new EtatLightSource());
-                            automat.action();
+                            PositionnalLight light = (PositionnalLight) automat.action();
+                            scene.setLight(light);
                             break;
                         }
 
@@ -169,7 +172,8 @@ public class Automat
                         {
                             System.out.println("SPHERE");
                             automat.setState(new EtatSphere());
-                            automat.action();
+                            Shape sphere = (Shape) automat.action();
+                            scene.addShape(sphere);
                             break;
                         }
 
@@ -177,7 +181,8 @@ public class Automat
                         {
                             System.out.println("TRIANGLE");
                             automat.setState(new EtatTriangle());
-                            automat.action();
+                            Shape triangle = (Shape) automat.action();
+                            scene.addShape(triangle);
                             break;
                         }
 
@@ -185,7 +190,8 @@ public class Automat
                         {
                             System.out.println("BOX");
                             automat.setState(new EtatBox());
-                            automat.action();
+                            Shape rectangle = (Shape)automat.action();
+                            scene.addShape(rectangle);
                             break;
                         }
 
@@ -193,7 +199,8 @@ public class Automat
                         {
                             System.out.println("PLANE");
                             automat.setState(new EtatPlane());
-                            automat.action();
+                            Shape plane = (Shape) automat.action();
+                            scene.addShape(plane);
                             break;
                         }
 
@@ -201,7 +208,8 @@ public class Automat
                         {
                             System.out.println("CAMERA");
                             automat.setState(new EtatCamera());
-                            automat.action();
+                            Camera camera = (Camera) automat.action();
+                            scene.setCamera(camera);
                             break;
                         }
 
@@ -220,6 +228,7 @@ public class Automat
         catch (Exception e) {
             e.printStackTrace();
         }
+        return scene;
     }
 }
 

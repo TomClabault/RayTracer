@@ -1,6 +1,6 @@
 package povParser.automat;
 
-import maths.Vector3D;
+import maths.Point;
 import scene.Camera;
 
 /**
@@ -81,9 +81,9 @@ public class EtatCamera implements EtatToken
     @Override
     public Camera action(Automat context)
     {
-        Camera camera = null;
-        Vector3D position = null;
-        Vector3D orientation = null;
+        Camera camera = new Camera();
+        Point position = null;
+        Point orientation = null;
         double angle = 0;
         int nbBracket = 0;
 
@@ -117,6 +117,7 @@ public class EtatCamera implements EtatToken
                     System.out.println("ANGLE");
                     context.callNextToken(); // skip "angle"
                     angle = context.getNumberValue();
+                    camera.setFOV(angle * 2);
                     System.out.println("angle value: " + angle);
                     context.callNextToken();
                     state = this.getNextAttribute(context);
@@ -130,7 +131,7 @@ public class EtatCamera implements EtatToken
                     double[] coordArray = this.parseAndGetCoord(context);
                     System.out.println("location : " + coordArray);
                     state = this.getNextAttribute(context);
-                    position = new Vector3D(coordArray[0], coordArray[1], coordArray[2]);
+                    position = new Point(coordArray[0], coordArray[1], coordArray[2]);
                     break;
                 }
 
@@ -141,7 +142,7 @@ public class EtatCamera implements EtatToken
                     double [] coordArray = this.parseAndGetCoord(context);
                     System.out.println("look_at : " + coordArray);
                     state = this.getNextAttribute(context);
-                    orientation = new Vector3D(coordArray[0], coordArray[1], coordArray[2]);
+                    orientation = new Point(coordArray[0], coordArray[1], coordArray[2]);
                     break;
                 }
 
@@ -149,12 +150,12 @@ public class EtatCamera implements EtatToken
                 {
                     context.callNextToken(); // skip "direction"
                     double [] coordArray = this.parseAndGetCoord(context);
-                    System.out.println("direction : " + coordArray);
                     state = this.getNextAttribute(context);
                     break;
                 }
             }
         }
+        return camera;
     }
 
 }
