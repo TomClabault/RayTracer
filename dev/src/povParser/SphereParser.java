@@ -1,7 +1,6 @@
 package povParser;
 
-import geometry.shapes.SphereMaths;
-import maths.Vector3D;
+import geometry.shapes.Sphere;
 
 public class SphereParser implements Runnable
 {

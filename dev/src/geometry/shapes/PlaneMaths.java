@@ -1,40 +1,17 @@
 package geometry.shapes;
 
 import materials.Material;
-import materials.MatteMaterial;
 import geometry.Shape;
 import geometry.ShapeUtil;
-import javafx.scene.paint.Color;
-import maths.Vector3D;
+import maths.Point;
 import maths.Ray;
+import maths.Vector;
 
 public class PlaneMaths extends ShapeUtil implements Shape
 {
 	//Equation de plan: (p - point).normal = 0
-	private Vector3D normal;//partie (A, B, C) de l'équation
-	private Vector3D point;//partie D de l'équation
-	
-	/*
-	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan
-	 * 
-	 * @param normal Vecteur normal au plan
-	 * @param point Vector3D par lequel passe le plan
-	 */
-	public PlaneMaths(Vector3D normal, Vector3D point)
-	{
-		this(normal, point, new MatteMaterial(Color.rgb(128, 128, 128)));
-	}
-	
-	/*
-	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan
-	 * 
-	 * @param normal 	Vecteur normal au plan
-	 * @param distance 	Distance du plan par rapport à l'origine dans la direction du vecteur 'normal'
-	 */
-	public PlaneMaths(Vector3D normal, double distance)
-	{
-		this(normal, Vector3D.scalarMul(Vector3D.normalize(normal), distance), new MatteMaterial(Color.rgb(128, 128, 128)));
-	}
+	private Vector normal;//partie (A, B, C) de l'équation
+	private Point point;//partie D de l'équation
 	
 	/*
 	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan
@@ -43,9 +20,9 @@ public class PlaneMaths extends ShapeUtil implements Shape
 	 * @param distance 	Distance du plan par rapport à l'origine dans la direction du vecteur 'normal'
 	 * @param material Matériau qui sera utilisé pour le rendu du plan
 	 */
-	public PlaneMaths(Vector3D normal, double distance, Material material)
+	public PlaneMaths(Vector normal, double distance, Material material)
 	{
-		this(normal, Vector3D.scalarMul(Vector3D.normalize(normal), distance), material);
+		this(normal, Point.translateMul(new Point(0, 0, 0), Vector.normalizeV(normal), distance), material);
 	}
 	
 	/*
@@ -55,7 +32,7 @@ public class PlaneMaths extends ShapeUtil implements Shape
 	 * @param point Vector3D par lequel passe le plan
 	 * @param material Matériau qui sera utilisé pour le rendu du plan
 	 */
-	public PlaneMaths(Vector3D normal, Vector3D point, Material material)
+	public PlaneMaths(Vector normal, Point point, Material material)
 	{
 		this.normal = normal;
 		this.point = point;
@@ -70,7 +47,7 @@ public class PlaneMaths extends ShapeUtil implements Shape
 	 * 
 	 * @return Normale du plan
 	 */
-	public Vector3D getNormal(Vector3D point) 
+	public Vector getNormal(Point point) 
 	{
 		return this.normal;
 	}
@@ -79,9 +56,9 @@ public class PlaneMaths extends ShapeUtil implements Shape
 	 * @link{geometry.shapes.Shape#getUVCoords}
 	 */
 	@Override
-	public Vector3D getUVCoords(Vector3D point)
+	public Point getUVCoords(Point point)
 	{
-		return new Vector3D(point.getX(), point.getZ(), 0);
+		return new Point(point.getX(), point.getZ(), 0);
 	}
 	
 	/*
@@ -93,15 +70,16 @@ public class PlaneMaths extends ShapeUtil implements Shape
 	 * 
 	 * @return Retourne le point d'intersection avec la sphère s'il existe (s'il y a deux points d'intersection, ne retourne que le point le plus près de l'origine du rayon). Retourne null sinon.
 	 */
-	public Vector3D intersect(Ray ray, Vector3D outNormalAtInter) 
+	public Point intersect(Ray ray, Vector outNormalAtInter) 
 	{
-		double NDir = Vector3D.dotProduct(normal, ray.getDirection());
+		double NDir = Vector.dotProduct(normal, ray.getDirection());
 		if(NDir > 0.0000001d && NDir < 0.0000001d)//Le rayon et le plan sont parallèles
 			return null;
 			
 		
-	    Vector3D p0l0 = Vector3D.sub(this.point, ray.getOrigin()); 
-	    double coeffVectorPoint = Vector3D.dotProduct(p0l0, this.normal) / NDir;
+		Point p0l0 = Point.sub(this.point, ray.getOrigin());
+		Vector p0l0Vec = new Vector(p0l0.getX(), p0l0.getY(), p0l0.getZ());
+	    double coeffVectorPoint = Vector.dotProduct(p0l0Vec, this.normal) / NDir;
 	    if(coeffVectorPoint > 0)
 	    {
 	    	if(outNormalAtInter != null)

@@ -1,34 +1,35 @@
 package geometry.shapes;
 
 import geometry.Shape;
-import geometry.ShapeUtil;
+import geometry.ShapeTriangleUtil;
 import materials.Material;
-import maths.Vector3D;
+import maths.Point;
 import maths.Ray;
+import maths.Vector;
 
-public class Triangle extends ShapeUtil implements Shape
+public class Triangle extends ShapeTriangleUtil implements Shape
 {
-	private Vector3D A, B, C;
+	private Point A, B, C;
 	
-	private Vector3D planeNormal;//Vecteur normal du plan formé par les 3 points du triangle
+	private Vector planeNormal;//Vecteur normal du plan formé par les 3 points du triangle
 	
-	public Triangle(Vector3D A, Vector3D B, Vector3D C, Material material)
+	public Triangle(Point A, Point B, Point C, Material material)
 	{
 		this.A = A;
 		this.B = B;
 		this.C = C;
-		this.planeNormal = Vector3D.normalize(Vector3D.crossProduct(new Vector3D(A, B), new Vector3D(A, C)));
+		this.planeNormal = Vector.normalizeV(Vector.crossProduct(new Vector(A, B), new Vector(A, C)));
 		
 		super.material = material;
 	}
 
-	public Vector3D getA() {return this.A;}
-	public Vector3D getB() {return this.B;}
-	public Vector3D getC() {return this.C;}
+	public Point getA() {return this.A;}
+	public Point getB() {return this.B;}
+	public Point getC() {return this.C;}
 
 
 
-	public Vector3D getNormal(Vector3D point)
+	public Vector getNormal(Point point)
 	{
 		return this.planeNormal;
 	}
@@ -40,32 +41,32 @@ public class Triangle extends ShapeUtil implements Shape
 	 * 
 	 * @return true si le point appartient au triangle. False sinon
 	 */
-	public boolean insideOutsideTest(Vector3D point)
+	public boolean insideOutsideTest(Point point)
 	{
-		Vector3D sideAB = new Vector3D(this.A, this.B);
-		Vector3D vecAP = new Vector3D(this.A, point);
-		Vector3D normalLocal;
+		Vector sideAB = new Vector(this.A, this.B);
+		Vector vecAP = new Vector(this.A, point);
+		Vector normalLocal;
 		
-		normalLocal = Vector3D.crossProduct(sideAB, vecAP);
-		if(Vector3D.dotProduct(normalLocal, this.planeNormal) < 0)//Le point est sur le côté droit du segment AB du triangle, pas dans le triangle donc
+		normalLocal = Vector.crossProduct(sideAB, vecAP);
+		if(Vector.dotProduct(normalLocal, this.planeNormal) < 0)//Le point est sur le côté droit du segment AB du triangle, pas dans le triangle donc
 			return false;
 		
 		
 		
-		Vector3D sideBC = new Vector3D(this.B, this.C);
-		Vector3D vecBP = new Vector3D(this.B, point);
+		Vector sideBC = new Vector(this.B, this.C);
+		Vector vecBP = new Vector(this.B, point);
 		
-		normalLocal = Vector3D.crossProduct(sideBC, vecBP);
-		if(Vector3D.dotProduct(normalLocal, this.planeNormal) < 0)//Le point est sur le côté droit du segment BC, pas à l'intérieur du triangle
+		normalLocal = Vector.crossProduct(sideBC, vecBP);
+		if(Vector.dotProduct(normalLocal, this.planeNormal) < 0)//Le point est sur le côté droit du segment BC, pas à l'intérieur du triangle
 			return false;
 		
 		
 		
-		Vector3D sideCA = new Vector3D(this.C, this.A);
-		Vector3D vecCP = new Vector3D(this.C, point);
+		Vector sideCA = new Vector(this.C, this.A);
+		Vector vecCP = new Vector(this.C, point);
 		
-		normalLocal = Vector3D.crossProduct(sideCA, vecCP);
-		if(Vector3D.dotProduct(normalLocal, this.planeNormal) < 0)//Le point est sur le côté droit du segment BC, pas à l'intérieur du triangle
+		normalLocal = Vector.crossProduct(sideCA, vecCP);
+		if(Vector.dotProduct(normalLocal, this.planeNormal) < 0)//Le point est sur le côté droit du segment BC, pas à l'intérieur du triangle
 			return false;
 		
 		return true;
@@ -82,15 +83,18 @@ public class Triangle extends ShapeUtil implements Shape
 	 * @return Le point d'intersection du rayon et du triangle. Null s'il n'y a pas d'intersection
 	 */
 	@Override
-	public Vector3D intersect(Ray ray, Vector3D outNormalAtInter)
+	public Point intersect(Ray ray, Vector outNormalAtInter)
 	{
-		Vector3D intersection = null;
-		double denom =  -Vector3D.dotProduct(this.planeNormal, ray.getDirection());
+		Point intersection = null;
+		double denom =  -Vector.dotProduct(this.planeNormal, ray.getDirection());
 		
 		if(Math.abs(denom) < 0.0000001d)//Si la normale du plan et la direction du rayon sont perpendiculaires, le plan et le rayon sont parallèles, pas d'intersection
 			return null;
 		
-		double sup = Vector3D.dotProduct(Vector3D.sub(ray.getOrigin(), this.A), planeNormal);
+		Point originMinA = Point.sub(ray.getOrigin(), A);
+		Vector originMinAVec = new Vector(originMinA.getX(), originMinA.getY(), originMinA.getZ());
+		
+		double sup = Vector.dotProduct(originMinAVec, planeNormal);
 		double coeffVectorPoint = sup/denom;
 		
 		if(coeffVectorPoint < 0)//L'intersection est dans la direction opposée du rayon, c'est à dire derrière la caméra
@@ -109,22 +113,13 @@ public class Triangle extends ShapeUtil implements Shape
 		else//Cela veut dire que le rayon intersecte le plan formé par le triangle mais pas le triangle lui même
 			return null;
 	}
-	
-	/*
-	 * @link{geometry.shapes.Shape#getUVCoords}
-	 */
-	@Override
-	public Vector3D getUVCoords(Vector3D point)
-	{
-		return null;
-	}
-	
+		
 	/*
 	 * Permet de redéfinir le point A du triangle
 	 * 
 	 * @param A Le nouveau point A du triangle
 	 */
-	public void setA(Vector3D A)
+	public void setA(Point A)
 	{
 		this.A = A;
 	}
@@ -132,7 +127,7 @@ public class Triangle extends ShapeUtil implements Shape
 	/*
 	 * Analogue à @link{geometry.shapes.Triangle#setA}
 	 */
-	public void setB(Vector3D B)
+	public void setB(Point B)
 	{
 		this.B = B;
 	}
@@ -140,7 +135,7 @@ public class Triangle extends ShapeUtil implements Shape
 	/*
 	 * Analogue à @link{geometry.shapes.Triangle#setA}
 	 */
-	public void setC(Vector3D C)
+	public void setC(Point C)
 	{
 		this.C = C;
 	}

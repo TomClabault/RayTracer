@@ -31,6 +31,7 @@ import scene.lights.*;
 public class ImageWriter {
 
     private RayTracingScene MyGlobalScene = addObjectsToScene();
+    
     private WritableImage writableImage;
     private PixelWriter pw;
     private Pane pane;
@@ -61,7 +62,7 @@ public class ImageWriter {
         pane.getChildren().add(imageView);
         this.pane = pane;
 
-        WindowTimer windowTimer = new WindowTimer(this.MyGlobalScene, this.pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 8));
+        WindowTimer windowTimer = new WindowTimer(this.MyGlobalScene, this.pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT));
         this.windowTimer = windowTimer;
 
         CameraTimer cameraTimer = new CameraTimer(this.mainAppScene, this.MyGlobalScene);
@@ -98,26 +99,26 @@ public class ImageWriter {
 
     public RayTracingScene addObjectsToScene() {/*utilisé dans le constructeur*/
 
-    	Camera cameraRT = new Camera(new Vector3D(0.000, 0.5, -1.5), 0, 0);
+    	Camera cameraRT = new Camera(new Point(0.000, 0.5, -1.5), 0, 0);//Magic camera
+    	//Camera cameraRT = new Camera(new Point(0.75, -0.75, -5.5), 0, 0);
         cameraRT.setFOV(60);
-        Light l = new LightBulb(new Vector3D(2, 2, 1), 1);
+        PositionnalLight l = new LightBulb(new Point(2, 2, 1), 1);
 
         ArrayList<Shape> shapeList = new ArrayList<>();
-        shapeList.add(new PlaneMaths(new Vector3D(0, 1, 0), new Vector3D(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0/2.0))));
+        shapeList.add(new PlaneMaths(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0/2.0))));
 
-        shapeList.add(new SphereMaths(new Vector3D(-1.25, 0.5, -6), 1, new MirrorMaterial(0.75)));
-        shapeList.add(new SphereMaths(Vector3D.add(new Vector3D(-0.25, 0.5, -0.1), Vector3D.scalarMul(new Vector3D(1.250, 0.000, -4.500), 1.5625)), 0.2, new MetallicMaterial(Color.GREEN)));
-        shapeList.add(new SphereMaths(new Vector3D(-1.25, 1, -6.5), 0.2, new MetallicMaterial(Color.LIGHTSKYBLUE)));
-        shapeList.add(new SphereMaths(new Vector3D(-2, -0.65, -5), 0.35, new MatteMaterial(Color.BLACK, new ProceduralTextureCheckerboard(Color.BLACK, Color.YELLOW, 12))));
-        shapeList.add(new SphereMaths(new Vector3D(2, -0.65, -5), 0.35, new MatteMaterial(Color.BLACK, new ProceduralTextureCheckerboard(Color.RED, Color.DARKRED.darker(), 12))));
-        shapeList.add(new SphereMaths(new Vector3D(0, -0.5, -6), 0.5, new GlassyMaterial(Color.RED)));
-        shapeList.add(new SphereMaths(new Vector3D(-0.75, -0.75, -6), 0.25, new GlassyMaterial(Color.rgb(255, 64, 0))));
-        shapeList.add(new SphereMaths(new Vector3D(0.75, -0.75, -6), 0.25, new GlassyMaterial(Color.rgb(255, 64, 0))));
-        shapeList.add(new SphereMaths(new Vector3D(1.25, 0.5, -6), 1, new GlassMaterial()));
+        shapeList.add(new Sphere(new Point(-1.25, 0.5, -6), 1, new MirrorMaterial(0.75)));
+        shapeList.add(new Sphere(Point.translateMul(new Point(-0.25, 0.5, -0.1), new Vector(1.250, 0.000, -4.500), 1.5625), 0.2, new GlassyMaterial(Color.GREEN)));
+        shapeList.add(new Sphere(new Point(-1.25, 1, -6.5), 0.2, new MetallicMaterial(Color.LIGHTSKYBLUE)));
+        shapeList.add(new Sphere(new Point(-2, -0.65, -5), 0.35, new MatteMaterial(Color.BLACK, new ProceduralTextureCheckerboard(Color.BLACK, Color.YELLOW, 12))));
+        shapeList.add(new Sphere(new Point(2, -0.65, -5), 0.35, new MatteMaterial(Color.BLACK, new ProceduralTextureCheckerboard(Color.RED, Color.DARKRED.darker(), 12))));
+        shapeList.add(new Sphere(new Point(0, -0.5, -6), 0.5, new GlassyMaterial(Color.RED)));
+        shapeList.add(new Sphere(new Point(-0.75, -0.75, -6), 0.25, new GlassyMaterial(Color.rgb(255, 64, 0))));
+        shapeList.add(new Sphere(new Point(0.75, -0.75, -6), 0.25, new GlassyMaterial(Color.rgb(255, 64, 0))));
+        shapeList.add(new Sphere(new Point(1.25, 0.5, -6), 1, new GlassMaterial()));
         //shapeList.add(new Icosphere(new Vector3D(0, 2, -6), 1, 1, new GlassyMaterial(Color.rgb(0, 128, 255))));
         
         
-
         Image skybox = null;
         URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
         if(skyboxURL != null)

@@ -2,8 +2,8 @@ package maths;
 
 public class Ray
 {
-	private Vector3D direction;
-	private Vector3D origin;
+	private Vector direction;
+	private Point origin;
 	
 	/*
 	 * Construit un rayon à partir de son point d'origine ainsi que d'un vecteur indiquant sa direction
@@ -11,15 +11,15 @@ public class Ray
 	 * @param origin Origine du rayon
 	 * @param direction Vecteur directeur du rayon
 	 */
-	public Ray(Vector3D origin, Vector3D direction)
+	public Ray(Point origin, Vector direction)
 	{
 		this.origin = origin;
 		this.direction = direction;
 	}
 	
-	public Vector3D determinePoint(double coefficient)
+	public Point determinePoint(double coefficient)
 	{
-		return Vector3D.add(Vector3D.scalarMul(this.direction, coefficient), this.getOrigin());
+		return Point.translateMul(this.origin, this.direction, coefficient);
 	}
 	
 	/*
@@ -27,7 +27,7 @@ public class Ray
 	 * 
 	 * @return Vecteur représentant la direction du rayon
 	 */
-	public Vector3D getDirection()
+	public Vector getDirection()
 	{
 		return this.direction;
 	}
@@ -37,19 +37,9 @@ public class Ray
 	 * 
 	 * @return Un point représentant l'origin du rayon
 	 */
-	public Vector3D getOrigin()
+	public Point getOrigin()
 	{
 		return this.origin;
-	}
-	
-	/*
-	 * Retourne l'origine du rayon sous la forme d'un vecteur
-	 * 
-	 * @return Vecteur de même coordonnées que le point d'origine du rayon
-	 */
-	public Vector3D getOriginV()
-	{
-		return new Vector3D(this.origin);
 	}
 	
 	/*
@@ -57,9 +47,9 @@ public class Ray
 	 * 
 	 * @return Si d = (x, y, z) le vecteur de direction du rayon, retourne v = (-x, -y, -z)
 	 */
-	public Vector3D negate()
+	public Vector getNegatedDirection()
 	{
-		return this.direction.negate();
+		return this.direction.getNegated();
 	}
 	
 	/*

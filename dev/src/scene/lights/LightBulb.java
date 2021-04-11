@@ -1,21 +1,21 @@
 package scene.lights;
 
-import maths.Vector3D;
+import maths.Point;
 
-public class LightBulb implements Light 
+public class LightBulb implements PositionnalLight 
 {
-	Vector3D center;
+	Point center;
 	
 	double intensity;
 	
-	public LightBulb(Vector3D center, double lightIntensity)
+	public LightBulb(Point center, double lightIntensity)
 	{
 		this.center = center;
 		
 		this.intensity = lightIntensity;
 	}
 	
-	public Vector3D getCenter()
+	public Point getCenter()
 	{
 		return this.center;
 	}

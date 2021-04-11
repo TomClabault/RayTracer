@@ -30,7 +30,7 @@
 \definecolor{javagreen}{rgb}{0.25,0.5,0.35} % comments
 \definecolor{javapurple}{rgb}{0.5,0,0.35} % keywords
 \definecolor{javadocblue}{rgb}{0.25,0.35,0.75} % javadoc
- 
+
 \lstset
 {
 language=Java,
@@ -51,63 +51,105 @@ showstringspaces=false}
 
 
 
-\author{}
+\author{Baptiste CLOCHARD \\
+    Tom CLABAULT\\
+    Thibault LETOURNEUR\\
+    Willie TANZIL}
 \title{Ray-Tracer}
 \date{}
 \geometry{hmargin=3cm, vmargin=2cm}
 
 \begin{document}
+\maketitle
+\newpage
 \tableofcontents
 \newpage
 
 \maketitle
 
-\section{Détail des parties techniques}
-\subsection{Le Ray Tracer}
-\subsubsection{L'algorithme de base}
-\label{rayTracingBase}
+\section{Introduction}
 
-\subfile{latex/RT/algoBase.tex}
+    \subsection{Présentation du sujet}
+    \subsection{Forme finale du projet}
+    \subsection{Répartition du travail}
 
-\subsubsection{L'ombrage de Phong}
-\label{ombragePhong}
-
-\subfile{latex/RT/ombragePhong.tex}
-
-\subsubsection{Les réflexions}
-
-\subfile{latex/RT/reflections.tex}
-
-\subsubsection{Les réfractions}
-\label{refractions}
-
-\subsubsection{Le damier et le ciel (skybox)}
-\label{checkerboardSkybox}
-
-\subfile{latex/RT/checkerboardSkybox.tex}
-
-\subsection{Le multithreading}
-
-\subfile{latex/RT/multithreading.tex}
-
-\subsection{Les mouvements de caméra}
-\label{mouvementsCamera}
-
-\subfile{latex/RT/mouvementsCam.tex}
+%\section{Mode d'emploi}
+%\input{latex/render.javafx/modeEmploi.tex}
+%a déplacer dans readMe.txt
 
 \section{Structuration du projet}
-\subsection{Les packages}
-\subsubsection{Liés au Ray Tracer}
+    \subsection{Les packages}
+        \subsubsection{Le parser}
+        \subsubsection{Liés au Ray Tracer}
+            \subfile{latex/packages/RTpackages.tex}
 
-\subfile{latex/packages/RTpackages.tex}
+        \subsubsection{Le multithreading}
+	  \subfile{latex/packages/multithreading.tex}
 
-\subsubsection{Le package materials}
+        \subsubsection{Le package materials}
+            \subfile{latex/packages/materials.tex}
 
-\subfile{latex/packages/materials.tex}
+        \subsection{Le package render}
 
-\section{Mesures de performance}
 
-\subfile{latex/other/mesuresPerf.tex}
+
+\section{Détail des parties techniques}
+    \subsection{Le Ray Tracer}
+        \subsubsection{L'algorithme de base}
+            \label{rayTracingBase}
+
+            \subfile{latex/RT/algoBase.tex}
+
+        \subsubsection{L'ombrage de Phong}
+            \label{ombragePhong}
+
+            \subfile{latex/RT/ombragePhong.tex}
+
+        \subsubsection{Les réflexions}
+
+            \subfile{latex/RT/reflections.tex}
+
+        \subsubsection{Les réfractions}
+            \label{refractions}
+
+        \subsubsection{Le damier et le ciel (skybox)}
+            \label{checkerboardSkybox}
+
+            \subfile{latex/RT/checkerboardSkybox.tex}
+
+    \subsection{Le multithreading}
+
+        \subfile{latex/RT/multithreading.tex}
+
+    \subsection{Les mouvements de caméra}
+        \label{mouvementsCamera}
+
+        \subfile{latex/RT/mouvementsCam.tex}
+
+    \subsection{L'interface graphique}
+
+    \input{latex/render.javafx/GUI.tex}
+
+    \subsection{Le parser}
+        \subsubsection{Structure d'un fichier POV}
+        \subsubsection{Implémentation du partern state}
+        \subsubsection{Implémentation du patern template méthode}
+        \subsubsection{Automate à état finit}
+
+
+    \subsection{Les formes géométriques}
+
+
+
+
+\section{Analyse des résultats}
+    \subsection{Mesure des performances}
+        \subfile{latex/other/mesuresPerf.tex}
+
+    \subsection{Comparaison avec povRay}
+\section{Idées d'améliorations}
+TODO BUG PREMIERE TILE MUTLITHREADING
+\section{Conclusion}
 
 
 
@@ -120,7 +162,7 @@ showstringspaces=false}
 		\subsection{Configuration d'une caméra, d'une scène et de rayons}
 		\begin{figure}[h!]
 			\adjustbox{center}{\includegraphics[width=1.1\textwidth]{img/rt/repCam2Rayonsv2.png}}
-		
+
 			\caption{Des rayons sont tirés depuis la caméra dans sa direction de regard. Nous cherchons les points d'intersection avec les objets de la scène}
 		\end{figure}
 		\FloatBarrier
@@ -129,7 +171,7 @@ showstringspaces=false}
 		\subsection{Le principe récursif des réflexions}
 		\begin{figure}[!h]
 			\adjustbox{center}{\includegraphics[width=1.1\textwidth]{img/rt/reflectionsSchema.png}}
-		
+
 			\caption{Exemple de rebonds successifs des rayons jusqu'à un objet non réfléchissant}
 			\label{reflectionsSchema}
 		\end{figure}

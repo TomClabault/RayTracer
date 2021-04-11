@@ -2,17 +2,22 @@ package scene;
 
 import maths.CTWMatrix;
 import maths.MatrixD;
-import maths.Vector3D;
+import maths.Point;
+import maths.Vector;
 
 /*
  * Class permettant de représenter une caméra définie par sa position dans l'espace, la direction dans laquelle elle regarde ainsi que son champ de vision
  */
 public class Camera 
 {
-	Vector3D position;//Vector3D depuis lequel regarde la caméra
+	private Point position;//Vector3D depuis lequel regarde la caméra
 	
-	double angleHori;/* Angle de rotation de caméra sur le plan x, z en degré */
-	double angleVerti;/* Angle de rotation de caméra sur le plan x, y en degré */
+	private double angleHori;/* Angle de rotation de caméra sur le plan x, z en degré */
+	private double angleVerti;/* Angle de rotation de caméra sur le plan x, y en degré */
+	
+	private static final int X_AXIS = 0;
+	private static final int Y_AXIS = 1;
+	private static final int Z_AXIS = 2;
 	/*
 	 * Deux angles horizontal et vertical
 	 * 
@@ -29,7 +34,7 @@ public class Camera
 	 */
 	public Camera()
 	{
-		this(new Vector3D(0, 0, 0), 0, 0);
+		this(new Point(0, 0, 0), 0, 0);
 	}
 	
 	/*
@@ -37,9 +42,20 @@ public class Camera
 	 * 
 	 *  @param position Le point d'origine de la caméra
 	 */
-	public Camera(Vector3D position)
+	public Camera(Point position)
 	{
 		this(position, 0, 0);
+	}
+	
+	/*
+	 * Crée une caméra à partir de son point d'ancrage et d'un point qu'elle regarde. Ce dernier définira la direction de regard de la caméra
+	 * 
+	 * @param position Point d'ancrage de la caméra
+	 * @param direction Point que regarde la caméra
+	 */
+	public Camera(Point position, Point direction)
+	{
+		this(position, getHoriAngleFromDir(position, direction), getVertiAngleFromDir(position, direction));//this.getVeriAngleFromDir(direction));
 	}
 	
 	/*
@@ -49,7 +65,7 @@ public class Camera
 	 * @param angleHori 	L'angle de rotation horizontal en degré de la caméra
 	 * @param angleVerti	L'angle de rotation vertical en degré de la caméra. Un angle de plus de 90° ou de moins de -90° sera ramené à 900 ou -90° repsectivement
 	 */
-	public Camera(Vector3D position, double angleHori, double angleVerti)
+	public Camera(Point position, double angleHori, double angleVerti)
 	{
 		this.position = position;
 		
@@ -125,7 +141,7 @@ public class Camera
 	 * 
 	 * @return Un vecteur de coordonnées (x, y, z) définissant la direction dans laquelle regarde la caméra 
 	 */
-	public Vector3D getDirection()
+	public Vector getDirection()
 	{
 		return this.getZAxis();
 	}
@@ -141,11 +157,62 @@ public class Camera
 	}
 	
 	/*
+	 * En supposant que la direction de regard par défaut de la caméra suit le vecteur (0, 0, -1), calcule l'angle de rotation horizontal nécessaire à la caméra pour regarder le point 'direction' passé en paramètre
+	 * 
+	 * @param position Position de la caméra / point d'ancrage
+	 * @param direction Le point que regarde la caméra. Utilisé pour calculer l'angle de rotation horizontal
+	 * 
+	 * @return Retourne l'angle de rotation horizontal dont la caméra a besoin pour regarder le point passé en argument. L'angle retourné est en degré
+	 */
+	public static double getHoriAngleFromDir(Point position, Point direction)
+	{
+		Vector vecDir = new Vector(position, direction);
+		Vector vecDirNoY = new Vector(vecDir.getX(), 0, vecDir.getZ());
+		if(vecDirNoY.getX() == 0 && vecDirNoY.getY() == 0 && vecDirNoY.getZ() == 0)//Le point qu'on veut regarder est déjà aligné avec la direction de regard par défaut de la caméra 
+			return 0;
+		
+		Vector vecDirNoYNorm = Vector.normalizeV(vecDirNoY);
+		
+		double dotProd = Vector.dotProduct(vecDirNoYNorm, new Vector(0, 0, -1));
+		double arcos = Math.acos(dotProd);
+		double degrees = Math.toDegrees(arcos);
+		
+		double angle = -Math.signum(vecDirNoYNorm.getX())*degrees;
+		return angle;
+	}
+	
+	/*
+	 * En supposant que la direction de regard par défaut de la caméra suit le vecteur (0, 0, -1), calcule l'angle de rotation vertical nécessaire à la caméra pour regarder le point 'direction' passé en paramètre
+	 * 
+	 * @param position Position actuelle de la caméra
+	 * @param direction Le point que regarde la caméra. Utilisé pour calculer l'angle de rotation vertical
+	 * 
+	 * @return Retourne l'angle de rotation vertical dont la caméra a besoin pour regarder le point passé en argument. L'angle retourné est en degré
+	 */
+	public static double getVertiAngleFromDir(Point position, Point direction)
+	{
+		Vector vecDir = new Vector(position, direction);
+		Vector vecDirNoX = new Vector(0, vecDir.getY(), vecDir.getZ());
+		if(vecDirNoX.getX() == 0 && vecDirNoX.getY() == 0 && vecDirNoX.getZ() == 0)//La direction de regard n'a pas changé pas rapport à la direction de regard par défaut de la caméra (0, 0, -1)
+			return 0;
+		Vector vecDirNoXNorm = Vector.normalizeV(vecDirNoX);
+		
+		double dotProd = Vector.dotProduct(vecDirNoXNorm, new Vector(0, 0, -1));
+		double arcos = Math.acos(dotProd);
+		double degrees = Math.toDegrees(arcos);
+		
+		double angle = Math.signum(vecDirNoXNorm.getY())*degrees;
+		
+		System.out.println(angle);
+		return angle;
+	}
+	
+	/*
 	 * Permet d'obtenir la position actuelle de la caméra
 	 * 
 	 * @return Un point de coordonnées (x, y, z) représentant les coordoonées actuelle de la caméra
 	 */
-	public Vector3D getPosition()
+	public Point getPosition()
 	{
 		return this.position;
 	}
@@ -155,9 +222,9 @@ public class Camera
 	 * 
 	 * @param axisIndex Entier entre 0 et 2 représentant l'axe que l'on souhaite obtenir. 0 pour l'axe x, 1 pour l'axe y et 2 pour l'axe z
 	 */
-	protected Vector3D getWAxis(int axisIndex)
+	protected Vector getAxis(int axisIndex)
 	{
-		return new Vector3D(this.CTWMatrix.get(axisIndex, 0), this.CTWMatrix.get(axisIndex, 1), this.CTWMatrix.get(axisIndex, 2));
+		return new Vector(this.CTWMatrix.get(axisIndex, 0), this.CTWMatrix.get(axisIndex, 1), this.CTWMatrix.get(axisIndex, 2));
 	}
 	
 	/*
@@ -165,9 +232,9 @@ public class Camera
 	 * 
 	 * @return Un vecteur de coordoonées (x, y, z) où x, y et z représentent les coordonnées du vecteur de l'axe x de la caméra exprmimées dans la base de l'espace vectoriel de la scène i.e. {(1, 0, 0), (0, 1, 0), (0, 0, 1)}
 	 */
-	public Vector3D getXAxis()
+	public Vector getXAxis()
 	{
-		return getWAxis(0);
+		return getAxis(X_AXIS);
 	}
 	
 	/*
@@ -175,9 +242,9 @@ public class Camera
 	 * 
 	 * @return Un vecteur de coordoonées (x, y, z) où x, y et z représentent les coordonnées du vecteur de l'axe y de la caméra exprmimées dans la base de l'espace vectoriel de la scène i.e. {(1, 0, 0), (0, 1, 0), (0, 0, 1)}
 	 */
-	public Vector3D getYAxis()
+	public Vector getYAxis()
 	{
-		return getWAxis(1);
+		return getAxis(Y_AXIS);
 	}
 	
 	/*
@@ -185,9 +252,9 @@ public class Camera
 	 * 
 	 * @return Un vecteur de coordoonées (x, y, z) où x, y et z représentent les coordonnées du vecteur de l'axe z de la caméra exprmimées dans la base de l'espace vectoriel de la scène i.e. {(1, 0, 0), (0, 1, 0), (0, 0, 1)}
 	 */
-	public Vector3D getZAxis()
+	public Vector getZAxis()
 	{
-		return getWAxis(2);
+		return getAxis(Z_AXIS);
 	}
 	
 	/*
@@ -229,7 +296,7 @@ public class Camera
 	 * 
 	 * @param newPosition Un point de coordonnées (x, y, z) pour définir les nouvelles coordonnées de la caméra
 	 */
-	public void setPosition(Vector3D newPosition)
+	public void setPosition(Point newPosition)
 	{
 		this.position = newPosition;
 		
