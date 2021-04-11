@@ -56,7 +56,8 @@ public class MainApp extends Application {
 		} catch (IllegalArgumentException e) 
         {
 			System.out.println("Vous avez annulé");
-
+			e.printStackTrace();
+			
 			System.exit(0);
 		}
         

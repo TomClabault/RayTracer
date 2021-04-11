@@ -1,11 +1,15 @@
 sphere { <-1.25, 0.5, -6>, 1
-  pigment { color rgb 0}
+  pigment { color rgb <1, 0, 0>}
   finish {
     ambient 1 
 	diffuse 1
     specular 1
     reflection 0.75
     phong_size 192
+  }
+  interior
+  {
+	ior 1.5
   }
 }
 

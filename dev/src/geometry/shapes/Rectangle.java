@@ -14,8 +14,9 @@ public class Rectangle extends ShapeTriangleUtil implements Shape
 {
 
 	private double height,width,length;
-	private Point A,B,C,D,E,F,G,H;
+	private Point A, G;
 
+	
 	/*
 
 		Imagine un bloc ABCD EFGH
@@ -65,6 +66,7 @@ public class Rectangle extends ShapeTriangleUtil implements Shape
 		this.G.setY(this.A.getY() + this.height);
 
 		super.material = new MatteMaterial(Color.rgb(200, 200, 200));
+		
 		this.buildRectangle();
 	}
 
@@ -74,14 +76,15 @@ public class Rectangle extends ShapeTriangleUtil implements Shape
 
 	protected void buildRectangle()
 	{
+		Point B, C, D, E, F, H;
 
 		/*on localise les points selon les coordonnees de depart */
-		this.B = new Point(A.getX() + length, A.getY(), A.getZ());
-		this.C = new Point(A.getX()+ length, A.getY(), A.getZ() + width);
-		this.D = new Point(A.getX(),A.getY(), A.getZ() + width);
-		this.E = new Point(A.getX(),A.getY() + height, A.getZ());
-		this.F = new Point(A.getX() + length,A.getY() + height, A.getZ());
-		this.H = new Point(A.getX(), A.getY() + height, A.getZ() + width);
+		B = new Point(A.getX() + length, A.getY(), A.getZ());
+		C = new Point(A.getX()+ length, A.getY(), A.getZ() + width);
+		D = new Point(A.getX(),A.getY(), A.getZ() + width);
+		E = new Point(A.getX(),A.getY() + height, A.getZ());
+		F = new Point(A.getX() + length,A.getY() + height, A.getZ());
+		H = new Point(A.getX(), A.getY() + height, A.getZ() + width);
 
 		/*on va construire les 12 triangles*/
 		Triangle tr1 = new Triangle(E,A,B, material);
@@ -114,5 +117,11 @@ public class Rectangle extends ShapeTriangleUtil implements Shape
 
 		/*on retourne la liste des triangles*/
 		/*return listeTriangle;*/
+	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("[Rectangle Shape] Coin 1: %s | Coin 2: %s | length, height, width: %.3f, %.3f, %.3f | Material: %s", this.A, this.G, this.length, this.height, this.width, this.material);
 	}
 }

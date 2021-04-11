@@ -2,6 +2,7 @@ package materials;
 
 import javafx.scene.paint.Color;
 import materials.textures.*;
+import maths.ColorOperations;
 
 /*
  * Classe permettant définir des matériaux à partir des différentes caractéristiques physiques que peut simuler le rayTracer
@@ -251,10 +252,10 @@ public class Material
 	}
 
 	@Override
-	public String toString() {
-		return "Material:"
-				+ "[color=" + color + "ambientCoeff=" + ambientCoeff + ", diffuseCoeff=" + diffuseCoeff + ", reflectiveCoeff=" + reflectiveCoeff
-				+ ", specularCoeff=" + specularCoeff + ", shininess=" + shininess + ", isTransparent=" + isTransparent
-				+ ", refractionIndex=" + refractionIndex + ", proceduralTexture=" + proceduralTexture + "]";
+	public String toString() 
+	{
+		String transparencyString = String.format("%b", isTransparent);
+		
+		return String.format("Color: %-15s | AmbientCoeff: %.3f | DiffuseCoeff: %.3f | ReflectiveCoeff: %.3f | SpecularCoeff: %.3f | Shininess: %-3d | Transparency: %-5s | RefractionIndex: %.3f | ProceduralTexture: %s", ColorOperations.colorToString(color), ambientCoeff, diffuseCoeff, reflectiveCoeff, specularCoeff, shininess, transparencyString, refractionIndex, proceduralTexture);
 	}
 }

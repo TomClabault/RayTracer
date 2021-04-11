@@ -1,6 +1,7 @@
 package materials.textures;
 
 import javafx.scene.paint.Color;
+import maths.ColorOperations;
 import maths.Point;
 
 public class ProceduralTextureCheckerboard implements ProceduralTexture 
@@ -48,5 +49,11 @@ public class ProceduralTextureCheckerboard implements ProceduralTexture
 		//Si la somme de u et v est impaire, on est sur une case de couleur 2 du damier
 		//Sinon, couleur 1
 		return ((xInt + yInt) & 0x1) == 1 ? this.color2 : this.color1;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("[Checkerboard Procedural] Couleur 1: %s | Couleur 2: %s | Taille: %.3f", ColorOperations.colorToString(color1), ColorOperations.colorToString(color2), size);
 	}
 }

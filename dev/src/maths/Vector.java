@@ -286,10 +286,13 @@ public class Vector implements CoordinateObject
 	 *
 	 * @return Une chaîne de caractère de la forme: (x, y, z) avec x, y et z les coordonnées du vecteur
 	 */
-	public String toString()
-	{
-		return String.format("(%.3f, %.3f, %.3f)", this.x, this.y, this.z);
-	}
+	@Override
+    public String toString()
+    {
+    	String output = String.format("[%.3f, %.3f, %.3f]", this.x, this.y, this.z);
+    	
+    	return String.format("%-25s", output);
+    }
 
 	/*
 	 * Utilise les coordoonées d'un vecteur pour définir un point

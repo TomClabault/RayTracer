@@ -47,7 +47,8 @@ public class ImageWriter {
     public ImageWriter(Scene mainAppScene)
     {
         this.mainAppScene = mainAppScene;
-        this.myGlobalScene = Automat.parsePov("dev/src/povParser/sphere.pov");
+        //this.myGlobalScene = Automat.parsePov("dev/src/povParser/sphere.pov");
+        this.myGlobalScene = addObjectsToScene();
         this.writableImage = new WritableImage(MainApp.WIDTH,MainApp.HEIGHT);
 
         System.out.println(myGlobalScene);
@@ -103,9 +104,8 @@ public class ImageWriter {
 
     public RayTracingScene addObjectsToScene() {/*utilisé dans le constructeur*/
 
-    	Camera cameraRT = new Camera(new Point(0.000, 0.5, -1.5), 0, 0);//Magic camera
+    	Camera cameraRT = new Camera(new Point(0.000, 0.5, -1.5), 0, 0, 60);//Magic camera
     	//Camera cameraRT = new Camera(new Point(0.75, -0.75, -5.5), 0, 0);
-        cameraRT.setFOV(60);
         PositionnalLight l = new LightBulb(new Point(2, 2, 1), 1);
 
         ArrayList<Shape> shapeList = new ArrayList<>();
@@ -120,7 +120,8 @@ public class ImageWriter {
         shapeList.add(new Sphere(new Point(-0.75, -0.75, -6), 0.25, new GlassyMaterial(Color.rgb(255, 64, 0))));
         shapeList.add(new Sphere(new Point(0.75, -0.75, -6), 0.25, new GlassyMaterial(Color.rgb(255, 64, 0))));
         shapeList.add(new Sphere(new Point(1.25, 0.5, -6), 1, new GlassMaterial()));
-        //shapeList.add(new Icosphere(new Vector3D(0, 2, -6), 1, 1, new GlassyMaterial(Color.rgb(0, 128, 255))));
+        //shapeList.add(new Icosphere(new Point(0, 2, -6), 1, 2, new GlassyMaterial(Color.rgb(0, 128, 255))));
+        //shapeList.add(new Rectangle(new Point(-1.25, 1.5, -6), new Point(-0.25, 2.5, -7), new GlassyMaterial(Color.RED)));
         
         
         Image skybox = null;
