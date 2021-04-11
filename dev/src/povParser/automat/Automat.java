@@ -11,9 +11,8 @@ import java.io.*;
 public class Automat
 {
     /*TODO
-    -parse les textures spéciales
     -parse cheker dans pigment
-    -parse camera (attributs: locate, rotate, translate, look_at)
+    _si Clear est précisé dans pigment (on met true dans isTransparent)
     -ajout de la javadoc
      */
 
