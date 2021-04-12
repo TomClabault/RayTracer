@@ -111,6 +111,7 @@ public class RayTracer
 		this.renderedPixels = IntBuffer.allocate(renderWidth*renderHeight);
 		
 		this.threadTaskList = new ThreadsTaskList();
+		this.randomGenerator= new Random();
 	}
 	
 	/*
@@ -232,6 +233,12 @@ public class RayTracer
 			int summedBlue = 0;
 			
 			int blurSampleCount = (this.settings.isEnableBlurryReflections() && intInfos.getIntObjMat().getScatteringCoeff() > 0) ? this.settings.getBlurryReflectionsSampleCount() : 1;
+//			System.out.println(blurSampleCount);
+//			System.out.println("point: " + intInfos.getIntP());
+//			System.out.println("objet: " + intInfos.getIntObj());
+//			System.out.println("nromal:" + intInfos.getNormInt());
+//			System.out.println("perfect refelct " + intInfos.getReflVec());
+//			System.out.println();
 			for(int blurSample = 0; blurSample < blurSampleCount; blurSample++)
 			{
 				Vector reflectDirection = null;
@@ -244,9 +251,11 @@ public class RayTracer
 					double randomY = randomGenerator.nextDouble() * 2 - 1;
 					double randomZ = randomGenerator.nextDouble() * 2 - 1;
 					
-					Vector randomBounce = Vector.add(new Vector(randomX, randomY, randomZ), intInfos.getNormInt());
+					Vector randomBounce = Vector.normalizeV(Vector.add(Vector.normalizeV(new Vector(randomX, randomY, randomZ)), intInfos.getNormInt()));
+					//System.out.println("bounce: " + randomBounce);
+					
 					//Vector randomBounceSample = Vector.normalizeV(Vector.add(new Vector(randomX, randomY, randomZ), Vector.scalarMul(intInfos.getNormInt(), 2)));
-					Vector randomBounceDirection = Vector.normalizeV(Vector.add(perfectReflectDirection, Vector.scalarMul(new Vector(randomX, randomY, randomZ), intInfos.getIntObjMat().getScatteringCoeff())));//Vector.interpolate(randomBounceSample, perfectReflectDirection, intInfos.getIntObjMat().getScatteringCoeff());
+					Vector randomBounceDirection = Vector.normalizeV(Vector.interpolate(perfectReflectDirection, randomBounce, intInfos.getIntObjMat().getScatteringCoeff()));
 					
 					reflectDirection = randomBounceDirection;
 				}
@@ -760,7 +769,6 @@ public class RayTracer
 	 */
 	public IntBuffer renderImage(RayTracingScene renderScene, RayTracerSettings renderSettings)
 	{
-		this.randomGenerator = new Random(0);//On réinitialise le random generator avec la seed 0 pour réobtenir les mêmes aléatoires et donc la même image que précédemment (si la caméra n'a pas bougé bien sûr)  
 		this.settings = renderSettings;
 		this.threadTaskList.initTaskList(settings.getNbCore(), renderWidth, renderHeight);
 		
