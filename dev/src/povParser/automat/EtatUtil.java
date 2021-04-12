@@ -18,7 +18,6 @@ enum Attribute
     AMBIENT, // only a coeff (not a vector)
     DIFFUSE,
     CHECKER,
-    CLEAR,
     REFLECTION, // only a coeff
     PHONG_SIZE, // = SHININESS in our raytracer
     PHONG, // is a coeff | diffuse -> diffuse * phong / specular -> specular * phong / ambient -> ambient * phong
@@ -26,6 +25,9 @@ enum Attribute
     OUTSIDE,
 }
 
+/**
+ * Ctte classe s'occupe de parser les attributs indépendamment de la figure qu'on est en train de parser
+ */
 public abstract class EtatUtil
 {
 
@@ -209,6 +211,10 @@ public abstract class EtatUtil
                             }
 
                         }
+                    }
+                    else if (context.currentWord("Clear"))
+                    {
+                        material.setTransparent(true);
                     }
                     break;
                 }
