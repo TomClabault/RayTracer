@@ -17,6 +17,8 @@ enum Attribute
     SPECULAR, // only a coeff (not a vector)
     AMBIENT, // only a coeff (not a vector)
     DIFFUSE,
+    CHECKER,
+    CLEAR,
     REFLECTION, // only a coeff
     PHONG_SIZE, // = SHININESS in our raytracer
     PHONG, // is a coeff | diffuse -> diffuse * phong / specular -> specular * phong / ambient -> ambient * phong
