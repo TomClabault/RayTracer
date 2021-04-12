@@ -47,8 +47,8 @@ public class ImageWriter {
     public ImageWriter(Scene mainAppScene)
     {
         this.mainAppScene = mainAppScene;
-        this.myGlobalScene = Automat.parsePov("dev/src/povParser/sphere.pov");
-        //this.myGlobalScene = addObjectsToScene();
+        //this.myGlobalScene = Automat.parsePov("dev/src/povParser/sphere.pov");
+        this.myGlobalScene = addObjectsToScene();
         this.writableImage = new WritableImage(MainApp.WIDTH,MainApp.HEIGHT);
         
         this.pw = writableImage.getPixelWriter();

@@ -81,6 +81,10 @@ public abstract class EtatUtil
             {
                 return Attribute.ROUGHNESS;
             }
+            else if(context.currentWord("checker"))
+            {
+                return Attribute.CHECKER;
+            }
         }
         return null;
     }
@@ -109,6 +113,7 @@ public abstract class EtatUtil
         Attribute state = parsePropertryAndGetState(context);
         int token = 0;
         boolean color = false;
+        boolean checkerContent = false;
         Double phong_value = null;
 
         while(state != Attribute.OUTSIDE)
@@ -221,9 +226,36 @@ public abstract class EtatUtil
                                 state = this.checkEndingBracket(context);
                             }
                         }
+                        else if(context.currentWord("checker"))
+                        {
+                            state = Attribute.CHECKER;
+                        }
                     }
                     break;
                 }
+
+                case CHECKER:
+                {
+                    context.callNextToken(); //skip checker
+                    if(context.isCurrentTokenAWord())
+                    {
+                        if(context.currentWord("color"))
+                        {
+                            context.callNextToken();
+                            if(context.isCurrentTokenAWord())
+                            {
+                                state = Attribute.OPENING_CHEVRON;
+                            }
+                            else
+                            {
+                                break; // todo à finir
+                            }
+                        }
+                    }
+
+                    break;
+                }
+
                 case PHONG:
                 {
                     context.callNextToken(); //skip phong
