@@ -135,7 +135,9 @@ public class Point implements CoordinateObject
     @Override
     public String toString()
     {
-    	return String.format("[%.3f, %.3f, %.3f]", this.x, this.y, this.z);
+    	String output = String.format("[%.3f, %.3f, %.3f]", this.x, this.y, this.z);
+    	
+    	return String.format("%-25s", output);
     }
     
     /*

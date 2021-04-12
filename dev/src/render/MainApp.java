@@ -2,6 +2,9 @@ package render;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
+
+import java.util.Random;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -56,10 +59,9 @@ public class MainApp extends Application {
 		} catch (IllegalArgumentException e) 
         {
 			System.out.println("Vous avez annulé");
-
+			e.printStackTrace();
+			
 			System.exit(0);
 		}
-        
-        
     }
 }

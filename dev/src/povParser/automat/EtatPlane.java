@@ -1,7 +1,7 @@
 package povParser.automat;
 
 import geometry.Shape;
-import geometry.shapes.PlaneMaths;
+import geometry.shapes.Plane;
 import materials.Material;
 import maths.Vector;
 
@@ -13,7 +13,7 @@ public class EtatPlane extends EtatSpherePlane
     @Override
     protected Shape createInstance(double[] normal, Double distance, Material material)
     {
-        PlaneMaths plane = new PlaneMaths(new Vector(normal[0], normal[1], normal[2]), distance, material);
+        Plane plane = new Plane(new Vector(normal[0], normal[1], normal[2]), distance, material);
         return plane;
     }
 }
