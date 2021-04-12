@@ -232,7 +232,7 @@ public class RayTracer
 			int summedGreen = 0;
 			int summedBlue = 0;
 			
-			int blurSampleCount = (this.settings.isEnableBlurryReflections() && intInfos.getIntObjMat().getScatteringCoeff() > 0) ? this.settings.getBlurryReflectionsSampleCount() : 1;
+			int blurSampleCount = (this.settings.isEnableBlurryReflections() && intInfos.getIntObjMat().getRoughness() > 0) ? this.settings.getBlurryReflectionsSampleCount() : 1;
 //			System.out.println(blurSampleCount);
 //			System.out.println("point: " + intInfos.getIntP());
 //			System.out.println("objet: " + intInfos.getIntObj());
@@ -243,7 +243,7 @@ public class RayTracer
 			{
 				Vector reflectDirection = null;
 				
-				if(!this.settings.isEnableBlurryReflections() || intInfos.getIntObjMat().getScatteringCoeff() == 0)
+				if(!this.settings.isEnableBlurryReflections() || intInfos.getIntObjMat().getRoughness() == 0)
 					reflectDirection = perfectReflectDirection;
 				else
 				{
@@ -255,7 +255,7 @@ public class RayTracer
 					//System.out.println("bounce: " + randomBounce);
 					
 					//Vector randomBounceSample = Vector.normalizeV(Vector.add(new Vector(randomX, randomY, randomZ), Vector.scalarMul(intInfos.getNormInt(), 2)));
-					Vector randomBounceDirection = Vector.normalizeV(Vector.interpolate(perfectReflectDirection, randomBounce, intInfos.getIntObjMat().getScatteringCoeff()));
+					Vector randomBounceDirection = Vector.normalizeV(Vector.interpolate(perfectReflectDirection, randomBounce, intInfos.getIntObjMat().getRoughness()));
 					
 					reflectDirection = randomBounceDirection;
 				}
