@@ -12,6 +12,7 @@ enum Attribute
     PIGMENT,
     INTERIOR,
     IOR,
+    ROUGHNESS,
     FINISH,
     SPECULAR, // only a coeff (not a vector)
     AMBIENT, // only a coeff (not a vector)
@@ -72,6 +73,10 @@ public abstract class EtatUtil
             {
                 return Attribute.PHONG;
             }
+            else if(context.currentWord("roughness"))
+            {
+                return Attribute.ROUGHNESS;
+            }
         }
         return null;
     }
@@ -117,6 +122,11 @@ public abstract class EtatUtil
                         state = this.checkEndingBracket(context);
                     }
                     break;
+                }
+
+                case ROUGHNESS:
+                {
+                    context.callNextToken(); //skip roughness
                 }
 
                 case SPECULAR:

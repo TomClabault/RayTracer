@@ -12,6 +12,7 @@ public class Automat
 {
     /*TODO
     -parse cheker dans pigment
+    -parse la roughness
     _si Clear est précisé dans pigment (on met true dans isTransparent)
     -ajout de la javadoc
      */
