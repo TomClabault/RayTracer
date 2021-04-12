@@ -115,7 +115,7 @@ public abstract class EtatUtil
                 {
                     context.callNextToken(); // skip ambient
                     material.setAmbientCoeff(context.getNumberValue());
-                    token = context.callNextToken(); // skip ambient coeff
+                    context.callNextToken(); // skip ambient coeff
                     state  = parsePropertryAndGetState(context);
                     if(state == null)
                     {
@@ -127,6 +127,14 @@ public abstract class EtatUtil
                 case ROUGHNESS:
                 {
                     context.callNextToken(); //skip roughness
+                    material.setRoughness(context.getNumberValue());
+                    context.callNextToken(); //skip roughness coeff
+                    state = this.parsePropertryAndGetState(context);
+                    if(state == null)
+                    {
+                        state = this.checkEndingBracket(context);
+                    }
+                    break;
                 }
 
                 case SPECULAR:
