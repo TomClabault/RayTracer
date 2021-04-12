@@ -30,7 +30,7 @@ public class EtatBox extends EtatUtil implements EtatToken
         context.callNextToken();
         int bracketNb = 0;
         int coordNb = 0;
-        Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0);
+        Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0, 0);
         Rectangle rectangle = null;
         Point vector1 = null;
         Point vector2 = null;

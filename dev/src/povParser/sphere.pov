@@ -1,5 +1,5 @@
 sphere { <-1.25, 0.5, -6>, 1
-  pigment { color rgb <1, 0, 0>}
+  pigment { color rgb <0, 0, 0>}
   finish {
     ambient 1 
 	diffuse 1
@@ -7,10 +7,49 @@ sphere { <-1.25, 0.5, -6>, 1
     reflection 0.75
     phong_size 192
   }
-  interior
+  /*interior
   {
 	ior 1.5
-  }
+  }*/
+}
+
+sphere
+{
+    <1.25, 0.5, -6>, 1
+    pigment
+    {
+        color Clear
+    }
+    finish
+    {
+        ambient 1
+        diffuse 0
+        reflection 0
+        specular 0
+    }
+
+    interior
+    {
+        ior 1.5
+    }
+}
+
+sphere
+{
+    <0, 1.5, -6>, 0.5
+    pigment
+    {
+        color rgb <0.19, 0.19, 0.19>
+    }
+    finish
+    {
+        ambient 1
+        diffuse 1
+        reflection 0.5
+        phong_size 3
+        specular 0.125
+        roughness 0.64
+    }
 }
 
 camera

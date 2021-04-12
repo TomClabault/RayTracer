@@ -105,7 +105,7 @@ public abstract class EtatUtil
 
     public Material parseAttributes(Automat context) throws RuntimeException
     {
-        Material material = new Material(null, 0, 0, 0, 0, 0, false, 0, null);
+        Material material = new Material(null, 0, 0, 0, 0, 0, false, 0, 0);
         Attribute state = parsePropertryAndGetState(context);
         int token = 0;
         boolean color = false;
@@ -203,7 +203,6 @@ public abstract class EtatUtil
                             }
 
                             context.callNextToken(); // skip color value
-                            //nbBracket--;
                             state = parsePropertryAndGetState(context);
                             if(state == null)
                             {
@@ -211,10 +210,17 @@ public abstract class EtatUtil
                             }
 
                         }
-                    }
-                    else if (context.currentWord("Clear"))
-                    {
-                        material.setTransparent(true);
+                        else if (context.currentWord("Clear"))
+                        {
+                            material.setTransparent(true);
+                            material.setColor(Color.BLACK);
+                            context.callNextToken(); //skip Clear
+                            state = this.parsePropertryAndGetState(context);
+                            if (state == null)
+                            {
+                                state = this.checkEndingBracket(context);
+                            }
+                        }
                     }
                     break;
                 }
