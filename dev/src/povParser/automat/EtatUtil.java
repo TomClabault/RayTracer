@@ -10,6 +10,8 @@ import java.util.ArrayList;
 enum Attribute
 {
     PIGMENT,
+    INTERIOR,
+    IOR,
     FINISH,
     SPECULAR, // only a coeff (not a vector)
     AMBIENT, // only a coeff (not a vector)
@@ -33,6 +35,14 @@ public abstract class EtatUtil
             if(context.currentWord("finish"))
             {
                 return Attribute.FINISH;
+            }
+            else if(context.currentWord("ior"))
+            {
+                return Attribute.IOR;
+            }
+            else if(context.currentWord("interior"))
+            {
+                return Attribute.INTERIOR;
             }
             else if(context.currentWord("pigment"))
             {
@@ -241,6 +251,27 @@ public abstract class EtatUtil
                         state = this.checkEndingBracket(context);
                     }
                     break;
+                }
+                case INTERIOR:
+                {
+                    context.callNextToken(); //skip interior
+                    context.callNextToken(); //skip '{'
+                    state = parsePropertryAndGetState(context);
+                    if(state == null)
+                    {
+                        throw new RuntimeException("fichier pov non valide");
+                    }
+                    break;
+                }
+                case IOR:
+                {
+                    context.callNextToken(); //skip "ior"
+                    material.setRefractionIndex(context.getNumberValue());
+                    state = this.parsePropertryAndGetState(context);
+                    if (state == null)
+                    {
+                        state = this.checkEndingBracket(context);
+                    }
                 }
             }
         }
