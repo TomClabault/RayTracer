@@ -11,8 +11,6 @@ public class RoughMaterial extends Material
 	{
 		super(color, 1, 1, 0.5, RoughMaterial.computeSpecularIntensity(roughness), RoughMaterial.computeSpecularSize(roughness), false, 0, roughness);
 		
-		System.out.println(RoughMaterial.computeSpecularSize(roughness));
-		
 	}
 	
 	private static int computeSpecularSize(double roughness)
