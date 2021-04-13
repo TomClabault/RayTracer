@@ -112,7 +112,7 @@ public class ImageWriter {
 
         //shapeList.add(new Sphere(new Point(0, 0.5, -3.5), 1, new GlossyMaterial(Color.GOLD, 0.92)));
         shapeList.add(new Sphere(new Point(-1.25, 0.5, -6), 1, new MirrorMaterial(0.75)));
-        shapeList.add(new Sphere(new Point(0, 1.5, -6), 0.5, new RoughMaterial(Color.rgb(48, 48, 48), 0.64)));
+        shapeList.add(new Sphere(new Point(0, 1.5, -6), 0.5, new RoughMaterial(Color.rgb(48, 48, 48), 0.75)));
         shapeList.add(new Sphere(new Point(1.25, 0.5, -6), 1, new GlassMaterial()));
         
         shapeList.add(new Sphere(Point.translateMul(new Point(-0.25, 0.5, -0.1), new Vector(1.250, 0.000, -4.500), 1.5625), 0.2, new GlassyMaterial(Color.GREEN)));
