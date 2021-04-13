@@ -1,9 +1,35 @@
 \subsubsection{Pourquoi JavaFX ?}
 
-Une des premières questions que nous nous sommes posées est : Swing ou JavaFX ?
+Une question que nous nous sommes posées est : Swing ou JavaFX ?
 
 Nous avons choisi d'utiliser JavaFX pour une principale raison. JavaFX est désormais la librairie officielle de Java. Swing n'étant plus maintenu, nous ne voulions pas développer avec une librairie qui commence à être dépréciée.
 
-De plus, le sujet de Bataille Navale étant à faire obligatoirement en swing, nous voulions essayer aux deux librairies.
+De plus, le sujet de Bataille Navale étant à faire obligatoirement en swing, nous voulions essayer les deux librairies.
 
-\subsubsection{Les différents éléments du package render}
+
+\subsubsection{L'interface graphique}
+
+Le développement de l'interface graphique a progressé au rythme du reste du projet, implémentant ce qui a été codé en parallèle. Plusieurs optimisations ont cependants été réalisés pour que l'affichage à l'écran impacte le moins possible les performances générales.
+
+L'optimisation la plus impactante est l'usage d'un IntBuffer et de PixelFormat<IntBuffer>. Ils ont permis d'utiliser la méthode setPixels de PixelWriter, permettant ainsi de définir les pixel de la fenêtre de rendu d'un coup et non pas pixel par pixel comme fait précédement.
+
+Un des effets secondaires engendré par les calculs lourds du rendu est la fenêtre qui n'était plus réactive.
+Au départ, nous utililisions CameraTimer et WindowTimer, deux classes héritant de Animation Timer. WindowTimer lançait le rendu et CameraTimer s'occupait de gérér un déplacement de caméra. La méthode handle de AnimationTimer s'execute à chaque frame, ce qui nous permettait de faire les fps, la caméra et le rendu à l'aide de la méthode handle et tout était donc synchronisé.
+
+Le problème posé par ce choix était que JavaFX gérait directement les calculs de rendus. La conséquencé était une interface graphique réactive à la vitesse du rendu (quelques images par secondes).
+
+Pour palier à ce problème nous avons utiliser des classes proposés par le package concurrent de JavaFX. Le problème a été résolu grâce à la classe tasks de ce package, permettant de faire des calculs lourds sans impacter la réactivité de l'interface graphique. Comme javafx et le calcul de rendu n'étaient plus liés il a fallut synchroniser les mouvements de caméra et le calcul de l'image d'après.
+
+\subsubsection{Le CSS}
+
+En quelques mots, JavaFX permet de lier le style de ces fenêtre à des fichiers CSS. Nous en avons profitez pour aérer les fenêtres de choix de taille et la "toolbox".
+
+\subsubsection{Le mode automatique}
+
+Le mode automatique récupère la taille de l'écran principal, maximize la fenêtre et étire le rendu de manière à ce qu'il soit pixélisé mais qu'il occupe tout l'écran.
+
+Dans une version plus ancienne la taille du rendu était également fixé par la taille de la fenêtre. Suite à l'ajout de la réfraction et de l'uvsphère qui sont assez couteuses en ressource nous avons décider de supprimer cette fonctionnalité.
+
+\subsubsection{le conteur de fps}
+
+Le conteur de FPS tire partie des avantages offerts par la classe AnimationTimer et utilise l'horodatage fournit par celle-ci pour calculer la vitesse de rendu.
