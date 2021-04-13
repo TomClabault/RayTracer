@@ -24,6 +24,7 @@
 \AtBeginEnvironment{appendices}{\renewcommand{\thesection}{\Alph {section}}}%Pour recommencer à compter les sections à 0 en rentrant dans l'annexe et pour compter avec des lettres et non des chiffres
 \renewcommand{\appendixpagename}{\centering Annexes}%Pour centrer le titre de la partie annexe
 \renewcommand{\appendixtocname}{Table des annexes} % Pour faire apparaître les annexes dans la table of contents
+\setlength{\parskip}{2mm}%Pour mettre de l'espacement entre les paragraphes
 
 %%%%%%%%%%%%%% Couleurs de: https://texblog.org/2011/06/11/latex-syntax-highlighting-examples/ %%%%%%%%%%%%%%
 \definecolor{javared}{rgb}{0.6,0,0} % for strings
@@ -89,7 +90,7 @@ showstringspaces=false}
         \subsubsection{Le package materials}
             \subfile{latex/packages/materials.tex}
 
-        \subsection{Le package render}
+        \subsubsection{Le package render}
         \input{latex/render.javafx/packageRender.tex}
 
 
