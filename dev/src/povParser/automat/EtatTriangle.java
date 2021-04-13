@@ -1,5 +1,12 @@
 package povParser.automat;
 
+import geometry.Shape;
+import geometry.shapes.Triangle;
+import javafx.scene.paint.Color;
+import materials.Material;
+import maths.Point;
+import maths.Vector;
+
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 
@@ -10,111 +17,120 @@ enum Trianglecontent
     OPENING_CHEVRON,
     ENDING_CHEVRON,
     OUTSIDE,
-    FINISH,
-    PIGMENT, //color of the figure
-    AMBIENT,
-    DIFFUSE,
-    SPECULAR,
+    ATTRIBUTE;
 }
 
-public class EtatTriangle implements EtatToken
+public class EtatTriangle extends EtatUtil implements EtatToken
 {
     @Override
-    public void action(Automat context)
+    public Shape action(Automat context)
     {
         int nextToken = context.callNextToken(); //accolade ouvrante après le mot triangle
-        ArrayList<String> list = new ArrayList<>();
 
         StreamTokenizer st = context.getStreamTokenizer();
         context.callNextToken();
         int bracketNb = 0;
         int coordNb = 0;
+        boolean color = false;
+        boolean triangleCoord = false;
+        Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0);
+        Triangle triangle = null;
+        Point vectA = null;
+        Point vectB = null;
+        Point vectC = null;
 
         Trianglecontent state = Trianglecontent.OPENING_BRACKET;
 
         while(state != Trianglecontent.OUTSIDE)
         {
+
             switch(state)
             {
                 case OPENING_BRACKET:
                 {
-                    context.callNextToken();
-
                     state = Trianglecontent.OPENING_CHEVRON;
+                    triangleCoord = true;
                     bracketNb++;
                     break;
                 }
 
                 case OPENING_CHEVRON:
                 {
-                    for(int i = 0; i < 3; i++)
+                    context.callNextToken(); //skip '<'
+                    double[][] coordArray = new double[3][3];
+                    if(triangleCoord)
                     {
-                        context.callNextToken(); // la virgule
-                        context.callNextToken();
-                        list.add(String.valueOf(st.nval));
-                    }
-                    state = Trianglecontent.ENDING_CHEVRON;
-                    coordNb++;
+                        for(int point = 0; point < 3; point++)
+                        {
+                            if(point > 0)
+                                context.callNextToken();
+                            for (int coord = 0; coord < 3; coord++)
+                            {
+                                coordArray[point][coord] = context.getNumberValue();
 
+                                context.callNextToken();
+
+
+                                if(point < 2 || coord < 2)
+                                    context.callNextToken();
+
+
+                            }
+                            if (point < 2)
+                            {
+                                context.callNextToken();
+                            }
+                        }
+                        vectA = new Point(coordArray[0][0], coordArray[0][1], coordArray[0][2]);
+                        vectB = new Point(coordArray[1][0], coordArray[1][1], coordArray[1][2]);
+                        vectC = new Point(coordArray[2][0], coordArray[2][1], coordArray[2][2]);
+
+                        triangleCoord = false;
+                    }
+
+                    coordNb++;
+                    state = Trianglecontent.ENDING_CHEVRON;
                     break;
                 }
                 case ENDING_CHEVRON:
                 {
                     context.callNextToken(); //passe le chevron fermant
-                    if(coordNb == 3)
+                    if(context.isCurrentTokenAWord())
                     {
-                        nextToken = context.callNextToken();
-
-                        if(context.isCurrentTokenAWord())
-                        {
-                            if(context.currentWord("pigment"))
-                            {
-                                System.out.println("pigment");
-                                state = Trianglecontent.PIGMENT;
-                            }
-                            else if(context.currentWord("finish"))
-                            {
-                                System.out.println("finish");
-                                state = Trianglecontent.FINISH;
-                            }
-                        }
-                        else
-                        {
-                            state = Trianglecontent.ENDING_BRACKET;
-                        }
+                        state = Trianglecontent.ATTRIBUTE;
                     }
                     else
                     {
-                        state = Trianglecontent.OPENING_CHEVRON;
+                        state = Trianglecontent.ENDING_BRACKET;
                     }
                     break;
                 }
                 case ENDING_BRACKET:
                 {
-                    context.callNextToken();
                     bracketNb--;
                     if(bracketNb == 0)
                     {
                         state = Trianglecontent.OUTSIDE;
+                        break;
+                    }
+                    context.callNextToken();
+                    if(context.isCurrentTokenAWord())
+                    {
+                        state = Trianglecontent.ATTRIBUTE;
                     }
                     break;
                 }
 
-                case PIGMENT:
-                {
-                    context.callNextToken(); //skip '{'
-                    context.callNextToken(); //skip
-                    System.exit(0);
-                    break;
-                }
 
-                case OUTSIDE:
+                case ATTRIBUTE:
                 {
+                    material = super.parseAttributes(context);
                     state = Trianglecontent.OUTSIDE;
                     break;
                 }
             }
         }
-        System.out.println(list);
+        triangle = new Triangle(vectA, vectB, vectC, material);
+        return triangle;
     }
 }

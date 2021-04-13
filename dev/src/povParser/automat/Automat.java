@@ -1,10 +1,22 @@
 package povParser.automat;
 
 
+import geometry.Shape;
+import scene.Camera;
+import scene.RayTracingScene;
+import scene.lights.PositionnalLight;
+
 import java.io.*;
 
 public class Automat
 {
+    /*TODO
+    -parse les textures spéciales
+    -parse cheker dans pigment
+    -parse camera (attributs: locate, rotate, translate, look_at)
+    -ajout de la javadoc
+     */
+
     private EtatToken etatToken;
     private StreamTokenizer streamTokenizer;
     private State currentState;
@@ -25,9 +37,9 @@ public class Automat
     {
         this.etatToken = etatToken;
     }
-    public void action()
+    public Object action()
     {
-        etatToken.action(this);
+        return etatToken.action(this);
     }
 
     public StreamTokenizer getStreamTokenizer()
@@ -50,7 +62,6 @@ public class Automat
         try {
             this.currentToken = this.streamTokenizer.nextToken();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         finally {
@@ -78,7 +89,12 @@ public class Automat
         }
         if(token == StreamTokenizer.TT_WORD)
         {
-            if(this.streamTokenizer.sval.equals("sphere") || this.streamTokenizer.sval.equals("triangle") || this.streamTokenizer.sval.equals("box") || this.streamTokenizer.sval.equals("plane")) {
+            if(this.streamTokenizer.sval.equals("sphere") ||
+                    this.streamTokenizer.sval.equals("triangle") ||
+                    this.streamTokenizer.sval.equals("box") ||
+                    this.streamTokenizer.sval.equals("plane") ||
+                    this.streamTokenizer.sval.equals("camera") ||
+                    this.streamTokenizer.sval.equals("light_source")) {
                 return true;
             }
         }
@@ -92,10 +108,13 @@ public class Automat
 
     public State getState()
     {
-
         if(this.streamTokenizer.sval.equals("sphere"))
         {
             return State.SPHERE;
+        }
+        else if(this.streamTokenizer.sval.equals("light_source"))
+        {
+            return State.LIGHT_SOURCE;
         }
         else if(this.streamTokenizer.sval.equals("triangle"))
         {
@@ -109,20 +128,26 @@ public class Automat
         {
             return State.PLANE;
         }
+        else if(this.streamTokenizer.sval.equals("camera"))
+        {
+            return State.CAMERA;
+        }
         return State.OUTSIDE;
     }
 
-    public static void main(String[] args)
+    public static RayTracingScene parsePov(String pathToFile)
     {
-        String pathToTestFile = "src/povParser/test.pov";
+        RayTracingScene scene = new RayTracingScene();
 
         try {
-            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(pathToTestFile));
+
+            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(pathToFile));
             BufferedReader fileReader = new BufferedReader(inputStreamReader);
 
             StreamTokenizer streamTokenizer = new StreamTokenizer(fileReader);
             streamTokenizer.wordChars('_', '_'); //permet d'avoir des noms contenant un underscore
             streamTokenizer.commentChar('#');
+            streamTokenizer.slashStarComments(true);
 
             Automat automat = new Automat(streamTokenizer);
 
@@ -131,36 +156,60 @@ public class Automat
                 if(automat.isValidState())
                 {
                     State currentState = automat.getState();
+
                     switch (currentState) {
+
+                        case LIGHT_SOURCE:
+                        {
+                            System.out.println("LIGHT_SOURCE");
+                            automat.setState(new EtatLightSource());
+                            PositionnalLight light = (PositionnalLight) automat.action();
+                            scene.setLight(light);
+                            break;
+                        }
+
                         case SPHERE:
                         {
-
+                            System.out.println("SPHERE");
                             automat.setState(new EtatSphere());
-                            automat.action();
+                            Shape sphere = (Shape) automat.action();
+                            scene.addShape(sphere);
                             break;
                         }
 
                         case TRIANGLE:
                         {
-
+                            System.out.println("TRIANGLE");
                             automat.setState(new EtatTriangle());
-                            automat.action();
+                            Shape triangle = (Shape) automat.action();
+                            scene.addShape(triangle);
                             break;
                         }
 
                         case BOX:
                         {
-
+                            System.out.println("BOX");
                             automat.setState(new EtatBox());
-                            automat.action();
+                            Shape rectangle = (Shape)automat.action();
+                            scene.addShape(rectangle);
                             break;
                         }
 
                         case PLANE:
                         {
-
+                            System.out.println("PLANE");
                             automat.setState(new EtatPlane());
-                            automat.action();
+                            Shape plane = (Shape) automat.action();
+                            scene.addShape(plane);
+                            break;
+                        }
+
+                        case CAMERA:
+                        {
+                            System.out.println("CAMERA");
+                            automat.setState(new EtatCamera());
+                            Camera camera = (Camera) automat.action();
+                            scene.setCamera(camera);
                             break;
                         }
 
@@ -179,6 +228,7 @@ public class Automat
         catch (Exception e) {
             e.printStackTrace();
         }
+        return scene;
     }
 }
 

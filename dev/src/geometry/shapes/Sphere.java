@@ -179,4 +179,10 @@ public class Sphere extends ShapeUtil implements Shape
 	{
 		this.radius = radius;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("[Sphere Shape] Centre: %s | Radius: %3.3f | Material: %s", this.center, this.radius, this.material);
+	}
 }

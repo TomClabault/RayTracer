@@ -1,12 +1,18 @@
 package povParser.automat;
 
+import geometry.Shape;
+import geometry.shapes.Sphere;
+import materials.Material;
+import maths.Point;
+
 import java.util.ArrayList;
 
 public class EtatSphere extends EtatSpherePlane
 {
     @Override
-    protected void createInstance(ArrayList<String> list)
+    protected Shape createInstance(double[] center, Double radius, Material material)
     {
-        System.out.println(list);
+        Sphere sphere = new Sphere(new Point(center[0], center[1], center[2]), radius, material);
+        return sphere;
     }
 }

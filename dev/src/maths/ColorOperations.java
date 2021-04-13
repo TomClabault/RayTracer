@@ -185,6 +185,28 @@ public class ColorOperations
 	}
 	
 	/*
+	 * Permet d'obtenir la représentation RGB d'une couleur
+	 * 
+	 * @param color La couleur dont on souhaite la représentation RGB sous forme de string
+	 * 
+	 * @return Retourne une chaîne de caractère représentant la couleur passé en argument sous la forme de ses 3 composantes
+	 */
+	public static String colorToString(Color color)
+	{
+		String output = "";
+		
+		output += "(";
+		
+		output += ((int)(color.getRed()*255) + ", ");
+		output += ((int)(color.getGreen()*255) + ", ");
+		output += ((int)(color.getBlue()*255));
+		
+		output += ")";
+		
+		return String.format("%-15s", output);
+	}
+	
+	/*
 	 * Retourne une nouvelle instance de Color représentant la même couleur que celle passée en argument
 	 * 
 	 * @param La couleur à copier

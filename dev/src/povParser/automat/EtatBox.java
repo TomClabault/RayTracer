@@ -1,5 +1,11 @@
 package povParser.automat;
 
+import geometry.Shape;
+import geometry.shapes.Rectangle;
+import javafx.scene.paint.Color;
+import materials.Material;
+import maths.Point;
+
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 
@@ -10,21 +16,24 @@ enum Boxcontent
     OPENING_CHEVRON,
     ENDING_CHEVRON,
     OUTSIDE,
+    ATTRIBUTE,
 }
 
-
-public class EtatBox implements EtatToken
+public class EtatBox extends EtatUtil implements EtatToken
 {
     @Override
-    public void action(Automat context)
+    public Shape action(Automat context)
     {
         int nextToken = context.callNextToken();
-        ArrayList<String> list = new ArrayList<>();
 
         StreamTokenizer st = context.getStreamTokenizer();
         context.callNextToken();
         int bracketNb = 0;
         int coordNb = 0;
+        Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0);
+        Rectangle rectangle = null;
+        Point vector1 = null;
+        Point vector2 = null;
 
         Boxcontent state = Boxcontent.OPENING_BRACKET;
 
@@ -42,12 +51,17 @@ public class EtatBox implements EtatToken
                 }
                 case OPENING_CHEVRON:
                 {
+                    double[] coordArray = new double[3];
                     for(int i = 0; i < 3; i++)
                     {
                         context.callNextToken(); // la virgule
                         context.callNextToken();
-                        list.add(String.valueOf(st.nval));
+                        coordArray[i] = context.getNumberValue();
                     }
+                    if(vector1 == null)
+                        vector1 = new Point(coordArray[0], coordArray[1], coordArray[2]);
+                    else
+                        vector2 = new Point(coordArray[0], coordArray[1], coordArray[2]);
                     state = Boxcontent.ENDING_CHEVRON;
                     coordNb++;
 
@@ -58,7 +72,7 @@ public class EtatBox implements EtatToken
                     context.callNextToken(); //passe le chevron fermant
                     if(coordNb == 2)
                     {
-                        state = Boxcontent.ENDING_BRACKET;
+                        state = Boxcontent.ATTRIBUTE;
                     }
                     else
                     {
@@ -69,6 +83,10 @@ public class EtatBox implements EtatToken
                 case ENDING_BRACKET:
                 {
                     context.callNextToken();
+                    if(context.isCurrentTokenAWord())
+                    {
+                        state = Boxcontent.ATTRIBUTE;
+                    }
                     bracketNb--;
                     if(bracketNb == 0)
                     {
@@ -76,13 +94,16 @@ public class EtatBox implements EtatToken
                     }
                     break;
                 }
-                case OUTSIDE:
+
+                case ATTRIBUTE:
                 {
+                    material = super.parseAttributes(context);
                     state = Boxcontent.OUTSIDE;
                     break;
                 }
             }
         }
-        System.out.println(list);
+        rectangle = new Rectangle(vector1, vector2, material);
+        return rectangle;
     }
 }

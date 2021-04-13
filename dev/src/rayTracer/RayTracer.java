@@ -2,9 +2,10 @@ package rayTracer;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Random;
 
 import geometry.Shape;
-import geometry.shapes.PlaneMaths;
+import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
 import materials.Material;
 import javafx.scene.image.PixelReader;
@@ -100,7 +101,8 @@ public class RayTracer
 	private ThreadsTaskList threadTaskList;
 	private IntBuffer renderedPixels;
 	private PixelReader skyboxPixelReader = null;
-
+	private Random randomGenerator;
+	
 	public RayTracer(int renderWidth, int renderHeight)
 	{
 		this.renderWidth = renderWidth;
@@ -109,6 +111,7 @@ public class RayTracer
 		this.renderedPixels = IntBuffer.allocate(renderWidth*renderHeight);
 		
 		this.threadTaskList = new ThreadsTaskList();
+		this.randomGenerator= new Random();
 	}
 	
 	/*
@@ -222,10 +225,50 @@ public class RayTracer
 		//Si l'objet est réfléchissant
 		if(intObjMat.getReflectiveCoeff() > 0)
 		{
-			Vector reflectDirection = intInfos.getReflVec();
-			Color reflectionColor = computePixel(renderScene, new Ray(intInfos.getIntPShift(), Vector.normalizeV(reflectDirection)), depth - 1);
+			Vector perfectReflectDirection = intInfos.getReflVec();
+			perfectReflectDirection = Vector.normalizeV(perfectReflectDirection);
+			
+			int summedRed = 0;
+			int summedGreen = 0;
+			int summedBlue = 0;
+			
+			int blurSampleCount = (this.settings.isEnableBlurryReflections() && intInfos.getIntObjMat().getRoughness() > 0) ? this.settings.getBlurryReflectionsSampleCount() : 1;
+//			System.out.println(blurSampleCount);
+//			System.out.println("point: " + intInfos.getIntP());
+//			System.out.println("objet: " + intInfos.getIntObj());
+//			System.out.println("nromal:" + intInfos.getNormInt());
+//			System.out.println("perfect refelct " + intInfos.getReflVec());
+//			System.out.println();
+			for(int blurSample = 0; blurSample < blurSampleCount; blurSample++)
+			{
+				Vector reflectDirection = null;
+				
+				if(!this.settings.isEnableBlurryReflections() || intInfos.getIntObjMat().getRoughness() == 0)
+					reflectDirection = perfectReflectDirection;
+				else
+				{
+					double randomX = randomGenerator.nextDouble() * 2 - 1;
+					double randomY = randomGenerator.nextDouble() * 2 - 1;
+					double randomZ = randomGenerator.nextDouble() * 2 - 1;
+					
+					Vector randomBounce = Vector.normalizeV(Vector.add(Vector.normalizeV(new Vector(randomX, randomY, randomZ)), intInfos.getNormInt()));
+					//System.out.println("bounce: " + randomBounce);
+					
+					//Vector randomBounceSample = Vector.normalizeV(Vector.add(new Vector(randomX, randomY, randomZ), Vector.scalarMul(intInfos.getNormInt(), 2)));
+					Vector randomBounceDirection = Vector.normalizeV(Vector.interpolate(perfectReflectDirection, randomBounce, intInfos.getIntObjMat().getRoughness()));
+					
+					reflectDirection = randomBounceDirection;
+				}
+					
+				Color reflectionColor = computePixel(renderScene, new Ray(intInfos.getIntPShift(), reflectDirection), depth - 1);
+				
+				summedRed += (int)(reflectionColor.getRed()*255);
+				summedGreen += (int)(reflectionColor.getGreen()*255);
+				summedBlue += (int)(reflectionColor.getBlue()*255);
+			}
 
-			return ColorOperations.mulColor(reflectionColor, intObjMat.getReflectiveCoeff());
+			Color summedColor = Color.rgb(summedRed / blurSampleCount, summedGreen / blurSampleCount, summedBlue / blurSampleCount);
+			return ColorOperations.mulColor(summedColor, intObjMat.getReflectiveCoeff());
 		}
 		else//Si l'objet n'est pas réfléchissant, on ne renvoie pas de couleur de réflexion --> noir
 			return Color.rgb(0, 0, 0);
@@ -273,7 +316,9 @@ public class RayTracer
 				}
 			}
 			
-			Color reflectedColor = computePixel(renderScene, reflectedRay, depth -1);
+			Color reflectedColor = Color.rgb(0, 0, 0);
+			if(this.settings.isEnableFresnel())
+				reflectedColor = computePixel(renderScene, reflectedRay, depth -1);
 			
 			Color finalColor = ColorOperations.mulColor(refractedColor, ft);
 			return ColorOperations.addColors(finalColor, ColorOperations.mulColor(reflectedColor, fr));
@@ -294,10 +339,12 @@ public class RayTracer
 	 */
 	protected Color computeShadow(RayTracingScene renderScene, RayTracerInterInfos intInfos, double ambientLighting, int depth)
 	{
-		Color finalColor = null;
+		Color finalColor = Color.rgb(0, 0, 0);
 
 		finalColor = ColorOperations.mulColor(intInfos.getObjCol(), ambientLighting);
-		finalColor = ColorOperations.addColors(finalColor, computeReflectionsColor(renderScene, intInfos, depth));
+		if(this.settings.isEnableReflections())
+			finalColor = ColorOperations.addColors(finalColor, computeReflectionsColor(renderScene, intInfos, depth));
+		if(this.settings.isEnableRefractions())
 		finalColor = ColorOperations.addColors(finalColor, computeRefractionsColor(renderScene, intInfos, depth));
 		
 		return finalColor;
@@ -374,13 +421,44 @@ public class RayTracer
 		{
 			for(int x = startX; x < endX; x++)
 			{
-				Point pixelWorldCoords = this.convPxCoToWorldCoords(FOV, x, y, ctwMatrix);
+				double[][] subpixelTab;//Coordonnées de tous les sous pixels du pixel (x, y) actuel. subpixelTab[i][0] = CoordX, [i][1] = CoordY
+				if(this.settings.isEnableAntialiasing() && this.settings.getAntialiasingSampling() > 1)
+				{
+					subpixelTab = new double[this.settings.getAntialiasingSampling()][2];
+					generateSubpixelsCoords(subpixelTab, this.settings.getAntialiasingSampling());
+				}
+				else
+				{
+					subpixelTab = new double[1][2];//Un seul pixel sera calculé pour chaque pixel
+					subpixelTab[0][0] = 0;
+					subpixelTab[0][1] = 0;
+				}
+					
+				int summedRed = 0;
+				int summedGreen = 0;
+				int summedBlue = 0;
+				
+				int antialiasingSampleCount = this.settings.isEnableAntialiasing() ? this.settings.getAntialiasingSampling() : 1;
+				for(int subpixel = 0; subpixel < antialiasingSampleCount; subpixel++)
+				{
+					Point pixelWorldCoords = this.convPxCoToWorldCoords(FOV, (double)x + subpixelTab[subpixel][0], (double)y + subpixelTab[subpixel][1], ctwMatrix);
+	
+					Vector rayDirection = new Vector(renderScene.getCamera().getPosition(), pixelWorldCoords);
+					Ray cameraRay = new Ray(MatrixD.mulPointP(new Vector(0, 0, 0), ctwMatrix), rayDirection);
+					cameraRay.normalize();
+	
+					Color subpixelColor = this.computePixel(renderScene, cameraRay, settings.getRecursionDepth());
 
-				Vector rayDirection = new Vector(renderScene.getCamera().getPosition(), pixelWorldCoords);
-				Ray cameraRay = new Ray(MatrixD.mulPointP(new Vector(0, 0, 0), ctwMatrix), rayDirection);
-				cameraRay.normalize();
-
-				Color pixelColor = this.computePixel(renderScene, cameraRay, settings.getRecursionDepth());
+					summedRed += (int)(subpixelColor.getRed()*255);
+					summedGreen += (int)(subpixelColor.getGreen()*255);
+					summedBlue += (int)(subpixelColor.getBlue()*255);
+				}
+				
+				summedRed /= antialiasingSampleCount;
+				summedGreen /= antialiasingSampleCount;
+				summedBlue /= antialiasingSampleCount;
+				
+				Color pixelColor = Color.rgb(summedRed, summedGreen, summedBlue);
 				pixelColor = ColorOperations.linearTosRGBGamma2_2(pixelColor);
 				
 				this.renderedPixels.put(y*this.renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
@@ -414,7 +492,9 @@ public class RayTracer
 			
 			double lightIntensity = renderScene.getLight().getIntensity();
 			double ambientLighting = computeAmbient(renderScene.getAmbientLightIntensity(), interInfos.getIntObjMat().getAmbientCoeff());
-
+			if(!this.settings.isEnableAmbient())//Si le calcul de l'ambient n'est pas activé
+				ambientLighting = 0;//On définit l'ambient à 0
+			
 			interInfos.setToLightVec(Vector.normalizeV(new Vector(interInfos.getIntP(), renderScene.getLight().getCenter())));
 
 			Color currentPixelColor = Color.rgb(0, 0, 0);
@@ -429,7 +509,7 @@ public class RayTracer
 			else
 				objectColor = interInfos.getIntObjMat().getColor();
 			
-			if(interInfos.getIntObj() instanceof PlaneMaths && interInfos.getIntObj().getMaterial().hasProceduralTexture())//Si le plan est un checkerboard
+			if(interInfos.getIntObj() instanceof Plane && interInfos.getIntObj().getMaterial().hasProceduralTexture())//Si le plan est un checkerboard
 				currentPixelColor = ColorOperations.addColors(currentPixelColor, ColorOperations.mulColor(objectColor, 1));//Cas spécial pour notre application pour que le plan soit plus illuminé que le reste. Non réaliste mais meilleur aspect visuel. On applique une ambient lighting fixe de 1
 			else
 				currentPixelColor = ColorOperations.addColors(currentPixelColor, ColorOperations.mulColor(objectColor, ambientLighting));
@@ -459,13 +539,18 @@ public class RayTracer
 
 			if(shadowInterObject == null || interToShadowInterDist > interToLightDist || shadowInterObject.getMaterial().getIsTransparent())//Aucune intersection trouvée pour aller jusqu'à la lumière, on peut calculer la couleur directe de l'objet
 			{
-				interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeDiffuseColor(interInfos, lightIntensity)));
-				interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeSpecularColor(interInfos, lightIntensity)));
-				interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeReflectionsColor(renderScene, interInfos, depth)));
-				interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeRefractionsColor(renderScene, interInfos, depth)));
+				if(this.settings.isEnableDiffuse())
+					interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeDiffuseColor(interInfos, lightIntensity)));
+				if(this.settings.isEnableSpecular())
+					interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeSpecularColor(interInfos, lightIntensity)));
+				if(this.settings.isEnableReflections())
+					interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeReflectionsColor(renderScene, interInfos, depth)));
+				if(this.settings.isEnableRefractions())
+					interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeRefractionsColor(renderScene, interInfos, depth)));
 			}
 			else//Une intersection a été trouvée et l'objet intersecté est entre la lumière et le départ du shadow ray. De plus, l'objet bloquant la vue à la lumière n'est pas transparent
 				interInfos.setCurPixCol(computeShadow(renderScene, interInfos, ambientLighting, depth));
+
 
 			return interInfos.getCurPixCol();
 		}
@@ -527,20 +612,20 @@ public class RayTracer
 	 *
 	 * @return Un point de cooordonnées (x, y, z) tel que x, y et z représentent les coordonnées du pixel dans la scène
 	 */
-	protected Point convPxCoToWorldCoords(double FOV, int x, int y, MatrixD ctwMatrix)
+	protected Point convPxCoToWorldCoords(double FOV, double x, double y, MatrixD ctwMatrix)
 	{
-		double xWorld = (double)x;
-		double yWorld = (double)y;
+		double xWorld = x;
+		double yWorld = y;
 
 		double aspectRatio = (double)this.renderWidth / (double)this.renderHeight;
 		double demiHeightPlane = Math.tan(Math.toRadians(FOV/2));
 
-		xWorld = (xWorld + 0.5) / this.renderWidth;//Normalisation des pixels. Maintenant dans [0, 1]
+		xWorld = xWorld / this.renderWidth;//Normalisation des pixels. Maintenant dans [0, 1]
 		xWorld = xWorld * 2 - 1;//Décalage des pixels dans [-1, 1]
 		xWorld *= aspectRatio;//Prise en compte de l'aspect ratio. Maintenant dans [-aspectRatio; aspectRatio]
 		xWorld *= demiHeightPlane;
 
-		yWorld = (yWorld + 0.5) / this.renderHeight;//Normalisation des pixels. Maintenant dans [0, 1]
+		yWorld = yWorld / this.renderHeight;//Normalisation des pixels. Maintenant dans [0, 1]
 		yWorld = 1 - yWorld * 2;//Décalage des pixels dans [-1, 1]
 		yWorld *= demiHeightPlane;
 
@@ -640,6 +725,27 @@ public class RayTracer
 		double fpr = Math.pow(sup/inf, 2);
 		
 		return 0.5*(fpl+fpr);
+	}
+	
+	/*
+	 * Génère des coordonnées aléatoires entre 0 et 1 et rempli 'subpixelTab' avec ces coordonnées
+	 * 
+	 * @param subpixelTab 	Le tableau qui va contenir toutes les coordonnées générées. Ce tableau est modifié par la fonction
+	 * @param subpixelCount Le nombre de coordonnées de sous pixel à calculer
+	 */
+	protected void generateSubpixelsCoords(double[][] subpixelTab, int subpixelCount)
+	{
+		int sqrtSubpixelCount = (int)Math.sqrt(subpixelCount);//Le résultat est forcément entier. subpixelCount est un carré d'entier 
+		double subPixelSize = 1.0 / (double)sqrtSubpixelCount;
+
+		for(int subPixelY = 0; subPixelY < sqrtSubpixelCount; subPixelY++)
+		{
+			for(int subPixelX = 0; subPixelX < sqrtSubpixelCount; subPixelX++)
+			{
+				subpixelTab[sqrtSubpixelCount * subPixelY + subPixelX][0] = (double)subPixelX*subPixelSize + subPixelSize/2;
+				subpixelTab[sqrtSubpixelCount * subPixelY + subPixelX][1] = (double)subPixelY*subPixelSize + subPixelSize/2;
+			}
+		}
 	}
 	
 	/*

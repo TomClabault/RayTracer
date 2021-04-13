@@ -2,7 +2,7 @@ package scene.lights;
 
 import maths.Point;
 
-public class LightBulb implements Light 
+public class LightBulb implements PositionnalLight 
 {
 	Point center;
 	
@@ -28,5 +28,11 @@ public class LightBulb implements Light
 	public double getIntensity()
 	{
 		return this.intensity;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("Centre: %s | Intensity: %.3f", center, intensity);
 	}
 }

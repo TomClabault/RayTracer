@@ -19,7 +19,7 @@ public class ThreadsTaskList
 		this.totalTaskGiven = 0;
 	}
 	
-	public TileTask getTask(int index)
+	synchronized public TileTask getTask(int index)
 	{
 		return this.taskList.get(index);
 	}

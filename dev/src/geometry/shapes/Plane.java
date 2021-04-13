@@ -7,7 +7,7 @@ import maths.Point;
 import maths.Ray;
 import maths.Vector;
 
-public class PlaneMaths extends ShapeUtil implements Shape
+public class Plane extends ShapeUtil implements Shape
 {
 	//Equation de plan: (p - point).normal = 0
 	private Vector normal;//partie (A, B, C) de l'équation
@@ -20,7 +20,7 @@ public class PlaneMaths extends ShapeUtil implements Shape
 	 * @param distance 	Distance du plan par rapport à l'origine dans la direction du vecteur 'normal'
 	 * @param material Matériau qui sera utilisé pour le rendu du plan
 	 */
-	public PlaneMaths(Vector normal, double distance, Material material)
+	public Plane(Vector normal, double distance, Material material)
 	{
 		this(normal, Point.translateMul(new Point(0, 0, 0), Vector.normalizeV(normal), distance), material);
 	}
@@ -32,7 +32,7 @@ public class PlaneMaths extends ShapeUtil implements Shape
 	 * @param point Vector3D par lequel passe le plan
 	 * @param material Matériau qui sera utilisé pour le rendu du plan
 	 */
-	public PlaneMaths(Vector normal, Point point, Material material)
+	public Plane(Vector normal, Point point, Material material)
 	{
 		this.normal = normal;
 		this.point = point;
@@ -89,5 +89,11 @@ public class PlaneMaths extends ShapeUtil implements Shape
 	    }
 	    else
 			return null;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("[Plane Shape] Normal: %s | Point: %s | Material: %s", this.normal, this.point, this.material);
 	}
 }

@@ -6,7 +6,7 @@ import geometry.Shape;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
-import scene.lights.Light;
+import scene.lights.PositionnalLight;
 import util.ImageUtil;
 
 /*
@@ -15,7 +15,7 @@ import util.ImageUtil;
 public class RayTracingScene
 {
 	private Camera camera;
-	private Light light;
+	private PositionnalLight light;
 
 	private ArrayList<Shape> shapes;
 
@@ -28,6 +28,15 @@ public class RayTracingScene
 	private double ambientLightIntensity;
 	
 	/*
+	 * Crée une scène vide
+	 */
+	public RayTracingScene()
+	{
+		this(null, null, new ArrayList<Shape>(), Color.rgb(0, 0, 0), 0.1);
+	}
+
+
+	/*
 	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
 	 * 
 	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
@@ -36,7 +45,7 @@ public class RayTracingScene
 	 * @param backgroundColor La couleur de fond qui sera utilisée pour la scène. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scène
 	 * @param ambientLightIntensity L'intensité de la luminosité ambiante de la scène. Défini l'intensité lumineuse minimale par laquelle seront éclairés tous les points de la scène
 	 */
-	public RayTracingScene(Camera camera, Light light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity) 
+	public RayTracingScene(Camera camera, PositionnalLight light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity) 
 	{
 		this(camera, light, shapes, backgroundColor, ambientLightIntensity, (Image)null);
 	}
@@ -51,7 +60,7 @@ public class RayTracingScene
 	 * @param ambientLightIntensity L'intensité de la luminosité ambiante de la scène. Défini l'intensité lumineuse minimale par laquelle seront éclairés tous les points de la scène
 	 * @param skyboxTexturePath Chemin vers la texture de la skybox a utiliser
 	 */
-	public RayTracingScene(Camera camera, Light light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, String skyboxTexturePath) 
+	public RayTracingScene(Camera camera, PositionnalLight light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, String skyboxTexturePath) 
 	{
 		this(camera, light, shapes, backgroundColor, ambientLightIntensity, new Image(skyboxTexturePath));
 	}
@@ -68,7 +77,7 @@ public class RayTracingScene
 	 * 
 	 * @throws IllegalArgumentException quand l'argument skyboxTexture passé ne constitue pas une image correcte. i.e. l'image n'a peut être pas été ouverte correctement, introuvable, format non supporté, ...
 	 */
-	public RayTracingScene(Camera camera, Light light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, Image skyboxTexture) throws IllegalArgumentException
+	public RayTracingScene(Camera camera, PositionnalLight light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, Image skyboxTexture) throws IllegalArgumentException
 	{
 		if(skyboxTexture != null)
 		{
@@ -98,7 +107,17 @@ public class RayTracingScene
 		this.backgroundColor = backgroundColor;
 		this.ambientLightIntensity = ambientLightIntensity;
 	}
-
+	
+	/*
+	 * Permet d'ajouter un objet à la scène
+	 * 
+	 * @param shape La forme à ajouter
+	 */
+	public void addShape(Shape shape)
+	{
+		this.shapes.add(shape);
+	}
+	
 	/*
 	 * Permet d'obtenir l'intensité de la lumière ambiante de la scène
 	 * 
@@ -134,7 +153,7 @@ public class RayTracingScene
 	 * 
 	 * @return La source de lumière de la scène
 	 */
-	public Light getLight() 
+	public PositionnalLight getLight() 
 	{
 		return this.light;
 	}
@@ -187,5 +206,45 @@ public class RayTracingScene
 	public boolean hasSkybox()
 	{
 		return !(this.skyboxTexture == null);
+	}
+	
+	public void setAmbientLightIntensity(double ambientLightIntensity) 
+	{
+		this.ambientLightIntensity = ambientLightIntensity;
+	}
+	
+	public void setBackgroundColor(Color backgroundColor) 
+	{
+		this.backgroundColor = backgroundColor;
+	}
+	
+	public void setCamera(Camera camera) 
+	{
+		this.camera = camera;
+	}
+
+	public void setLight(PositionnalLight light) 
+	{
+		this.light = light;
+	}
+
+	public void setShapes(ArrayList<Shape> shapes) 
+	{
+		this.shapes = shapes;
+	}
+	
+	@Override
+	public String toString()
+	{
+		String output = "";
+		
+		output += ("Camera: " + camera.toString() + System.lineSeparator());
+		output += ("Light: " + light.toString() + System.lineSeparator());
+		output += ("Ambient light: " + ambientLightIntensity + System.lineSeparator());
+		output += ("Formes: " + System.lineSeparator());
+		for(Shape object : this.shapes)
+			output += (object.toString() + System.lineSeparator());
+		
+		return output;
 	}
 }

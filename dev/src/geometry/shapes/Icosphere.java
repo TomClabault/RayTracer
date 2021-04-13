@@ -15,35 +15,40 @@ import java.util.ArrayList;
 */
 public class Icosphere extends ShapeTriangleUtil implements Shape
 {
-    private Point A,B,C,D,E,F,G,H,I,J,K,L;
-    private double t = ((1 + Math.sqrt(5))/2);
+	private Point centre;
+    private double size;
     private int subdivision;
 
     public Icosphere(Point depart, double size,int subdivision, Material material)
     {
+    	double t = ((1 + Math.sqrt(5))/2);
+    	
         if (subdivision > 0)
             this.subdivision = subdivision;
         else
             throw new IllegalArgumentException("Subdivision has to be bigger than 0");
 
-
-
+        this.centre = depart;
+        this.size = size;
         super.material = material;
 
-        this.A = Vector.normalizeP(new Point(-1 , t*1 ,0 ));
-        this.B = Vector.normalizeP(new Point(1 ,t*1 ,0 ));
-        this.C = Vector.normalizeP(new Point(-1 ,-t*1 ,0 ));
-        this.D = Vector.normalizeP(new Point(1 ,-t*1 ,0 ));
 
-        this.E = Vector.normalizeP(new Point(0 ,-1 ,t*1 ));
-        this.F = Vector.normalizeP(new Point(0 ,1 ,t*1 ));
-        this.G = Vector.normalizeP(new Point(0 ,-1 ,-t*1 ));
-        this.H = Vector.normalizeP(new Point(0 ,1 ,-t*1 ));
+        Point A, B, C, D, E, F, G, H, I, J, K, L;
+        
+        A = Vector.normalizeP(new Point(-1 , t*1 ,0 ));
+        B = Vector.normalizeP(new Point(1 ,t*1 ,0 ));
+        C = Vector.normalizeP(new Point(-1 ,-t*1 ,0 ));
+        D = Vector.normalizeP(new Point(1 ,-t*1 ,0 ));
 
-        this.I = Vector.normalizeP(new Point(t*1 ,0 ,-1 ));
-        this.J = Vector.normalizeP(new Point(t*1 ,0 ,1 ));
-        this.K = Vector.normalizeP(new Point(-t*1 ,0 ,-1 ));
-        this.L = Vector.normalizeP(new Point(-t*1 ,0 ,1 ));
+        E = Vector.normalizeP(new Point(0 ,-1 ,t*1 ));
+        F = Vector.normalizeP(new Point(0 ,1 ,t*1 ));
+        G = Vector.normalizeP(new Point(0 ,-1 ,-t*1 ));
+        H = Vector.normalizeP(new Point(0 ,1 ,-t*1 ));
+
+        I = Vector.normalizeP(new Point(t*1 ,0 ,-1 ));
+        J = Vector.normalizeP(new Point(t*1 ,0 ,1 ));
+        K = Vector.normalizeP(new Point(-t*1 ,0 ,-1 ));
+        L = Vector.normalizeP(new Point(-t*1 ,0 ,1 ));
 
 
 
@@ -103,20 +108,20 @@ public class Icosphere extends ShapeTriangleUtil implements Shape
             for (int i = 0; i < listsize; i++)
             {
             // on recupere les points du triangle a chaque bouclage
-            Point A = listeTriangle.get(i).getA();
-            Point B = listeTriangle.get(i).getB();
-            Point C = listeTriangle.get(i).getC();
+            Point Atr = listeTriangle.get(i).getA();
+            Point Btr = listeTriangle.get(i).getB();
+            Point Ctr = listeTriangle.get(i).getC();
 
             // on trouve le milieu de chaque segment du triangle
-            Point ABmid = Vector.normalizeP(Point.midPoint(A, B));
-            Point BCmid = Vector.normalizeP(Point.midPoint(B, C));
-            Point CAmid = Vector.normalizeP(Point.midPoint(C, A));
+            Point ABmid = Vector.normalizeP(Point.midPoint(Atr, Btr));
+            Point BCmid = Vector.normalizeP(Point.midPoint(Btr, Ctr));
+            Point CAmid = Vector.normalizeP(Point.midPoint(Ctr, Atr));
            
             // on fait des triangles dans un triangle
             Triangle trimid = new Triangle(ABmid, BCmid, CAmid, material);
-            Triangle trileft = new Triangle(A, ABmid, CAmid, material);
-            Triangle triright = new Triangle(CAmid, BCmid, C, material);
-            Triangle tribot = new Triangle(ABmid, B, BCmid, material);
+            Triangle trileft = new Triangle(Atr, ABmid, CAmid, material);
+            Triangle triright = new Triangle(CAmid, BCmid, Ctr, material);
+            Triangle tribot = new Triangle(ABmid, Btr, BCmid, material);
 
             // on ajout ces triangles dans la liste des triangles
             super.listeTriangle.add(trimid);
@@ -140,22 +145,28 @@ public class Icosphere extends ShapeTriangleUtil implements Shape
         //On va multiplier les triangles avec la taille souhaitee puis additioner avec le point de depart
         for(Triangle triangle:listeTriangle) 
         {
-        	Point A = triangle.getA();
-        	Point B = triangle.getB();
-        	Point C = triangle.getC();
+        	Point Atr = triangle.getA();
+        	Point Btr = triangle.getB();
+        	Point Ctr = triangle.getC();
         	
-        	A = Point.scalarMul(A, size);
-        	B = Point.scalarMul(B, size);
-        	C = Point.scalarMul(C, size);
+        	Atr = Point.scalarMul(Atr, size);
+        	Btr = Point.scalarMul(Btr, size);
+        	Ctr = Point.scalarMul(Ctr, size);
         	
-        	A = Point.add(A, depart);
-        	B = Point.add(B, depart);
-        	C = Point.add(C, depart);
+        	Atr = Point.add(Atr, depart);
+        	Btr = Point.add(Btr, depart);
+        	Ctr = Point.add(Ctr, depart);
         	
-        	triangle.setA(A);
-        	triangle.setB(B);
-        	triangle.setC(C);
+        	triangle.setA(Atr);
+        	triangle.setB(Btr);
+        	triangle.setC(Ctr);
         	
         }
     }
+    
+    @Override
+	public String toString()
+	{
+		return String.format("[Icosphere Shape] Centre: %s | Size: %.3f | Subdivisions: %d | Material: %s", this.centre, this.size, this.subdivision, this.material);
+	}
 }
