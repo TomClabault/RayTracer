@@ -31,10 +31,9 @@ import scene.lights.*;
 */
 public class ImageWriter {
 
-    private RayTracingScene myGlobalScene;
-
+    private RayTracingScene rayTracingScene = addObjectsToScene();
     private WritableImage writableImage;
-    private volatile PixelWriter pw;
+    private PixelWriter pixelWriter;
     private Pane pane;
     private Scene mainAppScene;
     private CameraTimer cameraTimer;
@@ -61,7 +60,7 @@ public class ImageWriter {
         //this.myGlobalScene = generateUsualScene();
         this.writableImage = new WritableImage(MainApp.WIDTH,MainApp.HEIGHT);
 
-        this.pw = writableImage.getPixelWriter();
+        this.pixelWriter = writableImage.getPixelWriter();
 
         ImageView imageView = new ImageView();
         imageView.setImage(writableImage);
@@ -76,16 +75,16 @@ public class ImageWriter {
         this.pane = pane;
 
         //this.task = new DoImageTask(mainAppScene, pw, PixelFormat.getIntArgbPreInstance(), MyGlobalScene);
-        this.windowTimer = new WindowTimer(mainAppScene, MyGlobalScene, pw, new RayTracer(MainApp.WIDTH, MainApp.HEIGHT, 4, 1));
-        this.cameraTimer = new CameraTimer(this.mainAppScene, MyGlobalScene);
+        this.windowTimer = new WindowTimer(mainAppScene, rayTracingScene, pixelWriter);
+        this.cameraTimer = new CameraTimer(this.mainAppScene, rayTracingScene);
     }
 
     public void setRayTracingScene(RayTracingScene rayTracingScene) {
-        this.myGlobalScene = rayTracingScene;
+        this.rayTracingScene = rayTracingScene;
     }
 
     public RayTracingScene getRayTracingScene() {
-        return this.myGlobalScene;
+        return this.rayTracingScene;
     }
 
     public WindowTimer getWindowTimer() {
@@ -100,20 +99,14 @@ public class ImageWriter {
     	return pane;
     }
 
-    public void ImageWriterMain(int height, int width) {
+    public void execute() {
     	windowTimer.start();
         cameraTimer.start();
-
-        //ExecutorService es = Executors.newFixedThreadPool(1);
-        //es.execute(task);
-
-        //this.updateCamera.run();
-        //this.updateWindow.run();
     }
 
-    public static void doImage(IntBuffer pixelBuffer, PixelWriter pw, WritablePixelFormat<IntBuffer> pixelFormat)
+    public static void doImage(IntBuffer pixelBuffer, PixelWriter pixelWriter, WritablePixelFormat<IntBuffer> pixelFormat)
     {
-    	pw.setPixels(0, 0, MainApp.WIDTH, MainApp.HEIGHT, pixelFormat, pixelBuffer, MainApp.WIDTH);
+    	pixelWriter.setPixels(0, 0, MainApp.WIDTH, MainApp.HEIGHT, pixelFormat, pixelBuffer, MainApp.WIDTH);
     }
 
     public RayTracingScene generateUsualScene()

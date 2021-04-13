@@ -42,7 +42,7 @@ public class MainApp extends Application {
         scene.getStylesheets().add(MainApp.class.getResource("style/fpsCounter.css").toExternalForm());
         try {
         	ImageWriter imageWriter = new ImageWriter(scene);
-            imageWriter.ImageWriterMain(HEIGHT, WIDTH);
+            imageWriter.execute();
 
             //CounterFPS counterFPS = new CounterFPS(imageWriter.getUpdateWindow().getWindowTimer().getfpsLabel());
             CounterFPS counterFPS = new CounterFPS(imageWriter.getWindowTimer().getfpsLabel());
