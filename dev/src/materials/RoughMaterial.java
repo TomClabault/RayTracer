@@ -19,14 +19,14 @@ public class RoughMaterial extends Material
 		
 	}
 	
-	private static int computeSpecularSize(double roughness)
+	public static int computeSpecularSize(double roughness)
 	{
 		//Fonction obtenue par curve_fit avec scipy sur jupyter notebook et ajustée pour ramener toutes les valeurs < 1 à 1
 		return (int)Math.round(0.481415*Math.exp(roughness*6.2106) - 47.7517) < 1 ? 1 : (int)Math.round(0.481415*Math.exp(roughness*6.2106) - 47.7517);
 	}
 	
-	private static double computeSpecularIntensity(double roughness)
+	public static double computeSpecularIntensity(double roughness)
 	{
-		return Math.round(892*roughness - 637)/255.0;
+		return Math.round(892*roughness - 637)/255.0 < 0 ? 0 : Math.round(892*roughness - 637)/255.0;
 	}
 }

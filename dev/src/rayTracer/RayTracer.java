@@ -589,8 +589,11 @@ public class RayTracer
 		TileTask currentTileTask = null;
 
 		taskNumber = taskList.getTotalTaskGiven();
-		if(taskNumber >= taskList.getTotalTaskCount())
-			return false;
+		synchronized (taskNumber)
+		{
+			if(taskNumber >= taskList.getTotalTaskCount())
+				return false;
+		}
 
 		currentTileTask = taskList.getTask(taskList.getTotalTaskGiven());
 		taskList.incrementTaskGiven();
