@@ -1,5 +1,8 @@
 sphere { <-1.25, 0.5, -6>, 1
-  pigment { color rgb <0, 0, 0>}
+  pigment
+  {
+    checker pigment {color rgb 0.5}, pigment {color rgb 0.5}
+  }
   finish {
     ambient 1 
 	diffuse 1
@@ -106,4 +109,3 @@ box
     }
 }
 */
-

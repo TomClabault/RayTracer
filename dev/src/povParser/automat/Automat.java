@@ -12,7 +12,6 @@ public class Automat
 {
     /*TODO
     -parse cheker dans pigment
-    _si Clear est précisé dans pigment (on met true dans isTransparent)
     -ajout de la javadoc
      */
 
