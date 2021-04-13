@@ -121,6 +121,7 @@ public abstract class EtatUtil
 
         while(state != Attribute.OUTSIDE)
         {
+            System.out.println("while state : "+ state);
             switch (state)
             {
                 case AMBIENT:
@@ -276,10 +277,12 @@ public abstract class EtatUtil
                                      }
                                      if(checkerPigment1)
                                      {
+                                         System.out.println("checker pigment 1!!!!");
                                          checkerColor1 = colorArray;
                                          context.callNextToken(); // skip '>'
                                          context.callNextToken(); //skip '}'
                                          context.callNextToken(); //skip ','
+                                         state = Attribute.CHECKER_PIGMENT;
                                      }
                                      else
                                      {
@@ -298,13 +301,18 @@ public abstract class EtatUtil
                                      int colorAttribute = (int)context.getNumberValue() * 255;
                                      if(checkerPigment1)
                                      {
+                                         System.out.println("checker pigment 1!!!!");
+                                         System.out.println(context.getStreamTokenizer());
                                          checkerColor1 = new int[]{colorAttribute, colorAttribute, colorAttribute};
+                                         context.callNextToken(); //skip value
                                          context.callNextToken(); //skip '}'
                                          context.callNextToken(); //skip ','
+                                         state = Attribute.CHECKER_PIGMENT;
                                      }
                                      else
                                      {
                                          checkerColor2 = new int[]{colorAttribute, colorAttribute, colorAttribute};
+                                         context.callNextToken(); //skip value
                                          context.callNextToken();//skip '}'
                                          state = parsePropertryAndGetState(context);
                                          if(state == null)
@@ -316,9 +324,10 @@ public abstract class EtatUtil
                              }
                         }
                     }
+                    System.out.println("state : " + state);
+                    System.out.println(context.getStreamTokenizer());
                     checkerPigment1 = false;
                     checkerPigment2 = true;
-                    state = Attribute.CHECKER_PIGMENT;
                 }
 
                 case PHONG:
