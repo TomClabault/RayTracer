@@ -2,20 +2,20 @@ package povParser.automat;
 
 import javafx.scene.paint.Color;
 import materials.Material;
-
-import javax.imageio.spi.ImageOutputStreamSpi;
-import java.io.StreamTokenizer;
-import java.util.ArrayList;
+import materials.textures.ProceduralTextureCheckerboard;
 
 enum Attribute
 {
     PIGMENT,
     INTERIOR,
     IOR,
+    ROUGHNESS,
     FINISH,
     SPECULAR, // only a coeff (not a vector)
     AMBIENT, // only a coeff (not a vector)
     DIFFUSE,
+    CHECKER_PIGMENT, // 2 pigment block in checker
+    CHECKER,
     REFLECTION, // only a coeff
     PHONG_SIZE, // = SHININESS in our raytracer
     PHONG, // is a coeff | diffuse -> diffuse * phong / specular -> specular * phong / ambient -> ambient * phong
@@ -23,6 +23,9 @@ enum Attribute
     OUTSIDE,
 }
 
+/**
+ * Ctte classe s'occupe de parser les attributs indépendamment de la figure qu'on est en train de parser
+ */
 public abstract class EtatUtil
 {
 
@@ -72,6 +75,14 @@ public abstract class EtatUtil
             {
                 return Attribute.PHONG;
             }
+            else if(context.currentWord("roughness"))
+            {
+                return Attribute.ROUGHNESS;
+            }
+            else if(context.currentWord("checker"))
+            {
+                return Attribute.CHECKER;
+            }
         }
         return null;
     }
@@ -96,22 +107,42 @@ public abstract class EtatUtil
 
     public Material parseAttributes(Automat context) throws RuntimeException
     {
-        Material material = new Material(null, 0, 0, 0, 0, 0, false, 0, null);
+        Material material = new Material(null, 0, 0, 0, 0, 0, false, 0, 0);
         Attribute state = parsePropertryAndGetState(context);
         int token = 0;
         boolean color = false;
         Double phong_value = null;
+        ProceduralTextureCheckerboard checkerboard = null;
+        int[] checkerColor1 = new int[3];
+        int[] checkerColor2 = new int[3];
+        boolean hasChecker = false;
+        boolean checkerPigment1 = false;
+        boolean checkerPigment2 = false;
 
         while(state != Attribute.OUTSIDE)
         {
+            System.out.println("while state : "+ state);
             switch (state)
             {
                 case AMBIENT:
                 {
                     context.callNextToken(); // skip ambient
                     material.setAmbientCoeff(context.getNumberValue());
-                    token = context.callNextToken(); // skip ambient coeff
+                    context.callNextToken(); // skip ambient coeff
                     state  = parsePropertryAndGetState(context);
+                    if(state == null)
+                    {
+                        state = this.checkEndingBracket(context);
+                    }
+                    break;
+                }
+
+                case ROUGHNESS:
+                {
+                    context.callNextToken(); //skip roughness
+                    material.setRoughness(context.getNumberValue());
+                    context.callNextToken(); //skip roughness coeff
+                    state = this.parsePropertryAndGetState(context);
                     if(state == null)
                     {
                         state = this.checkEndingBracket(context);
@@ -159,6 +190,7 @@ public abstract class EtatUtil
                 }
                 case PIGMENT:
                 {
+                    System.out.println("pigment");
                     context.callNextToken(); //skip pigment
                     context.callNextToken(); //skip '{'
                     this.nbBracket++;
@@ -181,7 +213,6 @@ public abstract class EtatUtil
                             }
 
                             context.callNextToken(); // skip color value
-                            //nbBracket--;
                             state = parsePropertryAndGetState(context);
                             if(state == null)
                             {
@@ -189,9 +220,116 @@ public abstract class EtatUtil
                             }
 
                         }
+                        else if (context.currentWord("Clear"))
+                        {
+                            material.setTransparent(true);
+                            material.setColor(Color.BLACK);
+                            context.callNextToken(); //skip Clear
+                            state = this.parsePropertryAndGetState(context);
+                            if (state == null)
+                            {
+                                state = this.checkEndingBracket(context);
+                            }
+                        }
+                    }
+                    else if(context.currentWord("checker"))
+                    {
+                        state = Attribute.CHECKER;
+                        System.out.println("checker");
                     }
                     break;
                 }
+
+                case CHECKER:
+                {
+                    System.out.println("CHECKER");
+                    context.callNextToken(); //skip "checker"
+                    hasChecker = true;
+                    checkerPigment1 = true;
+                    state = Attribute.CHECKER_PIGMENT;
+                    break;
+                }
+
+                case CHECKER_PIGMENT:
+                {
+                    System.out.println("checker pigment");
+                    System.out.println(context.getStreamTokenizer());
+                    context.callNextToken(); //skip pigment
+                    context.callNextToken(); // skip '{'
+                    if(context.isCurrentTokenAWord())
+                    {
+                        if(context.currentWord("color"))
+                        {
+                            context.callNextToken(); // skip color
+                             if(context.currentWord("rgb"))
+                             {
+                                 int nextToken = context.callNextToken(); //skip rgb
+                                 if ((char) nextToken == '<')
+                                 {
+                                     context.callNextToken(); // skip '<'
+                                     int colorArray[] = new int[3];
+                                     for(int i = 0; i < 3; i++)
+                                     {
+                                         colorArray[i] = (int)(context.getNumberValue() * 255);
+                                         context.callNextToken();
+                                         if(i < 2)
+                                             context.callNextToken();
+                                     }
+                                     if(checkerPigment1)
+                                     {
+                                         System.out.println("checker pigment 1!!!!");
+                                         checkerColor1 = colorArray;
+                                         context.callNextToken(); // skip '>'
+                                         context.callNextToken(); //skip '}'
+                                         context.callNextToken(); //skip ','
+                                         state = Attribute.CHECKER_PIGMENT;
+                                     }
+                                     else
+                                     {
+                                         checkerColor2 = colorArray;
+                                         context.callNextToken(); // skip '>'
+                                         context.callNextToken(); //skip '}'
+                                         state = parsePropertryAndGetState(context);
+                                         if(state == null)
+                                         {
+                                             state = checkEndingBracket(context);
+                                         }
+                                     }
+                                 }
+                                 else
+                                 {
+                                     int colorAttribute = (int)context.getNumberValue() * 255;
+                                     if(checkerPigment1)
+                                     {
+                                         System.out.println("checker pigment 1!!!!");
+                                         System.out.println(context.getStreamTokenizer());
+                                         checkerColor1 = new int[]{colorAttribute, colorAttribute, colorAttribute};
+                                         context.callNextToken(); //skip value
+                                         context.callNextToken(); //skip '}'
+                                         context.callNextToken(); //skip ','
+                                         state = Attribute.CHECKER_PIGMENT;
+                                     }
+                                     else
+                                     {
+                                         checkerColor2 = new int[]{colorAttribute, colorAttribute, colorAttribute};
+                                         context.callNextToken(); //skip value
+                                         context.callNextToken();//skip '}'
+                                         state = parsePropertryAndGetState(context);
+                                         if(state == null)
+                                         {
+                                             state = checkEndingBracket(context);
+                                         }
+                                     }
+                                 }
+                             }
+                        }
+                    }
+                    System.out.println("state : " + state);
+                    System.out.println(context.getStreamTokenizer());
+                    checkerPigment1 = false;
+                    checkerPigment2 = true;
+                }
+
                 case PHONG:
                 {
                     context.callNextToken(); //skip phong
@@ -207,6 +345,7 @@ public abstract class EtatUtil
 
                 case PHONG_SIZE:
                 {
+                    System.out.println("phong_size");
                     context.callNextToken(); //skip phong_size
                     material.setShininess((int)context.getNumberValue());
                     context.callNextToken();
@@ -265,6 +404,7 @@ public abstract class EtatUtil
                 }
                 case IOR:
                 {
+                    System.out.println("ior");
                     context.callNextToken(); //skip "ior"
                     material.setRefractionIndex(context.getNumberValue());
                     state = this.parsePropertryAndGetState(context);
@@ -281,6 +421,16 @@ public abstract class EtatUtil
             material.setSpecularCoeff(material.getSpecularCoeff() * phong_value);
             material.setDiffuseCoeff(material.getDiffuseCoeff() * phong_value);
         }
+        else if(hasChecker)
+        {
+            System.out.println(checkerColor1[0] + checkerColor1[1] + checkerColor1[2]);
+            System.out.println(checkerColor2[0] + checkerColor2[1] + checkerColor2[2]);
+            Color firstCheckerColor = Color.rgb(checkerColor1[0], checkerColor1[1], checkerColor1[2]);
+            Color lastCheckerColor = Color.rgb(checkerColor2[0], checkerColor2[1], checkerColor2[2]);
+            checkerboard = new ProceduralTextureCheckerboard(firstCheckerColor, lastCheckerColor);
+            material.setProceduralTexture(checkerboard);
+        }
         return material;
     }
 }
+
