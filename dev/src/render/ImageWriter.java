@@ -47,7 +47,15 @@ public class ImageWriter {
     public ImageWriter(Scene mainAppScene)
     {
         this.mainAppScene = mainAppScene;
-        this.myGlobalScene = Automat.parsePov("dev/src/povParser/roughScene.pov");
+        {
+        	Image skybox = null;
+            URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
+            if(skyboxURL != null)
+            		skybox = new Image(skyboxURL.toExternalForm());
+            
+        	this.myGlobalScene = Automat.parsePov("dev/src/povParser/roughScene.pov");
+        	this.myGlobalScene.setSkybox(skybox);
+        }
         //this.myGlobalScene = generateRoughnessDemoScene();
         this.writableImage = new WritableImage(MainApp.WIDTH,MainApp.HEIGHT);
         

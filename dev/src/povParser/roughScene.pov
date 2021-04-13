@@ -284,3 +284,24 @@ light_source
 {
     <-2, 6, 1>, 1
 }
+
+plane
+{
+    <0, 1, 0>, -1
+    finish
+    {
+        ambient 1
+        diffuse 0.75
+		specular 0.05
+		phong_size 1
+		reflection 0.05
+    }
+    pigment
+    {
+        color rgb <0.5, 0.5, 0.5>
+    }
+	interior
+	{
+		ior 1.2
+	}
+}
