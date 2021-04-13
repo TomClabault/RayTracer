@@ -1,6 +1,7 @@
 package materials;
 
 import javafx.scene.paint.Color;
+import materials.textures.ProceduralTexture;
 
 /*
  * Défini des matériaux dont les réflexions sont floues
@@ -10,6 +11,11 @@ public class RoughMaterial extends Material
 	public RoughMaterial(Color color, double roughness)
 	{
 		super(color, 1, 1, 0.5, RoughMaterial.computeSpecularIntensity(roughness), RoughMaterial.computeSpecularSize(roughness), false, 0, roughness);
+	}
+	
+	public RoughMaterial(Color color, double roughness, ProceduralTexture proceduralTexture)
+	{
+		super(color, 1, 1, 0.5, RoughMaterial.computeSpecularIntensity(roughness), RoughMaterial.computeSpecularSize(roughness), false, 0, roughness, proceduralTexture);
 		
 	}
 	

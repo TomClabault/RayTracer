@@ -108,7 +108,7 @@ public class ImageWriter {
 
         ArrayList<Shape> shapeList = new ArrayList<>();
         shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
-        //shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), null)));
+        //shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new RoughMaterial(Color.rgb(48, 48, 48), 0.75, new ProceduralTextureCheckerboard(Color.rgb(16, 16, 16), Color.rgb(75, 75, 75), 1.0))));
 
         //shapeList.add(new Sphere(new Point(0, 0.5, -3.5), 1, new GlossyMaterial(Color.GOLD, 0.92)));
         shapeList.add(new Sphere(new Point(-1.25, 0.5, -6), 1, new MirrorMaterial(0.75)));
