@@ -5,13 +5,20 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+
+import java.io.File;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import scene.RayTracingScene;
 
 public class Toolbox{
@@ -67,6 +74,20 @@ public class Toolbox{
 				}
         		MainApp.HEIGHT = Integer.parseInt(heightSceneRes.getText());
                 MainApp.WIDTH = Integer.parseInt(widthSceneRes.getText());
+            }
+        });
+        saveButton.setOnAction(new EventHandler<ActionEvent>() 
+    	{
+            @Override
+            public void handle(ActionEvent event) {
+            	DirectoryChooser directoryChooser = new DirectoryChooser();
+            	 directoryChooser.setTitle("Chemin d'enregistrement du rendu");
+            	 File selectedDir = directoryChooser.showDialog(stage);
+            	 if (selectedDir != null) {
+            	    //TODO ajouter code Tom
+            	 } else {
+            		 System.out.println("Aucun dossier n'est sélectionner");
+            	 }
             }
         });
         stage.show();
