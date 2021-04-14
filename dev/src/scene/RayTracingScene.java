@@ -15,7 +15,7 @@ import util.ImageUtil;
 public class RayTracingScene
 {
 	private Camera camera;
-	private PositionnalLight light;
+	private ArrayList<PositionnalLight> lights;
 
 	private ArrayList<Shape> shapes;
 
@@ -32,7 +32,7 @@ public class RayTracingScene
 	 */
 	public RayTracingScene()
 	{
-		this(null, null, new ArrayList<Shape>(), Color.rgb(0, 0, 0), 0.1);
+		this(null, new ArrayList<PositionnalLight>(), new ArrayList<Shape>(), Color.rgb(0, 0, 0), 0.1);
 	}
 
 
@@ -54,6 +54,20 @@ public class RayTracingScene
 	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
 	 * 
 	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
+	 * @param lights Les sources de lumière qui seront utilisées pour le rendu de la scène
+	 * @param shapes Liste de forme qui seront rendues
+	 * @param backgroundColor La couleur de fond qui sera utilisée pour la scène. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scène
+	 * @param ambientLightIntensity L'intensité de la luminosité ambiante de la scène. Défini l'intensité lumineuse minimale par laquelle seront éclairés tous les points de la scène
+	 */
+	public RayTracingScene(Camera camera, ArrayList<PositionnalLight> lights, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity) 
+	{
+		this(camera, lights, shapes, backgroundColor, ambientLightIntensity, (Image)null);
+	}
+	
+	/*
+	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
+	 * 
+	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
 	 * @param light La lumière permettant d'illuminer la scène
 	 * @param shapes Liste de forme qui seront rendues
 	 * @param backgroundColor La couleur de fond qui sera utilisée pour la scène. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scène. Si le paramètre skyboxTexture est utilisé, le paramètre backgroundColor sera ignoré
@@ -63,6 +77,24 @@ public class RayTracingScene
 	public RayTracingScene(Camera camera, PositionnalLight light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, String skyboxTexturePath) 
 	{
 		this(camera, light, shapes, backgroundColor, ambientLightIntensity, new Image(skyboxTexturePath));
+	}
+	
+	/*
+	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
+	 * 
+	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
+	 * @param lights Liste des sources de lumière qui illumineront la scène
+	 * @param shapes Liste de forme qui seront rendues
+	 * @param backgroundColor La couleur de fond qui sera utilisée pour la scène. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scène. Si le paramètre skyboxTexture est utilisé, le paramètre backgroundColor sera ignoré
+	 * @param ambientLightIntensity L'intensité de la luminosité ambiante de la scène. Défini l'intensité lumineuse minimale par laquelle seront éclairés tous les points de la scène
+	 * @param skyboxTexture javafx.scene.image.Image chargé de la texture a utiliser pour la skybox de la scène. null si aucune skybox n'est voulue
+	 */
+	public RayTracingScene(Camera camera, ArrayList<PositionnalLight> lights, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, Image skyboxTexture) 
+	{
+		this(camera, (PositionnalLight)null, shapes, backgroundColor, ambientLightIntensity, skyboxTexture);
+		
+		for(PositionnalLight light : lights)
+			this.lights.add(light);
 	}
 	
 	/*
@@ -89,11 +121,23 @@ public class RayTracingScene
 		}
 		
 		this.camera = camera;
-		this.light = light;
+		this.lights = new ArrayList<PositionnalLight>();
+		if(light != null)
+			this.lights.add(light);
 		this.shapes = shapes;
 
 		this.backgroundColor = backgroundColor;
 		this.ambientLightIntensity = ambientLightIntensity;
+	}
+	
+	/*
+	 * Permet d'ajouter une source de lumière à la scène
+	 * 
+	 * @param light La source de lumière à ajouter
+	 */
+	public void addLight(PositionnalLight light)
+	{
+		this.lights.add(light);
 	}
 	
 	/*
@@ -137,13 +181,25 @@ public class RayTracingScene
 	}
 
 	/*
-	 * Retourne la source de lumière de la scène
+	 * Retourne la source de lumière de la scène numéro i
+	 * 
+	 * @param i l'indice de la source de lumière que l'on veut récupérer
 	 * 
 	 * @return La source de lumière de la scène
 	 */
-	public PositionnalLight getLight() 
+	public PositionnalLight getLight(int i) 
 	{
-		return this.light;
+		return this.lights.get(i);
+	}
+	
+	/*
+	 * Retourne la liste des sources de lumière de la scène
+	 * 
+	 * @return Les sources de lumière de la scène
+	 */
+	public ArrayList<PositionnalLight> getLights() 
+	{
+		return this.lights;
 	}
 
 	/*
@@ -211,9 +267,9 @@ public class RayTracingScene
 		this.camera = camera;
 	}
 
-	public void setLight(PositionnalLight light) 
+	public void setLights(ArrayList<PositionnalLight> lights) 
 	{
-		this.light = light;
+		this.lights = lights;
 	}
 
 	public void setShapes(ArrayList<Shape> shapes) 
@@ -258,7 +314,7 @@ public class RayTracingScene
 		String output = "";
 		
 		output += ("Camera: " + camera.toString() + System.lineSeparator());
-		output += ("Light: " + light.toString() + System.lineSeparator());
+		output += ("Light: " + lights.toString() + System.lineSeparator());
 		output += ("Ambient light: " + ambientLightIntensity + System.lineSeparator());
 		output += ("Formes: " + System.lineSeparator());
 		for(Shape object : this.shapes)

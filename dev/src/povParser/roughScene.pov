@@ -1,6 +1,6 @@
 sphere 
 { 
-	<-5.0, 0, -15>, 0.5
+	<-5.0, -0.5, -15>, 0.5
 	pigment { color rgb <0.663, 0.435, 0.031>}
 	finish 
 	{
@@ -15,7 +15,7 @@ sphere
 
 sphere 
 { 
-	<-3.0, 0, -15>, 0.5
+	<-3.0, -0.5, -15>, 0.5
 	pigment { color rgb <0.392, 0.263, 0.024>}
 	finish 
 	{
@@ -30,7 +30,7 @@ sphere
 
 sphere 
 { 
-	<-1.0, 0, -15>, 0.5
+	<-1.0, -0.5, -15>, 0.5
 	pigment { color rgb <0.196, 0.133, 0.020>}
 	finish 
 	{
@@ -45,7 +45,7 @@ sphere
 
 sphere 
 { 
-	<1.0, 0, -15>, 0.5
+	<1.0, -0.5, -15>, 0.5
 	pigment { color rgb <0.067, 0.051, 0.012>}
 	finish 
 	{
@@ -69,7 +69,7 @@ sphere
 
 sphere 
 { 
-	<-5.0, 0, -12>, 0.5
+	<-5.0, -0.5, -12>, 0.5
 	pigment { color rgb <0.663, 0.435, 0.031>}
 	finish 
 	{
@@ -84,7 +84,7 @@ sphere
 
 sphere 
 { 
-	<-3.0, 0, -12>, 0.5
+	<-3.0, -0.5, -12>, 0.5
 	pigment { color rgb <0.392, 0.263, 0.024>}
 	finish 
 	{
@@ -99,7 +99,7 @@ sphere
 
 sphere 
 { 
-	<-1.0, 0, -12>, 0.5
+	<-1.0, -0.5, -12>, 0.5
 	pigment { color rgb <0.196, 0.133, 0.020>}
 	finish 
 	{
@@ -114,7 +114,7 @@ sphere
 
 sphere 
 { 
-	<1.0, 0, -12>, 0.5
+	<1.0, -0.5, -12>, 0.5
 	pigment { color rgb <0.067, 0.051, 0.012>}
 	finish 
 	{
@@ -143,7 +143,7 @@ sphere
 
 sphere 
 { 
-	<-5.0, 0, -9>, 0.5
+	<-5.0, -0.5, -9>, 0.5
 	pigment { color rgb <0.663, 0.435, 0.031>}
 	finish 
 	{
@@ -158,7 +158,7 @@ sphere
 
 sphere 
 { 
-	<-3.0, 0, -9>, 0.5
+	<-3.0, -0.5, -9>, 0.5
 	pigment { color rgb <0.392, 0.263, 0.024>}
 	finish 
 	{
@@ -173,7 +173,7 @@ sphere
 
 sphere 
 { 
-	<-1.0, 0, -9>, 0.5
+	<-1.0, -0.5, -9>, 0.5
 	pigment { color rgb <0.196, 0.133, 0.020>}
 	finish 
 	{
@@ -188,7 +188,7 @@ sphere
 
 sphere 
 { 
-	<1.0, 0, -9>, 0.5
+	<1.0, -0.5, -9>, 0.5
 	pigment { color rgb <0.067, 0.051, 0.012>}
 	finish 
 	{
@@ -215,7 +215,7 @@ sphere
 
 sphere 
 { 
-	<-5.0, 0, -6>, 0.5
+	<-5.0, -0.5, -6>, 0.5
 	pigment { color rgb <0.663, 0.435, 0.031>}
 	finish 
 	{
@@ -230,7 +230,7 @@ sphere
 
 sphere 
 { 
-	<-3.0, 0, -6>, 0.5
+	<-3.0, -0.5, -6>, 0.5
 	pigment { color rgb <0.392, 0.263, 0.024>}
 	finish 
 	{
@@ -245,7 +245,7 @@ sphere
 
 sphere 
 { 
-	<-1.0, 0, -6>, 0.5
+	<-1.0, -0.5, -6>, 0.5
 	pigment { color rgb <0.196, 0.133, 0.020>}
 	finish 
 	{
@@ -260,7 +260,7 @@ sphere
 
 sphere 
 { 
-	<1.0, 0, -6>, 0.5
+	<1.0, -0.5, -6>, 0.5
 	pigment { color rgb <0.067, 0.051, 0.012>}
 	finish 
 	{
@@ -280,9 +280,22 @@ camera
   angle 40
 }
 
+
 light_source
 {
-    <-2, 6, 1>, 1
+    <-3, 6, 1>, 1
+}
+
+/*
+light_source
+{
+    <3, 6, 1>, 1
+}
+*/
+
+light_source
+{
+    <-2, 6, -10.5>, 1
 }
 
 plane

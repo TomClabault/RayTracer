@@ -47,16 +47,17 @@ public class ImageWriter {
     public ImageWriter(Scene mainAppScene)
     {
         this.mainAppScene = mainAppScene;
-        {
-        	Image skybox = null;
-            URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
-            if(skyboxURL != null)
-            		skybox = new Image(skyboxURL.toExternalForm());
-            
-        	this.myGlobalScene = Automat.parsePov("dev/src/povParser/roughScene.pov");
-        	this.myGlobalScene.setSkybox(skybox);
-        }
-        //this.myGlobalScene = generateRoughnessDemoScene();
+//        {
+//        	Image skybox = null;
+//            URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
+//            if(skyboxURL != null)
+//            		skybox = new Image(skyboxURL.toExternalForm());
+//            
+//        	this.myGlobalScene = Automat.parsePov("dev/src/povParser/roughScene.pov");
+//        	this.myGlobalScene.setSkybox(skybox);
+//        }
+        this.myGlobalScene = generateRoughnessDemoScene();
+        //this.myGlobalScene = generateUsualScene();
         this.writableImage = new WritableImage(MainApp.WIDTH,MainApp.HEIGHT);
         
         this.pw = writableImage.getPixelWriter();
@@ -111,7 +112,7 @@ public class ImageWriter {
     public RayTracingScene generateUsualScene() 
     {
 
-    	Camera cameraRT = new Camera(new Point(0.000, 0.5, 0), 0, 0, 40);//Magic camera
+    	Camera cameraRT = new Camera(new Point(0.000, 0.5, 0.320), 0, 0, 40);//Magic camera
     	//Camera cameraRT = new Camera(new Point(0.75, -0.75, -5.5), 0, 0);
         PositionnalLight l = new LightBulb(new Point(2, 2, 1), 1);
 
@@ -124,7 +125,7 @@ public class ImageWriter {
         shapeList.add(new Sphere(new Point(0, 1.5, -6), 0.5, new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(Color.web("D4AF37")), 0.75)));
         shapeList.add(new Sphere(new Point(1.25, 0.5, -6), 1, new GlassMaterial()));
         
-        shapeList.add(new Sphere(Point.translateMul(new Point(-0.35, 0.5, -0.1), new Vector(1.250, 0.000, -4.500), 1.5625), 0.2, new GlassyMaterial(Color.GREEN)));
+        shapeList.add(new Sphere(Point.translateMul(new Point(-0.3, 0.5, -0.1), new Vector(1.250, 0.000, -4.500), 1.5625), 0.2, new GlassyMaterial(Color.GREEN)));
         shapeList.add(new Sphere(new Point(-2, -0.65, -5), 0.35, new MatteMaterial(Color.BLACK, new ProceduralTextureCheckerboard(Color.BLACK, Color.YELLOW, 12))));
         shapeList.add(new Sphere(new Point(2, -0.65, -5), 0.35, new MatteMaterial(Color.BLACK, new ProceduralTextureCheckerboard(Color.RED, Color.DARKRED.darker(), 12))));
         
@@ -151,12 +152,12 @@ public class ImageWriter {
         	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1);
         }
 
+        sceneRT.addLight(new LightBulb(new Point(-2, 2.5, 1.440), 1));
         return  sceneRT;
     }
     
     public RayTracingScene generateRoughnessDemoScene() 
     {
-
     	Camera cameraRT = new Camera(new Point(-2.000, 4, -1), new Point(-2, 0, -8), 40);
         PositionnalLight l = new LightBulb(new Point(-2, 6, 0), 1);
 
@@ -170,13 +171,13 @@ public class ImageWriter {
         	{
         		Color sphereColor = ColorOperations.sRGBGamma2_2ToLinear(Color.web("D4AF37").interpolate(Color.rgb(32, 32, 32), 1.0/4.0*x));
         		
-        		System.out.println(
-        				"Position:" + new Point(-5 + x * 2, 0, -15 + y * 3) 
-        				+ String.format("Color: [%.3f, %.3f, %.3f]", sphereColor.getRed(), sphereColor.getGreen(), sphereColor.getBlue()) 
-        				+ " Roughness: " + roughnessTab[y]
-        				+ String.format(" Specular Size/Intensity: %d/%.3f", RoughMaterial.computeSpecularSize(roughnessTab[y]), RoughMaterial.computeSpecularIntensity(roughnessTab[y])) );
+//        		System.out.println(
+//        				"Position:" + new Point(-5 + x * 2, -0.5, -15 + y * 3) 
+//        				+ String.format("Color: [%.3f, %.3f, %.3f]", sphereColor.getRed(), sphereColor.getGreen(), sphereColor.getBlue()) 
+//        				+ " Roughness: " + roughnessTab[y]
+//        				+ String.format(" Specular Size/Intensity: %d/%.3f", RoughMaterial.computeSpecularSize(roughnessTab[y]), RoughMaterial.computeSpecularIntensity(roughnessTab[y])) );
         		
-                shapeList.add(new Sphere(new Point(-5 + x * 2, 0, -15 + y * 3), 0.5, new RoughMaterial(sphereColor, roughnessTab[y])));
+                shapeList.add(new Sphere(new Point(-5 + x * 2, -0.5, -15 + y * 3), 0.5, new RoughMaterial(sphereColor, roughnessTab[y])));
         	}
         }
         
