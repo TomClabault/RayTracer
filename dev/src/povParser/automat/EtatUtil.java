@@ -359,7 +359,6 @@ public abstract class EtatUtil
         }
         else if(hasChecker)
         {
-            System.out.println(checkerboard);
             material.setProceduralTexture(checkerboard);
         }
         return material;

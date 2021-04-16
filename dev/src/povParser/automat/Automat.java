@@ -11,8 +11,12 @@ import java.io.*;
 public class Automat
 {
     /*TODO
-    -parse cheker dans pigment
-    -ajout de la javadoc
+        -ajout de la javadoc
+     */
+
+    /*
+    ajout d'un élément de syntaxe size pov dans un contexte checker pour ajouter une taille au damier:
+        pigment {checker color1, color2, size}
      */
 
     private EtatToken etatToken;

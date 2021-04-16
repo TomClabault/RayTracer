@@ -1,19 +1,17 @@
-sphere { <-1.25, 0.5, -6>, 1
-  pigment
-  {
-    checker pigment {color rgb <0.5, 0.5, 0.5>}, pigment {color rgb 0.5}
-  }
-  finish {
-    ambient 1 
-	diffuse 1
-    specular 1
-    reflection 0.75
-    phong_size 192
-  }
-  /*interior
-  {
-	ior 1.5
-  }*/
+sphere
+{
+    <-2, -0.65, -5>, 0.35
+    pigment
+    {
+        checker pigment{ color rgb 0}, pigment{color rgb <1, 1, 0>, size }
+    }
+    finish
+    {
+        ambient 1
+        diffuse 0.75
+        specular 0.05
+        phong_size 1
+    }
 }
 
 sphere
@@ -91,7 +89,7 @@ plane
     }
     pigment
     {
-        color rgb 1
+        checker pigment {color rgb <1, 1, 1>}, pigment {color rgb 0}
     }
 }
 /*
