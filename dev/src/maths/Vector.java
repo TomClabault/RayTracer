@@ -175,6 +175,20 @@ public class Vector implements CoordinateObject
 	}
 	
 	/*
+	 * Permet d'interpoler linéairement un vecteur entre deux vecteurs donnés
+	 * 
+	 * @param u Le premier vecteur qui servira pour l'interpolation
+	 * @param v Le deuxième vecteur qui servira pour l'interpolation
+	 * @param coeff La coefficient d'interpolation. 1 donnera 'u' comme résultat d'interpolation. 0 donnera v. Un réel entre les deux donnera un vecteur entre u et v  
+	 *
+	 * @return Retourne le vecteur interpolé des deux vecteurs passé en arguments avec le coefficient donné 
+	 */
+	public static Vector interpolate(Vector u, Vector v, double coeff)
+	{
+		return new Vector(Vector.add(Vector.scalarMul(u, coeff), Vector.scalarMul(v, 1 - coeff)));
+	}
+	
+	/*
 	 * Calcule la longueur du vecteur
 	 *
 	 * @return Longueur du vecteur
@@ -286,10 +300,13 @@ public class Vector implements CoordinateObject
 	 *
 	 * @return Une chaîne de caractère de la forme: (x, y, z) avec x, y et z les coordonnées du vecteur
 	 */
-	public String toString()
-	{
-		return String.format("(%.3f, %.3f, %.3f)", this.x, this.y, this.z);
-	}
+	@Override
+    public String toString()
+    {
+    	String output = String.format("[%.3f, %.3f, %.3f]", this.x, this.y, this.z);
+    	
+    	return String.format("%-25s", output);
+    }
 
 	/*
 	 * Utilise les coordoonées d'un vecteur pour définir un point

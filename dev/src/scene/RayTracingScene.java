@@ -6,7 +6,7 @@ import geometry.Shape;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
-import scene.lights.Light;
+import scene.lights.PositionnalLight;
 import util.ImageUtil;
 
 /*
@@ -15,7 +15,7 @@ import util.ImageUtil;
 public class RayTracingScene
 {
 	private Camera camera;
-	private Light light;
+	private ArrayList<PositionnalLight> lights;
 
 	private ArrayList<Shape> shapes;
 
@@ -28,6 +28,15 @@ public class RayTracingScene
 	private double ambientLightIntensity;
 	
 	/*
+	 * Crée une scène vide
+	 */
+	public RayTracingScene()
+	{
+		this(null, new ArrayList<PositionnalLight>(), new ArrayList<Shape>(), Color.rgb(0, 0, 0), 0.1);
+	}
+
+
+	/*
 	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
 	 * 
 	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
@@ -36,9 +45,23 @@ public class RayTracingScene
 	 * @param backgroundColor La couleur de fond qui sera utilisée pour la scène. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scène
 	 * @param ambientLightIntensity L'intensité de la luminosité ambiante de la scène. Défini l'intensité lumineuse minimale par laquelle seront éclairés tous les points de la scène
 	 */
-	public RayTracingScene(Camera camera, Light light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity) 
+	public RayTracingScene(Camera camera, PositionnalLight light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity) 
 	{
 		this(camera, light, shapes, backgroundColor, ambientLightIntensity, (Image)null);
+	}
+	
+	/*
+	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
+	 * 
+	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
+	 * @param lights Les sources de lumière qui seront utilisées pour le rendu de la scène
+	 * @param shapes Liste de forme qui seront rendues
+	 * @param backgroundColor La couleur de fond qui sera utilisée pour la scène. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scène
+	 * @param ambientLightIntensity L'intensité de la luminosité ambiante de la scène. Défini l'intensité lumineuse minimale par laquelle seront éclairés tous les points de la scène
+	 */
+	public RayTracingScene(Camera camera, ArrayList<PositionnalLight> lights, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity) 
+	{
+		this(camera, lights, shapes, backgroundColor, ambientLightIntensity, (Image)null);
 	}
 	
 	/*
@@ -51,9 +74,27 @@ public class RayTracingScene
 	 * @param ambientLightIntensity L'intensité de la luminosité ambiante de la scène. Défini l'intensité lumineuse minimale par laquelle seront éclairés tous les points de la scène
 	 * @param skyboxTexturePath Chemin vers la texture de la skybox a utiliser
 	 */
-	public RayTracingScene(Camera camera, Light light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, String skyboxTexturePath) 
+	public RayTracingScene(Camera camera, PositionnalLight light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, String skyboxTexturePath) 
 	{
 		this(camera, light, shapes, backgroundColor, ambientLightIntensity, new Image(skyboxTexturePath));
+	}
+	
+	/*
+	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
+	 * 
+	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
+	 * @param lights Liste des sources de lumière qui illumineront la scène
+	 * @param shapes Liste de forme qui seront rendues
+	 * @param backgroundColor La couleur de fond qui sera utilisée pour la scène. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scène. Si le paramètre skyboxTexture est utilisé, le paramètre backgroundColor sera ignoré
+	 * @param ambientLightIntensity L'intensité de la luminosité ambiante de la scène. Défini l'intensité lumineuse minimale par laquelle seront éclairés tous les points de la scène
+	 * @param skyboxTexture javafx.scene.image.Image chargé de la texture a utiliser pour la skybox de la scène. null si aucune skybox n'est voulue
+	 */
+	public RayTracingScene(Camera camera, ArrayList<PositionnalLight> lights, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, Image skyboxTexture) 
+	{
+		this(camera, (PositionnalLight)null, shapes, backgroundColor, ambientLightIntensity, skyboxTexture);
+		
+		for(PositionnalLight light : lights)
+			this.lights.add(light);
 	}
 	
 	/*
@@ -68,37 +109,47 @@ public class RayTracingScene
 	 * 
 	 * @throws IllegalArgumentException quand l'argument skyboxTexture passé ne constitue pas une image correcte. i.e. l'image n'a peut être pas été ouverte correctement, introuvable, format non supporté, ...
 	 */
-	public RayTracingScene(Camera camera, Light light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, Image skyboxTexture) throws IllegalArgumentException
+	public RayTracingScene(Camera camera, PositionnalLight light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, Image skyboxTexture) throws IllegalArgumentException
 	{
-		if(skyboxTexture != null)
+		try
 		{
-			if(skyboxTexture.isError())
-				throw new IllegalArgumentException("Erreur durant le chargement de la skybox : " + skyboxTexture.getException().getMessage());
-			else
-			{
-				this.skyboxTexture = ImageUtil.sRGBImageToLinear(skyboxTexture);
-				this.skyboxPixelReader = this.skyboxTexture.getPixelReader();
-				
-				this.skyboxWidth = (int)skyboxTexture.getWidth();
-				this.skyboxHeight = (int)skyboxTexture.getHeight();
-			}
+			setSkybox(skyboxTexture);
 		}
-		else
+		catch (IllegalArgumentException e)
 		{
-			this.skyboxPixelReader = null;
-			
-			this.skyboxWidth = 0;
-			this.skyboxHeight = 0;	
+			throw e;
 		}
 		
 		this.camera = camera;
-		this.light = light;
+		this.lights = new ArrayList<PositionnalLight>();
+		if(light != null)
+			this.lights.add(light);
 		this.shapes = shapes;
 
 		this.backgroundColor = backgroundColor;
 		this.ambientLightIntensity = ambientLightIntensity;
 	}
-
+	
+	/*
+	 * Permet d'ajouter une source de lumière à la scène
+	 * 
+	 * @param light La source de lumière à ajouter
+	 */
+	public void addLight(PositionnalLight light)
+	{
+		this.lights.add(light);
+	}
+	
+	/*
+	 * Permet d'ajouter un objet à la scène
+	 * 
+	 * @param shape La forme à ajouter
+	 */
+	public void addShape(Shape shape)
+	{
+		this.shapes.add(shape);
+	}
+	
 	/*
 	 * Permet d'obtenir l'intensité de la lumière ambiante de la scène
 	 * 
@@ -130,13 +181,25 @@ public class RayTracingScene
 	}
 
 	/*
-	 * Retourne la source de lumière de la scène
+	 * Retourne la source de lumière de la scène numéro i
+	 * 
+	 * @param i l'indice de la source de lumière que l'on veut récupérer
 	 * 
 	 * @return La source de lumière de la scène
 	 */
-	public Light getLight() 
+	public PositionnalLight getLight(int i) 
 	{
-		return this.light;
+		return this.lights.get(i);
+	}
+	
+	/*
+	 * Retourne la liste des sources de lumière de la scène
+	 * 
+	 * @return Les sources de lumière de la scène
+	 */
+	public ArrayList<PositionnalLight> getLights() 
+	{
+		return this.lights;
 	}
 
 	/*
@@ -187,5 +250,76 @@ public class RayTracingScene
 	public boolean hasSkybox()
 	{
 		return !(this.skyboxTexture == null);
+	}
+	
+	public void setAmbientLightIntensity(double ambientLightIntensity) 
+	{
+		this.ambientLightIntensity = ambientLightIntensity;
+	}
+	
+	public void setBackgroundColor(Color backgroundColor) 
+	{
+		this.backgroundColor = backgroundColor;
+	}
+	
+	public void setCamera(Camera camera) 
+	{
+		this.camera = camera;
+	}
+
+	public void setLights(ArrayList<PositionnalLight> lights) 
+	{
+		this.lights = lights;
+	}
+
+	public void setShapes(ArrayList<Shape> shapes) 
+	{
+		this.shapes = shapes;
+	}
+	
+	/*
+	 * Permet d'attribuer une skybox à la scène
+	 * 
+	 * @param skyboxTexture L'image de la skybox a utiliser pour le rendu de la scène
+	 * 
+	 * @throws IllegalArgumentException Si 'skyboxTexture' ne peut pas être chargé correctement
+	 */
+	public void setSkybox(Image skyboxTexture) throws IllegalArgumentException
+	{
+		if(skyboxTexture != null)
+		{
+			if(skyboxTexture.isError())
+				throw new IllegalArgumentException("Erreur durant le chargement de la skybox : " + skyboxTexture.getException().getMessage());
+			else
+			{
+				this.skyboxTexture = ImageUtil.sRGBImageToLinear(skyboxTexture);
+				this.skyboxPixelReader = this.skyboxTexture.getPixelReader();
+				
+				this.skyboxWidth = (int)skyboxTexture.getWidth();
+				this.skyboxHeight = (int)skyboxTexture.getHeight();
+			}
+		}
+		else
+		{
+			this.skyboxPixelReader = null;
+			
+			this.skyboxWidth = 0;
+			this.skyboxHeight = 0;	
+		}
+	}
+	
+	@Override
+	public String toString()
+	{
+		String output = "";
+		
+		output += ("Camera: " + camera.toString() + System.lineSeparator());
+		output += ("Light: " + lights.toString() + System.lineSeparator());
+		output += ("Ambient light: " + ambientLightIntensity + System.lineSeparator());
+		output += ("Formes: " + System.lineSeparator());
+		for(Shape object : this.shapes)
+			output += (object.toString() + System.lineSeparator());
+		
+		return output;
 	}
 }

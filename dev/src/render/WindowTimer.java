@@ -26,7 +26,9 @@ public class WindowTimer extends AnimationTimer {
     
     public WindowTimer(RayTracingScene rayTracingScene, PixelWriter pixelWriter, RayTracer rayTracer) {
         this.rayTracingScene = rayTracingScene;
-        this.rayTracingSettings = new RayTracerSettings(5, 8, 0);
+        this.rayTracingSettings = new RayTracerSettings(2, 4, 9, 4);
+        this.rayTracingSettings.enableAntialiasing(false);
+        this.rayTracingSettings.enableBlurryReflections(true);
         
         this.pixelWriter = pixelWriter;
         this.rayTracer = rayTracer;

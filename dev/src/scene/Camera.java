@@ -18,12 +18,6 @@ public class Camera
 	private static final int X_AXIS = 0;
 	private static final int Y_AXIS = 1;
 	private static final int Z_AXIS = 2;
-	/*
-	 * Deux angles horizontal et vertical
-	 * 
-	 * Faire deux constructeurs avec le point de direction et un autre avec les deux angles
-	 * Uné méthode pour faire regarder la caméra sur un certain point et calculer les deux angles à partir de ce point. En deux temps, horizontal et vertical après
-	 */
 	
 	MatrixD CTWMatrix;//Matrice de changement de base entre les coordonnées d'origine du monde [(1, 0, 0), (0, 1, 0), (0, 0, 1)] et les coordoonées de la caméra
 	
@@ -34,7 +28,7 @@ public class Camera
 	 */
 	public Camera()
 	{
-		this(new Point(0, 0, 0), 0, 0);
+		this(new Point(0, 0, 0), 0, 0, 60);
 	}
 	
 	/*
@@ -44,7 +38,7 @@ public class Camera
 	 */
 	public Camera(Point position)
 	{
-		this(position, 0, 0);
+		this(position, 0, 0, 60);
 	}
 	
 	/*
@@ -55,7 +49,19 @@ public class Camera
 	 */
 	public Camera(Point position, Point direction)
 	{
-		this(position, getHoriAngleFromDir(position, direction), getVertiAngleFromDir(position, direction));//this.getVeriAngleFromDir(direction));
+		this(position, getHoriAngleFromDir(position, direction), getVertiAngleFromDir(position, direction), 60);//this.getVeriAngleFromDir(direction));
+	}
+	
+	/*
+	 * Crée une caméra à partir de son point d'ancrage et d'un point qu'elle regarde. Ce dernier définira la direction de regard de la caméra
+	 * 
+	 * @param position Point d'ancrage de la caméra
+	 * @param direction Point que regarde la caméra
+	 * @param FOV Le champ de vision de la caméra. Entier entre 1 et 179
+	 */
+	public Camera(Point position, Point direction, double FOV)
+	{
+		this(position, getHoriAngleFromDir(position, direction), getVertiAngleFromDir(position, direction), FOV);//this.getVeriAngleFromDir(direction));
 	}
 	
 	/*
@@ -64,14 +70,16 @@ public class Camera
 	 * @param position 		Le point d'ancrage/d'origine de la caméra
 	 * @param angleHori 	L'angle de rotation horizontal en degré de la caméra
 	 * @param angleVerti	L'angle de rotation vertical en degré de la caméra. Un angle de plus de 90° ou de moins de -90° sera ramené à 900 ou -90° repsectivement
+	 * @param FOV Le champ de vision de la caméra. Entier entre 1 et 179
 	 */
-	public Camera(Point position, double angleHori, double angleVerti)
+	public Camera(Point position, double angleHori, double angleVerti, double FOV)
 	{
 		this.position = position;
 		
 		this.angleHori = angleHori;
 		this.angleVerti = angleVerti;
 		this.angleVerti = this.angleVerti > 90 ? 90 : this.angleVerti < -90 ? -90 : this.angleVerti;//On ramène l'angle à 900 / -90° s'il dépassait
+		this.degreeFOV = FOV;
 		
 		this.CTWMatrix = new CTWMatrix(this, angleHori, angleVerti);
 	}
@@ -203,7 +211,6 @@ public class Camera
 		
 		double angle = Math.signum(vecDirNoXNorm.getY())*degrees;
 		
-		System.out.println(angle);
 		return angle;
 	}
 	
@@ -292,6 +299,17 @@ public class Camera
 	}
 	
 	/*
+	 * Permet de redéfinir le point que regarde la caméra
+	 * 
+	 * @param lookAtPoint Le nouveau point que regarde la caméra 
+	 */
+	public void setLookAt(Point lookAtPoint)
+	{
+		this.angleHori = getHoriAngleFromDir(position, lookAtPoint);
+		this.angleVerti = getVertiAngleFromDir(position, lookAtPoint);
+	}
+	
+	/*
 	 * Définit la nouvelle position de la caméra. Cette méthode recalcule également la matrice de passage CTXMatrix
 	 * 
 	 * @param newPosition Un point de coordonnées (x, y, z) pour définir les nouvelles coordonnées de la caméra
@@ -301,5 +319,11 @@ public class Camera
 		this.position = newPosition;
 		
 		this.CTWMatrix = new CTWMatrix(this, this.angleHori, this.angleVerti);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("Position: %s | Angle hori: %.3f | Angle verti: %.3f | FOV: %.3f", position, this.angleHori, this.angleVerti, this.degreeFOV);
 	}
 }

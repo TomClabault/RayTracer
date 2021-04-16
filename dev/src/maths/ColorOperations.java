@@ -185,6 +185,28 @@ public class ColorOperations
 	}
 	
 	/*
+	 * Permet d'obtenir la représentation RGB d'une couleur
+	 * 
+	 * @param color La couleur dont on souhaite la représentation RGB sous forme de string
+	 * 
+	 * @return Retourne une chaîne de caractère représentant la couleur passé en argument sous la forme de ses 3 composantes
+	 */
+	public static String colorToString(Color color)
+	{
+		String output = "";
+		
+		output += "(";
+		
+		output += ((int)(color.getRed()*255) + ", ");
+		output += ((int)(color.getGreen()*255) + ", ");
+		output += ((int)(color.getBlue()*255));
+		
+		output += ")";
+		
+		return String.format("%-15s", output);
+	}
+	
+	/*
 	 * Retourne une nouvelle instance de Color représentant la même couleur que celle passée en argument
 	 * 
 	 * @param La couleur à copier
@@ -275,6 +297,22 @@ public class ColorOperations
 		int newBlue = (int)(Math.pow(col.getBlue(), power)*255);
 		
 		return Color.rgb(newRed, newGreen, newBlue);
+	}
+	
+	/*
+	 * Permet de convertir une couleur de l'espace sRGB avec une courbe de Gamma de 2.2 vers l'espace RGB linéaire
+	 * 
+	 * @param sRGB2_2Color La couleur que l'on veut convertir dont les composantes ne sont pas linéaires
+	 * 
+	 * @return Retourne la couleur passée en paramètre mais convertie dans l'espace de couleur RGB linéaire
+	 */
+	public static Color sRGBGamma2_2ToLinear(Color sRGB2_2Color)
+	{
+		int intRed = (int)(sRGB2_2Color.getRed()*255);
+		int intGreen = (int)(sRGB2_2Color.getGreen()*255);
+		int intBlue = (int)(sRGB2_2Color.getBlue()*255);
+		
+		return Color.rgb(ColorOperations.sRGB2_2ToLinearTable[intRed], ColorOperations.sRGB2_2ToLinearTable[intGreen], ColorOperations.sRGB2_2ToLinearTable[intBlue]);
 	}
 	
 	/*
