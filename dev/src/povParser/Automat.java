@@ -142,13 +142,13 @@ public class Automat
         return State.OUTSIDE;
     }
 
-    public static RayTracingScene parsePov(String pathToFile)
+    public static RayTracingScene parsePov(File povFile)
     {
         RayTracingScene scene = new RayTracingScene();
 
         try {
 
-            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(pathToFile));
+            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(povFile));
             BufferedReader fileReader = new BufferedReader(inputStreamReader);
 
             StreamTokenizer streamTokenizer = new StreamTokenizer(fileReader);
