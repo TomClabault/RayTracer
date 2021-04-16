@@ -1,5 +1,7 @@
 package render;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -22,6 +24,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import rayTracer.RayTracerSettings;
 import scene.RayTracingScene;
 
 public class Toolbox{
@@ -29,11 +32,13 @@ public class Toolbox{
 	private RayTracingScene rayTracingScene;
 	private Scene renderScene;
 	private Pane statPane;
+	private RayTracerSettings rayTracerSettings;
 
-	public Toolbox(RayTracingScene rts, Scene renderScene, Pane statPane) {
+	public Toolbox(RayTracingScene rts, Scene renderScene, Pane statPane, RayTracerSettings rayTracerSettings) {
 		this.rayTracingScene = rts;
 		this.renderScene = renderScene;
 		this.statPane = statPane;
+		this.rayTracerSettings = rayTracerSettings;
 	}
 
 	public RayTracingScene getRts() {
@@ -70,8 +75,15 @@ public class Toolbox{
 
         Button applyResButton = new Button("Appliquer");
 
-        Label depthLabel = new Label();
+        Label depthLabel = new Label("Profondeur maximale de récursion");
         Slider depthSlider = new Slider(0,10,1);
+        depthSlider.setShowTickLabels(true);
+        depthSlider.setShowTickMarks(true);
+        depthSlider.setMajorTickUnit(1);
+        depthSlider.setMinorTickCount(0);
+        depthSlider.setBlockIncrement(10);
+        depthSlider.setValue(5);
+        depthSlider.setSnapToTicks(true);
 
         root.getChildren().addAll(statOnOffCheckBox, saveButton, resolutionLabel, resolutionHbox, applyResButton, depthLabel, depthSlider);
 
@@ -115,7 +127,15 @@ public class Toolbox{
         		statPane.setVisible(statOnOffCheckBox.isSelected());
         	}
         });
+        depthSlider.valueProperty().addListener(new ChangeListener<Number>() {
+        	@Override
+            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+                    rayTracerSettings.setRecursionDepth(new_val.intValue());
+            }
+        });
 
         stage.show();
 	}
+	
+	
 }

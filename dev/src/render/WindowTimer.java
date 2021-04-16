@@ -56,6 +56,10 @@ public class WindowTimer extends AnimationTimer {
     public Label getfpsLabel() {
     	return fpsLabel;
     }
+    
+    public RayTracerSettings getRayTracerSettings() {
+    	return this.rayTracerSettings;
+    }
 
 
     public void handle(long actualFrameTime){
