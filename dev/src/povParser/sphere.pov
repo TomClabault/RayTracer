@@ -3,7 +3,7 @@ sphere
     <-2, -0.65, -5>, 0.35
     pigment
     {
-        checker pigment{ color rgb 0}, pigment{color rgb <1, 1, 0>, size }
+        checker pigment{ color rgb 0}, pigment{color rgb <1, 1, 0>}, size 12
     }
     finish
     {
@@ -89,7 +89,7 @@ plane
     }
     pigment
     {
-        checker pigment {color rgb <1, 1, 1>}, pigment {color rgb 0}
+        checker pigment {color rgb <1, 1, 1>}, pigment {color rgb 0}, size 1
     }
 }
 /*

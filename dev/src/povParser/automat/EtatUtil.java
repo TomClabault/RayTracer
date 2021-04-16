@@ -9,6 +9,7 @@ enum Attribute
     PIGMENT,
     INTERIOR,
     IOR,
+    SIZE,
     ROUGHNESS,
     FINISH,
     SPECULAR, // only a coeff (not a vector)
@@ -76,6 +77,10 @@ public abstract class EtatUtil
             else if(context.currentWord("roughness"))
             {
                 return Attribute.ROUGHNESS;
+            }
+            else if(context.currentWord("size"))
+            {
+                return Attribute.SIZE;
             }
         }
         return null;
@@ -284,7 +289,7 @@ public abstract class EtatUtil
                 {
                     context.callNextToken(); //skip reflexion
                     material.setReflectiveCoeff(context.getNumberValue());
-                    context.callNextToken();
+                    context.callNextToken(); //skip reflection value
                     state = parsePropertryAndGetState(context);
 
                     if(state == null)
@@ -292,6 +297,20 @@ public abstract class EtatUtil
                         state = this.checkEndingBracket(context);
                     }
                     break;
+                }
+
+                case SIZE:
+                {
+                    context.callNextToken(); //skip "size"
+                    checkerboard.setSize(context.getNumberValue());
+                    context.callNextToken(); // skip size value
+                    state = parsePropertryAndGetState(context);
+                    if(state == null)
+                    {
+                        state = this.checkEndingBracket(context);
+                    }
+                    break;
+
                 }
 
                 case OPENING_CHEVRON:

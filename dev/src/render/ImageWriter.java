@@ -53,7 +53,7 @@ public class ImageWriter {
             if(skyboxURL != null)
             		skybox = new Image(skyboxURL.toExternalForm());
 
-        	this.myGlobalScene = Automat.parsePov("dev/src/povParser/roughScene.pov");
+        	this.myGlobalScene = Automat.parsePov("dev/src/povParser/sphere.pov");
         	this.myGlobalScene.setSkybox(skybox);
         }
         //this.myGlobalScene = generateRoughnessDemoScene();
