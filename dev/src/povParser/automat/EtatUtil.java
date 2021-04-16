@@ -208,16 +208,16 @@ public abstract class EtatUtil
                             }
                             else
                             {
-                                int colorAttribute = (int)context.getNumberValue() * 255;
-                                if(hasChecker)
+                                int colorAttribute = (int)(context.getNumberValue() * 255);
+                                if(hasChecker && !checker2)
                                 {
+                                    System.out.println("first coeff color : " + colorAttribute);
                                     checkerboard.setColor1(Color.rgb(colorAttribute, colorAttribute, colorAttribute));
                                     checker2 = true;
                                 }
                                 else if(hasChecker && checker2)
                                 {
                                     checkerboard.setColor2(Color.rgb(colorAttribute, colorAttribute, colorAttribute));
-                                    System.out.println("second checker color");
                                 }
                                 else
                                     material.setColor(Color.rgb(colorAttribute, colorAttribute, colorAttribute));
@@ -305,13 +305,17 @@ public abstract class EtatUtil
                         if(i < 2)
                             context.callNextToken();
                     }
-                    if(hasChecker)
+                    if(hasChecker && !checker2)
                     {
                         checkerboard.setColor1(Color.rgb(colorTab[0], colorTab[1], colorTab[2]));
+                        System.out.println("first vector color[0] : " + colorTab[0]);
                         checker2 = true;
                     }
                     else if(hasChecker && checker2)
+                    {
                         checkerboard.setColor2(Color.rgb(colorTab[0], colorTab[1], colorTab[2]));
+                        checkerboard.setColor2(Color.rgb(colorTab[0], colorTab[1], colorTab[2]));
+                    }
                     else
                         material.setColor(Color.rgb(colorTab[0], colorTab[1], colorTab[2]));
                     context.callNextToken(); //skip '>'
