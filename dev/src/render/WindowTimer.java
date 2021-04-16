@@ -15,6 +15,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritablePixelFormat;
+import rayTracer.RayTracer;
 import rayTracer.RayTracerSettings;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -32,15 +33,15 @@ public class WindowTimer extends AnimationTimer {
 
     private WritablePixelFormat<IntBuffer> pixelFormat;
     private ExecutorService executortService;
-    Scene mainAppScene;
+    private Scene mainAppScene;
+    private RayTracer rayTracer;
 
     private Future<?> futureRenderTask = null;
 
-    public WindowTimer(Scene mainAppScene, RayTracingScene rayTracingScene, PixelWriter pixelWriter) {
+    public WindowTimer(Scene mainAppScene, RayTracer rayTracer, RayTracerSettings rayTracerSettings, RayTracingScene rayTracingScene, PixelWriter pixelWriter) {
         this.rayTracingScene = rayTracingScene;
-        this.rayTracingSettings = new RayTracerSettings(2, 4, 9, 4);
-        this.rayTracingSettings.enableAntialiasing(true);
-        this.rayTracingSettings.enableBlurryReflections(true);
+
+        this.rayTracer = rayTracer;
 
         this.pixelWriter = pixelWriter;
 
@@ -56,14 +57,14 @@ public class WindowTimer extends AnimationTimer {
     public Label getfpsLabel() {
     	return fpsLabel;
     }
-    
+
     public RayTracerSettings getRayTracerSettings() {
     	return this.rayTracerSettings;
     }
 
 
     public void handle(long actualFrameTime){
-    	DoImageTask renderTask = new DoImageTask(mainAppScene, pixelWriter, PixelFormat.getIntArgbPreInstance(), rayTracingScene, rayTracerSettings);
+    	DoImageTask renderTask = new DoImageTask(mainAppScene, pixelWriter, PixelFormat.getIntArgbPreInstance(), rayTracer, rayTracingScene, rayTracerSettings);
 
     	if(futureRenderTask == null || futureRenderTask.isDone())//Si aucune tâche n'a encore été donnée ou si la tâche est terminée
     		futureRenderTask = executortService.submit(renderTask);//On redonne une autre tâche de rendu à faire
@@ -73,7 +74,7 @@ public class WindowTimer extends AnimationTimer {
         renderTask.setOnSucceeded((succeededEvent) -> {
 
         	IntBuffer pixelBuffer = renderTask.getValue();
-        	ImageWriter.doImage(pixelBuffer, pixelWriter, pixelFormat);
+        	RenderWindow.doImage(pixelBuffer, pixelWriter, pixelFormat);
         	long dif = actualFrameTime - oldFrameTime;
             dif  = (long)1000000000.0 / dif;
             this.oldFrameTime = actualFrameTime;

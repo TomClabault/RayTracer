@@ -15,15 +15,14 @@ public class DoImageTask extends Task<IntBuffer> {
 
 	private IntBuffer pixelBuffer;
 	private RayTracingScene rayTracingScene;
-	private RayTracer rayTracerInstance;
 	private Scene mainAppScene;
 	private RayTracerSettings rayTracerSettings;
+	private RayTracer rayTracer;
 
-	DoImageTask(Scene mainAppScene, PixelWriter pw, WritablePixelFormat<IntBuffer> pixelFormat, RayTracingScene rts,
-			RayTracerSettings rayTracerSettings) {
+	DoImageTask(Scene mainAppScene, PixelWriter pw, WritablePixelFormat<IntBuffer> pixelFormat,RayTracer rayTracer, RayTracingScene rts, RayTracerSettings rayTracerSettings) {
 		this.mainAppScene = mainAppScene;
 		this.rayTracingScene = rts;
-		this.rayTracerInstance = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT);
+		this.rayTracer = rayTracer;
 		this.rayTracerSettings = rayTracerSettings;
 	}
 
@@ -34,7 +33,7 @@ public class DoImageTask extends Task<IntBuffer> {
 	@Override
 	public IntBuffer call() {
 		synchronized (mainAppScene) {
-			pixelBuffer = rayTracerInstance.renderImage(rayTracingScene, this.rayTracerSettings);
+			pixelBuffer = rayTracer.renderImage(rayTracingScene, this.rayTracerSettings);
 		}
 
 		return pixelBuffer;

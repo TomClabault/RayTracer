@@ -24,6 +24,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import rayTracer.RayTracer;
 import rayTracer.RayTracerSettings;
 import scene.RayTracingScene;
 
@@ -33,9 +34,11 @@ public class Toolbox{
 	private Scene renderScene;
 	private Pane statPane;
 	private RayTracerSettings rayTracerSettings;
+	private RayTracer rayTracer;
 
-	public Toolbox(RayTracingScene rts, Scene renderScene, Pane statPane, RayTracerSettings rayTracerSettings) {
-		this.rayTracingScene = rts;
+	public Toolbox(RayTracingScene rayTracingScene, Scene renderScene, Pane statPane, RayTracer rayTracer, RayTracerSettings rayTracerSettings) {
+		this.rayTracingScene = rayTracingScene;
+		this.rayTracer = rayTracer;
 		this.renderScene = renderScene;
 		this.statPane = statPane;
 		this.rayTracerSettings = rayTracerSettings;
@@ -97,6 +100,7 @@ public class Toolbox{
         		
         		MainApp.HEIGHT = Integer.parseInt(heightSceneRes.getText());
                 MainApp.WIDTH = Integer.parseInt(widthSceneRes.getText());
+                rayTracer.changeRenderSize(MainApp.WIDTH, MainApp.HEIGHT);
             }
         });
         saveButton.setOnAction(new EventHandler<ActionEvent>()
