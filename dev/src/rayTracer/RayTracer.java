@@ -116,6 +116,20 @@ public class RayTracer
 	}
 	
 	/*
+	 * Permet de changer la taille de rendu du ray tracer
+	 * 
+	 * @param newRenderWidth La nouvelle largeur de rendu
+	 * @param newRenderHeight La nouvelle hauteur de rendu
+	 */
+	public void changeRenderSize(int newRenderWidth, int newRenderHeight)
+	{
+		this.renderWidth = newRenderWidth;
+		this.renderHeight = newRenderHeight;
+		
+		this.renderedPixels = IntBuffer.allocate(renderWidth*renderHeight);
+	}
+	
+	/*
 	 * Calcule le premier point d'intersection du rayon passé en argument avec les objets de la scène
 	 *
 	 * @param objectList 			Liste des objets de la scène. Obtenable avec MyScene.getSceneObjects()
@@ -772,7 +786,7 @@ public class RayTracer
 	{
 		return this.renderedPixels;
 	}
-
+	
 	/*
 	 * Calcule le rendu de la scène donnée avec les réglages donnés
 	 * 
