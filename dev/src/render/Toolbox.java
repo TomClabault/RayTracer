@@ -1,5 +1,6 @@
 package render;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -54,8 +55,6 @@ public class Toolbox{
 
 	public void execute() {
 
-
-
 		Stage stage = new Stage();
 		VBox root = new VBox();
 		Scene scene = new Scene(root);
@@ -65,16 +64,13 @@ public class Toolbox{
 
         CheckBox statOnOffCheckBox = new CheckBox("Affichage des stats");
         statOnOffCheckBox.setSelected(true);
-
+        
+        //CheckBox skyboxCheckbox = new CheckBox("Affichage des stats");
+        //statOnOffCheckBox.setSelected(true);
 
         Button saveButton = new Button("Sauvegarder le rendu");
 
         Label resolutionLabel = new Label("Résolution de la scène");
-
-        HBox resolutionHbox = new HBox();
-        TextField widthSceneRes = new TextField("Width");
-        TextField heightSceneRes = new TextField("Height");
-        resolutionHbox.getChildren().addAll(widthSceneRes, heightSceneRes);
 
         Button applyResButton = new Button("Appliquer");
 
@@ -88,21 +84,8 @@ public class Toolbox{
         depthSlider.setValue(5);
         depthSlider.setSnapToTicks(true);
 
-        root.getChildren().addAll(statOnOffCheckBox, saveButton, resolutionLabel, resolutionHbox, applyResButton, depthLabel, depthSlider);
+        root.getChildren().addAll(statOnOffCheckBox, saveButton, resolutionLabel, applyResButton, depthLabel, depthSlider);
 
-        applyResButton.setOnAction(new EventHandler<ActionEvent>()
-    	{
-            @Override
-            public void handle(ActionEvent event) {
-        		if (Integer.parseInt(widthSceneRes.getText()) < 0 || Integer.parseInt(heightSceneRes.getText()) < 0) {
-					throw new NumberFormatException();
-				}
-        		
-        		MainApp.HEIGHT = Integer.parseInt(heightSceneRes.getText());
-                MainApp.WIDTH = Integer.parseInt(widthSceneRes.getText());
-                rayTracer.changeRenderSize(MainApp.WIDTH, MainApp.HEIGHT);
-            }
-        });
         saveButton.setOnAction(new EventHandler<ActionEvent>()
     	{
             @Override

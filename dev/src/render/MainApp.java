@@ -76,7 +76,7 @@ public class MainApp extends Application {
         
         RayTracer rayTracer = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT);
         RayTracerSettings rayTracerSettings = new RayTracerSettings(8, 4, 9, 4);
-        rayTracerSettings.enableAntialiasing(true);
+        rayTracerSettings.enableAntialiasing(false);
         rayTracerSettings.enableBlurryReflections(true);
         
     	RenderWindow renderWindow = new RenderWindow(stage, rayTracer, rayTracingScene, rayTracerSettings);
