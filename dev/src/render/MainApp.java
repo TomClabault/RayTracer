@@ -56,22 +56,28 @@ public class MainApp extends Application {
     }
     public void start(Stage stage) {
 
-        SetSizeWindow setSizeWindow = new SetSizeWindow();
+        FileChooser fileChooser = new FileChooser();
+	   	fileChooser.setTitle("Selectionnez un fichier POV");
+	   	ExtensionFilter filter = new ExtensionFilter("POV", "*.pov");
+	   	fileChooser.getExtensionFilters().add(filter);
+	   	File file = fileChooser.showOpenDialog(stage);
+	   	if (file == null) {
+	   		Platform.exit();
+    		System.exit(0);
+		}
+	   	System.out.println("fichier selectionner : " + file);
+	   	
+	   	RayTracingScene rayTracingScene = Automat.parsePov(file);
+	   	
+	   	System.out.println(rayTracingScene);
+	   	
+	   	SetSizeWindow setSizeWindow = new SetSizeWindow();
         setSizeWindow.execute();
         
         RayTracer rayTracer = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT);
         RayTracerSettings rayTracerSettings = new RayTracerSettings(8, 4, 9, 4);
         rayTracerSettings.enableAntialiasing(true);
         rayTracerSettings.enableBlurryReflections(true);
-        
-        RayTracingScene rayTracingScene = new RayTracingScene();
-
-        FileChooser fileChooser = new FileChooser();
-	   	fileChooser.setTitle("Selectionner un fichier POV");
-	   	ExtensionFilter filter = new ExtensionFilter("POV", "*.pov");
-	   	fileChooser.getExtensionFilters().add(filter);
-	   	File file = fileChooser.showOpenDialog(stage);
-	   	System.out.println("fichier selectionner : " + file);
         
     	RenderWindow renderWindow = new RenderWindow(stage, rayTracer, rayTracingScene, rayTracerSettings);
         renderWindow.execute();

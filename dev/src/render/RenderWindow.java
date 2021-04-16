@@ -98,7 +98,8 @@ public class RenderWindow {
         statPane.getChildren().add(windowTimer.getfpsLabel());
         
         this.windowTimer = new WindowTimer(this.renderScene, rayTracer, rayTracerSettings, rayTracingScene, pixelWriter);
-
+        windowTimer.start();
+        System.out.println("EXECUTION");
         this.cameraTimer = new CameraTimer(this.renderScene, rayTracingScene);
         stage.setTitle("Rendu");
         stage.setScene(this.renderScene);
@@ -251,7 +252,7 @@ public class RenderWindow {
             this.rayTracingScene = rayTracingScene;
 
             this.rayTracer = rayTracer;
-
+            this.rayTracerSettings = rayTracerSettings;
             this.pixelWriter = pixelWriter;
 
             Label fpsLabel = new Label("");
@@ -274,14 +275,11 @@ public class RenderWindow {
 
         public void handle(long actualFrameTime){
         	DoImageTask renderTask = new DoImageTask(mainAppScene, pixelWriter, PixelFormat.getIntArgbPreInstance(), rayTracer, rayTracingScene, rayTracerSettings);
-
-        	if(futureRenderTask == null || futureRenderTask.isDone())//Si aucune tâche n'a encore été donnée ou si la tâche est terminée
+        	if(futureRenderTask == null || futureRenderTask.isDone()){//Si aucune tâche n'a encore été donnée ou si la tâche est terminée
         		futureRenderTask = executortService.submit(renderTask);//On redonne une autre tâche de rendu à faire
-
-
+        	}
 
             renderTask.setOnSucceeded((succeededEvent) -> {
-
             	IntBuffer pixelBuffer = renderTask.getValue();
             	RenderWindow.doImage(pixelBuffer, pixelWriter, pixelFormat);
             	long dif = actualFrameTime - oldFrameTime;

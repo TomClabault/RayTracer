@@ -26,16 +26,11 @@ public class DoImageTask extends Task<IntBuffer> {
 		this.rayTracerSettings = rayTracerSettings;
 	}
 
-	// public WindowTimer getWindowTimer() {
-	// return this.windowTimer;
-	// }
-
 	@Override
 	public IntBuffer call() {
 		synchronized (mainAppScene) {
 			pixelBuffer = rayTracer.renderImage(rayTracingScene, this.rayTracerSettings);
 		}
-
 		return pixelBuffer;
 	}
 }
