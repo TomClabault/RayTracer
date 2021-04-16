@@ -11,7 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import povParser.automat.Automat;
+import povParser.Automat;
 import rayTracer.RayTracer;
 import rayTracer.RayTracerSettings;
 import scene.RayTracingScene;
