@@ -107,7 +107,7 @@ public class Toolbox{
     	{
             @Override
             public void handle(ActionEvent event) {
-            	FileChooser fileChooser = new FileChooser();
+            	 FileChooser fileChooser = new FileChooser();
             	 fileChooser.setTitle("Chemin d'enregistrement du rendu");
             	 ExtensionFilter filter = new ExtensionFilter("Image", "*.png");
             	 fileChooser.getExtensionFilters().add(filter);
