@@ -44,40 +44,29 @@ public class MainApp extends Application {
         Scene scene = new Scene(stackPane);
 
         scene.getStylesheets().add(MainApp.class.getResource("style/fpsCounter.css").toExternalForm());
-        try {
-        	ImageWriter imageWriter = new ImageWriter(scene);
-            imageWriter.execute();
+    	ImageWriter imageWriter = new ImageWriter(scene);
+        imageWriter.execute();
 
-            //CounterFPS counterFPS = new CounterFPS(imageWriter.getUpdateWindow().getWindowTimer().getfpsLabel());
-            CounterFPS counterFPS = new CounterFPS(imageWriter.getWindowTimer().getfpsLabel());
+        //CounterFPS counterFPS = new CounterFPS(imageWriter.getUpdateWindow().getWindowTimer().getfpsLabel());
+        CounterFPS counterFPS = new CounterFPS(imageWriter.getWindowTimer().getfpsLabel());
 
-            stackPane.getChildren().add(imageWriter.getPane());
-            stackPane.getChildren().add(counterFPS.getPane());
+        stackPane.getChildren().add(imageWriter.getPane());
+        stackPane.getChildren().add(counterFPS.getPane());
 
-            stage.setTitle("Rendu");
-            stage.setScene(scene);
-            stage.setMaximized(AUTO_MODE); // si AUTO_MODE alors on maximize la fenêtre
-            stage.show();
+        stage.setTitle("Rendu");
+        stage.setScene(scene);
+        stage.setMaximized(AUTO_MODE); // si AUTO_MODE alors on maximize la fenêtre
+        stage.show();
 
-            Toolbox toolbox = new Toolbox(imageWriter.getRayTracingScene(),scene, counterFPS.getPane(), imageWriter.getWindowTimer().getRayTracerSettings());
-            toolbox.execute();
-            
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>(){
-            	@Override
-            	public void handle(WindowEvent e) {
-            		Platform.exit();
-            		System.exit(0);
-            	}
-            });
-		} catch (IllegalArgumentException e)
-        {
-			System.out.println("Vous avez annulé");
-			e.printStackTrace();
-			
-			Platform.exit();
-			System.exit(0);
-		}
-
-        System.out.println();
+        Toolbox toolbox = new Toolbox(imageWriter.getRayTracingScene(),scene, counterFPS.getPane(), imageWriter.getWindowTimer().getRayTracerSettings());
+        toolbox.execute();
+        
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>(){
+        	@Override
+        	public void handle(WindowEvent e) {
+        		Platform.exit();
+        		System.exit(0);
+        	}
+        });
     }
 }

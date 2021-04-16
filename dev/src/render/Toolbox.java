@@ -94,6 +94,7 @@ public class Toolbox{
         		if (Integer.parseInt(widthSceneRes.getText()) < 0 || Integer.parseInt(heightSceneRes.getText()) < 0) {
 					throw new NumberFormatException();
 				}
+        		
         		MainApp.HEIGHT = Integer.parseInt(heightSceneRes.getText());
                 MainApp.WIDTH = Integer.parseInt(widthSceneRes.getText());
             }
