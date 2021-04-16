@@ -12,6 +12,7 @@ public class Automat
 {
     /*TODO
         -ajout de la javadoc
+        -nettoyage du code et des packages
      */
 
     /*
