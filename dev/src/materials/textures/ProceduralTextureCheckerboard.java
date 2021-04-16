@@ -51,6 +51,16 @@ public class ProceduralTextureCheckerboard implements ProceduralTexture
 		return ((xInt + yInt) & 0x1) == 1 ? this.color2 : this.color1;
 	}
 	
+	public void setColor1(Color color)
+	{
+		this.color1 = color;
+	}
+	
+	public void setColor2(Color color)
+	{
+		this.color2 = color;
+	}
+	
 	@Override
 	public String toString()
 	{
