@@ -211,7 +211,6 @@ public class Camera
 		
 		double angle = Math.signum(vecDirNoXNorm.getY())*degrees;
 		
-		System.out.println(angle);
 		return angle;
 	}
 	

@@ -1,4 +1,4 @@
-package povParser.automat;
+package povParser;
 
 import geometry.Shape;
 import geometry.shapes.Plane;

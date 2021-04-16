@@ -63,7 +63,7 @@ public class ImageUtil
 	 * @param javaFXScene Scène javaFX dont on veut faire un instantané à sauvegarder sur le disque
 	 * @param outputFile Le fichier dans lequel sauvegarder l'instantané
 	 */
-	public static void writeImageToDisk(Scene javaFXScene, String outputFile) throws IOException
+	public static void writeSceneToDisk(Scene javaFXScene, String outputFile) throws IOException
 	{
 		try 
 		{

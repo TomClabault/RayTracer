@@ -1,4 +1,4 @@
-package povParser.automat;
+package povParser;
 
 import geometry.Shape;
 import geometry.shapes.Triangle;
@@ -33,7 +33,7 @@ public class EtatTriangle extends EtatUtil implements EtatToken
         int coordNb = 0;
         boolean color = false;
         boolean triangleCoord = false;
-        Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0);
+        Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0, 0);
         Triangle triangle = null;
         Point vectA = null;
         Point vectB = null;

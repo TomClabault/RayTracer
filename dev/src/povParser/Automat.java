@@ -1,4 +1,4 @@
-package povParser.automat;
+package povParser;
 
 
 import geometry.Shape;
@@ -11,10 +11,13 @@ import java.io.*;
 public class Automat
 {
     /*TODO
-    -parse les textures spéciales
-    -parse cheker dans pigment
-    -parse camera (attributs: locate, rotate, translate, look_at)
-    -ajout de la javadoc
+        -ajout de la javadoc
+        -nettoyage du code et des packages
+     */
+
+    /*
+    ajout d'un élément de syntaxe size pov dans un contexte checker pour ajouter une taille au damier:
+        pigment {checker color1, color2, size}
      */
 
     private EtatToken etatToken;
@@ -81,13 +84,12 @@ public class Automat
 
     public boolean isValidState()
     {
-        int token = 0;
         try {
-            token = this.streamTokenizer.nextToken();
+            this.currentToken = this.streamTokenizer.nextToken();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(token == StreamTokenizer.TT_WORD)
+        if(this.currentToken == StreamTokenizer.TT_WORD)
         {
             if(this.streamTokenizer.sval.equals("sphere") ||
                     this.streamTokenizer.sval.equals("triangle") ||
@@ -104,6 +106,11 @@ public class Automat
     public boolean isFinished()
     {
         return (this.streamTokenizer.ttype == StreamTokenizer.TT_EOF);
+    }
+
+    public int getCurrentToken()
+    {
+        return this.currentToken;
     }
 
     public State getState()
@@ -164,7 +171,7 @@ public class Automat
                             System.out.println("LIGHT_SOURCE");
                             automat.setState(new EtatLightSource());
                             PositionnalLight light = (PositionnalLight) automat.action();
-                            scene.setLight(light);
+                            scene.addLight(light);
                             break;
                         }
 

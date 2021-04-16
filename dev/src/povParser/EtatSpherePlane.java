@@ -1,4 +1,4 @@
-package povParser.automat;
+package povParser;
 
 import geometry.Shape;
 import javafx.scene.paint.Color;
@@ -35,7 +35,7 @@ public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
         boolean coord = false;
         int nextToken = 0;
         double[] coordArray = {0};
-        Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0);
+        Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0, 0);
         CoordinateObject vect = null;
 
         Double dist = null;

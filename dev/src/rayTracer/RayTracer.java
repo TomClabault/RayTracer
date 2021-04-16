@@ -19,6 +19,7 @@ import multithreading.ThreadsTaskList;
 import multithreading.TileTask;
 import multithreading.TileThread;
 import scene.RayTracingScene;
+import scene.lights.PositionnalLight;
 
 /*
  * Une instance de RayTracer créée à partir de la largeur et de la hauteur du rendu voulu. Permet de générer les
@@ -112,6 +113,20 @@ public class RayTracer
 		
 		this.threadTaskList = new ThreadsTaskList();
 		this.randomGenerator= new Random();
+	}
+	
+	/*
+	 * Permet de changer la taille de rendu du ray tracer
+	 * 
+	 * @param newRenderWidth La nouvelle largeur de rendu
+	 * @param newRenderHeight La nouvelle hauteur de rendu
+	 */
+	public void changeRenderSize(int newRenderWidth, int newRenderHeight)
+	{
+		this.renderWidth = newRenderWidth;
+		this.renderHeight = newRenderHeight;
+		
+		this.renderedPixels = IntBuffer.allocate(renderWidth*renderHeight);
 	}
 	
 	/*
@@ -233,12 +248,6 @@ public class RayTracer
 			int summedBlue = 0;
 			
 			int blurSampleCount = (this.settings.isEnableBlurryReflections() && intInfos.getIntObjMat().getRoughness() > 0) ? this.settings.getBlurryReflectionsSampleCount() : 1;
-//			System.out.println(blurSampleCount);
-//			System.out.println("point: " + intInfos.getIntP());
-//			System.out.println("objet: " + intInfos.getIntObj());
-//			System.out.println("nromal:" + intInfos.getNormInt());
-//			System.out.println("perfect refelct " + intInfos.getReflVec());
-//			System.out.println();
 			for(int blurSample = 0; blurSample < blurSampleCount; blurSample++)
 			{
 				Vector reflectDirection = null;
@@ -252,9 +261,6 @@ public class RayTracer
 					double randomZ = randomGenerator.nextDouble() * 2 - 1;
 					
 					Vector randomBounce = Vector.normalizeV(Vector.add(Vector.normalizeV(new Vector(randomX, randomY, randomZ)), intInfos.getNormInt()));
-					//System.out.println("bounce: " + randomBounce);
-					
-					//Vector randomBounceSample = Vector.normalizeV(Vector.add(new Vector(randomX, randomY, randomZ), Vector.scalarMul(intInfos.getNormInt(), 2)));
 					Vector randomBounceDirection = Vector.normalizeV(Vector.interpolate(perfectReflectDirection, randomBounce, intInfos.getIntObjMat().getRoughness()));
 					
 					reflectDirection = randomBounceDirection;
@@ -490,12 +496,13 @@ public class RayTracer
 		{
 			interInfos.setIntO(intersectedObject);//On set l'objet intersecté dans les informations d'intersection
 			
-			double lightIntensity = renderScene.getLight().getIntensity();
+			double lightIntensity = 0;
+			for(PositionnalLight light : renderScene.getLights())
+				lightIntensity = Math.max(lightIntensity, light.getIntensity());
+			
 			double ambientLighting = computeAmbient(renderScene.getAmbientLightIntensity(), interInfos.getIntObjMat().getAmbientCoeff());
 			if(!this.settings.isEnableAmbient())//Si le calcul de l'ambient n'est pas activé
 				ambientLighting = 0;//On définit l'ambient à 0
-			
-			interInfos.setToLightVec(Vector.normalizeV(new Vector(interInfos.getIntP(), renderScene.getLight().getCenter())));
 
 			Color currentPixelColor = Color.rgb(0, 0, 0);
 			Color objectColor = null;
@@ -522,39 +529,56 @@ public class RayTracer
 			interInfos.setReflVec(computeReflectionVector(interInfos.getNormInt(), ray.getDirection()));
 			interInfos.setIntPShift(Point.translateMul(interInfos.getIntP(), interInfos.getReflVec(), EPSILON_SHIFT));//On translate légèrement le point d'intersection dans la direction d'un  rayon parfaitement réfléchi pour ne pas directement réintersecter l'objet avec lequel nous avons déjà trouvé un point d'intersection
 			
-			Vector shadowRayDir = new Vector(interInfos.getIntPShift(), renderScene.getLight().getCenter());//On calcule la direction du rayon secondaire qui va droit dans la source de lumière
-			double interToLightDist = shadowRayDir.length();//Distance qui sépare le point d'intersection du centre de la lumière
-			shadowRayDir.normalize();
-			
-			interInfos.setShadowRay(new Ray(interInfos.getIntPShift(), shadowRayDir));//Création du rayon secondaire avec pour origine le premier point d'intersection décalé et avec comme direction le centre de la lampe
-
-			//On cherche une intersection avec un objet qui se trouverait entre la lampe et l'origine du shadow ray
-			Point shadowInterPoint = new Point(0, 0, 0);
-			Shape shadowInterObject = computeClosestInterPoint(objectList, interInfos.getShadowRay(), null, false, shadowInterPoint);
-
-			double interToShadowInterDist = 0;
-			if(shadowInterObject != null)
-				interToShadowInterDist = Point.distance(interInfos.getIntP(), shadowInterPoint);
-
-
-			if(shadowInterObject == null || interToShadowInterDist > interToLightDist || shadowInterObject.getMaterial().getIsTransparent())//Aucune intersection trouvée pour aller jusqu'à la lumière, on peut calculer la couleur directe de l'objet
+			boolean accessToLight = false;//Si le point de la scène que l'on est en train de calculer a un accès direct à une (ou plusieures) source de lumière, alors on n'ombragera pas ce point et cette variable passera à true
+			boolean reflectionsDone = false;//Permet de ne pas recalculer les reflexions pour chaque source de lumière
+			boolean refractionsDone = false;//Permet de ne calculer les réfractions qu'une seule fois car elles ne dépendent pas des sources de lumière 
+			for(PositionnalLight light : renderScene.getLights())
 			{
-				if(this.settings.isEnableDiffuse())
-					interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeDiffuseColor(interInfos, lightIntensity)));
-				if(this.settings.isEnableSpecular())
-					interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeSpecularColor(interInfos, lightIntensity)));
-				if(this.settings.isEnableReflections())
-					interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeReflectionsColor(renderScene, interInfos, depth)));
-				if(this.settings.isEnableRefractions())
-					interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeRefractionsColor(renderScene, interInfos, depth)));
+				interInfos.setToLightVec(Vector.normalizeV(new Vector(interInfos.getIntP(), light.getCenter())));
+				
+				Vector shadowRayDir = new Vector(interInfos.getIntPShift(), light.getCenter());//On calcule la direction du rayon secondaire qui va droit dans la source de lumière
+				double interToLightDist = shadowRayDir.length();//Distance qui sépare le point d'intersection du centre de la lumière
+				shadowRayDir.normalize();
+				
+				interInfos.setShadowRay(new Ray(interInfos.getIntPShift(), shadowRayDir));//Création du rayon secondaire avec pour origine le premier point d'intersection décalé et avec comme direction le centre de la lampe
+	
+				//On cherche une intersection avec un objet qui se trouverait entre la lampe et l'origine du shadow ray
+				Point shadowInterPoint = new Point(0, 0, 0);
+				Shape shadowInterObject = computeClosestInterPoint(objectList, interInfos.getShadowRay(), null, false, shadowInterPoint);
+	
+				double interToShadowInterDist = 0;
+				if(shadowInterObject != null)
+					interToShadowInterDist = Point.distance(interInfos.getIntP(), shadowInterPoint);
+	
+	
+				if(shadowInterObject == null || interToShadowInterDist > interToLightDist || shadowInterObject.getMaterial().getIsTransparent())//Aucune intersection trouvée pour aller jusqu'à la lumière, on peut calculer la couleur directe de l'objet
+				{
+					accessToLight = true;
+					
+					if(this.settings.isEnableDiffuse())
+						interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeDiffuseColor(interInfos, lightIntensity)));
+					if(this.settings.isEnableSpecular())
+						interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeSpecularColor(interInfos, lightIntensity)));
+					if(this.settings.isEnableReflections() && !reflectionsDone)
+					{
+						interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeReflectionsColor(renderScene, interInfos, depth)));
+						reflectionsDone = true;
+					}
+					if(this.settings.isEnableRefractions() && !refractionsDone)
+					{
+						interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeRefractionsColor(renderScene, interInfos, depth)));
+						refractionsDone = true;
+					}
+				}
 			}
-			else//Une intersection a été trouvée et l'objet intersecté est entre la lumière et le départ du shadow ray. De plus, l'objet bloquant la vue à la lumière n'est pas transparent
+			
+			if(!accessToLight)
 				interInfos.setCurPixCol(computeShadow(renderScene, interInfos, ambientLighting, depth));
-
 
 			return interInfos.getCurPixCol();
 		}
 		else//Le rayon n'a rien intersecté --> couleur du background / de la skybox
+		{
 			if(renderScene.hasSkybox())
 			{
 				Point UVCoords = Sphere.getUVCoordsUnitSphere(ray.getDirection());
@@ -571,6 +595,7 @@ public class RayTracer
 			}
 			else
 				return renderScene.getBackgroundColor();//Couleur du fond si on a pas de skybox
+		}
 	}
 
 	/*
@@ -589,8 +614,11 @@ public class RayTracer
 		TileTask currentTileTask = null;
 
 		taskNumber = taskList.getTotalTaskGiven();
-		if(taskNumber >= taskList.getTotalTaskCount())
-			return false;
+		synchronized (taskNumber)
+		{
+			if(taskNumber >= taskList.getTotalTaskCount())
+				return false;
+		}
 
 		currentTileTask = taskList.getTask(taskList.getTotalTaskGiven());
 		taskList.incrementTaskGiven();
@@ -758,7 +786,7 @@ public class RayTracer
 	{
 		return this.renderedPixels;
 	}
-
+	
 	/*
 	 * Calcule le rendu de la scène donnée avec les réglages donnés
 	 * 

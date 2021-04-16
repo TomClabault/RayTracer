@@ -1,4 +1,4 @@
-package povParser.automat;
+package povParser;
 
 
 import maths.Point;
