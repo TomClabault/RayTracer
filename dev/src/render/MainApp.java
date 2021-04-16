@@ -63,5 +63,7 @@ public class MainApp extends Application {
 			
 			System.exit(0);
 		}
+        
+        System.out.println();
     }
 }
