@@ -15,7 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 
-import povParser.automat.Automat;
+import povParser.Automat;
 import rayTracer.RayTracer;
 import geometry.shapes.*;
 import geometry.*;
