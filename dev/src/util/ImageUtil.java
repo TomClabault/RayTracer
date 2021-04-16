@@ -56,7 +56,6 @@ public class ImageUtil
 	}
 	
 	/*
-	 * Code de: https://stackoverflow.com/questions/34194427/javafx-2-save-crisp-snapshot-of-scene-to-disk
 	 * 
 	 * Permet d'écrire le rendu d'une scène JavaFX sur le disque
 	 * 
@@ -65,11 +64,24 @@ public class ImageUtil
 	 */
 	public static void writeSceneToDisk(Scene javaFXScene, String outputFile) throws IOException
 	{
+		File output = new File(outputFile);
+		writeImageToDisk(javaFXScene, output);
+	}
+	
+	/*
+	 * Code de: https://stackoverflow.com/questions/34194427/javafx-2-save-crisp-snapshot-of-scene-to-disk
+	 * 
+	 * Permet d'écrire le rendu d'une scène JavaFX sur le disque
+	 * 
+	 * @param javaFXScene Scène javaFX dont on veut faire un instantané à sauvegarder sur le disque
+	 * @param outputFile Le fichier dans lequel sauvegarder l'instantané
+	 */
+	public static void writeImageToDisk(Scene javaFXScene, File output) throws IOException
+	{
 		try 
 		{
 			WritableImage wi = new WritableImage((int) javaFXScene.getWidth(), (int) javaFXScene.getHeight());
 			WritableImage snapshot = javaFXScene.snapshot(wi);
-			File output = new File(outputFile);
 			ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
 		} catch (IOException ex) {
 			ex.printStackTrace();
