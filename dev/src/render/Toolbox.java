@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 
 import java.io.File;
@@ -14,6 +15,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -26,10 +28,12 @@ public class Toolbox{
 
 	private RayTracingScene rayTracingScene;
 	private Scene renderScene;
+	private Pane statPane;
 
-	public Toolbox(RayTracingScene rts, Scene renderScene) {
+	public Toolbox(RayTracingScene rts, Scene renderScene, Pane statPane) {
 		this.rayTracingScene = rts;
 		this.renderScene = renderScene;
+		this.statPane = statPane;
 	}
 
 	public RayTracingScene getRts() {
@@ -51,8 +55,11 @@ public class Toolbox{
         stage.setScene(scene);
         stage.setTitle("ToolBox");
 
-        TextField saveTextField = new TextField("Chemin d'enregistrement du rendu");
-        Button saveButton = new Button("Save");
+        CheckBox statOnOffCheckBox = new CheckBox("Affichage des stats");
+        statOnOffCheckBox.setSelected(true);
+
+
+        Button saveButton = new Button("Sauvegarder le rendu");
 
         Label resolutionLabel = new Label("Résolution de la scène");
 
@@ -66,7 +73,7 @@ public class Toolbox{
         Label depthLabel = new Label();
         Slider depthSlider = new Slider(0,10,1);
 
-        root.getChildren().addAll(saveTextField, saveButton, resolutionLabel, resolutionHbox, applyResButton, depthLabel, depthSlider);
+        root.getChildren().addAll(statOnOffCheckBox, saveButton, resolutionLabel, resolutionHbox, applyResButton, depthLabel, depthSlider);
 
         applyResButton.setOnAction(new EventHandler<ActionEvent>()
     	{
@@ -101,6 +108,14 @@ public class Toolbox{
             	 }
             }
         });
+        statOnOffCheckBox.setOnAction(new EventHandler<ActionEvent>()
+        {
+        	@Override
+        	public void handle(ActionEvent event) {
+        		statPane.setVisible(statOnOffCheckBox.isSelected());
+        	}
+        });
+
         stage.show();
 	}
 }

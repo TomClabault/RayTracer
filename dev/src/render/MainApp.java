@@ -55,12 +55,8 @@ public class MainApp extends Application {
             stage.setMaximized(AUTO_MODE); // si AUTO_MODE alors on maximize la fenêtre
             stage.show();
 
-            Toolbox toolbox = new Toolbox(imageWriter.getRayTracingScene(),scene);
+            Toolbox toolbox = new Toolbox(imageWriter.getRayTracingScene(),scene, counterFPS.getPane());
             toolbox.execute();
-
-            //Toolbox toolboxTask = new Toolbox(null);
-            //ExecutorService es = Executors.newFixedThreadPool(1);
-            //.execute(toolboxTask);
 		} catch (IllegalArgumentException e)
         {
 			System.out.println("Vous avez annulé");
