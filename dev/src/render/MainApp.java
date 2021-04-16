@@ -4,7 +4,11 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * La classe contenant le Main qui gère la totalité de l'application
@@ -57,11 +61,20 @@ public class MainApp extends Application {
 
             Toolbox toolbox = new Toolbox(imageWriter.getRayTracingScene(),scene, counterFPS.getPane());
             toolbox.execute();
+            
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>(){
+            	@Override
+            	public void handle(WindowEvent e) {
+            		Platform.exit();
+            		System.exit(0);
+            	}
+            });
 		} catch (IllegalArgumentException e)
         {
 			System.out.println("Vous avez annulé");
 			e.printStackTrace();
-
+			
+			Platform.exit();
 			System.exit(0);
 		}
 
