@@ -151,11 +151,11 @@ showstringspaces=false}
 
 \section{Analyse des résultats}
     \subsection{Mesure des performances}
-        \subfile{latex/other/mesuresPerf.tex}
+        \subfile{latex/mesuresPerf.tex}
 
     \subsection{Comparaison avec povRay}
 \section{Idées d'améliorations}
-    \subfile{latex/other/ideesAmelios.tex}
+    \subfile{latex/ideesAmelios.tex}
 \section{Conclusion}
 
 
@@ -164,28 +164,7 @@ showstringspaces=false}
 
 
 \newpage%Nouvelle page pour les annexes
-\begin{appendices}
-	\section{Le ray tracer}
-		\subsection{Configuration d'une caméra, d'une scène et de rayons}
-		\begin{figure}[h!]
-			\adjustbox{center}{\includegraphics[width=1.1\textwidth]{img/rt/repCam2Rayonsv2.png}}
-
-			\caption{Des rayons sont tirés depuis la caméra dans sa direction de regard. Nous cherchons les points d'intersection avec les objets de la scène.}
-		\end{figure}
-		\FloatBarrier
-		\label{annexe:repreCamRayon}
-
-		\subsection{Le principe récursif des réflexions}
-		\begin{figure}[!h]
-			\adjustbox{center}{\includegraphics[width=1.1\textwidth]{img/rt/reflectionsSchema.png}}
-
-			\caption{Exemple de rebonds successifs des rayons jusqu'à un objet non réfléchissant}
-			\label{reflectionsSchema}
-		\end{figure}
-		\FloatBarrier
-		\label{annexe:reflexionsRecursives}
-\FloatBarrier
-\end{appendices}
+\subfile{latex/appendices}
 
 \newpage%Nouvelle page pour la bibliographie
 \nocite{*}
