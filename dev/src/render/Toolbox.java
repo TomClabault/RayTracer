@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.io.File;
+import java.io.IOException;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,10 +24,12 @@ import scene.RayTracingScene;
 
 public class Toolbox{
 
-	public RayTracingScene rayTracingScene;
+	private RayTracingScene rayTracingScene;
+	private Scene renderScene;
 
-	public Toolbox(RayTracingScene rts) {
+	public Toolbox(RayTracingScene rts, Scene renderScene) {
 		this.rayTracingScene = rts;
+		this.renderScene = renderScene;
 	}
 
 	public RayTracingScene getRts() {
@@ -76,15 +79,23 @@ public class Toolbox{
                 MainApp.WIDTH = Integer.parseInt(widthSceneRes.getText());
             }
         });
-        saveButton.setOnAction(new EventHandler<ActionEvent>() 
+        saveButton.setOnAction(new EventHandler<ActionEvent>()
     	{
             @Override
             public void handle(ActionEvent event) {
-            	DirectoryChooser directoryChooser = new DirectoryChooser();
-            	 directoryChooser.setTitle("Chemin d'enregistrement du rendu");
-            	 File selectedDir = directoryChooser.showDialog(stage);
-            	 if (selectedDir != null) {
-            	    //TODO ajouter code Tom
+            	FileChooser fileChooser = new FileChooser();
+            	 fileChooser.setTitle("Chemin d'enregistrement du rendu");
+            	 ExtensionFilter filter = new ExtensionFilter("Image", "*.png");
+            	 fileChooser.getExtensionFilters().add(filter);
+            	 File file = fileChooser.showSaveDialog(stage);
+            	 if (file != null) {
+            		 try {
+            			 util.ImageUtil.writeImageToDisk(renderScene, file);
+            			 System.out.println("Image sauvegardée en : " + file);
+					} catch (IOException e) {
+						System.out.println("Impossible de sauvegarder l'image");
+					}
+
             	 } else {
             		 System.out.println("Aucun dossier n'est sélectionner");
             	 }

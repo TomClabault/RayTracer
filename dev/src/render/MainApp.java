@@ -55,7 +55,7 @@ public class MainApp extends Application {
             stage.setMaximized(AUTO_MODE); // si AUTO_MODE alors on maximize la fenêtre
             stage.show();
 
-            Toolbox toolbox = new Toolbox(imageWriter.getRayTracingScene());
+            Toolbox toolbox = new Toolbox(imageWriter.getRayTracingScene(),scene);
             toolbox.execute();
 
             //Toolbox toolboxTask = new Toolbox(null);
