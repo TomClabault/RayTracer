@@ -15,6 +15,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritablePixelFormat;
+import rayTracer.RayTracerSettings;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 
@@ -23,7 +24,7 @@ import scene.RayTracingScene;
 public class WindowTimer extends AnimationTimer {
 
     private RayTracingScene rayTracingScene;
-    private RayTracerSettings rayTracingSettings;
+    private RayTracerSettings rayTracerSettings;
 
     private PixelWriter pixelWriter;
     private long oldFrameTime;
@@ -38,7 +39,7 @@ public class WindowTimer extends AnimationTimer {
     public WindowTimer(Scene mainAppScene, RayTracingScene rayTracingScene, PixelWriter pixelWriter) {
         this.rayTracingScene = rayTracingScene;
         this.rayTracingSettings = new RayTracerSettings(2, 4, 9, 4);
-        this.rayTracingSettings.enableAntialiasing(false);
+        this.rayTracingSettings.enableAntialiasing(true);
         this.rayTracingSettings.enableBlurryReflections(true);
 
         this.pixelWriter = pixelWriter;
@@ -58,7 +59,7 @@ public class WindowTimer extends AnimationTimer {
 
 
     public void handle(long actualFrameTime){
-    	DoImageTask renderTask = new DoImageTask(mainAppScene, pixelWriter, PixelFormat.getIntArgbPreInstance(), rayTracingScene);
+    	DoImageTask renderTask = new DoImageTask(mainAppScene, pixelWriter, PixelFormat.getIntArgbPreInstance(), rayTracingScene, rayTracerSettings);
 
     	if(futureRenderTask == null || futureRenderTask.isDone())//Si aucune tâche n'a encore été donnée ou si la tâche est terminée
     		futureRenderTask = executortService.submit(renderTask);//On redonne une autre tâche de rendu à faire
