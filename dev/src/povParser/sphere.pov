@@ -1,7 +1,7 @@
 sphere { <-1.25, 0.5, -6>, 1
   pigment
   {
-    checker pigment {color rgb 0.5}, pigment {color rgb 0.5}
+    checker pigment {color rgb <0.5, 0.5, 0.5>}, pigment {color rgb 0.5}
   }
   finish {
     ambient 1 

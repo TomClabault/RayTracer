@@ -94,7 +94,13 @@ public abstract class EtatUtil
         state = parsePropertryAndGetState(context);
         if(state == null)
         {
-            state = checkEndingBracket(context);
+            if((char)context.getCurrentToken() == ',')
+            {
+                context.callNextToken();
+                state = parsePropertryAndGetState(context);
+            }
+            else
+                state = checkEndingBracket(context);
         }
         return state;
     }
@@ -110,6 +116,7 @@ public abstract class EtatUtil
         int[] checkerColor1 = new int[3];
         int[] checkerColor2 = new int[3];
         boolean hasChecker = false;
+        boolean checker2 = false; //second checkerboard color
 
         while(state != Attribute.OUTSIDE)
         {
@@ -183,6 +190,7 @@ public abstract class EtatUtil
                 case PIGMENT:
                 {
                     System.out.println("pigment");
+                    System.out.println(context.getStreamTokenizer());
                     context.callNextToken(); //skip pigment
                     context.callNextToken(); //skip '{'
                     this.nbBracket++;
@@ -201,7 +209,18 @@ public abstract class EtatUtil
                             else
                             {
                                 int colorAttribute = (int)context.getNumberValue() * 255;
-                                material.setColor(Color.rgb(colorAttribute, colorAttribute, colorAttribute));
+                                if(hasChecker)
+                                {
+                                    checkerboard.setColor1(Color.rgb(colorAttribute, colorAttribute, colorAttribute));
+                                    checker2 = true;
+                                }
+                                else if(hasChecker && checker2)
+                                {
+                                    checkerboard.setColor2(Color.rgb(colorAttribute, colorAttribute, colorAttribute));
+                                    System.out.println("second checker color");
+                                }
+                                else
+                                    material.setColor(Color.rgb(colorAttribute, colorAttribute, colorAttribute));
                             }
 
                             context.callNextToken(); // skip color value
@@ -226,6 +245,7 @@ public abstract class EtatUtil
                     }
                     else if(context.currentWord("checker"))
                     {
+                        context.callNextToken(); // skip checker
                         state = Attribute.PIGMENT;
                         hasChecker = true;
                         System.out.println("checker");
@@ -286,7 +306,12 @@ public abstract class EtatUtil
                             context.callNextToken();
                     }
                     if(hasChecker)
-                        checkerboard
+                    {
+                        checkerboard.setColor1(Color.rgb(colorTab[0], colorTab[1], colorTab[2]));
+                        checker2 = true;
+                    }
+                    else if(hasChecker && checker2)
+                        checkerboard.setColor2(Color.rgb(colorTab[0], colorTab[1], colorTab[2]));
                     else
                         material.setColor(Color.rgb(colorTab[0], colorTab[1], colorTab[2]));
                     context.callNextToken(); //skip '>'
@@ -295,6 +320,7 @@ public abstract class EtatUtil
                     {
                         state = this.checkEndingBracket(context);
                     }
+                    System.out.println("after opening chevron: " + context.getStreamTokenizer() );
                     break;
                 }
                 case INTERIOR:
@@ -329,11 +355,7 @@ public abstract class EtatUtil
         }
         else if(hasChecker)
         {
-            System.out.println(checkerColor1[0] + checkerColor1[1] + checkerColor1[2]);
-            System.out.println(checkerColor2[0] + checkerColor2[1] + checkerColor2[2]);
-            Color firstCheckerColor = Color.rgb(checkerColor1[0], checkerColor1[1], checkerColor1[2]);
-            Color lastCheckerColor = Color.rgb(checkerColor2[0], checkerColor2[1], checkerColor2[2]);
-            checkerboard = new ProceduralTextureCheckerboard(firstCheckerColor, lastCheckerColor);
+            System.out.println(checkerboard);
             material.setProceduralTexture(checkerboard);
         }
         return material;
