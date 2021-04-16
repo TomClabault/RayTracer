@@ -12,7 +12,7 @@ public class Automat
 {
     /*TODO
         -ajout de la javadoc
-        -nettoyage du code et des packages
+        -enlever les sysout
      */
 
     /*
@@ -20,9 +20,24 @@ public class Automat
         pigment {checker color1, color2, size}
      */
 
+    /**
+     * état courant
+     */
     private EtatToken etatToken;
+
+    /**
+     *instance de StreamTokenizer utilisée pour effectuer le parsing
+     */
     private StreamTokenizer streamTokenizer;
+
+    /**
+     * état de figure courant, c'est une énumération de type State
+     */
     private State currentState;
+
+    /**
+     *
+     */
     private int currentToken;
 
     public Automat(StreamTokenizer streamTokenizer, State currentState)
@@ -166,68 +181,53 @@ public class Automat
 
                     switch (currentState) {
 
-                        case LIGHT_SOURCE:
-                        {
-                            System.out.println("LIGHT_SOURCE");
+                        case LIGHT_SOURCE: {
                             automat.setState(new EtatLightSource());
                             PositionnalLight light = (PositionnalLight) automat.action();
                             scene.addLight(light);
                             break;
                         }
 
-                        case SPHERE:
-                        {
-                            System.out.println("SPHERE");
+                        case SPHERE: {
                             automat.setState(new EtatSphere());
                             Shape sphere = (Shape) automat.action();
                             scene.addShape(sphere);
                             break;
                         }
 
-                        case TRIANGLE:
-                        {
-                            System.out.println("TRIANGLE");
+                        case TRIANGLE: {
                             automat.setState(new EtatTriangle());
                             Shape triangle = (Shape) automat.action();
                             scene.addShape(triangle);
                             break;
                         }
 
-                        case BOX:
-                        {
-                            System.out.println("BOX");
+                        case BOX: {
                             automat.setState(new EtatBox());
-                            Shape rectangle = (Shape)automat.action();
+                            Shape rectangle = (Shape) automat.action();
                             scene.addShape(rectangle);
                             break;
                         }
 
-                        case PLANE:
-                        {
-                            System.out.println("PLANE");
+                        case PLANE: {
                             automat.setState(new EtatPlane());
                             Shape plane = (Shape) automat.action();
                             scene.addShape(plane);
                             break;
                         }
 
-                        case CAMERA:
-                        {
-                            System.out.println("CAMERA");
+                        case CAMERA: {
                             automat.setState(new EtatCamera());
                             Camera camera = (Camera) automat.action();
                             scene.setCamera(camera);
                             break;
                         }
 
-                        case OUTSIDE:
-                        {
+                        case OUTSIDE: {
                             automat.setState(new EtatOutside());
                             automat.action();
                             break;
                         }
-                        default:
-                            System.out.println("not any state");
                     }
                 }
             }
