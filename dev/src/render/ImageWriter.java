@@ -15,7 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 
-import povParser.automat.Automat;
+import povParser.Automat;
 import rayTracer.RayTracer;
 import geometry.shapes.*;
 import geometry.*;
@@ -47,16 +47,16 @@ public class ImageWriter {
     public ImageWriter(Scene mainAppScene)
     {
         this.mainAppScene = mainAppScene;
-//        {
-//        	Image skybox = null;
-//            URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
-//            if(skyboxURL != null)
-//            		skybox = new Image(skyboxURL.toExternalForm());
-//            
-//        	this.myGlobalScene = Automat.parsePov("dev/src/povParser/roughScene.pov");
-//        	this.myGlobalScene.setSkybox(skybox);
-//        }
-        this.myGlobalScene = generateRoughnessDemoScene();
+        {
+        	Image skybox = null;
+            URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
+            if(skyboxURL != null)
+            		skybox = new Image(skyboxURL.toExternalForm());
+
+        	this.myGlobalScene = Automat.parsePov("dev/src/povParser/sphere.pov");
+        	this.myGlobalScene.setSkybox(skybox);
+        }
+        //this.myGlobalScene = generateRoughnessDemoScene();
         //this.myGlobalScene = generateUsualScene();
         this.writableImage = new WritableImage(MainApp.WIDTH,MainApp.HEIGHT);
         

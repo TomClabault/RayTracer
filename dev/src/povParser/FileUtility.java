@@ -5,8 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 /*
-class mainly used as a debug purpose
-
+class mainly used as a debugging purpose
  */
 public class FileUtility {
 

@@ -70,6 +70,11 @@ public class ProceduralTextureCheckerboard implements ProceduralTexture
 	{
 		this.color2 = color;
 	}
+
+	public void setSize(double newSize)
+	{
+		this.size = newSize;
+	}
 	
 	@Override
 	public String toString()
