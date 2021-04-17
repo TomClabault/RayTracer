@@ -193,6 +193,10 @@ public class ColorOperations
 	 */
 	public static String colorToString(Color color)
 	{
+		if(color == null)
+			return "null";
+		
+		
 		String output = "";
 		
 		output += "(";

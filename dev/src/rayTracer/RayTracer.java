@@ -612,16 +612,16 @@ public class RayTracer
 	{
 		Integer taskNumber = 0;
 		TileTask currentTileTask = null;
-
+		//synchronized (taskNumber)
+		//{
 		taskNumber = taskList.getTotalTaskGiven();
-		synchronized (taskNumber)
-		{
-			if(taskNumber >= taskList.getTotalTaskCount())
-				return false;
-		}
-
+		if(taskNumber >= taskList.getTotalTaskCount())
+			return false;
+		
 		currentTileTask = taskList.getTask(taskList.getTotalTaskGiven());
+		
 		taskList.incrementTaskGiven();
+		//}
 		
 		this.computePartialImage(renderScene, currentTileTask.getStartX(), currentTileTask.getStartY(), currentTileTask.getEndX(), currentTileTask.getEndY());
 
@@ -797,6 +797,12 @@ public class RayTracer
 	 */
 	public IntBuffer renderImage(RayTracingScene renderScene, RayTracerSettings renderSettings)
 	{
+		if(!verifRenderScene(renderScene))
+		{
+			System.out.println("Scène de rendu invalide.");
+			return this.getRenderedPixels();//Sera probablement noir puisque la scène n'est pas valide et donc aucun pixel n'a été calculé
+		}
+		
 		this.settings = renderSettings;
 		this.threadTaskList.initTaskList(settings.getNbCore(), renderWidth, renderHeight);
 		
@@ -811,5 +817,19 @@ public class RayTracer
 
 		this.threadTaskList.resetTasksProgression();
 		return this.getRenderedPixels();
+	}
+	
+	/*
+	 * Permet de vérifier que la scène est valide et peut être rendue 
+	 */
+	private boolean verifRenderScene(RayTracingScene renderScene)
+	{
+		if(renderScene.getCamera() == null)//Pas de caméra
+			return false;
+		
+		if(renderScene.getLights() == null || renderScene.getLights().size() == 0)//Pas de source de lumière
+			return false;
+		
+		return true;
 	}
 }

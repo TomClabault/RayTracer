@@ -99,7 +99,6 @@ public class RenderWindow {
         
         this.windowTimer = new WindowTimer(this.renderScene, rayTracer, rayTracerSettings, rayTracingScene, pixelWriter);
         windowTimer.start();
-        System.out.println("EXECUTION");
         this.cameraTimer = new CameraTimer(this.renderScene, rayTracingScene);
         stage.setTitle("Rendu");
         stage.setScene(this.renderScene);
@@ -139,97 +138,6 @@ public class RenderWindow {
     public static void doImage(IntBuffer pixelBuffer, PixelWriter pixelWriter, WritablePixelFormat<IntBuffer> pixelFormat)
     {
     	pixelWriter.setPixels(0, 0, MainApp.WIDTH, MainApp.HEIGHT, pixelFormat, pixelBuffer, MainApp.WIDTH);
-    }
-
-    public RayTracingScene generateUsualScene() 
-    {
-
-    	Camera cameraRT = new Camera(new Point(0.000, 0.5, 0.320), 0, 0, 40);//Magic camera
-    	//Camera cameraRT = new Camera(new Point(0.75, -0.75, -5.5), 0, 0);
-        PositionnalLight l = new LightBulb(new Point(2, 2, 1), 1);
-
-        ArrayList<Shape> shapeList = new ArrayList<>();
-        shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
-        //shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new RoughMaterial(Color.rgb(48, 48, 48), 0.75, new ProceduralTextureCheckerboard(Color.rgb(16, 16, 16), Color.rgb(75, 75, 75), 1.0))));
-
-        //shapeList.add(new Sphere(new Point(0, 0.5, -3.5), 1, new GlossyMaterial(Color.GOLD, 0.92)));
-        shapeList.add(new Sphere(new Point(-1.25, 0.5, -6), 1, new MirrorMaterial(0.75)));
-        shapeList.add(new Sphere(new Point(0, 1.5, -6), 0.5, new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(Color.web("D4AF37")), 0.75)));
-        shapeList.add(new Sphere(new Point(1.25, 0.5, -6), 1, new GlassMaterial()));
-        
-        shapeList.add(new Sphere(Point.translateMul(new Point(-0.3, 0.5, -0.1), new Vector(1.250, 0.000, -4.500), 1.5625), 0.2, new GlassyMaterial(Color.GREEN)));
-        shapeList.add(new Sphere(new Point(-2, -0.65, -5), 0.35, new MatteMaterial(Color.BLACK, new ProceduralTextureCheckerboard(Color.BLACK, Color.YELLOW, 12))));
-        shapeList.add(new Sphere(new Point(2, -0.65, -5), 0.35, new MatteMaterial(Color.BLACK, new ProceduralTextureCheckerboard(Color.RED, Color.DARKRED.darker(), 12))));
-        
-        shapeList.add(new Sphere(new Point(0, -0.5, -6), 0.5, new GlassyMaterial(Color.RED)));
-        shapeList.add(new Sphere(new Point(-0.75, -0.75, -6), 0.25, new GlassyMaterial(Color.rgb(255, 64, 0))));
-        shapeList.add(new Sphere(new Point(0.75, -0.75, -6), 0.25, new GlassyMaterial(Color.rgb(255, 64, 0))));
-        //shapeList.add(new Icosphere(new Point(0, 2, -6), 1, 2, new GlassyMaterial(Color.rgb(0, 128, 255))));
-        //shapeList.add(new Rectangle(new Point(-1.25, 1.5, -6), new Point(-0.25, 2.5, -7), new GlassyMaterial(Color.RED)));
-        
-        
-        Image skybox = null;
-        URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
-        if(skyboxURL != null)
-        		skybox = new Image(skyboxURL.toExternalForm());
-        
-        RayTracingScene sceneRT = null;
-        try
-        {
-        	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1, skybox);
-        }
-        catch (IllegalArgumentException exception)//Skybox mal chargée
-        {
-        	System.err.println(exception.getMessage() + System.lineSeparator() + "Aucune skybox ne sera utilisée.");
-        	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1);
-        }
-
-        sceneRT.addLight(new LightBulb(new Point(-2, 2.5, 1.440), 1));
-        return  sceneRT;
-    }
-    
-    public RayTracingScene generateRoughnessDemoScene() 
-    {
-    	Camera cameraRT = new Camera(new Point(-2.000, 4, -1), new Point(-2, 0, -8), 40);
-        PositionnalLight l = new LightBulb(new Point(-2, 6, 0), 1);
-
-        ArrayList<Shape> shapeList = new ArrayList<>();
-        shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
-
-        double roughnessTab[] = new double[] {0.5, 0.75, 0.9, 1};
-        for(int y = 0; y < 4; y++)
-        {
-        	for(int x = 0; x < 4; x++)
-        	{
-        		Color sphereColor = ColorOperations.sRGBGamma2_2ToLinear(Color.web("D4AF37").interpolate(Color.rgb(32, 32, 32), 1.0/4.0*x));
-        		
-//        		System.out.println(
-//        				"Position:" + new Point(-5 + x * 2, -0.5, -15 + y * 3) 
-//        				+ String.format("Color: [%.3f, %.3f, %.3f]", sphereColor.getRed(), sphereColor.getGreen(), sphereColor.getBlue()) 
-//        				+ " Roughness: " + roughnessTab[y]
-//        				+ String.format(" Specular Size/Intensity: %d/%.3f", RoughMaterial.computeSpecularSize(roughnessTab[y]), RoughMaterial.computeSpecularIntensity(roughnessTab[y])) );
-        		
-                shapeList.add(new Sphere(new Point(-5 + x * 2, -0.5, -15 + y * 3), 0.5, new RoughMaterial(sphereColor, roughnessTab[y])));
-        	}
-        }
-        
-        Image skybox = null;
-        URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
-        if(skyboxURL != null)
-        		skybox = new Image(skyboxURL.toExternalForm());
-        
-        RayTracingScene sceneRT = null;
-        try
-        {
-        	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1, skybox);
-        }
-        catch (IllegalArgumentException exception)//Skybox mal chargée
-        {
-        	System.err.println(exception.getMessage() + System.lineSeparator() + "Aucune skybox ne sera utilisée.");
-        	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1);
-        }
-
-        return  sceneRT;
     }
     
     private class WindowTimer extends AnimationTimer {
@@ -285,7 +193,11 @@ public class RenderWindow {
             	long dif = actualFrameTime - oldFrameTime;
                 dif  = (long)1000000000.0 / dif;
                 this.oldFrameTime = actualFrameTime;
-                fpsLabel.setText(String.format("FPS : %d\n%s\nH: %.2f°\nV: %.2f°", dif, this.rayTracingScene.getCamera().getPosition().toString(), this.rayTracingScene.getCamera().getAngleHori(), this.rayTracingScene.getCamera().getAngleVerti()));
+                
+                String fpsString = String.format("FPS : %d", dif);
+                if(this.rayTracingScene.getCamera() != null)//On vérifie quand même que la caméra n'est pas null
+                	fpsString += String.format("\n%s\nH: %.2f°\nV: %.2f°", this.rayTracingScene.getCamera().getPosition().toString(), this.rayTracingScene.getCamera().getAngleHori(), this.rayTracingScene.getCamera().getAngleVerti());
+                fpsLabel.setText(fpsString);
             });
         }
 

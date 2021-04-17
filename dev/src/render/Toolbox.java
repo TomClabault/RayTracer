@@ -71,7 +71,7 @@ public class Toolbox{
         Button saveButton = new Button("Sauvegarder le rendu");
 
         Label resolutionLabel = new Label("Résolution de la scène");
-
+        
         Button applyResButton = new Button("Appliquer");
 
         Label depthLabel = new Label("Profondeur maximale de récursion");
