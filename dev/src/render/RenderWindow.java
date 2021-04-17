@@ -83,6 +83,7 @@ public class RenderWindow {
         this.renderPane = renderPane;
         
         this.statPane = new Pane();
+        this.statPane.setVisible(false);//Désactivation des stats par défaut pour ne pas cacher l'affichage
         
         
         

@@ -612,16 +612,16 @@ public class RayTracer
 	{
 		Integer taskNumber = 0;
 		TileTask currentTileTask = null;
-		//synchronized (taskNumber)
-		//{
-		taskNumber = taskList.getTotalTaskGiven();
-		if(taskNumber >= taskList.getTotalTaskCount())
-			return false;
+		synchronized (taskNumber)
+		{
+			taskNumber = taskList.getTotalTaskGiven();
+			if(taskNumber >= taskList.getTotalTaskCount())
+				return false;
 		
-		currentTileTask = taskList.getTask(taskList.getTotalTaskGiven());
+			currentTileTask = taskList.getTask(taskList.getTotalTaskGiven());
 		
-		taskList.incrementTaskGiven();
-		//}
+			taskList.incrementTaskGiven();
+		}
 		
 		this.computePartialImage(renderScene, currentTileTask.getStartX(), currentTileTask.getStartY(), currentTileTask.getEndX(), currentTileTask.getEndY());
 
