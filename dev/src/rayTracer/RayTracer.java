@@ -322,7 +322,7 @@ public class RayTracer
 			return Color.rgb(0, 0, 0);
 	}
 	
-	private Color computeFresnelColor(RayTracingScene renderScene, RayTracerInterInfos intInfos, double reflectedLightRatio, int depth)
+	protected Color computeFresnelColor(RayTracingScene renderScene, RayTracerInterInfos intInfos, double reflectedLightRatio, int depth)
 	{
 		Vector incidentRayDir = intInfos.getRayDir();
 		Vector normalAtInter = intInfos.getNormInt();
