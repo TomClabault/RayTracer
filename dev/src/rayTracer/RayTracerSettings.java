@@ -31,6 +31,22 @@ public class RayTracerSettings
 		this(nbCore, maxRecursionDepth, antialiasingSampling, blurryReflectionsSampleCount, true, true, true, true, true, true, true, false);
 	}
 
+	public RayTracerSettings(RayTracerSettings settingsToCopy)
+	{
+		this(settingsToCopy.getNbCore(),
+			 settingsToCopy.getRecursionDepth(),
+			 settingsToCopy.getAntialiasingSampling(),
+			 settingsToCopy.getBlurryReflectionsSampleCount(),
+			 settingsToCopy.isEnableAmbient(),
+			 settingsToCopy.isEnableDiffuse(),
+			 settingsToCopy.isEnableReflections(),
+			 settingsToCopy.isEnableBlurryReflections(),
+			 settingsToCopy.isEnableRefractions(),
+			 settingsToCopy.isEnableSpecular(),
+			 settingsToCopy.isEnableFresnel(),
+			 settingsToCopy.isEnableAntialiasing());
+	}
+	
 	/*
 	 * Initialise les réglages qui seront utiliés pour le rendu de la scène
 	 * 

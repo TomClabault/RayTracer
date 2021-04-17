@@ -803,7 +803,7 @@ public class RayTracer
 			return this.getRenderedPixels();//Sera probablement noir puisque la scène n'est pas valide et donc aucun pixel n'a été calculé
 		}
 		
-		this.settings = renderSettings;
+		this.settings = new RayTracerSettings(renderSettings);//On crée une nouvelle instance de RayTracerSettings pour ne pas "lier dynamiquement" les réglages : cela pourrait causer des déchirement d'image lorsqu'on change les réglages pendant un rendu
 		this.threadTaskList.initTaskList(settings.getNbCore(), renderWidth, renderHeight);
 		
 		if(renderScene.hasSkybox())
