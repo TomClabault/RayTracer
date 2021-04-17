@@ -1,6 +1,5 @@
 package render;
 
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -9,22 +8,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 
 import java.io.File;
 import java.io.IOException;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import rayTracer.RayTracer;
 import rayTracer.RayTracerSettings;
 import scene.RayTracingScene;
@@ -36,7 +31,11 @@ public class Toolbox{
 	private Pane statPane;
 	private RayTracerSettings rayTracerSettings;
 	private RayTracer rayTracer;
-
+	
+	private Slider nbCoreSlider;//Attribut nécessaire pour pouvoir y accéder dans les méthodes Callback
+	private Slider blurrySamplesSlider;
+	private Slider antialiasingSlider;
+	
 	public Toolbox(RayTracingScene rayTracingScene, Scene renderScene, Pane statPane, RayTracer rayTracer, RayTracerSettings rayTracerSettings) {
 		this.rayTracingScene = rayTracingScene;
 		this.rayTracer = rayTracer;
@@ -63,28 +62,142 @@ public class Toolbox{
         stage.setTitle("ToolBox");
 
         CheckBox statOnOffCheckBox = new CheckBox("Affichage des stats");
-        statOnOffCheckBox.setSelected(false);
         
-        //CheckBox skyboxCheckbox = new CheckBox("Affichage des stats");
-        //statOnOffCheckBox.setSelected(true);
-
         Button saveButton = new Button("Sauvegarder le rendu");
 
         Label resolutionLabel = new Label("Résolution de la scène");
         
         Button applyResButton = new Button("Appliquer");
 
-        Label depthLabel = new Label("Profondeur maximale de récursion");
+        /*
+         * ------------------ Sliders ------------------ 
+         */
+        GridPane slidersPane = new GridPane();
+        slidersPane.setHgap(20);
+        
+        Label depthSliderLabel = new Label("Profondeur maximale de récursion:");
         Slider depthSlider = new Slider(0,10,1);
         depthSlider.setShowTickLabels(true);
         depthSlider.setShowTickMarks(true);
         depthSlider.setMajorTickUnit(1);
         depthSlider.setMinorTickCount(0);
-        depthSlider.setBlockIncrement(10);
         depthSlider.setValue(5);
-        depthSlider.setSnapToTicks(true);
-
-        root.getChildren().addAll(statOnOffCheckBox, saveButton, resolutionLabel, applyResButton, depthLabel, depthSlider);
+        
+        Label nbCoreSliderLabel = new Label("Nombre de thread utilisé pour le rendu:");
+        this.nbCoreSlider = new Slider(1, 8, 1);
+        this.nbCoreSlider.setShowTickLabels(true);
+        this.nbCoreSlider.setShowTickMarks(true);
+        this.nbCoreSlider.setMajorTickUnit(1);
+        this.nbCoreSlider.setMinorTickCount(0);
+        this.nbCoreSlider.setValue(8);
+        this.nbCoreSlider.valueProperty().addListener(this::nbCoreSliderCallback);
+        
+        Label blurrySamplesSliderLabel = new Label("Nombre d'échantillons rough réflexions:");
+        this.blurrySamplesSlider = new Slider(1, 16, 1);
+        this.blurrySamplesSlider.setShowTickLabels(true);
+        this.blurrySamplesSlider.setShowTickMarks(true);
+        this.blurrySamplesSlider.setMajorTickUnit(2);
+        this.blurrySamplesSlider.setMinorTickCount(0);
+        this.blurrySamplesSlider.setValue(4);
+        this.blurrySamplesSlider.valueProperty().addListener(this::blurrySamplesSliderCallback);
+        
+        Label antialiasingSliderLabel = new Label("Nombre d'échantillons d'anti-aliasing:");
+        CheckBox antialiasingCheckbox = new CheckBox("Anti-aliasing");
+        this.antialiasingSlider = new Slider(2, 8, 1);
+        this.antialiasingSlider.setShowTickLabels(true);
+        this.antialiasingSlider.setShowTickMarks(true);
+        this.antialiasingSlider.setMajorTickUnit(1);
+        this.antialiasingSlider.setMinorTickCount(0);
+        this.antialiasingSlider.setValue(3);
+        this.antialiasingSlider.valueProperty().addListener(this::antialiasingSliderCallback);
+        antialiasingCheckbox.selectedProperty().addListener(this::antialiasingCheckboxCallback);
+        
+        GridPane.setConstraints(depthSliderLabel, 0, 0, 2, 1);
+        GridPane.setConstraints(depthSlider, 0, 1, 2, 1);
+        
+        GridPane.setConstraints(nbCoreSliderLabel, 0, 2, 2, 1);
+        GridPane.setConstraints(nbCoreSlider, 0, 3, 2, 1);
+        
+        GridPane.setConstraints(blurrySamplesSliderLabel, 0, 4, 2, 1);
+        GridPane.setConstraints(blurrySamplesSlider, 0, 5, 2, 1);
+        
+        GridPane.setConstraints(antialiasingSliderLabel, 0, 6);
+        GridPane.setConstraints(this.antialiasingSlider, 0, 7);
+        GridPane.setConstraints(antialiasingCheckbox, 1, 7);
+        
+        slidersPane.getChildren().addAll(depthSliderLabel,
+        								 depthSlider,
+        								 nbCoreSliderLabel, 
+        								 nbCoreSlider, 
+        								 blurrySamplesSliderLabel,
+        								 blurrySamplesSlider,
+        								 antialiasingSliderLabel,
+        								 antialiasingSlider, 
+        								 antialiasingCheckbox);
+        /*
+         * ------------------ Sliders ------------------ 
+         */
+        
+        /*
+         * ------------------ Checkboxes ------------------ 
+         */
+        GridPane checkboxesPane = new GridPane();
+        checkboxesPane.setHgap(10);
+        checkboxesPane.setVgap(5);
+        
+        CheckBox ambiantCheckbox = new CheckBox("Ambiante");
+        CheckBox diffuseCheckbox = new CheckBox("Diffuse");
+        CheckBox reflectionsCheckbox = new CheckBox("Réflexions");
+        CheckBox roughReflectionsCheckbox = new CheckBox("Rough réflexions");
+        CheckBox refractionsCheckbox = new CheckBox("Réfractions"); 
+        CheckBox specularCheckbox = new CheckBox("Spécularité"); 
+        CheckBox fresnelCheckbox = new CheckBox("Fresnel");  
+        
+        ambiantCheckbox.setSelected(true);
+        diffuseCheckbox.setSelected(true);
+        reflectionsCheckbox.setSelected(true);
+        roughReflectionsCheckbox.setSelected(true);
+        refractionsCheckbox.setSelected(true);
+        specularCheckbox.setSelected(true);
+        fresnelCheckbox.setSelected(true);
+        
+        ambiantCheckbox.selectedProperty().addListener(this::ambiantCheckboxCallback);
+        diffuseCheckbox.selectedProperty().addListener(this::diffuseCheckboxCallback);
+        reflectionsCheckbox.selectedProperty().addListener(this::reflectionsCheckboxCallback);
+        roughReflectionsCheckbox.selectedProperty().addListener(this::roughReflectionsCheckboxCallback);
+        refractionsCheckbox.selectedProperty().addListener(this::refractionsCheckboxCallback);
+        specularCheckbox.selectedProperty().addListener(this::specularCheckboxCallback);
+        fresnelCheckbox.selectedProperty().addListener(this::fresnelCheckboxCallback);
+        
+       
+        
+        GridPane.setConstraints(ambiantCheckbox, 0, 0);
+        GridPane.setConstraints(diffuseCheckbox, 1, 0);
+        GridPane.setConstraints(reflectionsCheckbox, 2, 0);
+        GridPane.setConstraints(roughReflectionsCheckbox, 3, 0);
+        GridPane.setConstraints(refractionsCheckbox, 0, 1);
+        GridPane.setConstraints(specularCheckbox, 1, 1);
+        GridPane.setConstraints(fresnelCheckbox, 2, 1);
+        
+        checkboxesPane.getChildren().addAll(ambiantCheckbox, 
+        									diffuseCheckbox,
+        									reflectionsCheckbox,
+        									roughReflectionsCheckbox,
+        									refractionsCheckbox,
+        									specularCheckbox,
+        									fresnelCheckbox);
+        /*
+         * ------------------ Checkboxes ------------------ 
+         */
+        
+        root.getChildren().addAll(statOnOffCheckBox, 
+        						  saveButton, 
+        						  resolutionLabel, 
+        						  applyResButton,
+        						  new Separator(),
+        						  slidersPane,
+        						  new Separator(), 
+        						  checkboxesPane);
 
         saveButton.setOnAction(new EventHandler<ActionEvent>()
     	{
@@ -129,5 +242,36 @@ public class Toolbox{
         stage.show();
 	}
 	
+	private void ambiantCheckboxCallback(ObservableValue <? extends Boolean> observable, Boolean oldValue, Boolean newValue)			{ this.rayTracerSettings.enableAmbient(newValue); }
+	private void diffuseCheckboxCallback(ObservableValue <? extends Boolean> observable, Boolean oldValue, Boolean newValue)			{ this.rayTracerSettings.enableDiffuse(newValue); }
+	private void reflectionsCheckboxCallback(ObservableValue <? extends Boolean> observable, Boolean oldValue, Boolean newValue)		{ this.rayTracerSettings.enableReflections(newValue); }
+	private void roughReflectionsCheckboxCallback(ObservableValue <? extends Boolean> observable, Boolean oldValue, Boolean newValue)	{ this.rayTracerSettings.enableBlurryReflections(newValue); }
+	private void refractionsCheckboxCallback(ObservableValue <? extends Boolean> observable, Boolean oldValue, Boolean newValue)		{ this.rayTracerSettings.enableRefractions(newValue); }
+	private void specularCheckboxCallback(ObservableValue <? extends Boolean> observable, Boolean oldValue, Boolean newValue)			{ this.rayTracerSettings.enableSpecular(newValue); }
+	private void fresnelCheckboxCallback(ObservableValue <? extends Boolean> observable, Boolean oldValue, Boolean newValue)			{ this.rayTracerSettings.enableFresnel(newValue); }
 	
+	private void nbCoreSliderCallback(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue)
+	{
+		this.nbCoreSlider.setValue(Math.round(newValue.doubleValue()));
+		int roundedValue = (int)this.nbCoreSlider.getValue();
+	
+		this.rayTracerSettings.setNbCore(roundedValue*roundedValue);
+	}
+	
+	private void blurrySamplesSliderCallback(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue)
+	{
+		this.blurrySamplesSlider.setValue(Math.round(newValue.doubleValue()));
+		int roundedValue = (int)this.blurrySamplesSlider.getValue();
+	
+		this.rayTracerSettings.setBlurryReflectionsSampleCount(roundedValue*roundedValue);
+	}
+	
+	private void antialiasingSliderCallback(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue)		
+	{
+		this.antialiasingSlider.setValue(Math.round(newValue.doubleValue()));
+		int roundedValue = (int)this.antialiasingSlider.getValue();
+		
+		this.rayTracerSettings.setAntialiasingSampling(roundedValue*roundedValue);
+	}
+	private void antialiasingCheckboxCallback(ObservableValue <? extends Boolean> observable, Boolean oldValue, Boolean newValue)		{ this.rayTracerSettings.enableAntialiasing(newValue); }
 }

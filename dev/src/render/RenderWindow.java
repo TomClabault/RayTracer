@@ -1,8 +1,6 @@
 package render;
 
-import java.net.URL;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -13,27 +11,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 
-import povParser.Automat;
 import rayTracer.RayTracer;
 import rayTracer.RayTracerSettings;
-import geometry.shapes.*;
-import geometry.*;
-import materials.*;
-import materials.textures.*;
-import maths.*;
-import scene.*;
 import scene.RayTracingScene;
-import scene.lights.*;
 
 /**
 * Gère le Pane qui contient le rendu
