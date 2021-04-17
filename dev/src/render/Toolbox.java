@@ -117,8 +117,12 @@ public class Toolbox{
         });
         depthSlider.valueProperty().addListener(new ChangeListener<Number>() {
         	@Override
-            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
-                    rayTracerSettings.setRecursionDepth(new_val.intValue());
+            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) 
+        	{
+        		//Permet de ne faire se déplacer le curseur du slider que de valeur entière en valeur entière.
+        		depthSlider.setValue(Math.round(new_val.doubleValue()));//On arrondi à chaque fois la valeur du curseur et on set la valeur arrondie
+        		
+                rayTracerSettings.setRecursionDepth((int)depthSlider.getValue());
             }
         });
 
