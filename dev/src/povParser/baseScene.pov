@@ -85,7 +85,7 @@ Green glassy derrière le verre
 */
 sphere 
 { 
-	<1.653, 0.5, -7.13>, 0.2
+	<1.5, 0.5, -7.13>, 0.2
 	pigment { color rgb <0, 1, 0>}
 	finish 
 	{
