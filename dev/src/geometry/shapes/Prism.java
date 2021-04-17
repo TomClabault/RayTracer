@@ -77,7 +77,10 @@ public class Prism extends ShapeTriangleUtil implements Shape
         this.E = new Point(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ());
         this.F = new Point(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ() + width);
 
+
+
         super.material = material;
+
 
         buildPrism();
     }

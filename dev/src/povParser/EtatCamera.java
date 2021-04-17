@@ -114,10 +114,8 @@ public class EtatCamera implements EtatToken
 
                 case ANGLE:
                 {
-                    System.out.println("ANGLE");
                     context.callNextToken(); // skip "angle"
                     angle = context.getNumberValue();
-                    System.out.println("angle value: " + angle);
                     context.callNextToken();
                     state = this.getNextAttribute(context);
                     break;
@@ -126,9 +124,7 @@ public class EtatCamera implements EtatToken
                 case LOCATION:
                 {
                     context.callNextToken(); // skip "location"
-                    System.out.println("LOCATION");
                     double[] coordArray = this.parseAndGetCoord(context);
-                    System.out.println("location : " + coordArray);
                     state = this.getNextAttribute(context);
                     position = new Point(coordArray[0], coordArray[1], coordArray[2]);
                     break;
@@ -137,9 +133,7 @@ public class EtatCamera implements EtatToken
                 case LOOK_AT:
                 {
                     context.callNextToken(); // skip "look_at"
-                    System.out.println("LOOK_AT");
                     double [] coordArray = this.parseAndGetCoord(context);
-                    System.out.println("look_at : " + coordArray);
                     state = this.getNextAttribute(context);
                     orientation = new Point(coordArray[0], coordArray[1], coordArray[2]);
                     break;

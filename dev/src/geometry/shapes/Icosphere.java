@@ -142,7 +142,7 @@ public class Icosphere extends ShapeTriangleUtil implements Shape
                                   
             
         }
-
+        //On va multiplier les triangles avec la taille souhaitee puis additioner avec le point de depart
         for(Triangle triangle:listeTriangle) 
         {
         	Point Atr = triangle.getA();

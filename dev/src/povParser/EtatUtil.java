@@ -125,7 +125,6 @@ public abstract class EtatUtil
 
         while(state != Attribute.OUTSIDE)
         {
-            System.out.println("while state : "+ state);
             switch (state)
             {
                 case AMBIENT:
@@ -194,8 +193,6 @@ public abstract class EtatUtil
                 }
                 case PIGMENT:
                 {
-                    System.out.println("pigment");
-                    System.out.println(context.getStreamTokenizer());
                     context.callNextToken(); //skip pigment
                     context.callNextToken(); //skip '{'
                     this.nbBracket++;
@@ -216,7 +213,6 @@ public abstract class EtatUtil
                                 int colorAttribute = (int)(context.getNumberValue() * 255);
                                 if(hasChecker && !checker2)
                                 {
-                                    System.out.println("first coeff color : " + colorAttribute);
                                     checkerboard.setColor1(Color.rgb(colorAttribute, colorAttribute, colorAttribute));
                                     checker2 = true;
                                 }
@@ -253,7 +249,6 @@ public abstract class EtatUtil
                         context.callNextToken(); // skip checker
                         state = Attribute.PIGMENT;
                         hasChecker = true;
-                        System.out.println("checker");
                     }
                     break;
                 }
@@ -273,7 +268,6 @@ public abstract class EtatUtil
 
                 case PHONG_SIZE:
                 {
-                    System.out.println("phong_size");
                     context.callNextToken(); //skip phong_size
                     material.setShininess((int)context.getNumberValue());
                     context.callNextToken();
@@ -327,7 +321,6 @@ public abstract class EtatUtil
                     if(hasChecker && !checker2)
                     {
                         checkerboard.setColor1(Color.rgb(colorTab[0], colorTab[1], colorTab[2]));
-                        System.out.println("first vector color[0] : " + colorTab[0]);
                         checker2 = true;
                     }
                     else if(hasChecker && checker2)
@@ -343,7 +336,6 @@ public abstract class EtatUtil
                     {
                         state = this.checkEndingBracket(context);
                     }
-                    System.out.println("after opening chevron: " + context.getStreamTokenizer() );
                     break;
                 }
                 case INTERIOR:
@@ -359,7 +351,6 @@ public abstract class EtatUtil
                 }
                 case IOR:
                 {
-                    System.out.println("ior");
                     context.callNextToken(); //skip "ior"
                     material.setRefractionIndex(context.getNumberValue());
                     state = this.parsePropertryAndGetState(context);
