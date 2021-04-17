@@ -38,17 +38,6 @@ import scene.lights.PositionnalLight;
  * La classe contenant le Main qui gère la totalité de l'application
 */
 public class MainApp extends Application {
-	
-//  {
-//	Image skybox = null;
-//    URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
-//    if(skyboxURL != null)
-//    		skybox = new Image(skyboxURL.toExternalForm());
-//
-//	this.myGlobalScene = Automat.parsePov("dev/src/povParser/roughScene.pov");
-//	this.myGlobalScene.setSkybox(skybox);
-//}
-
     /**
      * Définie par la fenètre du choix de taille de rendu
     */
@@ -78,8 +67,16 @@ public class MainApp extends Application {
 		}
 	   	
 	   	RayTracingScene rayTracingScene = Automat.parsePov(file);
-	   	System.out.println(rayTracingScene);
-	   	
+	   	if(!rayTracingScene.hasSkybox())
+	   	{
+	   		Image skybox = null;
+		    URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
+		    if(skyboxURL != null)
+		    	skybox = new Image(skyboxURL.toExternalForm());
+	      
+	      rayTracingScene.setSkybox(skybox);
+	   	}
+	   		
 	   	SetSizeWindow setSizeWindow = new SetSizeWindow();
         setSizeWindow.execute();
         

@@ -183,7 +183,7 @@ sphere
 	<2, -0.65, -5>, 0.35
 	pigment 
 	{ 
-		checker pigment {color rgb <1, 0, 0>}, pigment {color rgb <0.75, 0, 0>}, size 12
+		checker pigment {color rgb <1, 0, 0>}, pigment {color rgb <0.5, 0, 0>}, size 12
 	}
 	finish
     {

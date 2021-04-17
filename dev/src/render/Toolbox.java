@@ -63,7 +63,7 @@ public class Toolbox{
         stage.setTitle("ToolBox");
 
         CheckBox statOnOffCheckBox = new CheckBox("Affichage des stats");
-        statOnOffCheckBox.setSelected(true);
+        statOnOffCheckBox.setSelected(false);
         
         //CheckBox skyboxCheckbox = new CheckBox("Affichage des stats");
         //statOnOffCheckBox.setSelected(true);
