@@ -1,5 +1,6 @@
 #!/bin/sh
 
+cd $(dirname $0)/..
 if [ -d ../doc ]
 then
     rm -rf ../doc
