@@ -1,7 +1,7 @@
- #!/bin/sh
+#!/bin/sh
 
- if [ -d ../doc ]
- then
+if [ -d ../doc ]
+then
     rm -rf ../doc
 fi
 
