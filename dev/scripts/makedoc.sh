@@ -9,4 +9,4 @@ then
 	exit 1
 fi
 [ -d doc ] || mkdir doc
-find ./src -type f -name *.java | xargs javadoc -d doc -sourcepath $(echo $PATH_TO_FX) --add-modules javafx.controls,javafx.fxml,javafx.swing
+find ./src -type f -name *.java | xargs javadoc -d doc
