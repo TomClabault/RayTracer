@@ -1,4 +1,4 @@
-package povParser.automat;
+package povParser;
 
 /**
  * énumération de tous les états de figure ainsi qu'un état extérieur

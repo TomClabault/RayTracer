@@ -1,4 +1,4 @@
-package povParser.automat;
+package povParser;
 
 
 import geometry.Shape;
@@ -10,51 +10,102 @@ import java.io.*;
 
 public class Automat
 {
-    /*TODO
-    -parse cheker dans pigment
-    -ajout de la javadoc
+
+    /* TODO
+        rapport : ajout d'un élément de syntaxe size pov dans un contexte checker pour ajouter une taille au damier:
+        pigment {checker color1, color2, size}
      */
 
+    /**
+     * état courant
+     */
     private EtatToken etatToken;
+
+    /**
+     * instance de StreamTokenizer utilisée pour effectuer le parsing
+     */
     private StreamTokenizer streamTokenizer;
+
+    /**
+     * état de figure courant, c'est une énumération de type State
+     */
     private State currentState;
+
+    /**
+     * jeton courant du StreamTokenizer, c'est un entier qui peut être cast en char pour récupérer des charactères (comme '<', '{')
+     */
     private int currentToken;
 
+    /**
+     * Constructeur complet d'Automat
+     * @param streamTokenizer Une instance de classe StreamTokenizer qui va servir de base à l'automat
+     * @param currentState état courant de Figure
+     */
     public Automat(StreamTokenizer streamTokenizer, State currentState)
     {
         this.streamTokenizer = streamTokenizer;
         this.currentState = currentState;
     }
 
+    /**
+     * Constructeur d'Automat qui omet l'état courant et qui l'initialise à OUTSIDE
+     * @param streamTokenizer streamTokenizer servant à parser le fichier
+     */
     public Automat(StreamTokenizer streamTokenizer)
     {
         this(streamTokenizer, State.OUTSIDE);
     }
 
+    /**
+     * Mutateur servant à fixer la valeur de l'état courant (qui est une sous classe de EtatToken) qui va être prochainement parsé
+     * @param etatToken Classe d'état qui implémente EtatToken
+     */
     public void setState(EtatToken etatToken)
     {
         this.etatToken = etatToken;
     }
+
+    /**
+     * Méthode servant à lancer le parsing de la figure courante, c'est à dire d'appeler la méthode action de la classe d'état courante
+     * @return Elle retourne l'objet résultant du parsing, ensuite casté en une figure, lumière etc. (polymorphisme)
+     */
     public Object action()
     {
         return etatToken.action(this);
     }
 
+    /**
+     * Accesseur donnant la valeur du streamTokenizer
+     * @return Retourne l'attribut streamTokenizer
+     */
     public StreamTokenizer getStreamTokenizer()
     {
         return this.streamTokenizer;
     }
 
+    /**
+     * Cette méthode teste si le type du streamTokenizer est un mot
+     * @return retourne true si c'est un mot, false sinon
+     */
     public boolean isCurrentTokenAWord()
     {
         return streamTokenizer.ttype == StreamTokenizer.TT_WORD;
     }
 
+    /**
+     * Cette méthode teste si un mot donné est égal au jeton courant du streamTokenizer
+     * @param word le mot à tester
+     * @return retourne true si le mot passé en argument est égal au jeton courant, false sinon
+     */
     public boolean currentWord(String word)
     {
         return streamTokenizer.sval.equals(word);
     }
 
+    /**
+     * Méthode appelant simplement le prochain jeton dans le fichier
+     * @return retourne l'entier correspondant au jeton
+     */
     public int callNextToken()
     {
         try {
@@ -67,16 +118,28 @@ public class Automat
         }
     }
 
+    /**
+     * Mutateur fixant la valeur de l'attribut streamTokenizer
+     * @param st
+     */
     public void setStreamTokenizer(StreamTokenizer st)
     {
         this.streamTokenizer = st;
     }
 
+    /**
+     * Cette méthode renvoit la valeur du nombre parsée
+     * @return nombre parsé
+     */
     public double getNumberValue()
     {
         return this.streamTokenizer.nval;
     }
 
+    /**
+     * Cette méthode teste si le jeton courant est une figure valide
+     * @return true si la figure est valide, false sinon
+     */
     public boolean isValidState()
     {
         try {
@@ -98,16 +161,28 @@ public class Automat
         return false;
     }
 
+    /**
+     * Teste si on a atteint la fin du fichier
+     * @return true si on a fini le parsing, false sinon
+     */
     public boolean isFinished()
     {
         return (this.streamTokenizer.ttype == StreamTokenizer.TT_EOF);
     }
 
+    /**
+     * Acceseur donnant la valeur de l'attribut currentToken
+     * @return
+     */
     public int getCurrentToken()
     {
         return this.currentToken;
     }
 
+    /**
+     * Méthode donnant l'état courant (figure, light...) que l'on va parser
+     * @return une constante de l'énumération State
+     */
     public State getState()
     {
         if(this.streamTokenizer.sval.equals("sphere"))
@@ -137,13 +212,19 @@ public class Automat
         return State.OUTSIDE;
     }
 
-    public static RayTracingScene parsePov(String pathToFile)
+    /**
+     * Méthode permettant de créer une scène à partir d'un fichier pov (langage de description de scène). Cette méthode
+     * permet de parser le fichier de scène et de créer les objets à ajouter dans la scène de notre lanceur de rayons
+     * @param povFile fichier pov à parser
+     * @return La scène créée à partir du fichier pov contenant les différentes figures
+     */
+    public static RayTracingScene parsePov(File povFile)
     {
         RayTracingScene scene = new RayTracingScene();
 
         try {
 
-            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(pathToFile));
+            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(povFile));
             BufferedReader fileReader = new BufferedReader(inputStreamReader);
 
             StreamTokenizer streamTokenizer = new StreamTokenizer(fileReader);
@@ -161,68 +242,53 @@ public class Automat
 
                     switch (currentState) {
 
-                        case LIGHT_SOURCE:
-                        {
-                            System.out.println("LIGHT_SOURCE");
+                        case LIGHT_SOURCE: {
                             automat.setState(new EtatLightSource());
                             PositionnalLight light = (PositionnalLight) automat.action();
                             scene.addLight(light);
                             break;
                         }
 
-                        case SPHERE:
-                        {
-                            System.out.println("SPHERE");
+                        case SPHERE: {
                             automat.setState(new EtatSphere());
                             Shape sphere = (Shape) automat.action();
                             scene.addShape(sphere);
                             break;
                         }
 
-                        case TRIANGLE:
-                        {
-                            System.out.println("TRIANGLE");
+                        case TRIANGLE: {
                             automat.setState(new EtatTriangle());
                             Shape triangle = (Shape) automat.action();
                             scene.addShape(triangle);
                             break;
                         }
 
-                        case BOX:
-                        {
-                            System.out.println("BOX");
+                        case BOX: {
                             automat.setState(new EtatBox());
-                            Shape rectangle = (Shape)automat.action();
+                            Shape rectangle = (Shape) automat.action();
                             scene.addShape(rectangle);
                             break;
                         }
 
-                        case PLANE:
-                        {
-                            System.out.println("PLANE");
+                        case PLANE: {
                             automat.setState(new EtatPlane());
                             Shape plane = (Shape) automat.action();
                             scene.addShape(plane);
                             break;
                         }
 
-                        case CAMERA:
-                        {
-                            System.out.println("CAMERA");
+                        case CAMERA: {
                             automat.setState(new EtatCamera());
                             Camera camera = (Camera) automat.action();
                             scene.setCamera(camera);
                             break;
                         }
 
-                        case OUTSIDE:
-                        {
+                        case OUTSIDE: {
                             automat.setState(new EtatOutside());
                             automat.action();
                             break;
                         }
-                        default:
-                            System.out.println("not any state");
                     }
                 }
             }
@@ -233,4 +299,3 @@ public class Automat
         return scene;
     }
 }
-

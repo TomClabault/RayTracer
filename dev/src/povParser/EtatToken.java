@@ -1,4 +1,4 @@
-package povParser.automat;
+package povParser;
 
 /**
  * interface clé du pattern state qui est l'état courant du jeton, il représente la figure que l'on est en train de parser
@@ -6,8 +6,8 @@ package povParser.automat;
 public interface EtatToken
 {
     /**
+     * Cette méthode effectue le parsing de n'importe quel objet
      * @param context contexte courant de l'automate
-     * Cette méthode effectue le parsing d'un objet light_source (point light)
      */
     public Object action(Automat context);
 }

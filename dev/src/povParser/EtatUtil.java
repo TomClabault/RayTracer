@@ -1,14 +1,19 @@
-package povParser.automat;
+package povParser;
 
 import javafx.scene.paint.Color;
 import materials.Material;
 import materials.textures.ProceduralTextureCheckerboard;
 
+
+/**
+ * énumération décrivant les différents états d'un modificateur d'objet (couleur, texture ...)
+ */
 enum Attribute
 {
     PIGMENT,
     INTERIOR,
     IOR,
+    SIZE,
     ROUGHNESS,
     FINISH,
     SPECULAR, // only a coeff (not a vector)
@@ -22,13 +27,18 @@ enum Attribute
 }
 
 /**
- * Ctte classe s'occupe de parser les attributs indépendamment de la figure qu'on est en train de parser
+ * Ctte classe décrit l'état "modificateur de figure"
  */
 public abstract class EtatUtil
 {
 
     int nbBracket = 1;
 
+    /**
+     * Cette méthode sert à renvoyer le prochain état du jeton
+     * @param context contexte courant de l'automate
+     * @return L'état décrivant l'objet qui va être parsée
+     */
     public Attribute parsePropertryAndGetState(Automat context)
     {
         if(context.isCurrentTokenAWord())
@@ -77,11 +87,21 @@ public abstract class EtatUtil
             {
                 return Attribute.ROUGHNESS;
             }
+            else if(context.currentWord("size"))
+            {
+                return Attribute.SIZE;
+            }
         }
         return null;
     }
 
 
+    /**
+     * Cette méthode sert à tester la présence de fin de bloc après une accolade fermante, s'il y a un objet après un certain
+     * nombre d'accolades, on renvoit l'état décrivant cette objet
+     * @param context contexte courant de l'automate
+     * @return l'état décrivant l'objet ou létat extérieur si l'on se trouve en fin de bloc
+     */
     public Attribute checkEndingBracket(Automat context)
     {
         Attribute state = null;
@@ -105,6 +125,11 @@ public abstract class EtatUtil
         return state;
     }
 
+    /**
+     * Cette méthode sert à parser les modificateurs d'objet afin de les ajouter à une figure
+     * @param context contexte courant de l'automate
+     * @return Objet de type Attribute qui décrit toutes les modifications apportées à une figure
+     */
     public Material parseAttributes(Automat context) throws RuntimeException
     {
         Material material = new Material(null, 0, 0, 0, 0, 0, false, 0, 0);
@@ -120,7 +145,6 @@ public abstract class EtatUtil
 
         while(state != Attribute.OUTSIDE)
         {
-            System.out.println("while state : "+ state);
             switch (state)
             {
                 case AMBIENT:
@@ -189,8 +213,6 @@ public abstract class EtatUtil
                 }
                 case PIGMENT:
                 {
-                    System.out.println("pigment");
-                    System.out.println(context.getStreamTokenizer());
                     context.callNextToken(); //skip pigment
                     context.callNextToken(); //skip '{'
                     this.nbBracket++;
@@ -211,7 +233,6 @@ public abstract class EtatUtil
                                 int colorAttribute = (int)(context.getNumberValue() * 255);
                                 if(hasChecker && !checker2)
                                 {
-                                    System.out.println("first coeff color : " + colorAttribute);
                                     checkerboard.setColor1(Color.rgb(colorAttribute, colorAttribute, colorAttribute));
                                     checker2 = true;
                                 }
@@ -248,7 +269,6 @@ public abstract class EtatUtil
                         context.callNextToken(); // skip checker
                         state = Attribute.PIGMENT;
                         hasChecker = true;
-                        System.out.println("checker");
                     }
                     break;
                 }
@@ -268,7 +288,6 @@ public abstract class EtatUtil
 
                 case PHONG_SIZE:
                 {
-                    System.out.println("phong_size");
                     context.callNextToken(); //skip phong_size
                     material.setShininess((int)context.getNumberValue());
                     context.callNextToken();
@@ -284,7 +303,7 @@ public abstract class EtatUtil
                 {
                     context.callNextToken(); //skip reflexion
                     material.setReflectiveCoeff(context.getNumberValue());
-                    context.callNextToken();
+                    context.callNextToken(); //skip reflection value
                     state = parsePropertryAndGetState(context);
 
                     if(state == null)
@@ -292,6 +311,20 @@ public abstract class EtatUtil
                         state = this.checkEndingBracket(context);
                     }
                     break;
+                }
+
+                case SIZE:
+                {
+                    context.callNextToken(); //skip "size"
+                    checkerboard.setSize(context.getNumberValue());
+                    context.callNextToken(); // skip size value
+                    state = parsePropertryAndGetState(context);
+                    if(state == null)
+                    {
+                        state = this.checkEndingBracket(context);
+                    }
+                    break;
+
                 }
 
                 case OPENING_CHEVRON:
@@ -308,7 +341,6 @@ public abstract class EtatUtil
                     if(hasChecker && !checker2)
                     {
                         checkerboard.setColor1(Color.rgb(colorTab[0], colorTab[1], colorTab[2]));
-                        System.out.println("first vector color[0] : " + colorTab[0]);
                         checker2 = true;
                     }
                     else if(hasChecker && checker2)
@@ -324,7 +356,6 @@ public abstract class EtatUtil
                     {
                         state = this.checkEndingBracket(context);
                     }
-                    System.out.println("after opening chevron: " + context.getStreamTokenizer() );
                     break;
                 }
                 case INTERIOR:
@@ -340,7 +371,6 @@ public abstract class EtatUtil
                 }
                 case IOR:
                 {
-                    System.out.println("ior");
                     context.callNextToken(); //skip "ior"
                     material.setRefractionIndex(context.getNumberValue());
                     state = this.parsePropertryAndGetState(context);
@@ -359,7 +389,6 @@ public abstract class EtatUtil
         }
         else if(hasChecker)
         {
-            System.out.println(checkerboard);
             material.setProceduralTexture(checkerboard);
         }
         return material;

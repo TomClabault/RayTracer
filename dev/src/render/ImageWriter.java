@@ -15,7 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 
-import povParser.automat.Automat;
+import povParser.Automat;
 import rayTracer.RayTracer;
 import geometry.shapes.*;
 import geometry.*;
@@ -54,7 +54,6 @@ public class ImageWriter {
             		skybox = new Image(skyboxURL.toExternalForm());
 
         	this.myGlobalScene = Automat.parsePov("dev/src/povParser/sphere.pov");
-        	System.exit(1);
         	this.myGlobalScene.setSkybox(skybox);
         }
         //this.myGlobalScene = generateRoughnessDemoScene();
