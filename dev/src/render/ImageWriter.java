@@ -1,5 +1,6 @@
 package render;
 
+import java.io.File;
 import java.net.URL;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class ImageWriter {
             if(skyboxURL != null)
             		skybox = new Image(skyboxURL.toExternalForm());
 
-        	this.myGlobalScene = Automat.parsePov("dev/src/povParser/sphere.pov");
+        	this.myGlobalScene = Automat.parsePov(new File("dev/src/povParser/sphere.pov"));
         	this.myGlobalScene.setSkybox(skybox);
         }
         //this.myGlobalScene = generateRoughnessDemoScene();

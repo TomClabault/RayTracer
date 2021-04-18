@@ -1,7 +1,8 @@
-package povParser;
+package povParser.state;
 
 
 import maths.Point;
+import povParser.Automat;
 import scene.lights.LightBulb;
 import scene.lights.PositionnalLight;
 

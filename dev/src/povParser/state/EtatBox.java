@@ -1,13 +1,13 @@
-package povParser;
+package povParser.state;
 
 import geometry.Shape;
 import geometry.shapes.Rectangle;
 import javafx.scene.paint.Color;
 import materials.Material;
 import maths.Point;
+import povParser.Automat;
 
 import java.io.StreamTokenizer;
-import java.util.ArrayList;
 
 /**
  * énumération des différents états d'un objet box

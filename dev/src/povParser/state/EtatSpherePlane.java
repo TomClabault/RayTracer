@@ -1,9 +1,10 @@
-package povParser;
+package povParser.state;
 
 import geometry.Shape;
 import javafx.scene.paint.Color;
 import materials.Material;
 import maths.CoordinateObject;
+import povParser.Automat;
 
 import java.io.StreamTokenizer;
 import java.util.ArrayList;

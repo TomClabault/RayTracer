@@ -1,4 +1,6 @@
-package povParser;
+package povParser.state;
+
+import povParser.Automat;
 
 /**
  * interface clé du pattern state qui est l'état courant du jeton, il représente la figure que l'on est en train de parser

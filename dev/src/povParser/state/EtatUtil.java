@@ -1,8 +1,9 @@
-package povParser;
+package povParser.state;
 
 import javafx.scene.paint.Color;
 import materials.Material;
 import materials.textures.ProceduralTextureCheckerboard;
+import povParser.Automat;
 
 
 /**
@@ -132,7 +133,7 @@ public abstract class EtatUtil
      */
     public Material parseAttributes(Automat context) throws RuntimeException
     {
-        Material material = new Material(null, 0, 0, 0, 0, 0, false, 0, 0);
+        Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0, 0);
         Attribute state = parsePropertryAndGetState(context);
         int token = 0;
         boolean color = false;

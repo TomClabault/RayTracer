@@ -1,11 +1,9 @@
-package povParser;
+package povParser.state;
 
 import geometry.Shape;
 import geometry.shapes.Sphere;
 import materials.Material;
 import maths.Point;
-
-import java.util.ArrayList;
 
 /**
  * Classe décrivant l'état d'une sphère

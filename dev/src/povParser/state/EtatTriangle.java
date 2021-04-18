@@ -1,14 +1,13 @@
-package povParser;
+package povParser.state;
 
 import geometry.Shape;
 import geometry.shapes.Triangle;
 import javafx.scene.paint.Color;
 import materials.Material;
 import maths.Point;
-import maths.Vector;
+import povParser.Automat;
 
 import java.io.StreamTokenizer;
-import java.util.ArrayList;
 
 
 /**

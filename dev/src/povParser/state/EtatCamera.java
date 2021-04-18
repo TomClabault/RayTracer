@@ -1,6 +1,7 @@
-package povParser;
+package povParser.state;
 
 import maths.Point;
+import povParser.Automat;
 import scene.Camera;
 
 /**

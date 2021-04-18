@@ -2,6 +2,7 @@ package povParser;
 
 
 import geometry.Shape;
+import povParser.state.*;
 import scene.Camera;
 import scene.RayTracingScene;
 import scene.lights.PositionnalLight;

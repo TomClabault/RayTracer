@@ -1,12 +1,9 @@
-package povParser;
+package povParser.state;
 
 import geometry.Shape;
 import geometry.shapes.Plane;
 import materials.Material;
 import maths.Vector;
-
-
-import java.util.ArrayList;
 
 /**
  * Classe décrivant l'état d'un plan

@@ -1,6 +1,7 @@
-package povParser;
+package povParser.state;
 
 import geometry.Shape;
+import povParser.Automat;
 
 /**
  * Classe décrivant tout simplement un état vide
