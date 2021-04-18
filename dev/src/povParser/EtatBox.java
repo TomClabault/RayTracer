@@ -9,6 +9,9 @@ import maths.Point;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 
+/**
+ * énumération des différents états d'un objet box
+ */
 enum Boxcontent
 {
     OPENING_BRACKET,
@@ -19,8 +22,16 @@ enum Boxcontent
     ATTRIBUTE,
 }
 
+/**
+ * Classe permettant de parser une figure de type box
+ */
 public class EtatBox extends EtatUtil implements EtatToken
 {
+    /**
+     * Méthode permettant de parser la box
+     * @param context contexte courant de l'automate
+     * @return Un objet de type shape contenant les coordonnées parsées etc.
+     */
     @Override
     public Shape action(Automat context)
     {

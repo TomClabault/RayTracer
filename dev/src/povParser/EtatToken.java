@@ -6,8 +6,8 @@ package povParser;
 public interface EtatToken
 {
     /**
+     * Cette méthode effectue le parsing de n'importe quel objet
      * @param context contexte courant de l'automate
-     * Cette méthode effectue le parsing d'un objet light_source (point light)
      */
     public Object action(Automat context);
 }

@@ -10,6 +10,10 @@ import maths.Vector;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 
+
+/**
+ * énumération décrivant les différents états d'un objet triangle
+ */
 enum Trianglecontent
 {
     OPENING_BRACKET,
@@ -20,8 +24,16 @@ enum Trianglecontent
     ATTRIBUTE;
 }
 
+/**
+ * Classe représentant l'état Triangle
+ */
 public class EtatTriangle extends EtatUtil implements EtatToken
 {
+    /**
+     * Cette méthode effectue le parsing d'un objet triangle
+     * @param context contexte courant de l'automate
+     * @return Un objet Shape décrivant le triangle
+     */
     @Override
     public Shape action(Automat context)
     {
