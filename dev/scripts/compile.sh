@@ -9,6 +9,5 @@ then
 	>&2 echo "il faut d'abord installer la lib javafx et la mettre dans une variable PATH_TO_FX (voir README)"
 	exit 1
 fi
-unzip lib/javafx.zip
-rm -rf lib/javafx.zip
+
 ant compile
