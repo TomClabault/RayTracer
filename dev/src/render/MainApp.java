@@ -7,6 +7,8 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 
+import exceptions.InvalidParallelepipedException;
+import exceptions.InvalidSphereException;
 import geometry.Shape;
 import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
@@ -55,8 +57,22 @@ public class MainApp extends Application {
         Application.launch(args);
 
     }
-    public void start(Stage stage) {
-
+    public void start(Stage stage) 
+    {
+    	try
+    	{
+    		Integer.parseInt("1");
+    	}
+    	catch(Exception test)
+    	{
+    		test.printStackTrace();
+    	}
+    	finally
+    	{
+    		System.out.println("finally");
+    	}
+    	
+    	
         FileChooser fileChooser = new FileChooser();
 	   	fileChooser.setTitle("Selectionnez un fichier POV");
 	   	ExtensionFilter filter = new ExtensionFilter("POV", "*.pov");
@@ -67,7 +83,28 @@ public class MainApp extends Application {
     		System.exit(0);
 		}
 	   	
-	   	RayTracingScene rayTracingScene = Automat.parsePov(file);
+	   	RayTracingScene rayTracingScene = new RayTracingScene();
+	   	try
+	   	{
+	   		rayTracingScene = Automat.parsePov(file);
+	   	}
+	   	catch(InvalidParallelepipedException recExc)
+	   	{
+	   		System.out.println("Le rendu de la scène ne peut pas être effectué dû à un parallélépipède incorrect.");
+	   		
+	   		Platform.exit();
+	   		System.exit(0);
+	   	}
+	   	catch(InvalidSphereException sphereExc)
+	   	{
+	   		System.out.println("Le rendu de la scène ne peut pas être effectué dû à une sphère incorrecte.");
+	   		
+	   		Platform.exit();
+	   		System.exit(0);
+	   	}
+	   	
+	   	
+	   	
 	   	if(!rayTracingScene.hasSkybox())
 	   	{
 	   		Image skybox = null;
@@ -75,7 +112,7 @@ public class MainApp extends Application {
 		    if(skyboxURL != null)
 		    	skybox = new Image(skyboxURL.toExternalForm());
 	      
-	      rayTracingScene.setSkybox(skybox);
+		    rayTracingScene.setSkybox(skybox);
 	   	}
 	   		
 	   	SetSizeWindow setSizeWindow = new SetSizeWindow();
@@ -105,17 +142,12 @@ public class MainApp extends Application {
     
     public RayTracingScene generateUsualScene() 
     {
-
-    	
     	Camera cameraRT = new Camera(new Point(0.000, 0.5, 0.320), 0, 0, 40);//Magic camera
-    	//Camera cameraRT = new Camera(new Point(0.75, -0.75, -5.5), 0, 0);
         PositionnalLight l = new LightBulb(new Point(2, 2, 1), 1);
 
         ArrayList<Shape> shapeList = new ArrayList<>();
         shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
-        //shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new RoughMaterial(Color.rgb(48, 48, 48), 0.75, new ProceduralTextureCheckerboard(Color.rgb(16, 16, 16), Color.rgb(75, 75, 75), 1.0))));
         
-        //shapeList.add(new Sphere(new Point(0, 0.5, -3.5), 1, new GlossyMaterial(Color.GOLD, 0.92)));
         shapeList.add(new Sphere(new Point(-1.25, 0.5, -6), 1, new MirrorMaterial(0.75)));
         shapeList.add(new Sphere(new Point(0, 1.5, -6), 0.5, new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(Color.web("D4AF37")), 0.75)));
         shapeList.add(new Sphere(new Point(1.25, 0.5, -6), 1, new GlassMaterial()));
@@ -127,8 +159,6 @@ public class MainApp extends Application {
         shapeList.add(new Sphere(new Point(0, -0.5, -6), 0.5, new GlassyMaterial(Color.RED)));
         shapeList.add(new Sphere(new Point(-0.75, -0.75, -6), 0.25, new GlassyMaterial(Color.rgb(255, 64, 0))));
         shapeList.add(new Sphere(new Point(0.75, -0.75, -6), 0.25, new GlassyMaterial(Color.rgb(255, 64, 0))));
-        //shapeList.add(new Icosphere(new Point(0, 2, -6), 1, 2, new GlassyMaterial(Color.rgb(0, 128, 255))));
-        //shapeList.add(new Rectangle(new Point(-1.25, 1.5, -6), new Point(-0.25, 2.5, -7), new GlassyMaterial(Color.RED)));
         
         
         Image skybox = null;
@@ -165,12 +195,6 @@ public class MainApp extends Application {
         	for(int x = 0; x < 4; x++)
         	{
         		Color sphereColor = ColorOperations.sRGBGamma2_2ToLinear(Color.web("D4AF37").interpolate(Color.rgb(32, 32, 32), 1.0/4.0*x));
-        		
-//        		System.out.println(
-//        				"Position:" + new Point(-5 + x * 2, -0.5, -15 + y * 3) 
-//        				+ String.format("Color: [%.3f, %.3f, %.3f]", sphereColor.getRed(), sphereColor.getGreen(), sphereColor.getBlue()) 
-//        				+ " Roughness: " + roughnessTab[y]
-//        				+ String.format(" Specular Size/Intensity: %d/%.3f", RoughMaterial.computeSpecularSize(roughnessTab[y]), RoughMaterial.computeSpecularIntensity(roughnessTab[y])) );
         		
                 shapeList.add(new Sphere(new Point(-5 + x * 2, -0.5, -15 + y * 3), 0.5, new RoughMaterial(sphereColor, roughnessTab[y])));
         	}

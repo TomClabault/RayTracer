@@ -2,7 +2,7 @@ package maths;
 
 import javafx.scene.paint.Color;
 
-/*
+/**
  * Classe permettant d'effectuer des opérations sur les objets javafx.scene.paint.Color
  */
 public class ColorOperations 
@@ -16,7 +16,7 @@ public class ColorOperations
 	public static final int[] linearTosRGB2_2Table = ColorOperations.computeLinearToSRGBTable(2.4);
 	public static final int[] linearTosRGB2_4Table = ColorOperations.computeLinearToSRGBTable(2.4);
 	
-	/*
+	/**
 	 * Calcule la sRGBToLinearTable : table de transposition des valeurs sRGB de gamma 'gammaValue' vers RGB linéaire
 	 * telle que sRGBToLinearTable[sRGBValue_gammaValue] = linearRGBValue avec:
 	 * - sRGBValue_gammaValue la valeur d'intensité d'une composante sRGB dans l'espace de couleur sRGB corrigé avec un gamma de 'gammaValue'
@@ -58,7 +58,7 @@ public class ColorOperations
 		return table;
 	}
 	
-	/*
+	/**
 	 * Calcule la linearToSRGBTable : table de transposition des valeurs RGB linéaire vers sRGB de gamma 'gammaValue'
 	 * telle que linearToSRGBTable[linearRGBValue] = sRGBValue_gammaValue avec:
 	 * - sRGBValue_gammaValue la valeur d'intensité d'une composante sRGB dans l'espace de couleur sRGB corrigé avec un gamma de 'gammaValue'
@@ -100,7 +100,7 @@ public class ColorOperations
 		return table;
 	}
 	
-	/*
+	/**
 	 * Ajoute deux couleurs terme à terme
 	 * 
 	 * @param col1 Première couleur
@@ -118,7 +118,7 @@ public class ColorOperations
 		return Color.rgb(newRed, newGreen, newBlue);
 	}
 	
-	/*
+	/**
 	 * Ajoute un entier à la couleur composante par composante
 	 * 
 	 * @param col La couleur à laquelle on souhaite ajouter une constante
@@ -141,7 +141,7 @@ public class ColorOperations
 		return Color.rgb(newRed, newGreen, newBlue);
 	}
 	
-	/*
+	/**
 	 * Ajoute un entier à la couleur composante par composante
 	 * 
 	 * @param col La couleur à laquelle on souhaite ajouter une constante
@@ -164,7 +164,7 @@ public class ColorOperations
 		return Color.rgb(newRed, newGreen, newBlue);
 	}
 	
-	/*
+	/**
 	 * Cette méthode converti la couleur passée en argument en entier 32 bits. Chaque composante de aRGB est codée sur 8 bits. 
 	 * Du MSB au LSB: alpha ; red ; green ; blue
 	 * 
@@ -184,7 +184,7 @@ public class ColorOperations
 				((int)(color.getBlue()    * 255));
 	}
 	
-	/*
+	/**
 	 * Permet d'obtenir la représentation RGB d'une couleur
 	 * 
 	 * @param color La couleur dont on souhaite la représentation RGB sous forme de string
@@ -210,10 +210,10 @@ public class ColorOperations
 		return String.format("%-15s", output);
 	}
 	
-	/*
+	/**
 	 * Retourne une nouvelle instance de Color représentant la même couleur que celle passée en argument
 	 * 
-	 * @param La couleur à copier
+	 * @param colorToCopy La couleur à copier
 	 * 
 	 * @return Une nouvelle instance de couleur dont les valeurs des composantes sont les même que colorToCopy 
 	 */
@@ -222,7 +222,7 @@ public class ColorOperations
 		return Color.rgb((int)(colorToCopy.getRed()*255), (int)(colorToCopy.getGreen()*255), (int)(colorToCopy.getBlue()*255));
 	}
 	
-	/*
+	/**
 	 * Permet de convertir une couleur dont les composantes sont utilisées linéairement en son équivalent sRGB avec une correction correction de gamma de paramètre 2.2
 	 * 
 	 * @param linearColor La couleur linéaire à convertir
@@ -242,7 +242,7 @@ public class ColorOperations
 		return Color.rgb(newRed, newGreen, newBlue);//Gamma correction 2.2
 	}
 	
-	/*
+	/**
 	 * Permet de convertir une couleur dont les composantes sont utilisées linéairement en son équivalent sRGB avec une correction correction de gamma de paramètre 2.4
 	 * 
 	 * @param linearColor La couleur linéaire à convertir
@@ -263,7 +263,7 @@ public class ColorOperations
 		return Color.rgb(newRed, newGreen, newBlue);
 	}
 	
-	/*
+	/**
 	 * Multiplie une couleur composante par composante par un scalaire
 	 * 
 	 * @param col Couleur à multiplier
@@ -286,7 +286,7 @@ public class ColorOperations
 		return Color.rgb(newRed, newGreen, newBlue);
 	}
 	
-	/*
+	/**
 	 * Permet d'élever toutes les composantes d'une couleur à une certaine puissance
 	 * 
 	 * @param col 	La couleur à élever à une certaine puissance
@@ -303,7 +303,7 @@ public class ColorOperations
 		return Color.rgb(newRed, newGreen, newBlue);
 	}
 	
-	/*
+	/**
 	 * Permet de convertir une couleur de l'espace sRGB avec une courbe de Gamma de 2.2 vers l'espace RGB linéaire
 	 * 
 	 * @param sRGB2_2Color La couleur que l'on veut convertir dont les composantes ne sont pas linéaires
@@ -319,7 +319,7 @@ public class ColorOperations
 		return Color.rgb(ColorOperations.sRGB2_2ToLinearTable[intRed], ColorOperations.sRGB2_2ToLinearTable[intGreen], ColorOperations.sRGB2_2ToLinearTable[intBlue]);
 	}
 	
-	/*
+	/**
 	 * Soustrait deux couleurs terme à terme
 	 * 
 	 * @param col1 Première couleur
