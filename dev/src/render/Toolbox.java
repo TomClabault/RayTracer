@@ -249,6 +249,12 @@ public class Toolbox{
 	private void specularCheckboxCallback(ObservableValue <? extends Boolean> observable, Boolean oldValue, Boolean newValue)			{ this.rayTracerSettings.enableSpecular(newValue); }
 	private void fresnelCheckboxCallback(ObservableValue <? extends Boolean> observable, Boolean oldValue, Boolean newValue)			{ this.rayTracerSettings.enableFresnel(newValue); }
 	
+	/**
+	 * Méthode gérant le slider javafx du nombre de Thread
+	 * @param observableValue
+	 * @param oldValue
+	 * @param newValue
+	 */
 	private void nbCoreSliderCallback(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue)
 	{
 		this.nbCoreSlider.setValue(Math.round(newValue.doubleValue()));
@@ -257,6 +263,12 @@ public class Toolbox{
 		this.rayTracerSettings.setNbCore(roundedValue*roundedValue);
 	}
 	
+	/**
+	 * Méthode gérant le slider d'échantillon rough reflexion.
+	 * @param observableValue
+	 * @param oldValue
+	 * @param newValue
+	 */
 	private void blurrySamplesSliderCallback(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue)
 	{
 		this.blurrySamplesSlider.setValue(Math.round(newValue.doubleValue()));
@@ -265,6 +277,12 @@ public class Toolbox{
 		this.rayTracerSettings.setBlurryReflectionsSampleCount(roundedValue*roundedValue);
 	}
 	
+	/**
+	 * Méthode gérant le slider d'antialiasing
+	 * @param observableValue
+	 * @param oldValue
+	 * @param newValue
+	 */
 	private void antialiasingSliderCallback(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue)		
 	{
 		this.antialiasingSlider.setValue(Math.round(newValue.doubleValue()));
