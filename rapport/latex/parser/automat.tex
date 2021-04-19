@@ -14,7 +14,7 @@ Voici le diagramme d'états des figures:
 \FloatBarrier
 
 
-Concrètement, dans la classe Automat, on traverse le fichier jusqu'à ce qu'on rencontre une figure connu. A ce moment là, on fixe l'état sur cette figure et on appelle la classe d'état correspondante. Dès lors que la parsing de la figure est fini, on regarde le prochain mot et on fixe l'état correspondant. Tout ces traitements dont effectués dans une boucle qui a pour condition de d'arrêt la fin du fichier. Ensuite on switch sur l'état courant et on définit autant de case qu'il y a d'états. On a aussi définit un état vide, l'état OUTSIDE qui correspond à aucun élément de syntaxe. Dès lors que l'on se trouve dans un état OUTSIDE, on avance juste notre jeton dans le fichier pour tomber sur la prochaine figure, s'il y en a une.
+Concrètement, dans la classe Automat, on traverse le fichier jusqu'à ce qu'on rencontre une figure connue. A ce moment là, on fixe l'état sur cette figure et on appelle la classe d'état correspondante. Dès lors que la parsing de la figure est fini, on regarde le prochain mot et on fixe l'état correspondant. Tout ces traitements dont effectués dans une boucle qui a pour condition d'arrêt la fin du fichier. Ensuite on switch sur l'état courant et on définit autant de case qu'il y a d'états. On a aussi définit un état vide, l'état OUTSIDE qui correspond à aucun élément de syntaxe. Dès lors que l'on se trouve dans un état OUTSIDE, on avance juste notre jeton dans le fichier pour tomber sur la prochaine figure, s'il y en a une.
 \begin{adjustbox}{max width=\textwidth}
  \lstinputlisting[language=Java]{../../code/automat.java}
 \end{adjustbox} 
