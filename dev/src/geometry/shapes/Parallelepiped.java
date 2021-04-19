@@ -58,7 +58,7 @@ public class Parallelepiped extends ShapeTriangleUtil implements Shape
 		this.height = this.G.getY() - this.A.getY();
 		super.material = material;
 		
-		this.buildRectangle();
+		this.buildParallelepiped();
 	}
 
 	public Parallelepiped(Point A, double height, double length, double width, Material material)
@@ -77,14 +77,14 @@ public class Parallelepiped extends ShapeTriangleUtil implements Shape
 
 		super.material = new MatteMaterial(Color.rgb(200, 200, 200));
 		
-		this.buildRectangle();
+		this.buildParallelepiped();
 	}
 
 
 
 
 
-	protected void buildRectangle()
+	protected void buildParallelepiped()
 	{
 		Point B, C, D, E, F, H;
 
