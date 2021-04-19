@@ -138,7 +138,7 @@ public class Automat
     }
 
     /**
-     * Cette méthode teste si le jeton courant est une figure valide
+     * Cette méthode teste si le prochain jeton est une figure valide
      * @return true si la figure est valide, false sinon
      */
     public boolean isValidState()

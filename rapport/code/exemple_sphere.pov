@@ -12,4 +12,8 @@ sphere
         specular 0.05
         phong_size 1
     }
+    interior
+    {
+        ior 0.5
+    }
 }
