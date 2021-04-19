@@ -179,11 +179,11 @@ public class RenderWindow {
             renderTask.setOnSucceeded((succeededEvent) -> {
             	IntBuffer pixelBuffer = renderTask.getValue();
             	RenderWindow.doImage(pixelBuffer, pixelWriter, pixelFormat);
-            	long dif = actualFrameTime - oldFrameTime;
-                dif  = (long)1000000000.0 / dif;
+            	float dif = actualFrameTime - oldFrameTime;
+                dif  = 1000000000.0f / dif;
                 this.oldFrameTime = actualFrameTime;
                 
-                String fpsString = String.format("FPS : %d", dif);
+                String fpsString = String.format("FPS : %.2f", dif);
                 if(this.rayTracingScene.getCamera() != null)//On vérifie quand même que la caméra n'est pas null
                 	fpsString += String.format("\n%s\nH: %.2f°\nV: %.2f°", this.rayTracingScene.getCamera().getPosition().toString(), this.rayTracingScene.getCamera().getAngleHori(), this.rayTracingScene.getCamera().getAngleVerti());
                 fpsLabel.setText(fpsString);
