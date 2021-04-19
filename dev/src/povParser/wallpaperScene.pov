@@ -65,6 +65,24 @@ sphere
 }
 
 /*
+Rough grise
+*/
+sphere 
+{ 
+	<0, -0.5, -6>, 0.5
+	pigment { color rgb 0.16}
+	finish 
+	{
+		ambient 1 
+		diffuse 1
+		reflection 0.5
+		specular 0.125
+		phong_size 3
+		roughness 0.75
+	}
+}
+
+/*
 glass
 */
 sphere 
@@ -96,38 +114,9 @@ sphere
 		reflection 0.5
 		specular 0.125
 		phong_size 3
-		roughness 1
+		roughness 0.9
 	}
 }
-
-/*
-box glassy entre les deux petites sphères miroirs
-*/
-
-box 
-{ 
-	<-0.75, -0.75, -6>, <0, 1.5, -6>
-	pigment { color rgb <1, 0, 0>}
-	finish 
-	{
-		ambient 1 
-		diffuse 1
-		reflection 0.03
-		specular 1
-		phong_size 256
-	}
-	interior
-	{
-		ior 1.5
-	}
-}
-
-/*
-triangle
-{
-	<2, -0.65, -5>, <-2, -0.65, -5>, <0, 0, -5>
-}
-*/
 
 sphere 
 { 

@@ -52,16 +52,16 @@ public class ThreadsTaskList
 	/**
 	 * Permet d'initialiser la liste des tâches
 	 * 
-	 * @param nbCore Combien de processeur de calcul va utiliser le rendu
 	 * @param renderWidth Largeur en pixel de l'image rendue
 	 * @param renderHeight Hauteur en pixel de l'image rendue
 	 */
-	public void initTaskList(int nbCore, int renderWidth, int renderHeight)
+	public void initTaskList(int renderWidth, int renderHeight)
 	{
 		this.taskList = new ArrayList<>();
 		
-		int tilesWidth = renderWidth / nbCore;
-		int tilesHeight = renderHeight / nbCore;
+		//un découpage en 64*64 tuiles semble être un bon choix (arbitraire) en terme de performances
+		int tilesWidth = renderWidth / 64;
+		int tilesHeight = renderHeight / 64;
 		
 		int tilesCountX = renderWidth / tilesWidth; tilesCountX = (tilesCountX * tilesWidth < renderWidth) ? tilesCountX + 1 : tilesCountX; 
 		int tilesCountY = renderHeight / tilesHeight; tilesCountY = (tilesCountY * tilesHeight < renderHeight) ? tilesCountY + 1 : tilesCountY;
