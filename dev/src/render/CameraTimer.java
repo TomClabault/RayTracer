@@ -52,10 +52,7 @@ public class CameraTimer extends AnimationTimer {
             {
             	synchronized(scene)
             	{
-            	//if(cameraRenderLock.tryLock() && cameraRenderLock.getHoldCount() == 1)//Si le verrou est disponible
-            	//{
 	                if (event.getCode() == KeyCode.E) {
-	                	System.out.println("E PUSHED");
 	                    upCamera();
 	                } else if (event.getCode() == KeyCode.A) {
 	                    downCamera();
@@ -76,13 +73,9 @@ public class CameraTimer extends AnimationTimer {
 	                } else if (event.getCode() == KeyCode.D) {
 	                    goRightCamera();
 	                }
-	                
-	                //cameraRenderLock.unlock();
-            	//}
             	}
             }
         });
-
     }
 
     /**

@@ -40,21 +40,36 @@ import scene.lights.PositionnalLight;
 */
 public class MainApp extends Application {
     /**
-     * Définie par la fenètre du choix de taille de rendu
+     * La hauteur de la résolution de la fenêtre du rendu définie par {@link render.SetSizeWindow}
     */
     public static int HEIGHT;
     /**
-     * Définie par la fenètre du choix de taille de rendu
+     * La largeur de la résolution de la fenêtre du rendu définie par {@link render.SetSizeWindow}
     */
     public static int WIDTH;
-
+    
+    /**
+     * Vaut true si le mode automatique est activé
+     * 
+     * Le mode automatique maximize la fenêtre de rendu et étire le rendu, le rendu devient pixélisé si la résolution du rendu est inférieur à la taille de la fenêtre
+     */
     public static boolean AUTO_MODE;
 
+    /**
+     * La méthode main de java
+     * @param args
+     */
     public static void main(String[] args) {
 
         Application.launch(args);
 
     }
+    /**
+     * Contient la méthode à Override de {@link javafx.application.Application}
+     * Elle est exécutée dans le main
+     * @param stage Le stage de la fenêtre de rendu
+     */
+    @Override
     public void start(Stage stage) {
 
         FileChooser fileChooser = new FileChooser();
@@ -89,7 +104,7 @@ public class MainApp extends Application {
     	RenderWindow renderWindow = new RenderWindow(stage, rayTracer, rayTracingScene, rayTracerSettings);
         renderWindow.execute();
 
-        Toolbox toolbox = new Toolbox(rayTracingScene, renderWindow.getRenderScene(), renderWindow.getStatPane(), rayTracer, rayTracerSettings);
+        Toolbox toolbox = new Toolbox(renderWindow.getRenderScene(), renderWindow.getStatPane(), rayTracerSettings);
         toolbox.execute();
         
         
@@ -103,6 +118,11 @@ public class MainApp extends Application {
         });
     }
     
+    /**
+     * La méthode de test pour ajouter des éléments 3d à une scène
+     * @deprecated Les éléments doivent désormais être importés à l'aide d'un fichier POV
+     * @return RayTracingScene contenant les éléments 3d
+     */
     public RayTracingScene generateUsualScene() 
     {
 
@@ -151,6 +171,11 @@ public class MainApp extends Application {
         return  sceneRT;
     }
     
+    /**
+     * Génère une 3d avec des éléments pour visualiser la roughness
+     * @return RaytracingScene contenant des éléments utilisant roughness
+     * @deprecated Les éléments doivent désormais être importés en utilisant un fichier POV
+     */
     public RayTracingScene generateRoughnessDemoScene() 
     {
     	Camera cameraRT = new Camera(new Point(-2.000, 4, -1), new Point(-2, 0, -8), 40);

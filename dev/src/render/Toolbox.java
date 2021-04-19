@@ -24,34 +24,33 @@ import rayTracer.RayTracer;
 import rayTracer.RayTracerSettings;
 import scene.RayTracingScene;
 
+/**
+ * La classe contenant le code de la toolbox, c'est-à-dire la fenêtre contenant les paramêtres que l'ont peux manipuler pendant l'affichage du rendu.
+ */
 public class Toolbox{
 
-	private RayTracingScene rayTracingScene;
 	private Scene renderScene;
 	private Pane statPane;
 	private RayTracerSettings rayTracerSettings;
-	private RayTracer rayTracer;
 	
 	private Slider nbCoreSlider;//Attribut nécessaire pour pouvoir y accéder dans les méthodes Callback
 	private Slider blurrySamplesSlider;
 	private Slider antialiasingSlider;
 	
-	public Toolbox(RayTracingScene rayTracingScene, Scene renderScene, Pane statPane, RayTracer rayTracer, RayTracerSettings rayTracerSettings) {
-		this.rayTracingScene = rayTracingScene;
-		this.rayTracer = rayTracer;
+	/**
+	 * @param renderScene la scène javafx contenant le rendu.
+	 * @param statPane le Pane contenant les statistiques du rendu (typiquement les fps).
+	 * @param rayTracerSettings les paramêtres du rayTracer.
+	 */
+	public Toolbox(Scene renderScene, Pane statPane, RayTracerSettings rayTracerSettings) {
 		this.renderScene = renderScene;
 		this.statPane = statPane;
 		this.rayTracerSettings = rayTracerSettings;
 	}
 
-	public RayTracingScene getRts() {
-		return rayTracingScene;
-	}
-
-	public void setRts(RayTracingScene rts) {
-		this.rayTracingScene = rts;
-	}
-
+	/**
+	 * Méthode affichant la toolbox.
+	 */
 	public void execute() {
 
 		Stage stage = new Stage();

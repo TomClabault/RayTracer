@@ -14,8 +14,14 @@ import javafx.stage.WindowEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 
+/**
+ * La classe contenant le code du choix de la taille du rendu.
+ */
 public class SetSizeWindow 
 {
+	/**
+	 * Méthode éxécutant le code pour afficher la fenêtre du choix de rendu.
+	 */
 	public void execute() {
         Stage stage = new Stage();
         GridPane root = new GridPane();
