@@ -1,6 +1,7 @@
 package geometry.shapes;
 
 import materials.Material;
+import exceptions.InvalidSphereException;
 import geometry.Shape;
 import geometry.ShapeUtil;
 import maths.CoordinateObject;
@@ -26,6 +27,9 @@ public class Sphere extends ShapeUtil implements Shape
 	 */
 	public Sphere(Point center, double radius, Material material)
 	{
+		if(radius < 0)
+			throw new InvalidSphereException("La sphère que vous avez essayé de créer est invalide.");
+			
 		this.center = center;
 		this.radius = radius;
 		

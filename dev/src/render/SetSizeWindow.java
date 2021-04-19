@@ -1,14 +1,18 @@
 package render;
 
 import javafx.scene.Scene;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 
 public class SetSizeWindow 
 {
@@ -16,7 +20,7 @@ public class SetSizeWindow
         Stage stage = new Stage();
         GridPane root = new GridPane();
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(SetSizeWindow.class.getResource("style/setSizeWindow.css").toExternalForm());
+        scene.getStylesheets().add(SetSizeWindow.class.getResource("style/window.css").toExternalForm());
 
         stage.setScene(scene);
         stage.setTitle("Selection de la taille de rendu");
@@ -28,8 +32,6 @@ public class SetSizeWindow
         CheckBox checkbox = new CheckBox("Mode automatique");
         Button validateButton = new Button("Valider");
         Button cancelButton = new Button("Annuler");
-
-        //gridPane.setPadding(new Insets(2));
 
         root.add(textLargeur, 0, 0);
         root.add(inputLargeur, 1, 0);
@@ -65,8 +67,17 @@ public class SetSizeWindow
 
             @Override
             public void handle(ActionEvent event) {
-                stage.close();
+            	Platform.exit();
+        		System.exit(0);
             }
+        });
+        
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>(){
+        	@Override
+        	public void handle(WindowEvent e) {
+        		Platform.exit();
+        		System.exit(0);
+        	}
         });
         
         stage.showAndWait();

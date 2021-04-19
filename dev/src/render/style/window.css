@@ -1,0 +1,5 @@
+.root {
+	-fx-spacing: 5;
+	-fx-vgap: 5;
+	-fx-padding: 2mm;
+}

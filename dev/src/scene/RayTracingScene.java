@@ -313,7 +313,7 @@ public class RayTracingScene
 	{
 		String output = "";
 		
-		output += ("Camera: " + camera.toString() + System.lineSeparator());
+		output += ("Camera: " + (camera == null ? "null" : camera.toString()) + System.lineSeparator());
 		output += ("Light: " + lights.toString() + System.lineSeparator());
 		output += ("Ambient light: " + ambientLightIntensity + System.lineSeparator());
 		output += ("Formes: " + System.lineSeparator());
