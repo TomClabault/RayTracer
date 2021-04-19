@@ -4,14 +4,14 @@ Une question que nous nous sommes posée est : Swing ou JavaFX ?
 
 Nous avons choisi d'utiliser JavaFX pour une principale raison. JavaFX est désormais la librairie officielle de Java. Swing n'étant plus maintenu, nous ne voulions pas développer avec une librairie qui commence à être dépréciée.
 
-De plus, le sujet de Bataille Navale étant à faire obligatoirement en swing, nous voulions essayer les deux librairies.
+De plus, le sujet de Bataille Navale (le projet de Complément de POO que nous devons réaliser en parallèle) étant à faire obligatoirement en swing, nous voulions essayer les deux librairies.
 
 
 \subsubsection{L'interface graphique}
 
 Le développement de l'interface graphique a progressé au rythme du reste du projet, implémentant ce qui a été codé en parallèle. Plusieurs optimisations ont cependant été réalisées pour que l'affichage à l'écran impacte le moins possible les performances générales.
 
-L'optimisation la plus impactant est l'usage d'un IntBuffer et de PixelFormat<IntBuffer>. Ils ont permis d'utiliser la méthode setPixels de PixelWriter, permettant ainsi de définir les pixel de la fenêtre de rendu d'un coup et non pas pixel par pixel comme fait précédement.
+L'optimisation la plus impactant est l'usage d'un IntBuffer et de PixelFormat<IntBuffer>. Ils ont permis d'utiliser la méthode setPixels de PixelWriter, permettant ainsi de définir les pixel de la fenêtre de rendu d'un coup et non pas pixel par pixel comme fait précédememnt.
 
 Un des effets secondaires engendrés par les calculs lourds du rendu est la fenêtre qui n'était plus réactive.
 Au départ, nous utilisions CameraTimer et WindowTimer, deux classes héritant de Animation Timer. WindowTimer lançait le rendu et CameraTimer s'occupait de gérer un déplacement de caméra. La méthode handle de AnimationTimer s'exécute à chaque frame, ce qui nous permettait de gérer l'affichage des FPS, la caméra et le rendu à l'aide de la méthode handle et tout était donc synchronisé.
@@ -20,7 +20,7 @@ Le problème posé par ce choix était que JavaFX gérait directement les calcul
 
 \label{UsageTask}
 
-Pour pallier à ce problème, nous avons utilisé des classes proposées par le package concurrent de JavaFX. Le problème a été résolu grâce à la classe tasks de ce package, permettant de faire des calculs lourds sans impacter la réactivité de l'interface graphique. Comme javafx et le calcul de rendu n'étaient plus liés il a fallu synchroniser les mouvements de caméra et le calcul de l'image d'après.
+Pour palier à ce problème, nous avons utilisé des classes proposées par le package concurrent de JavaFX. Le problème a été résolu grâce à la classe tasks de ce package, permettant de faire des calculs lourds sans impacter la réactivité de l'interface graphique. Comme javafx et le calcul de rendu n'étaient plus liés il a fallu synchroniser les mouvements de caméra et le calcul de l'image d'après.
 
 
 
