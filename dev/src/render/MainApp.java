@@ -7,7 +7,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 
-import exceptions.InvalidRectangleException;
+import exceptions.InvalidParallelepipedException;
 import exceptions.InvalidSphereException;
 import geometry.Shape;
 import geometry.shapes.Plane;
@@ -88,7 +88,7 @@ public class MainApp extends Application {
 	   	{
 	   		rayTracingScene = Automat.parsePov(file);
 	   	}
-	   	catch(InvalidRectangleException recExc)
+	   	catch(InvalidParallelepipedException recExc)
 	   	{
 	   		System.out.println("Le rendu de la scène ne peut pas être effectué dû à un parallélépipède incorrect.");
 	   		
