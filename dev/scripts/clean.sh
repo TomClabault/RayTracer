@@ -1,16 +1,12 @@
- #!/bin/sh
+#!/bin/sh
 
- if [ -d ../doc ]
- then
-    rm -rf ../doc
+cd $(dirname $0)/..
+if [ -d doc ]
+then
+    rm -rf doc
 fi
 
-if [ -d ../lib ]
+if [ -d build ]
 then
-    rm -rf ../lib
-fi
-
-if [ -d ../build ]
-then
-    rm -rf ../build
+    rm -rf build
 fi
