@@ -13,7 +13,7 @@ Afin de parser n'importe quel fichier au format pov, la méthode qui a été ret
 \end{figure}
 \FloatBarrier
 
-Ce pattern est composé d'une interface EtatToken qui définit une méthode action qui servira à parser le bon objet. Ensuite, on implémente ce que l'on appelle des classes d'état qui redéfinissent la méthode action et font tout le traitement de la figure. Ces classes correspondent à un seul objet/figure à la fois à l'exception de la classe EtatSpherePlane dont on parlera plus tard. Cette interface est donc en quelque sorte le modèle d'un état.
+Ce pattern est composé d'une interface EtatToken qui définit une méthode action qui servira à parser le bon objet. Ensuite, on crée ce que l'on appelle des classes d'état qui implémentent l'interface et donc redéfinissent la méthode action. Ce sont elles qui s'occupent de tout le traitement de la figure. Ces classes correspondent à un seul objet/figure à la fois à l'exception de la classe EtatSpherePlane dont on parlera plus tard. Cette interface est donc en quelque sorte le modèle d'un état.
 C'est ensuite la Classe Automat qui s'occupe d'appeler les différents états. Voici un exemple d'appel d'état lorsque l'on tombe sur un objet camera:
 
 
