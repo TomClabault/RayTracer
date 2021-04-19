@@ -4,7 +4,7 @@
 \begin{document}
 
 
-Afin de pouvoir se déplacer dans la scène, nous nous sommes attelé à l'implémentation de mouvements de caméra grâce aux touches du clavier. Les mouvements possible sont: les translations de la caméra ainsi que les rotations de cette dernière autour des axes X et Y. Translater la caméra est assez simple. Il suffit de choisir un vecteur par lequel translater la caméra et appliquer cette même translation à l'origine des rayons (car leur origine doit rester la caméra) ainsi qu'à leur point de direction. Pour ce qui est des rotations, le principe est le même. En effet, faire une rotation de la caméra de 90\degree\ autour de l'axe Y revient à appliquer la même rotation aux points de direction des rayons. Afin de simplifier l'utilisation des translation et des rotations, nous avons utilisé une matrice appelée la CTWMatrix (Camera To World Matrix). Cette matrice rassemble les transformations de translation et de rotation appliquées à la caméra. Il n'y a donc plus qu'à multiplier le point que l'on veut transformer par cette matrice et le tour est joué.\\
+Afin de pouvoir se déplacer dans la scène, nous nous sommes attelé à l'implémentation de mouvements de caméra grâce aux touches du clavier. Les mouvements possible sont: les translations de la caméra ainsi que les rotations de cette dernière autour des axes X et Y. Translater la caméra est assez simple. Il suffit de choisir un vecteur par lequel translater la caméra et appliquer cette même translation à l'origine des rayons (car leur origine doit rester la caméra) ainsi qu'à leur point de direction. Pour ce qui est des rotations, le principe est le même. En effet, faire une rotation de la caméra de 90\degree\ autour de l'axe Y revient à appliquer la même rotation aux points de direction des rayons. Afin de simplifier l'utilisation des translations et des rotations, nous avons utilisé une matrice appelée la CTWMatrix (Camera To World Matrix). Cette matrice rassemble les transformations de translation et de rotation appliquées à la caméra. Il n'y a donc plus qu'à multiplier le point que l'on veut transformer par cette matrice et le tour est joué.\\
 Les matrices de rotation dans un espace de dimension 3 se présentent sous la forme suivante:
 
 \begin{center}
@@ -52,5 +52,6 @@ On sait que la multiplication de deux matrices de rotation donne aussi une matri
 
 Multiplier un point par cette matrice revient alors à effectuer les rotations des deux matrices $R_{Y_{\alpha}}$ et $R_{X_{\beta}}$ et ensuite à translater le point résultant par le vecteur $\overrightarrow{u}(a, b, c)$.Tout cela en une seule opération de multiplication matricielle.
 
+Des schémas représentant les rotations de la caméra autour des axes X et Y sont disponibles en annexe \ref{annexe:rotationsCamera}
 
 \end{document}

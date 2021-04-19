@@ -6,6 +6,7 @@
 \usepackage{adjustbox}%Permet de centrer les figures dans la largeur de la page même si les figures sont plus larges que \textwidth
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage{adjustbox} % pour avoir adjustbox
 \usepackage[toc,page,title,titletoc,header]{appendix}
 \usepackage{expl3}%Pour la control sequence /ExlpSyntaxOn demandée par l'utilisation de subfiles apparemment...
 \usepackage{gensymb}%pour pouvoir écrire le signe °
@@ -81,20 +82,21 @@ showstringspaces=false}
 \section{Structuration du projet}
     \subsection{Les packages}
         \subsubsection{Le parser}
+        	\subfile{latex/packages/parser_package.tex}
         \subsubsection{Liés au Ray Tracer}
             \subfile{latex/packages/RTpackages.tex}
 
-        \subsubsection{Le multithreading}
+        \subsection{Le package multithreading}
 	  \subfile{latex/packages/multithreading.tex}
 
-	\subsubsection{Le package geometry}
+	\subsection{Le package geometry}
 	    \subfile{latex/packages/geometry.tex}
 
-        \subsubsection{Le package materials}
+        \subsection{Le package materials}
             \subfile{latex/packages/materials.tex}
 
-        \subsubsection{Le package render}
-        \input{latex/render.javafx/packageRender.tex}
+        \subsection{Le package render}
+        	\input{latex/render.javafx/packageRender.tex}
 
 
 
@@ -139,10 +141,21 @@ showstringspaces=false}
     \input{latex/render.javafx/GUI.tex}
 
     \subsection{Le parser}
+<<<<<<< HEAD
+        \subsubsection{Structure d'un fichier POV}      
+        	\subfile{latex/parser/struct_pov.tex}
+        \subsubsection{Automate à état finit}
+           	\subfile{latex/parser/automat.tex}
+        \subsubsection{Implémentation du pattern state}
+        	\subfile{latex/parser/pattern_state.tex}
+        \subsubsection{Implémentation du pattern template méthod}
+        	\subfile{latex/parser/pattern_template_method.tex}        	
+=======
         \subsubsection{Structure d'un fichier POV}
         \subsubsection{Implémentation du partern state}
         \subsubsection{Implémentation du patern template méthode}
         \subsubsection{Automate à état fini}
+>>>>>>> master
 
 
     \subsection{Les formes géométriques}
@@ -152,11 +165,11 @@ showstringspaces=false}
 
 \section{Analyse des résultats}
     \subsection{Mesure des performances}
-        \subfile{latex/other/mesuresPerf.tex}
+        \subfile{latex/mesuresPerf.tex}
 
     \subsection{Comparaison avec povRay}
 \section{Idées d'améliorations}
-    \subfile{latex/other/ideesAmelios.tex}
+    \subfile{latex/ideesAmelios.tex}
 \section{Conclusion}
 
 
@@ -165,28 +178,7 @@ showstringspaces=false}
 
 
 \newpage%Nouvelle page pour les annexes
-\begin{appendices}
-	\section{Le ray tracer}
-		\subsection{Configuration d'une caméra, d'une scène et de rayons}
-		\begin{figure}[h!]
-			\adjustbox{center}{\includegraphics[width=1.1\textwidth]{img/rt/repCam2Rayonsv2.png}}
-
-			\caption{Des rayons sont tirés depuis la caméra dans sa direction de regard. Nous cherchons les points d'intersection avec les objets de la scène.}
-		\end{figure}
-		\FloatBarrier
-		\label{annexe:repreCamRayon}
-
-		\subsection{Le principe récursif des réflexions}
-		\begin{figure}[!h]
-			\adjustbox{center}{\includegraphics[width=1.1\textwidth]{img/rt/reflectionsSchema.png}}
-
-			\caption{Exemple de rebonds successifs des rayons jusqu'à un objet non réfléchissant}
-			\label{reflectionsSchema}
-		\end{figure}
-		\FloatBarrier
-		\label{annexe:reflexionsRecursives}
-\FloatBarrier
-\end{appendices}
+\subfile{latex/appendices}
 
 \newpage%Nouvelle page pour la bibliographie
 \nocite{*}

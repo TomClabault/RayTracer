@@ -9,8 +9,10 @@ import geometry.ShapeTriangleUtil;
 
 import java.util.ArrayList;
 
+import exceptions.InvalidParallelepipedException;
 
-public class Rectangle extends ShapeTriangleUtil implements Shape
+
+public class Parallelepiped extends ShapeTriangleUtil implements Shape
 {
 
 	private double height,width,length;
@@ -41,8 +43,13 @@ public class Rectangle extends ShapeTriangleUtil implements Shape
 
 	 */
 
-	public Rectangle(Point coin1, Point coin2, Material material)
+	public Parallelepiped(Point coin1, Point coin2, Material material)
 	{
+		if(coin1.getX() == coin2.getX()
+		|| coin1.getY() == coin2.getY() 
+		|| coin1.getZ() == coin2.getZ())//Si le rectangle est "plat"
+			throw new InvalidParallelepipedException("Le parallélépipède que vous avez essayé de créer était plat.");
+			
 		this.A = coin1;
 		this.G = coin2;
 		/*car les longeurs sont inconnus*/
@@ -51,11 +58,14 @@ public class Rectangle extends ShapeTriangleUtil implements Shape
 		this.height = this.G.getY() - this.A.getY();
 		super.material = material;
 		
-		this.buildRectangle();
+		this.buildParallelepiped();
 	}
 
-	public Rectangle(Point A, double height, double length, double width, Material material)
+	public Parallelepiped(Point A, double height, double length, double width, Material material)
 	{	/*ici coin1 peut etre considere comme le point de depart*/
+		if(height == 0 || length == 0 || width == 0)
+			throw new InvalidParallelepipedException("Le parallélépipède que vous avez essayé de créer était plat.");
+		
 		this.A = A;
 		this.height = height;
 		this.length = length;
@@ -67,14 +77,14 @@ public class Rectangle extends ShapeTriangleUtil implements Shape
 
 		super.material = new MatteMaterial(Color.rgb(200, 200, 200));
 		
-		this.buildRectangle();
+		this.buildParallelepiped();
 	}
 
 
 
 
 
-	protected void buildRectangle()
+	protected void buildParallelepiped()
 	{
 		Point B, C, D, E, F, H;
 
@@ -115,6 +125,11 @@ public class Rectangle extends ShapeTriangleUtil implements Shape
 		super.listeTriangle.add(tr11);
 		super.listeTriangle.add(tr12);
 
+		for(Triangle triangle : listeTriangle)
+		{
+			System.out.println(triangle + "normal = " + triangle.getNormal(null));
+		}
+		
 		/*on retourne la liste des triangles*/
 		/*return listeTriangle;*/
 	}

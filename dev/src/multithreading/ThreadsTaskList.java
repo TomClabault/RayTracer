@@ -49,20 +49,19 @@ public class ThreadsTaskList
 		this.totalTaskGiven++;
 	}
 	
-	/*
+	/**
 	 * Permet d'initialiser la liste des tâches
 	 * 
-	 * @param nbCore Combien de processeur de calcul va utiliser le rendu
 	 * @param renderWidth Largeur en pixel de l'image rendue
-	 * @param renderHieght Hauteur en pixel de l'image rendue
+	 * @param renderHeight Hauteur en pixel de l'image rendue
 	 */
-	public void initTaskList(int nbCore, int renderWidth, int renderHeight)
+	public void initTaskList(int renderWidth, int renderHeight)
 	{
 		this.taskList = new ArrayList<>();
-		this.totalTaskCount = 0;
 		
-		int tilesWidth = renderWidth / nbCore;
-		int tilesHeight = renderHeight / nbCore;
+		//un découpage en 64*64 tuiles semble être un bon choix (arbitraire) en terme de performances
+		int tilesWidth = renderWidth / 64;
+		int tilesHeight = renderHeight / 64;
 		
 		int tilesCountX = renderWidth / tilesWidth; tilesCountX = (tilesCountX * tilesWidth < renderWidth) ? tilesCountX + 1 : tilesCountX; 
 		int tilesCountY = renderHeight / tilesHeight; tilesCountY = (tilesCountY * tilesHeight < renderHeight) ? tilesCountY + 1 : tilesCountY;
@@ -82,13 +81,13 @@ public class ThreadsTaskList
 		}
 	}
 	
-	/*
+	/**
 	 * Permet de remettre à zéro l'avancement de la liste des tâches. i.e. la liste garde les mêmes tâches mais est prête à être réutilisée.
-	 * Sans l'appel à cette fonction, une fois la liste de tâche complétée une fois, l'état de la liste est tel qu'elle ne pourra pas être réutilisée.
-	 * On doit donc reset la liste entre plusieures utilisations 
+	 * Cette méthode doit toujours être appelée avant une nouvelle réutilisation des tâches 
 	 */
 	public void resetTasksProgression()
 	{
+		this.totalTaskCount = 0;
 		this.totalTaskFinished = 0;
 		this.totalTaskGiven = 0;
 	}

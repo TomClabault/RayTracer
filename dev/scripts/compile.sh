@@ -2,7 +2,12 @@
 
 cd $(dirname $0)/..
 [ -d lib ] || mkdir lib
-wget https://gluonhq.com/download/javafx-16-sdk-linux/ -o /lib/javafx.zip #peut mettre un certain temps à s'exécuter
-unzip lib/javafx.zip
-rm -rf lib/javafx.zip
+env | grep PATH_TO_FX
+return_status=$?
+if [ $return_status -ne 0 ]
+then
+	>&2 echo "il faut d'abord installer la lib javafx et la mettre dans une variable PATH_TO_FX (voir README)"
+	exit 1
+fi
+
 ant compile

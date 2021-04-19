@@ -1,14 +1,17 @@
-package povParser;
+package povParser.state;
 
 import geometry.Shape;
-import geometry.shapes.Rectangle;
+import geometry.shapes.Parallelepiped;
 import javafx.scene.paint.Color;
 import materials.Material;
 import maths.Point;
+import povParser.Automat;
 
 import java.io.StreamTokenizer;
-import java.util.ArrayList;
 
+/**
+ * énumération des différents états d'un objet box
+ */
 enum Boxcontent
 {
     OPENING_BRACKET,
@@ -19,8 +22,16 @@ enum Boxcontent
     ATTRIBUTE,
 }
 
+/**
+ * Classe permettant de parser une figure de type box
+ */
 public class EtatBox extends EtatUtil implements EtatToken
 {
+    /**
+     * Méthode permettant de parser la box
+     * @param context contexte courant de l'automate
+     * @return Un objet de type shape contenant les coordonnées parsées etc.
+     */
     @Override
     public Shape action(Automat context)
     {
@@ -31,7 +42,7 @@ public class EtatBox extends EtatUtil implements EtatToken
         int bracketNb = 0;
         int coordNb = 0;
         Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0, 0);
-        Rectangle rectangle = null;
+        Parallelepiped rectangle = null;
         Point vector1 = null;
         Point vector2 = null;
 
@@ -103,7 +114,7 @@ public class EtatBox extends EtatUtil implements EtatToken
                 }
             }
         }
-        rectangle = new Rectangle(vector1, vector2, material);
+        rectangle = new Parallelepiped(vector1, vector2, material);
         return rectangle;
     }
 }

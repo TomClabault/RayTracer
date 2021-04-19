@@ -1,15 +1,13 @@
 package maths;
 
-/*
+/**
  * Classe permettant de représenter un vecteur en coordonnées réelles dans l'espace
  */
 public class Vector implements CoordinateObject
 {
 	private double x, y, z;
-
-	private static double EPSILON_EQUALS = 0.00000001;
 	
-	/*
+	/**
 	 * Contruit un vecteur à partir de ses trois composantes x, y et z
 	 *
 	 * @param x Composante x du vecteur
@@ -23,11 +21,11 @@ public class Vector implements CoordinateObject
 		this.z = z;
 	}
 
-	/*
-	 * Construit le vecteur AB à partir des points a et b passés en paramètre
+	/**
+	 * Construit le vecteur d'origine le point 'originPoint' et d'arrivée le point 'directionPoint'
 	 *
-	 * @param a Point A
-	 * @param b Point B
+	 * @param originPoint Point A
+	 * @param directionPoint Point B
 	 */
 	public Vector(Point originPoint, Point directionPoint)
 	{
@@ -38,8 +36,10 @@ public class Vector implements CoordinateObject
 		this.z = vectorPoint.getZ();
 	}
 
-	/*
+	/**
 	 * Créer un nouveau vecteur à partir d'un existant. i.e. fait une copie
+	 * 
+	 * @param u Le vecteur a copier
 	 */
 	public Vector(Vector u)
 	{
@@ -48,7 +48,7 @@ public class Vector implements CoordinateObject
 		this.z = u.z;
 	}
 
-	/*
+	/**
 	 * Ajoute deux vecteurs et retourne le vecteur somme
 	 *
 	 * @param u Premier terme de l'addition des deux vecteurs
@@ -61,10 +61,10 @@ public class Vector implements CoordinateObject
 		return new Vector(v.x + u.x, v.y + u.y, v.z + u.z);
 	}
 
-	/*
+	/**
 	 * Ajoute un vecteur au vecteur représenté par l'instance appelante
 	 *
-	 * @param u Deuxième terme de l'addition des deux vecteurs
+	 * @param v Deuxième terme de l'addition des deux vecteurs
 	 *
 	 * @return this + v
 	 */
@@ -73,7 +73,7 @@ public class Vector implements CoordinateObject
 		return new Vector(this.x + v.x, this.y + v.y, this.z + v.z);
 	}
 
-	/*
+	/**
 	 * Vérifie si deux vecteurs sont colinéaires ou non
 	 * *
 	 * @param u Premier vecteur
@@ -93,7 +93,7 @@ public class Vector implements CoordinateObject
 			return false;
 	}
 
-	/*
+	/**
      * Permet de copier un vecteur passé en argument dans l'instance du vecteur appelante
      *
      * @param vectorToCopy Vecteur dont les coordonnées vont être copiées dans l'instance actuelle
@@ -105,7 +105,7 @@ public class Vector implements CoordinateObject
     	this.z = vectorToCopy.z;
     }
 
-	/*
+	/**
 	 * @param u Premier vecteur
 	 * @param v Deuxième vecteur
 	 *
@@ -116,7 +116,7 @@ public class Vector implements CoordinateObject
 		return new Vector(u.y*v.z - u.z*v.y, u.z*v.x - u.x*v.z, u.x*v.y - u.y*v.x);
 	}
 
-	/*
+	/**
 	 * Calcule le produit scalaire de deux vecteurs
 	 *
 	 * @param u Premier vecteur
@@ -149,7 +149,7 @@ public class Vector implements CoordinateObject
 		return true;
 	}
 	
-	/*
+	/**
 	 * Calcule et retourne un nouveau vecteur de direction opposée au vetceur représenté par l'instance appelante
 	 * 
 	 * @return Si le vecteur de l'instance appelante est de coordonnées (x, y, z), retourne le vecteur de coordonnées (-x, -y , -z) 
@@ -174,7 +174,7 @@ public class Vector implements CoordinateObject
 		return this.z;
 	}
 	
-	/*
+	/**
 	 * Permet d'interpoler linéairement un vecteur entre deux vecteurs donnés
 	 * 
 	 * @param u Le premier vecteur qui servira pour l'interpolation
@@ -188,7 +188,7 @@ public class Vector implements CoordinateObject
 		return new Vector(Vector.add(Vector.scalarMul(u, coeff), Vector.scalarMul(v, 1 - coeff)));
 	}
 	
-	/*
+	/**
 	 * Calcule la longueur du vecteur
 	 *
 	 * @return Longueur du vecteur
@@ -198,7 +198,7 @@ public class Vector implements CoordinateObject
 		return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z);
 	}
 
-	/*
+	/**
 	 * Normalise le vecteur
 	 */
 	public void normalize()
@@ -228,7 +228,7 @@ public class Vector implements CoordinateObject
 		return normalized;
 	}
 	
-	/*
+	/**
 	 * Calcule les coordonnées normalisée du CoordinateObject passé en paramètre et renvoie un point ayant ces coordonnées normalisées
 	 * 
 	 *  @param toNormalize L'objet dont on veut les coordonnées normalisées
@@ -240,7 +240,7 @@ public class Vector implements CoordinateObject
 		return normalize(toNormalize);
 	}
 	
-	/*
+	/**
 	 * Calcule les coordonnées normalisée du CoordinateObject passé en paramètre et renvoie un vecteur ayant ces coordonnées normalisées
 	 * 
 	 *  @param toNormalize L'objet dont on veut les coordonnées normalisées
@@ -269,7 +269,7 @@ public class Vector implements CoordinateObject
 		this.z = z;
 	}
 	
-	/*
+	/**
 	 * Multiple chaque coordonnée d'un vecteur par un scalaire
 	 * 
 	 * @param u Un vecteur de coordonnées (x, y, z)
@@ -282,7 +282,7 @@ public class Vector implements CoordinateObject
 		return new Vector(u.getX()*scalar, u.getY()*scalar, u.getZ()*scalar);
 	}
 
-	/*
+	/**
 	 * Ajoute deux vecteurs et retourne le vecteur somme
 	 *
 	 * @param u Premier terme de la soustraction des deux vecteurs
@@ -295,7 +295,7 @@ public class Vector implements CoordinateObject
 		return new Vector(u.x - v.x, u.y - v.y, u.z - v.z);
 	}
 
-	/*
+	/**
 	 * Retourne la représentation mathématique du vecteur
 	 *
 	 * @return Une chaîne de caractère de la forme: (x, y, z) avec x, y et z les coordonnées du vecteur
@@ -308,7 +308,7 @@ public class Vector implements CoordinateObject
     	return String.format("%-25s", output);
     }
 
-	/*
+	/**
 	 * Utilise les coordoonées d'un vecteur pour définir un point
 	 *
 	 * @param u Un vecteur de coordonnées (x, y, z)

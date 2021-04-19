@@ -1,9 +1,14 @@
-package povParser;
+package povParser.state;
 
 import javafx.scene.paint.Color;
 import materials.Material;
 import materials.textures.ProceduralTextureCheckerboard;
+import povParser.Automat;
 
+
+/**
+ * énumération décrivant les différents états d'un modificateur d'objet (couleur, texture ...)
+ */
 enum Attribute
 {
     PIGMENT,
@@ -23,13 +28,18 @@ enum Attribute
 }
 
 /**
- * Ctte classe s'occupe de parser les attributs indépendamment de la figure qu'on est en train de parser
+ * Ctte classe décrit l'état "modificateur de figure"
  */
 public abstract class EtatUtil
 {
 
     int nbBracket = 1;
 
+    /**
+     * Cette méthode sert à renvoyer le prochain état du jeton
+     * @param context contexte courant de l'automate
+     * @return L'état décrivant l'objet qui va être parsée
+     */
     public Attribute parsePropertryAndGetState(Automat context)
     {
         if(context.isCurrentTokenAWord())
@@ -87,6 +97,12 @@ public abstract class EtatUtil
     }
 
 
+    /**
+     * Cette méthode sert à tester la présence de fin de bloc après une accolade fermante, s'il y a un objet après un certain
+     * nombre d'accolades, on renvoit l'état décrivant cette objet
+     * @param context contexte courant de l'automate
+     * @return l'état décrivant l'objet ou létat extérieur si l'on se trouve en fin de bloc
+     */
     public Attribute checkEndingBracket(Automat context)
     {
         Attribute state = null;
@@ -110,9 +126,14 @@ public abstract class EtatUtil
         return state;
     }
 
+    /**
+     * Cette méthode sert à parser les modificateurs d'objet afin de les ajouter à une figure
+     * @param context contexte courant de l'automate
+     * @return Objet de type Attribute qui décrit toutes les modifications apportées à une figure
+     */
     public Material parseAttributes(Automat context) throws RuntimeException
     {
-        Material material = new Material(null, 0, 0, 0, 0, 0, false, 0, 0);
+        Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0, 0);
         Attribute state = parsePropertryAndGetState(context);
         int token = 0;
         boolean color = false;

@@ -1,13 +1,17 @@
-package povParser;
+package povParser.state;
 
 import geometry.Shape;
 import javafx.scene.paint.Color;
 import materials.Material;
 import maths.CoordinateObject;
+import povParser.Automat;
 
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 
+/**
+ * différents états d'un objet de type sphère ou plan
+ */
 enum SpherePlanecontent
 {
     OPENING_BRACKET,
@@ -18,10 +22,26 @@ enum SpherePlanecontent
     ATTRIBUTE
 }
 
+/**
+ * Classe abstraire effectuant le parsing d'un objet de type sphère ou plan (car la syntaxe
+ * est la même)
+ */
 public abstract class EtatSpherePlane extends EtatUtil implements EtatToken
 {
+    /**
+     * Méthode permettant de renvoyer un objet plan ou sphère
+     * @param coord vecteur normal dans le cas du plan, centre dans le cas de la sphère
+     * @param dist distance dans le cas du plan, rayon dans le cas de la sphère
+     * @param material les différents modificateurs de textures, couleurs, etc.
+     * @return un objet de type Shape qui décrit un plan ou une sphère
+     */
     protected abstract Shape createInstance(double[] coord, Double dist, Material material);
 
+    /**
+     * Méthode permettant de parser une sphère ou un plan
+     * @param context contexte courant de l'automate
+     * @return Un objet de type shape contenant les coordonnées parsées etc.
+     */
     @Override
     public Shape action(Automat context)
     {
