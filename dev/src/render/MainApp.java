@@ -7,6 +7,8 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 
+import exceptions.InvalidRectangleException;
+import exceptions.InvalidSphereException;
 import geometry.Shape;
 import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
@@ -55,8 +57,22 @@ public class MainApp extends Application {
         Application.launch(args);
 
     }
-    public void start(Stage stage) {
-
+    public void start(Stage stage) 
+    {
+    	try
+    	{
+    		Integer.parseInt("1");
+    	}
+    	catch(Exception test)
+    	{
+    		test.printStackTrace();
+    	}
+    	finally
+    	{
+    		System.out.println("finally");
+    	}
+    	
+    	
         FileChooser fileChooser = new FileChooser();
 	   	fileChooser.setTitle("Selectionnez un fichier POV");
 	   	ExtensionFilter filter = new ExtensionFilter("POV", "*.pov");
@@ -67,7 +83,28 @@ public class MainApp extends Application {
     		System.exit(0);
 		}
 	   	
-	   	RayTracingScene rayTracingScene = Automat.parsePov(file);
+	   	RayTracingScene rayTracingScene = new RayTracingScene();
+	   	try
+	   	{
+	   		rayTracingScene = Automat.parsePov(file);
+	   	}
+	   	catch(InvalidRectangleException recExc)
+	   	{
+	   		System.out.println("Le rendu de la scène ne peut pas être effectué dû à un parallélépipède incorrect.");
+	   		
+	   		Platform.exit();
+	   		System.exit(0);
+	   	}
+	   	catch(InvalidSphereException sphereExc)
+	   	{
+	   		System.out.println("Le rendu de la scène ne peut pas être effectué dû à une sphère incorrecte.");
+	   		
+	   		Platform.exit();
+	   		System.exit(0);
+	   	}
+	   	
+	   	
+	   	
 	   	if(!rayTracingScene.hasSkybox())
 	   	{
 	   		Image skybox = null;
@@ -75,7 +112,7 @@ public class MainApp extends Application {
 		    if(skyboxURL != null)
 		    	skybox = new Image(skyboxURL.toExternalForm());
 	      
-	      rayTracingScene.setSkybox(skybox);
+		    rayTracingScene.setSkybox(skybox);
 	   	}
 	   		
 	   	SetSizeWindow setSizeWindow = new SetSizeWindow();
