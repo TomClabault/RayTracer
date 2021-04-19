@@ -66,7 +66,6 @@ public class MainApp extends Application {
         Application.launch(args);
 
     }
-<<<<<<< HEAD
     /**
      * Contient la méthode à Override de {@link javafx.application.Application}
      * Elle est exécutée dans le main
@@ -88,7 +87,6 @@ public class MainApp extends Application {
     	}
 
 
->>>>>>> 3e75f03305e4be03f179bd7ca8ed1b4189967f19
         FileChooser fileChooser = new FileChooser();
 	   	fileChooser.setTitle("Selectionnez un fichier POV");
 	   	ExtensionFilter filter = new ExtensionFilter("POV", "*.pov");
