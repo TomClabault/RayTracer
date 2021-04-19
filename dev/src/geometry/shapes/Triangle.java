@@ -139,4 +139,9 @@ public class Triangle extends ShapeTriangleUtil implements Shape
 	{
 		this.C = C;
 	}
+	
+	public String toString()
+	{
+		return String.format("Shape triangle: A = %s | B = %s | C = %s", A, B, C);
+	}
 }

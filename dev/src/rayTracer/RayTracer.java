@@ -233,7 +233,7 @@ public class RayTracer
 	 *  
 	 * @return La couleur réfléchie par le matériau au point d'intersection contenu dans intInfos. Si l'objet n'est pas réflexif, renvoie la couleur noire rgb(0, 0, 0)
 	 */
-	protected Color computeReflectionsColor(RayTracingScene renderScene, RayTracerInterInfos intInfos, int depth)
+	protected Color computeReflectionsColor(int x, int y, RayTracingScene renderScene, RayTracerInterInfos intInfos, int depth)
 	{
 		Material intObjMat = intInfos.getIntObjMat();
 		
@@ -266,7 +266,7 @@ public class RayTracer
 					reflectDirection = randomBounceDirection;
 				}
 					
-				Color reflectionColor = computePixel(renderScene, new Ray(intInfos.getIntPShift(), reflectDirection), depth - 1);
+				Color reflectionColor = computePixel(x, y, renderScene, new Ray(intInfos.getIntPShift(), reflectDirection), depth - 1);
 				
 				summedRed += (int)(reflectionColor.getRed()*255);
 				summedGreen += (int)(reflectionColor.getGreen()*255);
@@ -290,7 +290,7 @@ public class RayTracer
 	 * 
 	 * @return Le mix de couleur réfléchie et réfractée par le matériau au point d'intersection contenu dans intInfos. Si l'objet n'est pas réfractif, renvoie la couleur noire rgb(0, 0, 0)
 	 */
-	protected Color computeRefractionsColor(RayTracingScene renderScene, RayTracerInterInfos intInfos, double transmittedLightRatio, int depth)
+	protected Color computeRefractionsColor(int x, int y, RayTracingScene renderScene, RayTracerInterInfos intInfos, double transmittedLightRatio, int depth)
 	{
 		Material intObjMat = intInfos.getIntObjMat();
 		
@@ -312,7 +312,7 @@ public class RayTracer
 			if(intObjMat.getIsTransparent())//L'objet est transparent, on va donc calculer les rayons réfractés à l'intérieur de l'objet
 			{
 				if (! refractedRayDir.equals(new Vector(0,0,0)) ) {
-					refractedColor = computePixel(renderScene, refractedRay, depth -1);
+					refractedColor = computePixel(x, y, renderScene, refractedRay, depth -1);
 				}
 			}
 			
@@ -322,7 +322,7 @@ public class RayTracer
 			return Color.rgb(0, 0, 0);
 	}
 	
-	protected Color computeFresnelColor(RayTracingScene renderScene, RayTracerInterInfos intInfos, double reflectedLightRatio, int depth)
+	protected Color computeFresnelColor(int x, int y, RayTracingScene renderScene, RayTracerInterInfos intInfos, double reflectedLightRatio, int depth)
 	{
 		Vector incidentRayDir = intInfos.getRayDir();
 		Vector normalAtInter = intInfos.getNormInt();
@@ -336,7 +336,7 @@ public class RayTracer
 			reflectedRay = new Ray(Point.translateMul(rayInterPoint, incidentRayDir, -EPSILON_SHIFT), computeReflectionVector(normalAtInter, incidentRayDir));
 		
 		Color reflectedColor = Color.rgb(0, 0, 0);
-		reflectedColor = computePixel(renderScene, reflectedRay, depth -1);
+		reflectedColor = computePixel(x, y, renderScene, reflectedRay, depth -1);
 		
 		return ColorOperations.mulColor(reflectedColor, reflectedLightRatio);
 	}
@@ -351,17 +351,17 @@ public class RayTracer
 	 * 
 	 * @return Retourne la couleur ombragée au point d'intersection contenu dans intInfos
 	 */
-	protected Color computeShadow(RayTracingScene renderScene, RayTracerInterInfos intInfos, double reflectedLightRatio, double transmittedLightRatio, double ambientLighting, int depth)
+	protected Color computeShadow(int x, int y, RayTracingScene renderScene, RayTracerInterInfos intInfos, double reflectedLightRatio, double transmittedLightRatio, double ambientLighting, int depth)
 	{
 		Color finalColor = Color.rgb(0, 0, 0);
 
 		finalColor = ColorOperations.mulColor(intInfos.getObjCol(), ambientLighting);
 		if(this.settings.isEnableReflections())
-			finalColor = ColorOperations.addColors(finalColor, computeReflectionsColor(renderScene, intInfos, depth));
+			finalColor = ColorOperations.addColors(finalColor, computeReflectionsColor(x, y, renderScene, intInfos, depth));
 		if(this.settings.isEnableRefractions())
-			finalColor = ColorOperations.addColors(finalColor, computeRefractionsColor(renderScene, intInfos, transmittedLightRatio, depth));
+			finalColor = ColorOperations.addColors(finalColor, computeRefractionsColor(x, y, renderScene, intInfos, transmittedLightRatio, depth));
 		if(this.settings.isEnableFresnel())
-			finalColor = ColorOperations.addColors(finalColor, computeFresnelColor(renderScene, intInfos, reflectedLightRatio, depth));
+			finalColor = ColorOperations.addColors(finalColor, computeFresnelColor(x, y, renderScene, intInfos, reflectedLightRatio, depth));
 		
 		return finalColor;
 	}
@@ -463,7 +463,7 @@ public class RayTracer
 					Ray cameraRay = new Ray(MatrixD.mulPointP(new Vector(0, 0, 0), ctwMatrix), rayDirection);
 					cameraRay.normalize();
 	
-					Color subpixelColor = this.computePixel(renderScene, cameraRay, settings.getRecursionDepth());
+					Color subpixelColor = this.computePixel(x, y, renderScene, cameraRay, settings.getRecursionDepth());
 
 					summedRed += (int)(subpixelColor.getRed()*255);
 					summedGreen += (int)(subpixelColor.getGreen()*255);
@@ -491,7 +491,7 @@ public class RayTracer
 	 *
 	 * @return La couleur du pixel que traverse le rayon incident 'ray'
 	 */
-	protected Color computePixel(RayTracingScene renderScene, Ray ray, int depth)
+	protected Color computePixel(int x, int y, RayTracingScene renderScene, Ray ray, int depth)
 	{
 		if(depth == 0)
 			return Color.BLACK;
@@ -572,7 +572,7 @@ public class RayTracer
 						interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeSpecularColor(interInfos, lightIntensity)));
 					if(this.settings.isEnableReflections() && !reflectionsDone)
 					{
-						interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeReflectionsColor(renderScene, interInfos, depth)));
+						interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeReflectionsColor(x, y, renderScene, interInfos, depth)));
 						reflectionsDone = true;
 					}
 					
@@ -583,12 +583,12 @@ public class RayTracer
 						
 						if(this.settings.isEnableRefractions() && !refractionsDone)
 						{
-							interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeRefractionsColor(renderScene, interInfos, transmittedLightRatio, depth)));
+							interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeRefractionsColor(x, y, renderScene, interInfos, transmittedLightRatio, depth)));
 							refractionsDone = true;
 						}
 						if(this.settings.isEnableFresnel() && !fresnelDone)
 						{
-							interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeFresnelColor(renderScene, interInfos, reflectedLightRatio, depth)));	
+							interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeFresnelColor(x, y, renderScene, interInfos, reflectedLightRatio, depth)));	
 							fresnelDone = true;	
 						}
 					}
@@ -605,7 +605,7 @@ public class RayTracer
 					reflectedLightRatio = fresnel(interInfos.getRayDir(), interInfos.getNormInt(), interInfos.getIntObjMat().getRefractionIndex());
 					transmittedLightRatio = 1 - reflectedLightRatio;
 				}
-				interInfos.setCurPixCol(computeShadow(renderScene, interInfos, reflectedLightRatio, transmittedLightRatio, ambientLighting, depth));
+				interInfos.setCurPixCol(computeShadow(x, y, renderScene, interInfos, reflectedLightRatio, transmittedLightRatio, ambientLighting, depth));
 			}
 
 			return interInfos.getCurPixCol();

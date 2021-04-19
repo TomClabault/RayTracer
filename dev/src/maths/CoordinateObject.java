@@ -5,6 +5,8 @@ package maths;
  */
 public interface CoordinateObject 
 {
+	static final double EPSILON_EQUALS = 0.00000001;
+	
 	public double getX();
 	public double getY();
 	public double getZ();

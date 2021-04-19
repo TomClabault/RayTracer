@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import geometry.Shape;
 import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
+import geometry.shapes.Triangle;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;

@@ -49,6 +49,26 @@ public class Point implements CoordinateObject
     	Point pSub = Point.sub(p2,  p1);
     	return Math.sqrt(pSub.getX()*pSub.getX() + pSub.getY()*pSub.getY() + pSub.getZ()*pSub.getZ());
     }
+    
+    @Override
+    public boolean equals(Object otherPoint)
+    {
+    	Point otherPointP = (Point)otherPoint;
+    	
+    	double diffX = otherPointP.getX() - this.getX();
+    	if(Math.abs(diffX) > EPSILON_EQUALS)
+    		return false;
+    	
+    	double diffY = otherPointP.getY() - this.getY();
+    	if(Math.abs(diffY) > EPSILON_EQUALS)
+    		return false;
+    	
+    	double diffZ = otherPointP.getZ() - this.getZ();
+    	if(Math.abs(diffZ) > EPSILON_EQUALS)
+    		return false;
+    	
+    	return true;
+    }
 	
 	@Override
 	public double getX() 
@@ -67,6 +87,7 @@ public class Point implements CoordinateObject
 	{
 		return this.z;
 	}
+	
 	/*
 	 * Permet de déterminer le point représentant le milieu du segment formé par les points a et b passés en argument
 	 * 

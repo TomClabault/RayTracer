@@ -6,8 +6,6 @@ package maths;
 public class Vector implements CoordinateObject
 {
 	private double x, y, z;
-
-	private static double EPSILON_EQUALS = 0.00000001;
 	
 	/*
 	 * Contruit un vecteur à partir de ses trois composantes x, y et z
