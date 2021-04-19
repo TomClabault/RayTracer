@@ -1,6 +1,7 @@
 package geometry.shapes;
 
 import materials.Material;
+import exceptions.InvalidSphereException;
 import geometry.Shape;
 import geometry.ShapeUtil;
 import maths.CoordinateObject;
@@ -8,7 +9,7 @@ import maths.Point;
 import maths.Ray;
 import maths.Vector;
 
-/*
+/**
  * Classe représentant une sphère décrite par son centre ainsi que son rayon. Représente la "version" mathématique d'une sphère. 
  * Pour une représentation polygonale d'une sphère, voir SphereTriangle
  */
@@ -17,7 +18,7 @@ public class Sphere extends ShapeUtil implements Shape
 	private Point center;
 	private double radius;
 	
-	/*
+	/**
 	 * Crée une sphère blanche à partie de son centre, de son rayon et de son matériau
 	 * 
 	 * @param center Vector3D représentant le centre de la sphère
@@ -26,13 +27,16 @@ public class Sphere extends ShapeUtil implements Shape
 	 */
 	public Sphere(Point center, double radius, Material material)
 	{
+		if(radius < 0)
+			throw new InvalidSphereException("La sphère que vous avez essayé de créer est invalide.");
+			
 		this.center = center;
 		this.radius = radius;
 		
 		super.material = material;
 	}
 	
-	/*
+	/**
 	 * Permet d'obtenir le centre de la sphère
 	 * 
 	 * @return Instance sur le point représentant le centre de la sphère 
@@ -42,7 +46,7 @@ public class Sphere extends ShapeUtil implements Shape
 		return this.center;
 	}
 	
-	/*
+	/**
 	 * Retourne le vecteur normal à la sphère à un point donné
 	 * 
 	 * @param point Le point définissant la direction du vecteur normal de la sphère
@@ -54,8 +58,8 @@ public class Sphere extends ShapeUtil implements Shape
 		return Vector.normalizeV(Point.sub(point, center));
 	}
 	
-	/*
-	 * @link{geometry.shapes.Shape#getUVCoords}
+	/**
+	 * {@link geometry.Shape#getUVCoords}
 	 */
 	@Override
 	public Point getUVCoords(Point point)
@@ -74,7 +78,7 @@ public class Sphere extends ShapeUtil implements Shape
 		return UVCoords;
 	}
 	
-	/*
+	/**
 	 * Permet d'obtenir les coordonnées de texture UV d'une supposée sphère de rayon 1 à partir d'un point de cette sphère
 	 * 
 	 * @param point Le point de la sphère dont on veut les coordonnées UV. Le point est supposé être effectivement sur la sphère. Aucune vérification n'est faite
@@ -94,7 +98,7 @@ public class Sphere extends ShapeUtil implements Shape
 		return UVCoords;
 	}
 	
-	/*
+	/**
 	 * Calcule de façon analytique l'intersection d'un rayon et d'une sphère
 	 * 
 	 * @param ray 				Le rayon avec lequel l'intersection avec la sphère doit être calculée
@@ -160,7 +164,7 @@ public class Sphere extends ShapeUtil implements Shape
 		return intersection;
 	}
 	
-	/*
+	/**
 	 * Permet de redéfinir la position du centre de la sphère
 	 * 
 	 * @param center Le nouveau centre de la sphère dans la scène
@@ -170,7 +174,7 @@ public class Sphere extends ShapeUtil implements Shape
 		this.center = center;
 	}
 	
-	/*
+	/**
 	 * Permet de redéfinir le rayon de la sphère
 	 * 
 	 * @param radius Le nouveau rayon de la sphère

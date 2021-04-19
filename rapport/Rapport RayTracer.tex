@@ -25,6 +25,7 @@
 \AtBeginEnvironment{appendices}{\renewcommand{\thesection}{\Alph {section}}}%Pour recommencer à compter les sections à 0 en rentrant dans l'annexe et pour compter avec des lettres et non des chiffres
 \renewcommand{\appendixpagename}{\centering Annexes}%Pour centrer le titre de la partie annexe
 \renewcommand{\appendixtocname}{Table des annexes} % Pour faire apparaître les annexes dans la table of contents
+\setlength{\parskip}{2mm}%Pour mettre de l'espacement entre les paragraphes
 
 %%%%%%%%%%%%%% Couleurs de: https://texblog.org/2011/06/11/latex-syntax-highlighting-examples/ %%%%%%%%%%%%%%
 \definecolor{javared}{rgb}{0.6,0,0} % for strings
@@ -85,13 +86,17 @@ showstringspaces=false}
         \subsubsection{Liés au Ray Tracer}
             \subfile{latex/packages/RTpackages.tex}
 
-        \subsubsection{Le multithreading}
+        \subsection{Le package multithreading}
 	  \subfile{latex/packages/multithreading.tex}
 
-        \subsubsection{Le package materials}
+	\subsection{Le package geometry}
+	    \subfile{latex/packages/geometry.tex}
+
+        \subsection{Le package materials}
             \subfile{latex/packages/materials.tex}
 
         \subsection{Le package render}
+        	\input{latex/render.javafx/packageRender.tex}
 
 
 
@@ -119,6 +124,9 @@ showstringspaces=false}
 
             \subfile{latex/RT/checkerboardSkybox.tex}
 
+    \subsection{Les formes}
+	\subfile{latex/formes/geometryFormes.tex}
+
     \subsection{Le multithreading}
 
         \subfile{latex/RT/multithreading.tex}
@@ -133,6 +141,7 @@ showstringspaces=false}
     \input{latex/render.javafx/GUI.tex}
 
     \subsection{Le parser}
+<<<<<<< HEAD
         \subsubsection{Structure d'un fichier POV}      
         	\subfile{latex/parser/struct_pov.tex}
         \subsubsection{Automate à état finit}
@@ -141,6 +150,12 @@ showstringspaces=false}
         	\subfile{latex/parser/pattern_state.tex}
         \subsubsection{Implémentation du pattern template méthod}
         	\subfile{latex/parser/pattern_template_method.tex}        	
+=======
+        \subsubsection{Structure d'un fichier POV}
+        \subsubsection{Implémentation du partern state}
+        \subsubsection{Implémentation du patern template méthode}
+        \subsubsection{Automate à état fini}
+>>>>>>> master
 
 
     \subsection{Les formes géométriques}
@@ -150,11 +165,11 @@ showstringspaces=false}
 
 \section{Analyse des résultats}
     \subsection{Mesure des performances}
-        \subfile{latex/other/mesuresPerf.tex}
+        \subfile{latex/mesuresPerf.tex}
 
     \subsection{Comparaison avec povRay}
 \section{Idées d'améliorations}
-TODO BUG PREMIERE TILE MUTLITHREADING
+    \subfile{latex/ideesAmelios.tex}
 \section{Conclusion}
 
 
@@ -163,28 +178,7 @@ TODO BUG PREMIERE TILE MUTLITHREADING
 
 
 \newpage%Nouvelle page pour les annexes
-\begin{appendices}
-	\section{Le ray tracer}
-		\subsection{Configuration d'une caméra, d'une scène et de rayons}
-		\begin{figure}[h!]
-			\adjustbox{center}{\includegraphics[width=1.1\textwidth]{img/rt/repCam2Rayonsv2.png}}
-
-			\caption{Des rayons sont tirés depuis la caméra dans sa direction de regard. Nous cherchons les points d'intersection avec les objets de la scène}
-		\end{figure}
-		\FloatBarrier
-		\label{annexe:repreCamRayon}
-
-		\subsection{Le principe récursif des réflexions}
-		\begin{figure}[!h]
-			\adjustbox{center}{\includegraphics[width=1.1\textwidth]{img/rt/reflectionsSchema.png}}
-
-			\caption{Exemple de rebonds successifs des rayons jusqu'à un objet non réfléchissant}
-			\label{reflectionsSchema}
-		\end{figure}
-		\FloatBarrier
-		\label{annexe:reflexionsRecursives}
-\FloatBarrier
-\end{appendices}
+\subfile{latex/appendices}
 
 \newpage%Nouvelle page pour la bibliographie
 \nocite{*}

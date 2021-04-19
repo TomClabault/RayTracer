@@ -9,7 +9,6 @@ import javafx.scene.control.Label;
 public class CounterFPS {
 
     private Pane pane;
-
     /**
     * @param fpsLabel le Label contenant le nombre de FPS
     */

@@ -37,10 +37,13 @@ public class PyramideTriangulaire extends ShapeTriangleUtil implements Shape
 	private Point A,B,C,D;
 
 
-    /* Le constructeur prendra 4 parametres sous la forme de Vector3D; Vector3D A, Vector3D B, Vector3D C, Vector3D D
-    *  Vector3D A, B et C sont le sol de la pyramide triangulaire
-    *  Vector3D D sera le toit de la pyramide
-    *  Tout est deja explique sur le schéma au-dessus*/
+    /**
+    *  @param A Premier point de la base triangulaire de la pyramide
+    *  @param B Deuxième point de la base triangulaire de la pyramide
+    *  @param C Troisième point de la base triangulaire de la pyramide
+    *  @param D sera le "point sommet" de la pyramide
+    *  @param material Le matériau qui sera utilisé pour le rendu de la pyramide
+    */
     public PyramideTriangulaire(Point A, Point B, Point C, Point D, Material material)
     {
         this.A = A;
@@ -62,22 +65,9 @@ public class PyramideTriangulaire extends ShapeTriangleUtil implements Shape
         this.B = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ() + width);
         this.C = new Point(this.A.getX(), this.A.getY(), this.A.getZ() + width);
 
-        /*
-        this.D.setX(this.A.getX() + width/4);
-        this.D.setY(this.A.getY() + height);
-        this.D.setZ(this.A.getZ() + width*3/4);
-
-
-        this.B.setX(this.A.getX() + width);
-        this.B.setY(this.A.getY());
-        this.B.setZ(this.A.getZ() + width);
-
-        this.C.setX(this.A.getX());
-        this.C.setY(this.A.getY());
-        this.C.setZ(this.A.getZ() + width);
-        */
 
         super.material = material;
+
 
         this.buildPyramide();
     }

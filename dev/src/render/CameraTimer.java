@@ -7,7 +7,11 @@ import scene.RayTracingScene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.Scene;
 import javafx.event.EventHandler;
+
+import java.util.concurrent.locks.ReentrantLock;
+
 import javafx.animation.AnimationTimer;
+import javafx.concurrent.Task;
 import javafx.scene.input.KeyCode;
 
 /**
@@ -30,7 +34,7 @@ public class CameraTimer extends AnimationTimer {
 
     private Scene scene;
     private RayTracingScene rayTracingScene;
-
+    
     /**
     * @param scene scene javafx
     * @param rayTracingScene scene {@link RayTracingScene}
@@ -40,31 +44,42 @@ public class CameraTimer extends AnimationTimer {
         this.rayTracingScene = rayTracingScene;
     }
 
-    public void handle(long nanoTime){
+    @Override
+    public void handle(long actualFrameTime){
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {//TODO ajouter liste keycode 
             @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.E) {
-                    upCamera();
-                } else if (event.getCode() == KeyCode.A) {
-                    downCamera();
-                } else if (event.getCode() == KeyCode.UP) {
-                    turnUpCamera();
-                } else if (event.getCode() == KeyCode.DOWN) {
-                    turnDownCamera();
-                } else if (event.getCode() == KeyCode.RIGHT) {
-                    turnRightCamera();
-                } else if (event.getCode() == KeyCode.LEFT) {
-                    turnLeftCamera();
-                } else if (event.getCode() == KeyCode.Z) {
-                    goForwardCamera();
-                } else if (event.getCode() == KeyCode.S) {
-                    goBackwardCamera();
-                } else if (event.getCode() == KeyCode.Q) {
-                    goLeftCamera();
-                } else if (event.getCode() == KeyCode.D) {
-                    goRightCamera();
-                }
+            public void handle(KeyEvent event) 
+            {
+            	synchronized(scene)
+            	{
+            	//if(cameraRenderLock.tryLock() && cameraRenderLock.getHoldCount() == 1)//Si le verrou est disponible
+            	//{
+	                if (event.getCode() == KeyCode.E) {
+	                	System.out.println("E PUSHED");
+	                    upCamera();
+	                } else if (event.getCode() == KeyCode.A) {
+	                    downCamera();
+	                } else if (event.getCode() == KeyCode.UP) {
+	                    turnUpCamera();
+	                } else if (event.getCode() == KeyCode.DOWN) {
+	                    turnDownCamera();
+	                } else if (event.getCode() == KeyCode.RIGHT) {
+	                    turnRightCamera();
+	                } else if (event.getCode() == KeyCode.LEFT) {
+	                    turnLeftCamera();
+	                } else if (event.getCode() == KeyCode.Z) {
+	                    goForwardCamera();
+	                } else if (event.getCode() == KeyCode.S) {
+	                    goBackwardCamera();
+	                } else if (event.getCode() == KeyCode.Q) {
+	                    goLeftCamera();
+	                } else if (event.getCode() == KeyCode.D) {
+	                    goRightCamera();
+	                }
+	                
+	                //cameraRenderLock.unlock();
+            	//}
+            	}
             }
         });
 

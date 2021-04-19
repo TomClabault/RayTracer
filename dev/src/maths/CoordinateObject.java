@@ -5,6 +5,11 @@ package maths;
  */
 public interface CoordinateObject 
 {
+	/**
+	 * Constante utilisée pour déterminer à quelle niveau de précision de objet sont considérés égaux
+	 */
+	static final double EPSILON_EQUALS = 0.00000001;
+	
 	public double getX();
 	public double getY();
 	public double getZ();

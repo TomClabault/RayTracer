@@ -49,6 +49,26 @@ public class Point implements CoordinateObject
     	Point pSub = Point.sub(p2,  p1);
     	return Math.sqrt(pSub.getX()*pSub.getX() + pSub.getY()*pSub.getY() + pSub.getZ()*pSub.getZ());
     }
+    
+    @Override
+    public boolean equals(Object otherPoint)
+    {
+    	Point otherPointP = (Point)otherPoint;
+    	
+    	double diffX = otherPointP.getX() - this.getX();
+    	if(Math.abs(diffX) > EPSILON_EQUALS)
+    		return false;
+    	
+    	double diffY = otherPointP.getY() - this.getY();
+    	if(Math.abs(diffY) > EPSILON_EQUALS)
+    		return false;
+    	
+    	double diffZ = otherPointP.getZ() - this.getZ();
+    	if(Math.abs(diffZ) > EPSILON_EQUALS)
+    		return false;
+    	
+    	return true;
+    }
 	
 	@Override
 	public double getX() 
@@ -67,7 +87,8 @@ public class Point implements CoordinateObject
 	{
 		return this.z;
 	}
-	/*
+	
+	/**
 	 * Permet de déterminer le point représentant le milieu du segment formé par les points a et b passés en argument
 	 * 
 	 *  @param a Le premier point du segment dont on veut déterminer le milieu
@@ -80,11 +101,11 @@ public class Point implements CoordinateObject
 		return new Point((a.getX() + b.getX())/2, (a.getY() + b.getY())/2, (a.getZ() + b.getZ())/2);
 	}
 	
-	/*
+	/**
      * Multiplie les coordonnées d'un point par un scalaire et retourne le point résultant
      * 
-     * @param scalar Un scalaire
-     * @param Un point de coordonnées (a, b , c)
+     * @param scalar 	Un scalaire
+     * @param a 		Un point de coordonnées (a, b , c)
      * 
      * @return Le point de coordonnées (a*scalar, b*scalar, c*scalar)
      */
@@ -93,8 +114,8 @@ public class Point implements CoordinateObject
     	return new Point(a.getX()*scalar, a.getY()*scalar, a.getZ()*scalar);
     }
     
-    /*
-     * @link {maths.Point#scalarMul}
+    /**
+     * {@link maths.Point#scalarMul}
      */
     public static Point scalarMul(Point a, double scalar)
     {
@@ -119,7 +140,7 @@ public class Point implements CoordinateObject
 		this.z = z;
 	}
     
-    /*
+    /**
      * Soustrait deux points coordonnées à coordonnées et retourne le point résultant
      * 
      * @param a Le premier point de coordoonées (a1, a2, a3)
@@ -140,7 +161,7 @@ public class Point implements CoordinateObject
     	return String.format("%-25s", output);
     }
     
-    /*
+    /**
      * Translate le point a le long du vecteur u "k fois"
      * 
      *  @param a Un point de coordonnées (x, y, z)
