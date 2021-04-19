@@ -3,7 +3,7 @@ package materials;
 import javafx.scene.paint.Color;
 import materials.textures.ProceduralTexture;
 
-/*
+/**
  * Défini des matériaux dont les réflexions sont floues
  */
 public class RoughMaterial extends Material 

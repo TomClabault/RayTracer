@@ -5,7 +5,7 @@ import materials.textures.*;
 
 public class MatteMaterial extends Material
 {
-	/*
+	/**
 	 * Crée un matériau mat d'une certaine couleur
 	 * 
 	 * @param color Couleur du matériau
@@ -15,7 +15,7 @@ public class MatteMaterial extends Material
 		super(color, 1, 0.75, 0, 0.05, 1, false, 0, 0);
 	}
 	
-	/*
+	/**
 	 * Crée un matériau mat d'une certaine couleur ayant une certaine texture procédurale
 	 * 
 	 * @param color Couleur du matériau

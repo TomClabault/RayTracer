@@ -5,7 +5,7 @@ import materials.textures.*;
 
 public class MetallicMaterial extends Material
 {
-	/*
+	/**
 	 * Crée un matériau d'une certaine couleur ayant des reflets métalliques
 	 * 
 	 * @param color La couleur du matériau métallique
@@ -15,7 +15,7 @@ public class MetallicMaterial extends Material
 		super(color, 1, 1, 0.06, 1, 200, false, 0, 0);
 	}
 	
-	/*
+	/**
 	 * Crée un matériau d'une certaine couleur ayant des reflets métalliques et une certaine texture procédurale
 	 * 
 	 * @param color La couleur du matériau métallique

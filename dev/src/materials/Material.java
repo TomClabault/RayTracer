@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import materials.textures.*;
 import maths.ColorOperations;
 
-/*
+/**
  * Classe permettant définir des matériaux à partir des différentes caractéristiques physiques que peut simuler le rayTracer
  * 
  * Un matériau est définit par différentes caractéristiques:
@@ -32,7 +32,7 @@ public class Material
 	
 	private ProceduralTexture proceduralTexture;//Attribut special qui spécifie la texture du matériau. Utilisé pour le damier par exemple
 	
-	/*
+	/**
 	 * Crée un matériau de A à Z
 	 * 
 	 * @param color Couleur du matériau
@@ -61,7 +61,7 @@ public class Material
 		this.proceduralTexture = null;//Pas de texture par défaut
 	}
 	
-	/*
+	/**
 	 * Crée un matériau de A à Z
 	 * 
 	 * @param color Couleur du matériau
@@ -91,7 +91,7 @@ public class Material
 		this.proceduralTexture = proceduralTexture;
 	}
 
-	/*
+	/**
 	 * Retourne le couleur du matériau sous la forme d'un objet Color.RGB(r, g, b)
 	 * 
 	 * @return Color.rgb(r, g, b), la couleur de l'objet au format RGB
@@ -101,7 +101,7 @@ public class Material
 		return this.color;
 	}
 	
-	/*
+	/**
 	 * Permet de récupérer le coefficient de réflexion de la lumière ambiante du matériau
 	 * 
 	 * @return Retourne un réel entre 0 et 1 représentant le coefficient dit 'ambiant' du matériau
@@ -111,7 +111,7 @@ public class Material
 		return this.ambientCoeff;
 	}
 	
-	/*
+	/**
 	 * Permet d'obtenir la composante diffuse du matériau
 	 * Plus un matériau est diffus et plus il sera mat. La craie est par exemple très diffuse alors que l'aluminium ne l'est pas
 	 * 
@@ -122,7 +122,7 @@ public class Material
 		return this.diffuseCoeff;
 	}
 	
-	/*
+	/**
 	 * Permet de savoir si un matériau est transparent et réfracte la lumière ou non
 	 * 
 	 * @return Retourne true si le matériau est transparent, false sinon
@@ -132,7 +132,7 @@ public class Material
 		return this.isTransparent;
 	}
 	
-	/*
+	/**
 	 * Permet d'obtenir la proportion de lumière que réfléchit le matériau.
 	 * Un coefficient réflectif de 1 fera du matériau un miroir tandis qu'à 0, le matériau ne réfléchira rien de ce qui l'entour
 	 * 
@@ -143,7 +143,7 @@ public class Material
 		return this.reflectiveCoeff;
 	}
 	
-	/*
+	/**
 	 * Permet d'obtenir l'indice de réfraction du matériau
 	 * 
 	 * @return Un réel représentant l'indice de réfraction du matériau. Si le matériau n'est pas transparent, retournera 0
@@ -158,7 +158,7 @@ public class Material
 		return roughness;
 	}
 	
-	/*
+	/**
 	 * Permet d'obtenir la brillance du matériau
 	 * Cette valeur influe sur les tâches spécualaires de l'objet. Une shininess haute entraînera des tâches plus petite alors qu'une faible shininess produira des tâches de spécularité larges
 	 * 
@@ -169,7 +169,7 @@ public class Material
 		return this.shininess;
 	}
 	
-	/*
+	/**
 	 * Permet d'obtenir le coefficient de spécularité du matériau.
 	 * Ce coefficient définit l'intensité des tâches de spécularité de l'objet.
 	 * Avec une valeur de 0, le matériau n'exhibera aucune tâches spéculaires.
@@ -182,7 +182,7 @@ public class Material
 		return this.specularCoeff;
 	}
 	
-	/*
+	/**
 	 * Permet d'obtenir la texture procédurale de l'objet s'il en a une
 	 * 
 	 * @return L'instance de la texture procédurale de l'objet. Retourne null si l'objet n'a pas de texture procédurale.
@@ -192,7 +192,7 @@ public class Material
 		return this.proceduralTexture;
 	}
 	
-	/*
+	/**
 	 * Permet de déterminer si le matériau a une texture procédurale appliquée ou non
 	 * 
 	 *  @return Retourne true si le matériau a une texture procédurale appliquée. false sinon
@@ -202,7 +202,7 @@ public class Material
 		return !(this.proceduralTexture == null);
 	}
 	
-	/*
+	/**
 	 * Permet de définir la couleur du matériau
 	 * 
 	 * @param color La nouvelle couleur du matériau
@@ -212,7 +212,7 @@ public class Material
 		this.color = color;
 	}
 
-	/*
+	/**
 	 * Permet de defénir un coefficient de réflexion de la lumière ambiante pour le matériau
 	 * 
 	 * @param ambientCoeff Le nouveau coefficient ambiant du matériau
@@ -222,7 +222,7 @@ public class Material
 		this.ambientCoeff = ambientCoeff;
 	}
 	
-	/*
+	/**
 	 * Permet de définir le coefficient de diffusion du matériau
 	 * 
 	 * @param diffuseCoeff Le nouveau coefficient de diffusion du matériau

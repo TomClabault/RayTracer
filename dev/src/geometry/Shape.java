@@ -7,30 +7,32 @@ import maths.Vector;
 
 public interface Shape
 {
-	/*
+	/**
 	 * Permet de récupérer le matériau de la forme
 	 * 
 	 * @return Le matériau de la forme caractérisant son aspect visuel
 	 */
 	public Material getMaterial();
 	
-	/*
+	/**
 	 * Permet d'obtenir la normale à un point donné de la forme
 	 * 
-	 * @param point Le point par rapport auquel on souhaite la normale
+	 * @param point Le point par rapport auquel on souhaite la normale. 
+	 * Certaines formes ont la même normale pour tout point appartenant à la forme. Dans un tel cas, le paramètre
+	 * 'point' sera ignoré.
 	 */
 	public Vector getNormal(Point point);
 	
-	/*
+	/**
 	 * Permet de récupérer les coordonnées (u, v) de la forme au point donné
 	 * 
-	 * @param Vector3D Le point auquel on souhaite récupérer les coordonnées u et v 
+	 * @param point Le point auquel on souhaite récupérer les coordonnées u et v 
 	 * 
 	 * @return Retourne un point (x, y, z) contenant les coordoonnées (u, v) tel que x = u, y = v et z = 0. La troisième coordonnée du point sera toujours fixée à 0 car non utilisée.
 	 */
 	public Point getUVCoords(Point point);
 	
-	/*
+	/**
 	 * Calcule le point d'intersection avec un rayon et le renvoie si existant. Le point d'intersection n'est cherché que "en face" du rayon.
 	 * 
 	 * @param ray 				Rayon avec lequel chercher une intersection
@@ -42,7 +44,7 @@ public interface Shape
 	 */
 	public Point intersect(Ray ray, Vector outNormalAtInter);
 	
-	/*
+	/**
 	 * Permet de redéfinir le matériau qui sera utilisé pour le rendu de l'objet
 	 * 
 	 * @param newMaterial Le nouveau matériau de l'objet

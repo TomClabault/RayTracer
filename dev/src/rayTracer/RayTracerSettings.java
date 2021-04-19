@@ -1,9 +1,29 @@
 package rayTracer;
 
+/**
+ * 
+ * Représente les réglages de rendu qui seront utilisés par le ray tracer. Ces réglages sont dynamiques et peuvent être modifiés pendant le rendu.
+ * Le ray Tracer adaptera alors son rendu en conséquence
+ * 
+ * Paramètres:
+ * nbCore: Détermine le nombre de thread sur lequel sera effectué le rendu des images
+ * recursionDepth: Gère le nombre d'appel récursif maximum que peut faire le ray tracer. Détermine par exemple le nombre consécutifs de reflets que l'on peut observer dans deux surfaces se réfléchissant l'une l'autre
+ * antialiasingSampling: Détermine le nombre de sous-pixel calculé pour chaque pixel afin de réduire l'aliasing (effet d'escalier) de l'image
+ * blurryReflectionsSampleCount: Combien d'échantillons seront utilisés pour calculer les réflexion flous de certains matériaux 
+ *	
+ * enableAmbient: Permet d'activer ou de désactiver l'effet de lumière ambiante de l'ombrage de Phong
+ * enableDiffuse: Permet d'activer ou de désactiver l'effet de lumière diffuse de l'ombrage de Phong
+ * enableReflections: Permet d'activer ou de désactiver les réflexions des matériaux du rendu
+ * enableBlurryReflections: Permet d'activer / désactiver les réflexions floues des matériaux
+ * enableRefractions: Permet d'activer ou de désactiver les réfractions des matériaux du rendu
+ * enableSpecular: Permet d'activer ou de désactiver l'effet de lumière spéculaire de l'ombrage de Phong
+ * enableFresnel: Permet d'activer ou de désactiver les reflets aux bords des objets réfractifs
+ * enableAntialiasing: Permet d'activer / désactiver l'antialiasing lors du rendu
+ */
 public class RayTracerSettings 
 {
 	private int nbCore;//Détermine le nombre de thread sur lequel sera effectué le rendu des images
-	private int recursionDepth;//Gère le nombre d'appel récursif maximum que peut faire le ray tracer. Détermine par exemple le nombre consécutifs de reflets que l'on peut observer dans deux surfaces se réfléchissant l'une l'autre  
+	private int recursionDepth;//Gère le nombre d'appel récursif maximum que peut faire le ray tracer. Détermine par exemple le nombre consécutifs de reflets que l'on peut observer dans deux surfaces se réfléchissant l'une l'autre
 	private int antialiasingSampling;//Détermine le nombre de sous-pixel calculé pour chaque pixel afin de réduire l'aliasing (effet d'escalier) de l'image
 	private int blurryReflectionsSampleCount;//Combien d'échantillons seront utilisés pour calculer les réflexion flous de certains matériaux 
 	
@@ -47,7 +67,7 @@ public class RayTracerSettings
 			 settingsToCopy.isEnableAntialiasing());
 	}
 	
-	/*
+	/**
 	 * Initialise les réglages qui seront utiliés pour le rendu de la scène
 	 * 
 	 * @param nbCore Le nombre de threads sur lequel sera effectué le rendu
@@ -198,7 +218,7 @@ public class RayTracerSettings
 		return antialiasingSampling;
 	}
 	
-	/*
+	/**
 	 * Permet de redéfinir le nombre d'échantillons calculés par pixels pour l'antiailiasing du rendu
 	 * 
 	 * @param sampleCount	Le nombre d'échantillons par pixel à utiliser pour l'antialiasing. Doit être le carré d'un entier >= 2.  
@@ -213,7 +233,7 @@ public class RayTracerSettings
 		this.antialiasingSampling = sampleCount;
 	}
 	
-	/*
+	/**
 	 * Permet de vérifier si sampleCount est le carré d'un entier >= 2
 	 * 
 	 * @param sampleCount Le nombre d'échantillons par pixel à utliser pour l'antialiasing. Cette méthode détermine si c'est le carré d'un entier >= 2

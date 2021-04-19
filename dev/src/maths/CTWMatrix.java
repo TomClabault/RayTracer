@@ -2,7 +2,7 @@ package maths;
 
 import scene.Camera;
 
-/*
+/**
  * Cette classe représente la matrice permettant le changement de base des coordonnées des pixels en fonction de la position de la caméra et de ses angles de rotation
  */
 public class CTWMatrix extends MatrixD

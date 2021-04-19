@@ -1,18 +1,29 @@
 package maths;
 
+/**
+ * Permet de créer une matrice de rotation autour d'un axe donné du monde pour un certain angle de rotation
+ * Les "axes du monde" sont supposés être les axes standards. C'est à dire:
+ * X = (1, 0, 0)
+ * Y = (0, 1, 0)
+ * Z = (0, 0, 1)
+ */
 public class RotationMatrix extends MatrixD 
 {
-	public static final int xAxis = 0;
-	public static final int yAxis = 1;
-	public static final int zAxis = 2;
-	/*
-	 * Crée une matrice de rotation autour d'un axe donné du monde pour un certain angle de rotation
-	 * 
-	 * @param axis L'axe du monde ({1, 0, 0}, {0, 1, 0} ou {0, 0, 1} autour duquel on va effectuer la rotation. 0 pour l'axe x, 1 pour y et 2 pour z. Utilisation des constantes définies dans la classe possible
-	 * @param rotation L'angle de rotation en degré 
-	 * 
-	 * @throws IllegalArgumentException Jète cette exception si l'axe de rotation donné en argument n'est ni 'x' ni 'y' ni 'z'
+	/**
+	 * Constante permettant de spécifier l'axe X du monde
 	 */
+	public static final int xAxis = 0;
+	
+	/**
+	 * Constante permettant de spécifier l'axe Y du monde
+	 */
+	public static final int yAxis = 1;
+	
+	/**
+	 * Constante permettant de spécifier l'axe Z du monde
+	 */
+	public static final int zAxis = 2;
+
 	public RotationMatrix(int axis, double rotation)
 	{
 		super(4, 4);

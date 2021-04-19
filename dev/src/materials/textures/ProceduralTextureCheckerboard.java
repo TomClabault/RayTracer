@@ -11,7 +11,7 @@ public class ProceduralTextureCheckerboard implements ProceduralTexture
 	
 	private double size;
 	
-	/*
+	/**
 	 * Crée la texture procédurale d'un checkerboard à partir des deux couleurs de son damier. Les cases sont des carrés de 2x2 unité
 	 * 
 	 * @param color1 La première couleur qui sera utilisée pour le damier
@@ -22,7 +22,7 @@ public class ProceduralTextureCheckerboard implements ProceduralTexture
 		this(color1, color2, 2);
 	}
 	
-	/*
+	/**
 	 * Crée la texture procédurale d'un checkerboard à partir des deux couleurs de son damier et de la taille des cases
 	 * 
 	 * @param color1 La première couleur qui sera utilisée pour le damier
@@ -37,8 +37,8 @@ public class ProceduralTextureCheckerboard implements ProceduralTexture
 		this.size = size;
 	}
 
-	/*
-	 * @link{textures.ProceduralTexture#getColorAt}
+	/**
+	 * {@link materials.textures.ProceduralTexture#getColorAt}
 	 */
 	@Override
 	public Color getColorAt(Point point) 
@@ -51,7 +51,7 @@ public class ProceduralTextureCheckerboard implements ProceduralTexture
 		return ((xInt + yInt) & 0x1) == 1 ? this.color2 : this.color1;
 	}
 	
-	/*
+	/**
 	 * Permet de redéfinir la première couleur des cases du damier
 	 * 
 	 * @param color La nouvelle couleur des première cases du damier
@@ -61,7 +61,7 @@ public class ProceduralTextureCheckerboard implements ProceduralTexture
 		this.color1 = color;
 	}
 	
-	/*
+	/**
 	 * Permet de redéfinir la deuxième couleur des cases du damier
 	 * 
 	 * @param color La nouvelle couleur des deuxièmes cases du damier

@@ -13,8 +13,8 @@ public abstract class ShapeTriangleUtil
 	protected Material material;
 	protected ArrayList<Triangle> listeTriangle;
 
-	/*
-	 * @link{geometry.Shape#intersect} 
+	/**
+	 * {@link geometry.Shape#intersect} 
 	 */
 	public Point intersect(Ray ray, Vector outNormalAtInter)
 	{
@@ -53,8 +53,8 @@ public abstract class ShapeTriangleUtil
 
 	}
 	
-	/*
-	 * @link{geometry.Shape#getNormal} 
+	/**
+	 * {@link geometry.Shape#getNormal} 
 	 */
 	public Vector getNormal(Point point)
 	{
@@ -68,24 +68,24 @@ public abstract class ShapeTriangleUtil
 		return null;
 	}
 
-	/*
-	 * @link{geometry.Shape#getMaterial} 
+	/**
+	 * {@link geometry.Shape#getMaterial} 
 	 */
 	public Material getMaterial()
 	{
 		return material;
 	}
 	
-	/*
-	 * @link{geometry.Shape#getUVCoords}
+	/**
+	 * {@link geometry.Shape#getUVCoords}
 	 */
 	public Point getUVCoords(Point point)
 	{
 		return null;
 	}
 	
-	/*
-	 * @link{geometry.Shape#setMaterial} 
+	/**
+	 * {@link geometry.Shape#setMaterial} 
 	 */
 	public void setMaterial(Material material)
 	{
