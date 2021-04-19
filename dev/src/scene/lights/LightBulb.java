@@ -20,7 +20,7 @@ public class LightBulb implements PositionnalLight
 		return this.center;
 	}
 	
-	/*
+	/**
 	 * Permet d'obtenir l'intensité de la lumière
 	 * 
 	 * @return Un réel entre 0 et 1 représentant l'intensité de la lumière

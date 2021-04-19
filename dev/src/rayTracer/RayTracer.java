@@ -21,12 +21,13 @@ import multithreading.TileThread;
 import scene.RayTracingScene;
 import scene.lights.PositionnalLight;
 
-/*
- * Une instance de RayTracer créée à partir de la largeur et de la hauteur du rendu voulu. Permet de générer les
+/**
+ * Permet d'instancier un ray tracer capable de faire le rendu d'une scène donnée.
+ * 
  */
 public class RayTracer
 {
-	/*
+	/**
 	 * Lorsque qu'une intersection est trouvée, cette classe collecte toutes les informations utiles à la suite des calculs 
 	 * (normal au point d'intersection, point d'intersection lui même, l'objet intersecté, la direction du rayon réfléchi, ...) 
 	 */
@@ -115,7 +116,7 @@ public class RayTracer
 		this.randomGenerator= new Random();
 	}
 	
-	/*
+	/**
 	 * Permet de changer la taille de rendu du ray tracer
 	 * 
 	 * @param newRenderWidth La nouvelle largeur de rendu
@@ -129,7 +130,7 @@ public class RayTracer
 		this.renderedPixels = IntBuffer.allocate(renderWidth*renderHeight);
 	}
 	
-	/*
+	/**
 	 * Calcule le premier point d'intersection du rayon passé en argument avec les objets de la scène
 	 *
 	 * @param objectList 			Liste des objets de la scène. Obtenable avec MyScene.getSceneObjects()
@@ -177,7 +178,7 @@ public class RayTracer
 		return closestObjectIntersected;
 	}
 
-	/*
+	/**
 	 * A partir des informations sur le point d'intersection données en entrée, calcule et renvoie la couleur de la composante diffuse de l'ombrage de Phong au point d'intersection
 	 * Si le matériau de l'objet n'est pas diffus, la couleur noire rgb(0, 0, 0) est renvoyée
 	 *
@@ -199,7 +200,7 @@ public class RayTracer
 			return Color.rgb(0, 0, 0);
 	}
 	
-	/*
+	/**
 	 * A partir d'une couleur donnée en entrée, calcule et renvoie la couleur après application de la composante spéculaire de l'ombrage de Phong pour un matériau et des directions de rayons donnés
 	 * Si le matériau de l'objet n'est pas spéculaire, la couleur noire rgb(0, 0, 0) est renvoyée
 	 * 
@@ -223,7 +224,7 @@ public class RayTracer
 			return Color.rgb(0, 0, 0);
 	}
 	
-	/*
+	/**
 	 * A partir d'une couleur donnée en entrée, calcule et renvoie la couleur après application de la réflectivité du matériau.
 	 * Si le matériau de l'objet n'est pas réflexif, la couleur noire rgb(0, 0, 0) est renvoyée
 	 * 
@@ -233,7 +234,7 @@ public class RayTracer
 	 *  
 	 * @return La couleur réfléchie par le matériau au point d'intersection contenu dans intInfos. Si l'objet n'est pas réflexif, renvoie la couleur noire rgb(0, 0, 0)
 	 */
-	protected Color computeReflectionsColor(int x, int y, RayTracingScene renderScene, RayTracerInterInfos intInfos, int depth)
+	protected Color computeReflectionsColor(RayTracingScene renderScene, RayTracerInterInfos intInfos, int depth)
 	{
 		Material intObjMat = intInfos.getIntObjMat();
 		
@@ -266,7 +267,7 @@ public class RayTracer
 					reflectDirection = randomBounceDirection;
 				}
 					
-				Color reflectionColor = computePixel(x, y, renderScene, new Ray(intInfos.getIntPShift(), reflectDirection), depth - 1);
+				Color reflectionColor = computePixel(renderScene, new Ray(intInfos.getIntPShift(), reflectDirection), depth - 1);
 				
 				summedRed += (int)(reflectionColor.getRed()*255);
 				summedGreen += (int)(reflectionColor.getGreen()*255);
@@ -280,7 +281,7 @@ public class RayTracer
 			return Color.rgb(0, 0, 0);
 	}
 	
-	/*
+	/**
 	 * Calcule les couleurs venant des réfractions et des réflexions d'un objet transparent.
 	 * Si le matériau de l'objet n'est pas réfractif, la couleur noire rgb(0, 0, 0) est renvoyée 
 	 * 
@@ -290,7 +291,7 @@ public class RayTracer
 	 * 
 	 * @return Le mix de couleur réfléchie et réfractée par le matériau au point d'intersection contenu dans intInfos. Si l'objet n'est pas réfractif, renvoie la couleur noire rgb(0, 0, 0)
 	 */
-	protected Color computeRefractionsColor(int x, int y, RayTracingScene renderScene, RayTracerInterInfos intInfos, double transmittedLightRatio, int depth)
+	protected Color computeRefractionsColor(RayTracingScene renderScene, RayTracerInterInfos intInfos, double transmittedLightRatio, int depth)
 	{
 		Material intObjMat = intInfos.getIntObjMat();
 		
@@ -312,7 +313,7 @@ public class RayTracer
 			if(intObjMat.getIsTransparent())//L'objet est transparent, on va donc calculer les rayons réfractés à l'intérieur de l'objet
 			{
 				if (! refractedRayDir.equals(new Vector(0,0,0)) ) {
-					refractedColor = computePixel(x, y, renderScene, refractedRay, depth -1);
+					refractedColor = computePixel(renderScene, refractedRay, depth -1);
 				}
 			}
 			
@@ -322,7 +323,15 @@ public class RayTracer
 			return Color.rgb(0, 0, 0);
 	}
 	
-	protected Color computeFresnelColor(int x, int y, RayTracingScene renderScene, RayTracerInterInfos intInfos, double reflectedLightRatio, int depth)
+	/**
+	 * Calcule la couleur des réflexions de Fresnel aux bords des objets réfractifs
+	 * 
+	 * @param renderScene La scène utilisée pour le rendu
+	 * @param intInfos Ensemble des informations sur le point d'intersection entre le rayon incident et l'objet qui a été intersecté et dont on souhaite obtenir la couleur de réfraction
+	 * @param reflectedLightRatio Le ratio de lumière réfléchie par le matériau réfractif.
+	 * @param depth La profondeur de récursion actuelle de l'algorithme
+	 */
+	protected Color computeFresnelColor(RayTracingScene renderScene, RayTracerInterInfos intInfos, double reflectedLightRatio, int depth)
 	{
 		Vector incidentRayDir = intInfos.getRayDir();
 		Vector normalAtInter = intInfos.getNormInt();
@@ -336,12 +345,12 @@ public class RayTracer
 			reflectedRay = new Ray(Point.translateMul(rayInterPoint, incidentRayDir, -EPSILON_SHIFT), computeReflectionVector(normalAtInter, incidentRayDir));
 		
 		Color reflectedColor = Color.rgb(0, 0, 0);
-		reflectedColor = computePixel(x, y, renderScene, reflectedRay, depth -1);
+		reflectedColor = computePixel(renderScene, reflectedRay, depth -1);
 		
 		return ColorOperations.mulColor(reflectedColor, reflectedLightRatio);
 	}
 	
-	/*
+	/**
 	 * Calcule la couleur d'un point de la scène ombragé 
 	 * 
 	 * @param renderScene 		La scène utilisée pour le rendu
@@ -351,22 +360,22 @@ public class RayTracer
 	 * 
 	 * @return Retourne la couleur ombragée au point d'intersection contenu dans intInfos
 	 */
-	protected Color computeShadow(int x, int y, RayTracingScene renderScene, RayTracerInterInfos intInfos, double reflectedLightRatio, double transmittedLightRatio, double ambientLighting, int depth)
+	protected Color computeShadow(RayTracingScene renderScene, RayTracerInterInfos intInfos, double reflectedLightRatio, double transmittedLightRatio, double ambientLighting, int depth)
 	{
 		Color finalColor = Color.rgb(0, 0, 0);
 
 		finalColor = ColorOperations.mulColor(intInfos.getObjCol(), ambientLighting);
 		if(this.settings.isEnableReflections())
-			finalColor = ColorOperations.addColors(finalColor, computeReflectionsColor(x, y, renderScene, intInfos, depth));
+			finalColor = ColorOperations.addColors(finalColor, computeReflectionsColor(renderScene, intInfos, depth));
 		if(this.settings.isEnableRefractions())
-			finalColor = ColorOperations.addColors(finalColor, computeRefractionsColor(x, y, renderScene, intInfos, transmittedLightRatio, depth));
-		if(this.settings.isEnableFresnel())
-			finalColor = ColorOperations.addColors(finalColor, computeFresnelColor(x, y, renderScene, intInfos, reflectedLightRatio, depth));
+			finalColor = ColorOperations.addColors(finalColor, computeRefractionsColor(renderScene, intInfos, transmittedLightRatio, depth));
+		if(this.settings.isEnableFresnel()) 
+			finalColor = ColorOperations.addColors(finalColor, computeFresnelColor(renderScene, intInfos, reflectedLightRatio, depth));
 		
 		return finalColor;
 	}
 	
-	/*
+	/**
 	 * Calcule la luminosité ambiante de la scène à partir de l'intensité de la source de lumière et du coefficient de réflexion ambiant du matériau de l'objet
 	 *
 	 * @param ambientLightIntensity Intensité de la luminosité ambiante de la scène
@@ -379,7 +388,7 @@ public class RayTracer
 		return ambientLightIntensity * materialAmbientCoeff;
 	}
 
-	/*
+	/**
 	 * Calcule l'intensité lumineuse diffuse en un point donné de l'image à la surface d'un objet
 	 *
 	 *  @param toLightDirection 	Vecteur indiquant la direction de la source de lumière
@@ -396,10 +405,10 @@ public class RayTracer
 		return diffuseTerm;
 	}
 
-	/*
+	/**
 	 * Calcule l'intensité lumineuse spéculaire en un point donné de l'image à la surface d'un objet
 	 *
-	 *  @param incidentRay 			Ray incident au point dont on souhaite l'intensité spéculaire
+	 *  @param incidentRayDirection	Ray incident au point dont on souhaite l'intensité spéculaire
 	 *  @param toLightDirection 	Vecteur indiquant la direction de la source de lumière
 	 *  @param normalAtIntersection Vecteur normal à la surface de l'objet
 	 *  @param lightIntensity 		Intensité lumineuse de la source de lumière
@@ -418,7 +427,7 @@ public class RayTracer
 		return specularTerm;
 	}
 	
-	/*
+	/**
 	 * Calcule un partie de la scène représentée par un pixel de départ X et Y et un pixel d'arrivée X et Y. Le rendu du rectangle de pixel définit par ces valeurs est alors effectué
 	 *
 	 * @param renderScene La scène de rendu contenant les informations pour rendre l'image
@@ -463,7 +472,7 @@ public class RayTracer
 					Ray cameraRay = new Ray(MatrixD.mulPointP(new Vector(0, 0, 0), ctwMatrix), rayDirection);
 					cameraRay.normalize();
 	
-					Color subpixelColor = this.computePixel(x, y, renderScene, cameraRay, settings.getRecursionDepth());
+					Color subpixelColor = this.computePixel(renderScene, cameraRay, settings.getRecursionDepth());
 
 					summedRed += (int)(subpixelColor.getRed()*255);
 					summedGreen += (int)(subpixelColor.getGreen()*255);
@@ -482,7 +491,7 @@ public class RayTracer
 		}
 	}
 
-	/*
+	/**
 	 * Calcule la couleur d'un pixel grâce à un rayon
 	 *
 	 * @param renderScene La scène utilisée pour le rendu
@@ -491,7 +500,7 @@ public class RayTracer
 	 *
 	 * @return La couleur du pixel que traverse le rayon incident 'ray'
 	 */
-	protected Color computePixel(int x, int y, RayTracingScene renderScene, Ray ray, int depth)
+	protected Color computePixel(RayTracingScene renderScene, Ray ray, int depth)
 	{
 		if(depth == 0)
 			return Color.BLACK;
@@ -572,7 +581,7 @@ public class RayTracer
 						interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeSpecularColor(interInfos, lightIntensity)));
 					if(this.settings.isEnableReflections() && !reflectionsDone)
 					{
-						interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeReflectionsColor(x, y, renderScene, interInfos, depth)));
+						interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeReflectionsColor(renderScene, interInfos, depth)));
 						reflectionsDone = true;
 					}
 					
@@ -583,12 +592,12 @@ public class RayTracer
 						
 						if(this.settings.isEnableRefractions() && !refractionsDone)
 						{
-							interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeRefractionsColor(x, y, renderScene, interInfos, transmittedLightRatio, depth)));
+							interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeRefractionsColor(renderScene, interInfos, transmittedLightRatio, depth)));
 							refractionsDone = true;
 						}
 						if(this.settings.isEnableFresnel() && !fresnelDone)
 						{
-							interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeFresnelColor(x, y, renderScene, interInfos, reflectedLightRatio, depth)));	
+							interInfos.setCurPixCol(ColorOperations.addColors(interInfos.getCurPixCol(), computeFresnelColor(renderScene, interInfos, reflectedLightRatio, depth)));	
 							fresnelDone = true;	
 						}
 					}
@@ -605,7 +614,7 @@ public class RayTracer
 					reflectedLightRatio = fresnel(interInfos.getRayDir(), interInfos.getNormInt(), interInfos.getIntObjMat().getRefractionIndex());
 					transmittedLightRatio = 1 - reflectedLightRatio;
 				}
-				interInfos.setCurPixCol(computeShadow(x, y, renderScene, interInfos, reflectedLightRatio, transmittedLightRatio, ambientLighting, depth));
+				interInfos.setCurPixCol(computeShadow(renderScene, interInfos, reflectedLightRatio, transmittedLightRatio, ambientLighting, depth));
 			}
 
 			return interInfos.getCurPixCol();
@@ -631,7 +640,7 @@ public class RayTracer
 		}
 	}
 
-	/*
+	/**
 	 * Permet de calculer la prochaine tâche de rendu de la taskList. 
 	 * Cette méthode est exécutée par plusieurs threads en même temps.
 	 * Elle est public afin que TileThread, la classe des threads puisse appeler cette méthode depuis run() des threads 
@@ -663,7 +672,7 @@ public class RayTracer
 		return true;//Encore des tuiles à calculer
 	}
 
-	/*
+	/**
 	 * Convertit les coordonnées d'un pixel sur le plan de la caméra en coordonnées 3D dans la scène à rendre
 	 *
 	 * @param FOV Champ de vision de la caméra. Entier entre 1 et 189
@@ -696,11 +705,11 @@ public class RayTracer
 		return pixelWorldConverted;
 	}
 
-	/*
+	/**
 	 * Calcule le rayon réfléchi par la surface en fonction de la position de la lumière par rapport au point d'intersection
 	 *
 	 * @param normalToSurface Le vecteur normal normalisé de la surface au point d'intersection
-	 * @param intersectToLightVec Le vecteur normalisé indiquant la direction vers la source de lumière depuis le point d'intersection avec l'objet
+	 * @param rayDirection Le vecteur normalisé indiquant la direction du rayon incident 
 	 *
 	 * @return Le vecteur indiquant la direction d'un rayon de lumière parfaitement réfléchi par la surface de l'objet
 	 */
@@ -709,7 +718,7 @@ public class RayTracer
 		return Vector.sub(rayDirection, Vector.scalarMul(normalToSurface, Vector.dotProduct(normalToSurface, rayDirection)*2));
 	}
 
-	/*
+	/**
 	 * Calcule le rayon réfracté par un matériau pour un indice de réfraction donné
 	 * 
 	 *  @param rayDirection La direction du rayon incident au point d'intersection avec l'objet
@@ -748,12 +757,12 @@ public class RayTracer
 		return  Vector.add(leftPart, rightPart);
 	}
 	
-	/*
+	/**
 	 * Calcule la proportion de lumière réfléchie et réfractée par un objet réfractif
 	 * 
 	 * @param incidentRayDirection La direction du rayon incident au point d'intersection de l'objet
 	 * @param normalAtIntersection Vecteur normal à la surface de l'objet au point d'intersection
-	 * @param specialMediumRefractionIndex L'indice de réfraction du matériau réfractif
+	 * @param specialMediumRefIndex L'indice de réfraction du matériau réfractif
 	 * 
 	 * @return Retourne la proportion de lumière réfléchie par le matériau étant donne le rayon incident.
 	 * La proportion de lumière réfractée peut être déduite comme suit: réfractée = 1 - réfléchie
@@ -788,7 +797,7 @@ public class RayTracer
 		return 0.5*(fpl+fpr);
 	}
 	
-	/*
+	/**
 	 * Génère des coordonnées aléatoires entre 0 et 1 et rempli 'subpixelTab' avec ces coordonnées
 	 * 
 	 * @param subpixelTab 	Le tableau qui va contenir toutes les coordonnées générées. Ce tableau est modifié par la fonction
@@ -809,18 +818,18 @@ public class RayTracer
 		}
 	}
 	
-	/*
+	/**
 	 * Permet d'obtenir le tableau de pixels correspondant à la dernière image rendue par le RayTracer
 	 * Si aucune image n'a été rendue au préalable, renvoie null
 	 *
-	 * @param Un tableau de Color.RGB(r, g, b) de dimension renderHeight*renderLength. Renvoie null si encore aucune image n'a été rendue
+	 * @return Un tableau de Color.RGB(r, g, b) de dimension renderHeight*renderLength. Renvoie null si encore aucune image n'a été rendue
 	 */
 	public IntBuffer getRenderedPixels()
 	{
 		return this.renderedPixels;
 	}
 	
-	/*
+	/**
 	 * Calcule le rendu de la scène donnée avec les réglages donnés
 	 * 
 	 * @param renderScene La scène à rendre
@@ -852,8 +861,12 @@ public class RayTracer
 		return this.getRenderedPixels();
 	}
 	
-	/*
-	 * Permet de vérifier que la scène est valide et peut être rendue 
+	/**
+	 * Permet de vérifier que la scène est valide et peut être rendue
+	 * 
+	 * @param renderScene La scène à vérifier
+	 * 
+	 * @eturn Retourne true si la scène passée en argument est correcte et prête à être rendue. False sinon
 	 */
 	private boolean verifRenderScene(RayTracingScene renderScene)
 	{

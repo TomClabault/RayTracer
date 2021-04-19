@@ -1,7 +1,7 @@
 package povParser;
 
 import geometry.Shape;
-import geometry.shapes.Rectangle;
+import geometry.shapes.Parallelepiped;
 import javafx.scene.paint.Color;
 import materials.Material;
 import maths.Point;
@@ -31,7 +31,7 @@ public class EtatBox extends EtatUtil implements EtatToken
         int bracketNb = 0;
         int coordNb = 0;
         Material material = new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0, 0);
-        Rectangle rectangle = null;
+        Parallelepiped rectangle = null;
         Point vector1 = null;
         Point vector2 = null;
 
@@ -103,7 +103,7 @@ public class EtatBox extends EtatUtil implements EtatToken
                 }
             }
         }
-        rectangle = new Rectangle(vector1, vector2, material);
+        rectangle = new Parallelepiped(vector1, vector2, material);
         return rectangle;
     }
 }

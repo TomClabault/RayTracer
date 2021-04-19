@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 import scene.lights.PositionnalLight;
 import util.ImageUtil;
 
-/*
+/**
  * Permet de représenter une scène de rendu contenant une caméra, une lumière et une liste de formes
  */
 public class RayTracingScene
@@ -36,7 +36,7 @@ public class RayTracingScene
 	}
 
 
-	/*
+	/**
 	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
 	 * 
 	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
@@ -50,7 +50,7 @@ public class RayTracingScene
 		this(camera, light, shapes, backgroundColor, ambientLightIntensity, (Image)null);
 	}
 	
-	/*
+	/**
 	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
 	 * 
 	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
@@ -64,7 +64,7 @@ public class RayTracingScene
 		this(camera, lights, shapes, backgroundColor, ambientLightIntensity, (Image)null);
 	}
 	
-	/*
+	/**
 	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
 	 * 
 	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
@@ -79,7 +79,7 @@ public class RayTracingScene
 		this(camera, light, shapes, backgroundColor, ambientLightIntensity, new Image(skyboxTexturePath));
 	}
 	
-	/*
+	/**
 	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
 	 * 
 	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
@@ -97,7 +97,7 @@ public class RayTracingScene
 			this.lights.add(light);
 	}
 	
-	/*
+	/**
 	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
 	 * 
 	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
@@ -130,7 +130,7 @@ public class RayTracingScene
 		this.ambientLightIntensity = ambientLightIntensity;
 	}
 	
-	/*
+	/**
 	 * Permet d'ajouter une source de lumière à la scène
 	 * 
 	 * @param light La source de lumière à ajouter
@@ -140,7 +140,7 @@ public class RayTracingScene
 		this.lights.add(light);
 	}
 	
-	/*
+	/**
 	 * Permet d'ajouter un objet à la scène
 	 * 
 	 * @param shape La forme à ajouter
@@ -150,7 +150,7 @@ public class RayTracingScene
 		this.shapes.add(shape);
 	}
 	
-	/*
+	/**
 	 * Permet d'obtenir l'intensité de la lumière ambiante de la scène
 	 * 
 	 * @return L'intensité de la lumière ambiante de la scène, un réel entre 0 et 1
@@ -160,7 +160,7 @@ public class RayTracingScene
 		return this.ambientLightIntensity;
 	}
 
-	/*
+	/**
 	 * Permet d'obtenir la couleur du fond de la scène
 	 * 
 	 * @return La couleur du fond de la scène sous la forme d'un objet Color
@@ -170,7 +170,7 @@ public class RayTracingScene
 		return this.backgroundColor;
 	}
 	
-	/*
+	/**
 	 * Retourne la caméra de la scène
 	 * 
 	 * @return La caméra de la scène
@@ -180,7 +180,7 @@ public class RayTracingScene
 		return this.camera;
 	}
 
-	/*
+	/**
 	 * Retourne la source de lumière de la scène numéro i
 	 * 
 	 * @param i l'indice de la source de lumière que l'on veut récupérer
@@ -192,7 +192,7 @@ public class RayTracingScene
 		return this.lights.get(i);
 	}
 	
-	/*
+	/**
 	 * Retourne la liste des sources de lumière de la scène
 	 * 
 	 * @return Les sources de lumière de la scène
@@ -202,17 +202,17 @@ public class RayTracingScene
 		return this.lights;
 	}
 
-	/*
+	/**
 	 * Permet d'obtenir la liste des formes de la scène
 	 * 
-	 * @return Une ArrayList<Shape> contenant toutes les formes de la scène
+	 * @return Une {@link java.util.ArrayList} of {@link geometry.Shape} contenant toutes les formes de la scène
 	 */
 	public ArrayList<Shape> getSceneObjects() 
 	{
 		return this.shapes;
 	}
 	
-	/*
+	/**
 	 * Permet d'obtenir la hauteur de la texture de la skybox
 	 * 
 	 * @return Un entier représentant la hauteur de la texture de la skybox
@@ -222,7 +222,7 @@ public class RayTracingScene
 		return this.skyboxHeight;
 	}
 	
-	/*
+	/**
 	 * Permet d'obtenir la largeur de la texture de la skybox
 	 * 
 	 * @return Un entier représentant la largeur de la texture de la skybox
@@ -232,7 +232,7 @@ public class RayTracingScene
 		return this.skyboxWidth;
 	}
 	
-	/*
+	/**
 	 * Permet d'obtenir le pixelReader de la texture de la skybox. Utile pour récupérer la couleur d'un pixel donné de la texture
 	 * 
 	 * @return Retourne une nouvelle instance d'un PixelReader sur la texture de la skybox
@@ -242,7 +242,7 @@ public class RayTracingScene
 		return this.skyboxPixelReader;
 	}
 	
-	/*
+	/**
 	 * Permet de déterminer si la scène possède une skybox ou non
 	 * 
 	 * @return Retourne true si la scène a une skybox, false sinon.
@@ -277,7 +277,7 @@ public class RayTracingScene
 		this.shapes = shapes;
 	}
 	
-	/*
+	/**
 	 * Permet d'attribuer une skybox à la scène
 	 * 
 	 * @param skyboxTexture L'image de la skybox a utiliser pour le rendu de la scène

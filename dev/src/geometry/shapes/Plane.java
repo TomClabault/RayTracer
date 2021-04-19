@@ -13,7 +13,7 @@ public class Plane extends ShapeUtil implements Shape
 	private Vector normal;//partie (A, B, C) de l'équation
 	private Point point;//partie D de l'équation
 	
-	/*
+	/**
 	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan
 	 * 
 	 * @param normal 	Vecteur normal au plan
@@ -25,7 +25,7 @@ public class Plane extends ShapeUtil implements Shape
 		this(normal, Point.translateMul(new Point(0, 0, 0), Vector.normalizeV(normal), distance), material);
 	}
 	
-	/*
+	/**
 	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan 
 	 * 
 	 * @param normal Vecteur normal au plan
@@ -40,7 +40,7 @@ public class Plane extends ShapeUtil implements Shape
 		super.material = material;
 	}
 	
-	/*
+	/**
 	 * Permet d'obtenir la normal du plan
 	 * 
 	 * @param point Paramètre ignoré
@@ -52,8 +52,8 @@ public class Plane extends ShapeUtil implements Shape
 		return this.normal;
 	}
 	
-	/*
-	 * @link{geometry.shapes.Shape#getUVCoords}
+	/**
+	 * {@link geometry.Shape#getUVCoords}
 	 */
 	@Override
 	public Point getUVCoords(Point point)
@@ -61,7 +61,7 @@ public class Plane extends ShapeUtil implements Shape
 		return new Point(point.getX(), point.getZ(), 0);
 	}
 	
-	/*
+	/**
 	 * Calcule de façon analytique l'intersection d'un rayon et d'une sphère
 	 * 
 	 * @param ray Le rayon avec lequel l'intersection avec la sphère doit être calculée

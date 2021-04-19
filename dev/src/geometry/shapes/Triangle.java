@@ -34,7 +34,7 @@ public class Triangle extends ShapeTriangleUtil implements Shape
 		return this.planeNormal;
 	}
 	
-	/*
+	/**
 	 * Test si un point appartient au triangle
 	 * 
 	 * @param point Le point à tester
@@ -72,7 +72,7 @@ public class Triangle extends ShapeTriangleUtil implements Shape
 		return true;
 	}
 	
-	/*
+	/**
 	 * Calcule l'intersection du triangle représenté par cette instance avec un rayon passé en paramètre. Cette méthode ne cherche l'intersection que dans la direction du rayon (c'est à dire pas "derrière" le rayon / derrière la caméra).
 	 * 
 	 * @param ray Le rayon avec lequel chercher une intersection
@@ -114,7 +114,7 @@ public class Triangle extends ShapeTriangleUtil implements Shape
 			return null;
 	}
 		
-	/*
+	/**
 	 * Permet de redéfinir le point A du triangle
 	 * 
 	 * @param A Le nouveau point A du triangle
@@ -124,7 +124,7 @@ public class Triangle extends ShapeTriangleUtil implements Shape
 		this.A = A;
 	}
 	
-	/*
+	/**
 	 * Analogue à @link{geometry.shapes.Triangle#setA}
 	 */
 	public void setB(Point B)
@@ -132,7 +132,7 @@ public class Triangle extends ShapeTriangleUtil implements Shape
 		this.B = B;
 	}
 	
-	/*
+	/**
 	 * Analogue à @link{geometry.shapes.Triangle#setA}
 	 */
 	public void setC(Point C)

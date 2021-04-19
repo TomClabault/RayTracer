@@ -7,7 +7,7 @@ public abstract class ShapeUtil
 {
 	protected Material material;
 	
-	/*
+	/**
 	 * Permet d'obtenir le matériau de l'objet
 	 * 
 	 * @return Retourne le matériau actuel de l'objet
@@ -17,12 +17,12 @@ public abstract class ShapeUtil
 		return this.material;
 	}
 	
-	/*
-	 * @link {geometry.Shape#getUVCoords}
+	/**
+	 * {@link geometry.Shape#getUVCoords}
 	 */
 	public abstract Point getUVCoords(Point point);
 	
-	/*
+	/**
 	 * Permet de redéfinir le matériau de l'objet
 	 * 
 	 * @param material Le nouveau matériau de l'objet

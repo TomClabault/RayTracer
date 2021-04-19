@@ -37,10 +37,13 @@ public class PyramideTriangulaire extends ShapeTriangleUtil implements Shape
 	private Point A,B,C,D;
 
 
-    /* Le constructeur prendra 4 parametres sous la forme de Vector3D; Vector3D A, Vector3D B, Vector3D C, Vector3D D
-    *  Vector3D A, B et C sont le sol de la pyramide triangulaire
-    *  Vector3D D sera le toit de la pyramide
-    *  Tout est deja explique sur le schéma au-dessus*/
+    /**
+    *  @param A Premier point de la base triangulaire de la pyramide
+    *  @param B Deuxième point de la base triangulaire de la pyramide
+    *  @param C Troisième point de la base triangulaire de la pyramide
+    *  @param D sera le "point sommet" de la pyramide
+    *  @param material Le matériau qui sera utilisé pour le rendu de la pyramide
+    */
     public PyramideTriangulaire(Point A, Point B, Point C, Point D, Material material)
     {
         this.A = A;
