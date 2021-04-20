@@ -227,14 +227,6 @@ public class RenderWindow {
 
         
         /**
-         * Retourne l'instance de RayTracerSetting utilisé par la classe.
-         * @return this.rayTracerSettings
-         */
-        public RayTracerSettings getRayTracerSettings() {
-        	return this.rayTracerSettings;
-        }
-        
-        /**
          * Exécutée à chaque frame, lance les calculs de rendus si les précédents sont terminés. Calcul également les fps.
          */
         @Override

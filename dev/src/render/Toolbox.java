@@ -21,9 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-import rayTracer.RayTracer;
 import rayTracer.RayTracerSettings;
-import scene.RayTracingScene;
 
 /**
  * La classe contenant le code de la toolbox, c'est-à-dire la fenêtre contenant les paramêtres que l'ont peux manipuler pendant l'affichage du rendu.
@@ -33,7 +31,6 @@ public class Toolbox{
 	private Scene renderScene;
 	private Pane statPane;
 	private RayTracerSettings rayTracerSettings;
-	private RayTracer rayTracer;
 	
 	private Slider nbCoreSlider;//Attribut nécessaire pour pouvoir y accéder dans les méthodes Callback
 	private Slider blurrySamplesSlider;
@@ -45,10 +42,9 @@ public class Toolbox{
 	 * @param statPane le Pane contenant les statistiques du rendu (typiquement les fps).
 	 * @param rayTracerSettings les paramêtres du rayTracer.
 	 */
-	public Toolbox(Scene renderScene, Pane statPane, ProgressBar progressBar, RayTracer rayTracer, RayTracerSettings rayTracerSettings) {
+	public Toolbox(Scene renderScene, Pane statPane, ProgressBar progressBar, RayTracerSettings rayTracerSettings) {
 		this.renderScene = renderScene;
 		this.statPane = statPane;
-		this.rayTracer = rayTracer;
 		this.rayTracerSettings = rayTracerSettings;
 		this.progressBar = progressBar;
 	}
@@ -68,11 +64,7 @@ public class Toolbox{
         CheckBox statOnOffCheckBox = new CheckBox("Affichage des stats");
         
         Button saveButton = new Button("Sauvegarder le rendu");
-
-        Label resolutionLabel = new Label("Résolution de la scène");
-        
-        Button applyResButton = new Button("Appliquer");
-        
+     
         Label progressLabel = new Label("Avancement du rendu de l'image");
         progressBar.setMaxWidth(Double.MAX_VALUE);
 
@@ -200,8 +192,6 @@ public class Toolbox{
         
         root.getChildren().addAll(statOnOffCheckBox, 
         						  saveButton, 
-        						  resolutionLabel, 
-        						  applyResButton,
         						  new Separator(),
         						  slidersPane,
         						  new Separator(), 

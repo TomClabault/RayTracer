@@ -3,7 +3,6 @@ package render;
 import javafx.scene.Scene;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
@@ -12,7 +11,6 @@ import javafx.scene.control.CheckBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 
 /**
  * La classe contenant le code du choix de la taille du rendu.
