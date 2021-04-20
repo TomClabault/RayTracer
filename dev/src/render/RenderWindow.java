@@ -112,6 +112,14 @@ public class RenderWindow {
     }
     
     /**
+     * Retourne la writableImage utilisé dans la classe
+     * @return this.writableImage
+     */
+    public WritableImage getWritableImage() {
+    	return this.writableImage;
+    }
+    
+    /**
      * Retourne la barre de progression de la toolbox
      * @return this.progressBar
      */

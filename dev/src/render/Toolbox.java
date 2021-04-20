@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javafx.scene.control.Slider;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -36,17 +37,19 @@ public class Toolbox{
 	private Slider blurrySamplesSlider;
 	private Slider antialiasingSlider;
 	private ProgressBar progressBar;
+	private WritableImage writableImage;
 	
 	/**
 	 * @param renderScene la scène javafx contenant le rendu.
 	 * @param statPane le Pane contenant les statistiques du rendu (typiquement les fps).
 	 * @param rayTracerSettings les paramêtres du rayTracer.
 	 */
-	public Toolbox(Scene renderScene, Pane statPane, ProgressBar progressBar, RayTracerSettings rayTracerSettings) {
+	public Toolbox(Scene renderScene, Pane statPane, ProgressBar progressBar, RayTracerSettings rayTracerSettings, WritableImage writableImage) {
 		this.renderScene = renderScene;
 		this.statPane = statPane;
 		this.rayTracerSettings = rayTracerSettings;
 		this.progressBar = progressBar;
+		this.writableImage = writableImage;
 	}
 
 	/**
@@ -211,7 +214,7 @@ public class Toolbox{
             	 File file = fileChooser.showSaveDialog(stage);
             	 if (file != null) {
             		 try {
-            			 util.ImageUtil.writeSceneToDiskFile(renderScene, file);
+            			 util.ImageUtil.writeWritableImageToDisk(writableImage, file);
             			 System.out.println("Image sauvegardée en : " + file);
 					} catch (IOException e) {
 						System.out.println("Impossible de sauvegarder l'image");

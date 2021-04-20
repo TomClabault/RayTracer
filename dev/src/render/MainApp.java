@@ -127,7 +127,7 @@ public class MainApp extends Application {
     	RenderWindow renderWindow = new RenderWindow(stage, rayTracer, rayTracingScene, rayTracerSettings);
         renderWindow.execute();
 
-        Toolbox toolbox = new Toolbox(renderWindow.getRenderScene(), renderWindow.getStatPane(), renderWindow.getProgressBar(), rayTracerSettings);
+        Toolbox toolbox = new Toolbox(renderWindow.getRenderScene(), renderWindow.getStatPane(), renderWindow.getProgressBar(), rayTracerSettings, renderWindow.getWritableImage());
         toolbox.execute();
 
 
