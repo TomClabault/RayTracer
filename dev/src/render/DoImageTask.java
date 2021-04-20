@@ -22,7 +22,7 @@ public class DoImageTask extends Task<IntBuffer> {
 	private Scene mainAppScene;
 	private RayTracerSettings rayTracerSettings;
 	private RayTracer rayTracer;
-
+	
 	/**
 	 * @param mainAppScene 
 	 * @param pixelWriter

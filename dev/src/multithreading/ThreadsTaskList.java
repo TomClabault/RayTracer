@@ -59,9 +59,9 @@ public class ThreadsTaskList
 	{
 		this.taskList = new ArrayList<>();
 		
-		//un découpage en 64*64 tuiles semble être un bon choix (arbitraire) en terme de performances
-		int tilesWidth = renderWidth / 64;
-		int tilesHeight = renderHeight / 64;
+		//Des tuiles de 64*64 pixels semblent être un bon choix arbitraire en terme de performances
+		int tilesWidth = 64;//renderWidth / 64;
+		int tilesHeight = 64;//renderHeight / 64;
 		
 		int tilesCountX = renderWidth / tilesWidth; tilesCountX = (tilesCountX * tilesWidth < renderWidth) ? tilesCountX + 1 : tilesCountX; 
 		int tilesCountY = renderHeight / tilesHeight; tilesCountY = (tilesCountY * tilesHeight < renderHeight) ? tilesCountY + 1 : tilesCountY;
