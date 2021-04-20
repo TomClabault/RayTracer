@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Separator;
 
 import java.io.File;
@@ -32,20 +33,24 @@ public class Toolbox{
 	private Scene renderScene;
 	private Pane statPane;
 	private RayTracerSettings rayTracerSettings;
+	private RayTracer rayTracer;
 	
 	private Slider nbCoreSlider;//Attribut nécessaire pour pouvoir y accéder dans les méthodes Callback
 	private Slider blurrySamplesSlider;
 	private Slider antialiasingSlider;
+	private ProgressBar progressBar;
 	
 	/**
 	 * @param renderScene la scène javafx contenant le rendu.
 	 * @param statPane le Pane contenant les statistiques du rendu (typiquement les fps).
 	 * @param rayTracerSettings les paramêtres du rayTracer.
 	 */
-	public Toolbox(Scene renderScene, Pane statPane, RayTracerSettings rayTracerSettings) {
+	public Toolbox(Scene renderScene, Pane statPane, ProgressBar progressBar, RayTracer rayTracer, RayTracerSettings rayTracerSettings) {
 		this.renderScene = renderScene;
 		this.statPane = statPane;
+		this.rayTracer = rayTracer;
 		this.rayTracerSettings = rayTracerSettings;
+		this.progressBar = progressBar;
 	}
 
 	/**
@@ -67,6 +72,9 @@ public class Toolbox{
         Label resolutionLabel = new Label("Résolution de la scène");
         
         Button applyResButton = new Button("Appliquer");
+        
+        Label progressLabel = new Label("Avancement du rendu de l'image");
+        progressBar.setMaxWidth(Double.MAX_VALUE);
 
         /*
          * ------------------ Sliders ------------------ 
@@ -189,6 +197,7 @@ public class Toolbox{
          * ------------------ Checkboxes ------------------ 
          */
         
+        
         root.getChildren().addAll(statOnOffCheckBox, 
         						  saveButton, 
         						  resolutionLabel, 
@@ -196,7 +205,10 @@ public class Toolbox{
         						  new Separator(),
         						  slidersPane,
         						  new Separator(), 
-        						  checkboxesPane);
+        						  checkboxesPane,
+        						  new Separator(),
+        						  progressLabel,
+        						  this.progressBar);
 
         saveButton.setOnAction(new EventHandler<ActionEvent>()
     	{

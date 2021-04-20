@@ -9,6 +9,7 @@ import javafx.animation.AnimationTimer;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
@@ -38,6 +39,7 @@ public class RenderWindow {
     private RayTracerSettings rayTracerSettings;
     private Scene renderScene;
     private Pane statPane;
+    private ProgressBar progressBar;
 
     /**
      * 
@@ -72,7 +74,6 @@ public class RenderWindow {
         this.statPane.setVisible(false);//Désactivation des stats par défaut pour ne pas cacher l'affichage
         
         
-        
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(renderPane);
         stackPane.getChildren().add(statPane);
@@ -84,7 +85,9 @@ public class RenderWindow {
         WindowTimer windowTimer = new WindowTimer(this.renderScene, this.rayTracer, this.rayTracerSettings, this.rayTracingScene, this.pixelWriter);
         statPane.getChildren().add(windowTimer.getfpsLabel());
         
+        
         this.windowTimer = new WindowTimer(this.renderScene, rayTracer, rayTracerSettings, rayTracingScene, pixelWriter);
+        this.progressBar = windowTimer.getProgressBar();
         windowTimer.start();
         this.cameraTimer = new CameraTimer(this.renderScene, rayTracingScene);
         stage.setTitle("Rendu");
@@ -106,6 +109,14 @@ public class RenderWindow {
      */
     public RayTracingScene getRayTracingScene() {
         return this.rayTracingScene;
+    }
+    
+    /**
+     * Retourne la barre de progression de la toolbox
+     * @return this.progressBar
+     */
+    public ProgressBar getProgressBar() {
+    	return this.progressBar;
     }
     
     /**
@@ -177,6 +188,7 @@ public class RenderWindow {
         private RayTracer rayTracer;
         
         private Future<?> futureRenderTask = null;
+		private ProgressBar progressBar;
 
         /**
          * @param scene La Scene javafx de la fenêtre du rendu.
@@ -195,6 +207,7 @@ public class RenderWindow {
             Label fpsLabel = new Label("");
             this.fpsLabel = fpsLabel;
             fpsLabel.setId("fpsLabel");
+            this.progressBar = new ProgressBar();
             this.mainAppScene = scene;
             this.pixelFormat = PixelFormat.getIntArgbPreInstance();
             this.executortService = Executors.newFixedThreadPool(1);
@@ -207,6 +220,11 @@ public class RenderWindow {
         public Label getfpsLabel() {
         	return this.fpsLabel;
         }
+        
+        public ProgressBar getProgressBar() {
+        	return this.progressBar;
+        }
+
         
         /**
          * Retourne l'instance de RayTracerSetting utilisé par la classe.
@@ -222,6 +240,7 @@ public class RenderWindow {
         @Override
         public void handle(long actualFrameTime){
         	DoImageTask renderTask = new DoImageTask(mainAppScene, pixelWriter, PixelFormat.getIntArgbPreInstance(), rayTracer, rayTracingScene, rayTracerSettings);
+        	this.progressBar.setProgress(rayTracer.getProgression());
         	if(futureRenderTask == null || futureRenderTask.isDone()){//Si aucune tâche n'a encore été donnée ou si la tâche est terminée
         		futureRenderTask = executortService.submit(renderTask);//On redonne une autre tâche de rendu à faire
         	}
