@@ -1,5 +1,6 @@
 package util;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -55,16 +56,25 @@ public class ImageUtil
 		return outputLinear;
 	}
 	
+	/*
+	 * Code de: https://stackoverflow.com/questions/47211852/using-filechooser-to-save-a-writableimage-image
+	 */
+	public static void writeWritableImageToDisk(WritableImage writableImage, File outputFile) throws IOException
+	{
+        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(writableImage, null);
+        ImageIO.write(bufferedImage, "png", outputFile);
+	}
+	
 	/**
 	 * Permet d'écrire le rendu d'une scène JavaFX sur le disque
 	 * 
 	 * @param javaFXScene Scène javaFX dont on veut faire un instantané à sauvegarder sur le disque
-	 * @param outputFile Le fichier dans lequel sauvegarder l'instantané
+	 * @param outputPath Le fichier dans lequel sauvegarder l'instantané
 	 */
-	public static void writeSceneToDisk(Scene javaFXScene, String outputFile) throws IOException
+	public static void writeSceneToDiskPath(Scene javaFXScene, String outputPath) throws IOException
 	{
-		File output = new File(outputFile);
-		writeImageToDisk(javaFXScene, output);
+		File output = new File(outputPath);
+		writeSceneToDiskFile(javaFXScene, output);
 	}
 	
 	/**
@@ -75,7 +85,7 @@ public class ImageUtil
 	 * @param javaFXScene Scène javaFX dont on veut faire un instantané à sauvegarder sur le disque
 	 * @param output Le fichier dans lequel sauvegarder l'instantané
 	 */
-	public static void writeImageToDisk(Scene javaFXScene, File output) throws IOException
+	public static void writeSceneToDiskFile(Scene javaFXScene, File output) throws IOException
 	{
 		try 
 		{
