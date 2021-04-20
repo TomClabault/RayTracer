@@ -239,7 +239,7 @@ public class RenderWindow {
                 
                 String fpsString = String.format("FPS : %.2f", dif);
                 if(this.rayTracingScene.getCamera() != null)//On vérifie quand même que la caméra n'est pas null
-                	fpsString += String.format("\n%s\nH: %.2f°\nV: %.2f°", this.rayTracingScene.getCamera().getPosition().toString(), this.rayTracingScene.getCamera().getAngleHori(), this.rayTracingScene.getCamera().getAngleVerti());
+                	fpsString += String.format("\n%s\nH: %.2f°\nV: %.2f°\n%.3f%%", this.rayTracingScene.getCamera().getPosition().toString(), this.rayTracingScene.getCamera().getAngleHori(), this.rayTracingScene.getCamera().getAngleVerti(), this.rayTracer.getProgression());
                 fpsLabel.setText(fpsString);
             });
         }

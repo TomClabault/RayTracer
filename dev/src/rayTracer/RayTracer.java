@@ -3,6 +3,7 @@ package rayTracer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import geometry.Shape;
 import geometry.shapes.Plane;
@@ -99,6 +100,12 @@ public class RayTracer
 	private int renderWidth;
 	private int renderHeight;
 	
+	/*
+	 * Variables utilisées pour calculer la progression du rendu
+	 */
+	private AtomicInteger totalPixelComputed;
+	private int totalPixelToRender;
+	
 	private RayTracerSettings settings;
 	private ThreadsTaskList threadTaskList;
 	private IntBuffer renderedPixels;
@@ -109,6 +116,7 @@ public class RayTracer
 	{
 		this.renderWidth = renderWidth;
 		this.renderHeight = renderHeight;
+		this.totalPixelToRender = renderWidth * renderHeight;
 		
 		this.renderedPixels = IntBuffer.allocate(renderWidth*renderHeight);
 		
@@ -487,6 +495,8 @@ public class RayTracer
 				pixelColor = ColorOperations.linearTosRGBGamma2_2(pixelColor);
 				
 				this.renderedPixels.put(y*this.renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
+				
+				this.totalPixelComputed.incrementAndGet();
 			}
 		}
 	}
@@ -819,6 +829,16 @@ public class RayTracer
 	}
 	
 	/**
+	 * Retourne la progression du rendu de l'image en cours.
+	 * 
+	 * @return Réel entre 0 et 1 représentant le pourcentage de pixels de l'image ayant été calculés jusqu'à présent 
+	 */
+	public double getProgression()
+	{
+		return this.totalPixelComputed.doubleValue() / (double)totalPixelToRender;
+	}
+	
+	/**
 	 * Permet d'obtenir le tableau de pixels correspondant à la dernière image rendue par le RayTracer
 	 * Si aucune image n'a été rendue au préalable, renvoie null
 	 *
@@ -847,6 +867,7 @@ public class RayTracer
 		
 		this.settings = new RayTracerSettings(renderSettings);//On crée une nouvelle instance de RayTracerSettings pour ne pas "lier dynamiquement" les réglages : cela pourrait causer des déchirement d'image lorsqu'on change les réglages pendant un rendu
 		this.threadTaskList.initTaskList(settings.getNbCore(), renderWidth, renderHeight);
+		this.totalPixelComputed.set(0);
 		
 		if(renderScene.hasSkybox())
 			this.skyboxPixelReader = renderScene.getSkyboxPixelReader();
