@@ -209,7 +209,7 @@ public class Toolbox{
             	 File file = fileChooser.showSaveDialog(stage);
             	 if (file != null) {
             		 try {
-            			 util.ImageUtil.writeImageToDisk(renderScene, file);
+            			 util.ImageUtil.writeSceneToDiskFile(renderScene, file);
             			 System.out.println("Image sauvegardée en : " + file);
 					} catch (IOException e) {
 						System.out.println("Impossible de sauvegarder l'image");
