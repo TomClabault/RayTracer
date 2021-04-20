@@ -9,6 +9,7 @@ import javafx.animation.AnimationTimer;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
@@ -30,16 +31,15 @@ public class RenderWindow {
 
     private WritableImage writableImage;
     private PixelWriter pixelWriter;
-    private Pane renderPane;
     private CameraTimer cameraTimer;
     private WindowTimer windowTimer;
     private DoImageTask task;
-    private Stage stage;
     private RayTracer rayTracer;
     private RayTracingScene rayTracingScene;
     private RayTracerSettings rayTracerSettings;
     private Scene renderScene;
     private Pane statPane;
+    private ProgressBar progressBar;
 
     /**
      * 
@@ -50,7 +50,6 @@ public class RenderWindow {
      */
     public RenderWindow(Stage stage, RayTracer rayTracer, RayTracingScene rayTracingScene, RayTracerSettings rayTracerSettings)
     {
-        this.stage = stage;
         this.rayTracer = rayTracer;
         this.rayTracingScene = rayTracingScene;
         this.rayTracerSettings = rayTracerSettings;
@@ -70,11 +69,9 @@ public class RenderWindow {
 
         Pane renderPane = new Pane();
         renderPane.getChildren().add(imageView);
-        this.renderPane = renderPane;
         
         this.statPane = new Pane();
         this.statPane.setVisible(false);//Désactivation des stats par défaut pour ne pas cacher l'affichage
-        
         
         
         StackPane stackPane = new StackPane();
@@ -88,7 +85,9 @@ public class RenderWindow {
         WindowTimer windowTimer = new WindowTimer(this.renderScene, this.rayTracer, this.rayTracerSettings, this.rayTracingScene, this.pixelWriter);
         statPane.getChildren().add(windowTimer.getfpsLabel());
         
+        
         this.windowTimer = new WindowTimer(this.renderScene, rayTracer, rayTracerSettings, rayTracingScene, pixelWriter);
+        this.progressBar = windowTimer.getProgressBar();
         windowTimer.start();
         this.cameraTimer = new CameraTimer(this.renderScene, rayTracingScene);
         stage.setTitle("Rendu");
@@ -110,6 +109,22 @@ public class RenderWindow {
      */
     public RayTracingScene getRayTracingScene() {
         return this.rayTracingScene;
+    }
+    
+    /**
+     * Retourne la writableImage utilisé dans la classe
+     * @return this.writableImage
+     */
+    public WritableImage getWritableImage() {
+    	return this.writableImage;
+    }
+    
+    /**
+     * Retourne la barre de progression de la toolbox
+     * @return this.progressBar
+     */
+    public ProgressBar getProgressBar() {
+    	return this.progressBar;
     }
     
     /**
@@ -181,6 +196,7 @@ public class RenderWindow {
         private RayTracer rayTracer;
         
         private Future<?> futureRenderTask = null;
+		private ProgressBar progressBar;
 
         /**
          * @param scene La Scene javafx de la fenêtre du rendu.
@@ -199,6 +215,7 @@ public class RenderWindow {
             Label fpsLabel = new Label("");
             this.fpsLabel = fpsLabel;
             fpsLabel.setId("fpsLabel");
+            this.progressBar = new ProgressBar();
             this.mainAppScene = scene;
             this.pixelFormat = PixelFormat.getIntArgbPreInstance();
             this.executortService = Executors.newFixedThreadPool(1);
@@ -212,13 +229,10 @@ public class RenderWindow {
         	return this.fpsLabel;
         }
         
-        /**
-         * Retourne l'instance de RayTracerSetting utilisé par la classe.
-         * @return this.rayTracerSettings
-         */
-        public RayTracerSettings getRayTracerSettings() {
-        	return this.rayTracerSettings;
+        public ProgressBar getProgressBar() {
+        	return this.progressBar;
         }
+
         
         /**
          * Exécutée à chaque frame, lance les calculs de rendus si les précédents sont terminés. Calcul également les fps.
@@ -226,6 +240,7 @@ public class RenderWindow {
         @Override
         public void handle(long actualFrameTime){
         	DoImageTask renderTask = new DoImageTask(mainAppScene, pixelWriter, PixelFormat.getIntArgbPreInstance(), rayTracer, rayTracingScene, rayTracerSettings);
+        	this.progressBar.setProgress(rayTracer.getProgression());
         	if(futureRenderTask == null || futureRenderTask.isDone()){//Si aucune tâche n'a encore été donnée ou si la tâche est terminée
         		futureRenderTask = executortService.submit(renderTask);//On redonne une autre tâche de rendu à faire
         	}

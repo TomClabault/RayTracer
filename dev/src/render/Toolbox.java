@@ -8,21 +8,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Separator;
 
 import java.io.File;
 import java.io.IOException;
 
 import javafx.scene.control.Slider;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-import rayTracer.RayTracer;
 import rayTracer.RayTracerSettings;
-import scene.RayTracingScene;
 
 /**
  * La classe contenant le code de la toolbox, c'est-à-dire la fenêtre contenant les paramêtres que l'ont peux manipuler pendant l'affichage du rendu.
@@ -36,16 +36,20 @@ public class Toolbox{
 	private Slider nbCoreSlider;//Attribut nécessaire pour pouvoir y accéder dans les méthodes Callback
 	private Slider blurrySamplesSlider;
 	private Slider antialiasingSlider;
+	private ProgressBar progressBar;
+	private WritableImage writableImage;
 	
 	/**
 	 * @param renderScene la scène javafx contenant le rendu.
 	 * @param statPane le Pane contenant les statistiques du rendu (typiquement les fps).
 	 * @param rayTracerSettings les paramêtres du rayTracer.
 	 */
-	public Toolbox(Scene renderScene, Pane statPane, RayTracerSettings rayTracerSettings) {
+	public Toolbox(Scene renderScene, Pane statPane, ProgressBar progressBar, RayTracerSettings rayTracerSettings, WritableImage writableImage) {
 		this.renderScene = renderScene;
 		this.statPane = statPane;
 		this.rayTracerSettings = rayTracerSettings;
+		this.progressBar = progressBar;
+		this.writableImage = writableImage;
 	}
 
 	/**
@@ -63,10 +67,9 @@ public class Toolbox{
         CheckBox statOnOffCheckBox = new CheckBox("Affichage des stats");
         
         Button saveButton = new Button("Sauvegarder le rendu");
-
-        Label resolutionLabel = new Label("Résolution de la scène");
-        
-        Button applyResButton = new Button("Appliquer");
+     
+        Label progressLabel = new Label("Avancement du rendu de l'image");
+        progressBar.setMaxWidth(Double.MAX_VALUE);
 
         /*
          * ------------------ Sliders ------------------ 
@@ -189,14 +192,16 @@ public class Toolbox{
          * ------------------ Checkboxes ------------------ 
          */
         
+        
         root.getChildren().addAll(statOnOffCheckBox, 
         						  saveButton, 
-        						  resolutionLabel, 
-        						  applyResButton,
         						  new Separator(),
         						  slidersPane,
         						  new Separator(), 
-        						  checkboxesPane);
+        						  checkboxesPane,
+        						  new Separator(),
+        						  progressLabel,
+        						  this.progressBar);
 
         saveButton.setOnAction(new EventHandler<ActionEvent>()
     	{
@@ -209,7 +214,7 @@ public class Toolbox{
             	 File file = fileChooser.showSaveDialog(stage);
             	 if (file != null) {
             		 try {
-            			 util.ImageUtil.writeImageToDisk(renderScene, file);
+            			 util.ImageUtil.writeWritableImageToDisk(writableImage, file);
             			 System.out.println("Image sauvegardée en : " + file);
 					} catch (IOException e) {
 						System.out.println("Impossible de sauvegarder l'image");
@@ -260,7 +265,7 @@ public class Toolbox{
 		this.nbCoreSlider.setValue(Math.round(newValue.doubleValue()));
 		int roundedValue = (int)this.nbCoreSlider.getValue();
 	
-		this.rayTracerSettings.setNbCore(roundedValue*roundedValue);
+		this.rayTracerSettings.setNbCore(roundedValue);
 	}
 	
 	/**
@@ -274,7 +279,7 @@ public class Toolbox{
 		this.blurrySamplesSlider.setValue(Math.round(newValue.doubleValue()));
 		int roundedValue = (int)this.blurrySamplesSlider.getValue();
 	
-		this.rayTracerSettings.setBlurryReflectionsSampleCount(roundedValue*roundedValue);
+		this.rayTracerSettings.setBlurryReflectionsSampleCount(roundedValue);
 	}
 	
 	/**

@@ -12,7 +12,6 @@ import exceptions.InvalidSphereException;
 import geometry.Shape;
 import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
-import geometry.shapes.Triangle;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -71,22 +70,8 @@ public class MainApp extends Application {
      * Elle est exécutée dans le main
      * @param stage Le stage de la fenêtre de rendu
      */
-    @Override
-    public void start(Stage stage) {
-    	try
-    	{
-    		Integer.parseInt("1");
-    	}
-    	catch(Exception test)
-    	{
-    		test.printStackTrace();
-    	}
-    	finally
-    	{
-    		System.out.println("finally");
-    	}
-
-
+    public void start(Stage stage) 
+    {
         FileChooser fileChooser = new FileChooser();
 	   	fileChooser.setTitle("Selectionnez un fichier POV");
 	   	ExtensionFilter filter = new ExtensionFilter("POV", "*.pov");
@@ -117,8 +102,10 @@ public class MainApp extends Application {
 	   		System.exit(0);
 	   	}
 
-
-
+	   	
+	   	
+	   	
+	   	
 	   	if(!rayTracingScene.hasSkybox())
 	   	{
 	   		Image skybox = null;
@@ -140,7 +127,7 @@ public class MainApp extends Application {
     	RenderWindow renderWindow = new RenderWindow(stage, rayTracer, rayTracingScene, rayTracerSettings);
         renderWindow.execute();
 
-        Toolbox toolbox = new Toolbox(renderWindow.getRenderScene(), renderWindow.getStatPane(), rayTracerSettings);
+        Toolbox toolbox = new Toolbox(renderWindow.getRenderScene(), renderWindow.getStatPane(), renderWindow.getProgressBar(), rayTracerSettings, renderWindow.getWritableImage());
         toolbox.execute();
 
 

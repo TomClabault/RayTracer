@@ -8,10 +8,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.Scene;
 import javafx.event.EventHandler;
 
-import java.util.concurrent.locks.ReentrantLock;
 
 import javafx.animation.AnimationTimer;
-import javafx.concurrent.Task;
 import javafx.scene.input.KeyCode;
 
 /**

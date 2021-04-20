@@ -1,12 +1,8 @@
 \documentclass [11pt]{article}
 
 \begin{document}
-	Un problème subsiste dans le calcul du rendu de la scène. Pour calculer le rendu plus rapidement, l'image à rendre est découpée en tuile.
-	Parfois, une des tuiles de l'image n'est pas rendue correctement. Cela a pour effet de faire "clignoter" des parties de l'image de temps à autre.
-	Ce bug n'apparaît que lorsque le rendu est effectué sur un nombre de threads supérieur à 1 mais reste tout de même assez aléatoire.
-	Nous pensons donc cette imperfection vient d'une synchronisation insuffisante entre les threads mais nous n'avons pas pu trouver la source exacte du problème.
-	
-	La question des performances est aussi au coeur des débats. Bien que notre application soit multithreadée, il n'est pas rare, lors de rendu de scène gourmande, que le
+	La question des performances est au coeur des débats. Bien que notre application soit multithreadée, il n'est pas rare, lors de rendu de scène gourmande, que le
 	temps de calcul d'une image dépasse plusieurs secondes. C'est un comportement potentiellement attendu d'un ray tracer, ces algorithmes étant coûteux en temps de calcul.
-	Nous trouvons toutefois cela dommage car les mouvements de notre caméra ne peuvent alors plus s'effectuer convenablement.
+	Nous trouvons toutefois cela dommage car les mouvements de notre caméra ne peuvent alors plus s'effectuer convenablement. Une idée serait alors d'optimiser d'une façon
+	ou d'une autre les temps de calcul de notre algorithme.
 \end{document}
