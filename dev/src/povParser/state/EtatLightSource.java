@@ -1,7 +1,8 @@
-package povParser;
+package povParser.state;
 
 
 import maths.Point;
+import povParser.Automat;
 import scene.lights.LightBulb;
 import scene.lights.PositionnalLight;
 
@@ -27,6 +28,7 @@ public class EtatLightSource implements EtatToken
     /**
      * @param context contexte courant de l'automate
      * Cette méthode effectue le parsing d'un objet light_source (point light)
+     * @return un objet de type positionnal light qui décrit la source de lumière
      */
     @Override
     public PositionnalLight action(Automat context)

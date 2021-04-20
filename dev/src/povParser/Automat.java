@@ -2,6 +2,7 @@ package povParser;
 
 
 import geometry.Shape;
+import povParser.state.*;
 import scene.Camera;
 import scene.RayTracingScene;
 import scene.lights.PositionnalLight;
@@ -10,12 +11,9 @@ import java.io.*;
 
 public class Automat
 {
-    /*TODO
-        -ajout de la javadoc
-     */
 
-    /*
-    ajout d'un élément de syntaxe size pov dans un contexte checker pour ajouter une taille au damier:
+    /* TODO
+        rapport : ajout d'un élément de syntaxe size pov dans un contexte checker pour ajouter une taille au damier:
         pigment {checker color1, color2, size}
      */
 
@@ -140,7 +138,7 @@ public class Automat
     }
 
     /**
-     * Cette méthode teste si le jeton courant est une figure valide
+     * Cette méthode teste si le prochain jeton est une figure valide
      * @return true si la figure est valide, false sinon
      */
     public boolean isValidState()
@@ -215,6 +213,12 @@ public class Automat
         return State.OUTSIDE;
     }
 
+    /**
+     * Méthode permettant de créer une scène à partir d'un fichier pov (langage de description de scène). Cette méthode
+     * permet de parser le fichier de scène et de créer les objets à ajouter dans la scène de notre lanceur de rayons
+     * @param povFile fichier pov à parser
+     * @return La scène créée à partir du fichier pov contenant les différentes figures
+     */
     public static RayTracingScene parsePov(File povFile)
     {
         RayTracingScene scene = new RayTracingScene();
@@ -296,4 +300,3 @@ public class Automat
         return scene;
     }
 }
-

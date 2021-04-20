@@ -1,6 +1,7 @@
-package povParser;
+package povParser.state;
 
 import maths.Point;
+import povParser.Automat;
 import scene.Camera;
 
 /**
@@ -26,7 +27,7 @@ public class EtatCamera implements EtatToken
 {
 
     /**
-     * Cette fonction sert à parser une coordonnée de type <, , > et retourne
+     * Cette fonction sert à parser une coordonnée de type c1, c2, c3 et retourne
      * le tableau des 3 composantes
      * @param context Le contexte courant de l'automate
      * @return Le tableau contenant les coordonnées parsées

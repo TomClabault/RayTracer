@@ -1,7 +1,6 @@
 package render;
 
 import java.nio.IntBuffer;
-import java.util.concurrent.locks.ReentrantLock;
 
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
@@ -41,7 +40,8 @@ public class DoImageTask extends Task<IntBuffer> {
 
 	@Override
 	public IntBuffer call() {
-		synchronized (mainAppScene) {
+		synchronized (mainAppScene) 
+		{
 			pixelBuffer = rayTracer.renderImage(rayTracingScene, this.rayTracerSettings);
 		}
 		return pixelBuffer;

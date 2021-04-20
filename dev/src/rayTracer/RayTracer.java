@@ -110,7 +110,7 @@ public class RayTracer
 	private ThreadsTaskList threadTaskList;
 	private IntBuffer renderedPixels;
 	private PixelReader skyboxPixelReader = null;
-	private Random randomGenerator;
+	private Random randomGenerator;//Générateur de nombre aléatoire qui servira uniquement au thread principal
 	
 	public RayTracer(int renderWidth, int renderHeight)
 	{
@@ -265,9 +265,21 @@ public class RayTracer
 					reflectDirection = perfectReflectDirection;
 				else
 				{
-					double randomX = randomGenerator.nextDouble() * 2 - 1;
-					double randomY = randomGenerator.nextDouble() * 2 - 1;
-					double randomZ = randomGenerator.nextDouble() * 2 - 1;
+					double randomX;
+					double randomY;
+					double randomZ;
+					
+					Thread currentThread = Thread.currentThread();
+					Random localRandomGenerator = null;
+					
+					if(currentThread instanceof TileThread)//Si le thread courant n'est pas le thread principal mais un thread de calcul
+						localRandomGenerator = ((TileThread)currentThread).getLocalRandomGenerator();//On récupère le générateur de nombre aléatoire local au thread de calcul
+					else
+						localRandomGenerator = this.randomGenerator;
+					
+					randomX = localRandomGenerator.nextDouble() * 2 - 1;
+					randomY = localRandomGenerator.nextDouble() * 2 - 1;
+					randomZ = localRandomGenerator.nextDouble() * 2 - 1;
 					
 					Vector randomBounce = Vector.normalizeV(Vector.add(Vector.normalizeV(new Vector(randomX, randomY, randomZ)), intInfos.getNormInt()));
 					Vector randomBounceDirection = Vector.normalizeV(Vector.interpolate(perfectReflectDirection, randomBounce, intInfos.getIntObjMat().getRoughness()));
@@ -446,6 +458,15 @@ public class RayTracer
 	 */
 	protected void computePartialImage(RayTracingScene renderScene, int startX, int startY, int endX, int endY)
 	{
+		Thread currentThread = Thread.currentThread();
+		Random localRandomGenerator = null;
+		if(currentThread instanceof TileThread)
+			localRandomGenerator = ((TileThread)currentThread).getLocalRandomGenerator();
+		else
+			localRandomGenerator = this.randomGenerator;
+		localRandomGenerator.setSeed(Integer.parseInt(String.format("%d%d", startX, startY)));//On réinitialise la graine du générateur pour la tuile à calculer avec un nombre
+		//unique construit à partir des coordonnées de départ de la tuile
+		
 		MatrixD ctwMatrix = renderScene.getCamera().getCTWMatrix();
 
 		double FOV = renderScene.getCamera().getFOV();
@@ -462,7 +483,7 @@ public class RayTracer
 				}
 				else
 				{
-					subpixelTab = new double[1][2];//Un seul pixel sera calculé pour chaque pixel
+					subpixelTab = new double[1][2];//Un seul sous-pixel sera calculé pour chaque pixel
 					subpixelTab[0][0] = 0;
 					subpixelTab[0][1] = 0;
 				}
@@ -866,14 +887,17 @@ public class RayTracer
 		}
 		
 		this.settings = new RayTracerSettings(renderSettings);//On crée une nouvelle instance de RayTracerSettings pour ne pas "lier dynamiquement" les réglages : cela pourrait causer des déchirement d'image lorsqu'on change les réglages pendant un rendu
-		this.threadTaskList.initTaskList(settings.getNbCore(), renderWidth, renderHeight);
+		this.threadTaskList.initTaskList(renderWidth, renderHeight);
+		this.randomGenerator = new Random(0);//On réinitialise le générateur de nombre avec la graine 0
 		this.totalPixelComputed.set(0);
+
+		
 		
 		if(renderScene.hasSkybox())
 			this.skyboxPixelReader = renderScene.getSkyboxPixelReader();
 
 		for(int i = 1; i < settings.getNbCore(); i++)//Création des threads sauf 1, le thread principal, qui est déjà créé
-			new Thread(new TileThread(threadTaskList, this, renderScene), String.format("RT-Thread %d", i)).start();
+			new TileThread(threadTaskList, this, renderScene).start();
 
 		while(threadTaskList.getTotalTaskFinished() < threadTaskList.getTotalTaskCount())
 			this.computeTask(renderScene, threadTaskList);

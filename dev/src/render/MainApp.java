@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 
 import exceptions.InvalidParallelepipedException;
 import exceptions.InvalidSphereException;
@@ -29,6 +30,7 @@ import materials.textures.ProceduralTextureCheckerboard;
 import maths.ColorOperations;
 import maths.Point;
 import maths.Vector;
+import multithreading.TileThread;
 import povParser.Automat;
 import rayTracer.RayTracer;
 import rayTracer.RayTracerSettings;
@@ -71,22 +73,8 @@ public class MainApp extends Application {
      * Elle est exécutée dans le main
      * @param stage Le stage de la fenêtre de rendu
      */
-    @Override
-    public void start(Stage stage) {
-    	try
-    	{
-    		Integer.parseInt("1");
-    	}
-    	catch(Exception test)
-    	{
-    		test.printStackTrace();
-    	}
-    	finally
-    	{
-    		System.out.println("finally");
-    	}
-
-
+    public void start(Stage stage) 
+    {
         FileChooser fileChooser = new FileChooser();
 	   	fileChooser.setTitle("Selectionnez un fichier POV");
 	   	ExtensionFilter filter = new ExtensionFilter("POV", "*.pov");
@@ -117,8 +105,10 @@ public class MainApp extends Application {
 	   		System.exit(0);
 	   	}
 
-
-
+	   	
+	   	
+	   	
+	   	
 	   	if(!rayTracingScene.hasSkybox())
 	   	{
 	   		Image skybox = null;

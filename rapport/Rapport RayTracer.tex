@@ -6,6 +6,7 @@
 \usepackage{adjustbox}%Permet de centrer les figures dans la largeur de la page même si les figures sont plus larges que \textwidth
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage{adjustbox} % pour avoir adjustbox
 \usepackage[toc,page,title,titletoc,header]{appendix}
 \usepackage{expl3}%Pour la control sequence /ExlpSyntaxOn demandée par l'utilisation de subfiles apparemment...
 \usepackage{gensymb}%pour pouvoir écrire le signe °
@@ -82,8 +83,10 @@ showstringspaces=false}
 %a déplacer dans readMe.txt
 
 \section{Structuration du projet}
-        \subsection{Le package povParser}
-        \subsection{Les packages liés au Ray Tracer}
+    \subsection{Les packages}
+        \subsubsection{Le parser}
+        	\subfile{latex/packages/parser_package.tex}
+        \subsubsection{Liés au Ray Tracer}
             \subfile{latex/packages/RTpackages.tex}
 
         \subsection{Le package multithreading}
@@ -142,10 +145,14 @@ showstringspaces=false}
     \input{latex/render.javafx/GUI.tex}
 
     \subsection{Le parser}
-        \subsubsection{Structure d'un fichier POV}
-        \subsubsection{Implémentation du partern state}
-        \subsubsection{Implémentation du patern template méthode}
-        \subsubsection{Automate à état fini}
+        \subsubsection{Structure d'un fichier POV}      
+        	\subfile{latex/parser/struct_pov.tex}
+        \subsubsection{Automate à état finit}
+           	\subfile{latex/parser/automat.tex}
+        \subsubsection{Implémentation du pattern state}
+        	\subfile{latex/parser/pattern_state.tex}
+        \subsubsection{Implémentation du pattern template méthod}
+        	\subfile{latex/parser/pattern_template_method.tex}        	
 
 
     \subsection{Les formes géométriques}
