@@ -17,6 +17,7 @@ Ce pattern est composé d'une interface EtatToken qui définit une méthode acti
 On a ensuite notre classe principale, la classe Automat qui possède un attribut de type EtatToken. Le grand avantage de ce pattern se trouve dans cette classe. Au lieu d'avoir chaque état dans la classe Automat, on a un seul état type, celui de l'interface. Dès que l'on se trouve sur une certaine figure on change l'état courant et on appelle sa méthode action. La méthode action possède en argument le contexte d'exécution de l'automate, c'est important notamment pour récupérer l'instance courante du streamTokenizer et donc sa dernière position dans le fichier. Voici un exemple de fonctionnement d'un appel d'état:
 
  \lstinputlisting[language=Java]{../../code/exemple_appel_state.java}
+ 
 
 Et voici la méthode action de la classe Automat (qui n'a rien à voir avec celle des états):
 
