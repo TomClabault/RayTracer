@@ -1,12 +1,11 @@
-Le package render contient le code de l'interface graphique, c'est-à-dire celui permettant l'affichage du rendu et des fenêtres.
+Le package render \ref{diagRender} contient le code de l'interface graphique, c'est-à-dire celui permettant l'affichage du rendu et des fenêtres.
 
 \begin{description}
     \item [MainApp] contient le main de l'application et lance toutes les fenêtres.
     \item [SetSizeWindow] est la classe responsable de la fenêtre du choix de taille du rendu.
-    \item [ImageWriter] est la classe responsable de l'affichage de la fenêtre du rendu.
+    \item [RenderWindow] est la classe responsable de l'affichage de la fenêtre du rendu.
     \item [Toolbox] est la classe responsable de la fenêtre de changement lors de l'affichage du rendu.
     \item [CameraTimer] est la classe responsable du déplacement de la caméra lors de l'appui de touches.
-    \item [Window Timer et CounterFPS] sont les classes responsables de l'exécution du calcul du rendu (et des fps).
     \item [DoImageTask] est la task contenant les calculs du rendu. Voir \nameref{UsageTask} pour l'usage des taches.
 \end{description}
 
@@ -16,5 +15,5 @@ Le package render contient le code de l'interface graphique, c'est-à-dire celui
    \begin{center}
        \includegraphics[scale=0.5]{img/render.javafx/diagClassRender.png}
    \end{center}
-   \caption{Diagramme du package render}
+   \caption{Diagramme du package render \label{diagRender}}
 \end{figure}

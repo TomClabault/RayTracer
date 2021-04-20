@@ -4,9 +4,9 @@
     <property name="src" value="src"/>
     <property name="build" value="build"/>
     <property name="modulepath" value="javafx.controls"/>
+    <property environment="env"/>
     <property name="projet.lib.dir" value="lib"/>
     <property name="doc.dir" value="javadoc"/>
-    <property environment="env"/>
     <property name="javafxlib.dir" value="${env.PATH_TO_FX}"/>
 
     <path id="projet.classpath">
