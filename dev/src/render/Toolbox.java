@@ -260,7 +260,7 @@ public class Toolbox{
 		this.nbCoreSlider.setValue(Math.round(newValue.doubleValue()));
 		int roundedValue = (int)this.nbCoreSlider.getValue();
 	
-		this.rayTracerSettings.setNbCore(roundedValue*roundedValue);
+		this.rayTracerSettings.setNbCore(roundedValue);
 	}
 	
 	/**
@@ -274,7 +274,7 @@ public class Toolbox{
 		this.blurrySamplesSlider.setValue(Math.round(newValue.doubleValue()));
 		int roundedValue = (int)this.blurrySamplesSlider.getValue();
 	
-		this.rayTracerSettings.setBlurryReflectionsSampleCount(roundedValue*roundedValue);
+		this.rayTracerSettings.setBlurryReflectionsSampleCount(roundedValue);
 	}
 	
 	/**

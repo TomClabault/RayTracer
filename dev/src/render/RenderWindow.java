@@ -30,11 +30,9 @@ public class RenderWindow {
 
     private WritableImage writableImage;
     private PixelWriter pixelWriter;
-    private Pane renderPane;
     private CameraTimer cameraTimer;
     private WindowTimer windowTimer;
     private DoImageTask task;
-    private Stage stage;
     private RayTracer rayTracer;
     private RayTracingScene rayTracingScene;
     private RayTracerSettings rayTracerSettings;
@@ -50,7 +48,6 @@ public class RenderWindow {
      */
     public RenderWindow(Stage stage, RayTracer rayTracer, RayTracingScene rayTracingScene, RayTracerSettings rayTracerSettings)
     {
-        this.stage = stage;
         this.rayTracer = rayTracer;
         this.rayTracingScene = rayTracingScene;
         this.rayTracerSettings = rayTracerSettings;
@@ -70,7 +67,6 @@ public class RenderWindow {
 
         Pane renderPane = new Pane();
         renderPane.getChildren().add(imageView);
-        this.renderPane = renderPane;
         
         this.statPane = new Pane();
         this.statPane.setVisible(false);//Désactivation des stats par défaut pour ne pas cacher l'affichage
@@ -239,7 +235,7 @@ public class RenderWindow {
                 
                 String fpsString = String.format("FPS : %.2f", dif);
                 if(this.rayTracingScene.getCamera() != null)//On vérifie quand même que la caméra n'est pas null
-                	fpsString += String.format("\n%s\nH: %.2f°\nV: %.2f°\n%.3f%%", this.rayTracingScene.getCamera().getPosition().toString(), this.rayTracingScene.getCamera().getAngleHori(), this.rayTracingScene.getCamera().getAngleVerti(), this.rayTracer.getProgression());
+                	fpsString += String.format("\n%s\nH: %.2f°\nV: %.2f°", this.rayTracingScene.getCamera().getPosition().toString(), this.rayTracingScene.getCamera().getAngleHori(), this.rayTracingScene.getCamera().getAngleVerti());
                 fpsLabel.setText(fpsString);
             });
         }
