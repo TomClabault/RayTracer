@@ -22,7 +22,21 @@ Le problème posé par ce choix était que JavaFX gérait directement les calcul
 
 Pour palier à ce problème, nous avons utilisé des classes proposées par le package concurrent de JavaFX. Le problème a été résolu grâce à la classe tasks de ce package, permettant de faire des calculs lourds sans impacter la réactivité de l'interface graphique. Comme javafx et le calcul de rendu n'étaient plus liés il a fallu synchroniser les mouvements de caméra et le calcul de l'image d'après.
 
-TODO ajouter les fonctionnalité proposées par la toolbox
+\subsubsection{La Toolbox}
+
+La toolbox est un élément essentiel du raytracing. Elle permet à l'utilisateur d'utiliser le logiciel avec simplicité, sans devoir passer par des lignes de commandes ou des scripts d'exécution.
+Ensuite, le logiciel de rendu utilise différents procédés qui peuvent fonctionner en parallèle ou les uns au-dessus des autres. La toolbox permet de choisir quels éléments l'utilisateur veux conserver pour pouvoir ainsi mieux comprendre les différentes étapes jusqu'au rendu final.
+Pour finir, cette interface permet à l'utilisateur d'avoir un maximum de liberté sur l'utilisation du logiciel, lui permettant ainsi de faire un compromis entre fidélité et rapidité.
+
+\begin{figure}[h]
+   \begin{center}
+       \includegraphics[scale=0.8]{img/rt/toolbox.jpg}
+   \end{center}
+   \caption{La toolbox et les possibilités qu'elle offre.}
+\end{figure}
+\FloatBarrier
+
+
 
 \subsubsection{Le CSS}
 
