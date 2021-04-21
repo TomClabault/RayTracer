@@ -6,7 +6,7 @@
     <property name="modulepath" value="javafx.controls"/>
     <property environment="env"/>
     <property name="projet.lib.dir" value="lib"/>
-    <property name="doc.dir" value="javadoc"/>
+    <property name="doc.dir" value="doc"/>
     <property name="javafxlib.dir" value="${env.PATH_TO_FX}"/>
 
     <path id="projet.classpath">
