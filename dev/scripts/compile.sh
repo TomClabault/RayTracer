@@ -11,3 +11,5 @@ then
 fi
 
 ant compile
+
+cp -r resources/* build
