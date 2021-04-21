@@ -18,7 +18,7 @@ import maths.ColorOperations;
 public class ImageUtil 
 {
 	/**
-	 * Permet de passer d'une image sRGB à composantes non-linéaires de gamma 2.2 à son équivalent RGB linéaire
+	 * Permet de passer d'une image sRGB dont les composantes des pixels sont non-linéaires de gamma 2.2 à son équivalent RGB linéaire
 	 * 
 	 * @param sRGBImage L'image sRGB gamma 2.2 à convertir
 	 * 

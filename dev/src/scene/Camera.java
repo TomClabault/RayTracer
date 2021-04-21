@@ -6,7 +6,10 @@ import maths.Point;
 import maths.Vector;
 
 /**
- * Permet de représenter une caméra définie par sa position dans l'espace, la direction dans laquelle elle regarde ainsi que son champ de vision
+ * Permet de représenter une caméra définie par sa position dans l'espace, ses angles de rotation définissant sa direction
+ * de regard ainsi que son champ de vision.<br>
+ * La caméra est par défaut orientée pour regarder le long de l'axe Z négatif (0, 0, -1). Les rotations autour des axes de la caméra
+ * peuvent être déduites de cette direction de regard de départ.
  */
 public class Camera 
 {

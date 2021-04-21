@@ -5,6 +5,11 @@ import java.util.Random;
 import rayTracer.RayTracer;
 import scene.RayTracingScene;
 
+/**
+ * Thread s'occupant du rendu des tâches d'une instance de {@link multithreading.ThreadsTaskList}.<br>
+ * Chaque TileThread dispose d'un générateur de nombre aléatoire qui lui est propre, permettant ainsi une consistence des nombres aléatoires
+ * générés d'une image à l'autre (pourvu que la graîne des générateurs soit gérée de façon appropriée).
+ */
 public class TileThread extends Thread
 {
 	private ThreadsTaskList taskList;
