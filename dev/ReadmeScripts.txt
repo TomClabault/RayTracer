@@ -1,3 +1,13 @@
+------------------------------------------------------
+
+L'exécution du projet nécessite l'installation de la librairie javafx. Nous avons
+réalisé notre projet avec javafx version 16. Pour éviter tout éventuels problèmes
+de compatibilité, l'installation de la version 16 de javafx est recommandée.
+
+Téléchargement possible à l'adresse: https://gluonhq.com/products/javafx/
+
+------------------------------------------------------
+
 Clean.sh:
 Supprime les dossiers générés par les autres scripts tels que "doc" et "build".
 
