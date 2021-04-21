@@ -41,10 +41,6 @@
       <delete file="test.jar"/>
     </target>
 
-    <target name="packaging" depends="compile,clean">
-        <jar jarfile="test.jar" basedir="${build}" manifest="${basedir}/Manifest.txt"/>
-    </target>
-
     <target name="doc" description="generate javadoc">
     <javadoc encoding="UTF-8" charset="UTF-8" docencoding="UTF-8" sourcepath="${src}" destdir="${doc.dir}">
         <classpath refid="projet.classpath"/>
