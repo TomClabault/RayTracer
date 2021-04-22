@@ -1,8 +1,7 @@
 #!/bin/sh
 
 cd $(dirname $0)/..
-[ -d lib ] || mkdir lib
-env | grep PATH_TO_FX
+env | grep PATH_TO_FX > /dev/null
 return_status=$?
 if [ $return_status -ne 0 ]
 then
@@ -11,3 +10,5 @@ then
 fi
 
 ant compile
+
+cp -r resources/* build

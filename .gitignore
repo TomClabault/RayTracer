@@ -23,7 +23,7 @@ Rapport RayTracer.synctex.gz
 
 #Fichiers geogebra
 *.ggb
-rapport/img/rt/photoshop
+rapport/sources/img/rt/photoshop
 rapport v2/img/rt/photoshop
 
 #Image du rendu généré automatiquement
@@ -39,3 +39,4 @@ RenderOutput.png
 *.out
 *.toc
 *.pdf
+*.gz

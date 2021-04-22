@@ -4,9 +4,9 @@
     <property name="src" value="src"/>
     <property name="build" value="build"/>
     <property name="modulepath" value="javafx.controls"/>
-    <property name="projet.lib.dir" value="lib"/>
-    <property name="doc.dir" value="javadoc"/>
     <property environment="env"/>
+    <property name="projet.lib.dir" value="lib"/>
+    <property name="doc.dir" value="doc"/>
     <property name="javafxlib.dir" value="${env.PATH_TO_FX}"/>
 
     <path id="projet.classpath">
@@ -21,17 +21,11 @@
       <tstamp/>
       <!-- Create the build directory structure used by compile -->
       <mkdir dir="${build}"/>
-      <mkdir dir="${doc.dir}"/>
     </target>
 
     <target name="compile" depends="init" description="compile the source">
         <!-- Compile the Java code from ${src} into ${build} -->
         <javac includeantruntime="false" srcdir="${src}" destdir="${build}">
-            <exclude name="**/choiceWindow.java"/>
-            <exclude name="**/Rectangle.java"/>
-            <exclude name="**/Triangle.java"/>
-            <exclude name="**/MatricesTests.java"/>
-            <exclude name="**/CTWMatrixTests.java"/>
             <classpath refid="projet.classpath"/>
         </javac>
     </target>
@@ -44,10 +38,6 @@
 
     <target name = "clean" description="delete jar">
       <delete file="test.jar"/>
-    </target>
-
-    <target name="packaging" depends="compile,clean">
-        <jar jarfile="test.jar" basedir="${build}" manifest="${basedir}/Manifest.txt"/>
     </target>
 
     <target name="doc" description="generate javadoc">

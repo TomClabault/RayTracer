@@ -3,22 +3,23 @@ package rayTracer;
 /**
  * 
  * Représente les réglages de rendu qui seront utilisés par le ray tracer. Ces réglages sont dynamiques et peuvent être modifiés pendant le rendu.
- * Le ray Tracer adaptera alors son rendu en conséquence
- * 
- * Paramètres:
- * nbCore: Détermine le nombre de thread sur lequel sera effectué le rendu des images
- * recursionDepth: Gère le nombre d'appel récursif maximum que peut faire le ray tracer. Détermine par exemple le nombre consécutifs de reflets que l'on peut observer dans deux surfaces se réfléchissant l'une l'autre
- * antialiasingSampling: Détermine le nombre de sous-pixel calculé pour chaque pixel afin de réduire l'aliasing (effet d'escalier) de l'image
- * blurryReflectionsSampleCount: Combien d'échantillons seront utilisés pour calculer les réflexion flous de certains matériaux 
- *	
- * enableAmbient: Permet d'activer ou de désactiver l'effet de lumière ambiante de l'ombrage de Phong
- * enableDiffuse: Permet d'activer ou de désactiver l'effet de lumière diffuse de l'ombrage de Phong
- * enableReflections: Permet d'activer ou de désactiver les réflexions des matériaux du rendu
- * enableBlurryReflections: Permet d'activer / désactiver les réflexions floues des matériaux
- * enableRefractions: Permet d'activer ou de désactiver les réfractions des matériaux du rendu
- * enableSpecular: Permet d'activer ou de désactiver l'effet de lumière spéculaire de l'ombrage de Phong
- * enableFresnel: Permet d'activer ou de désactiver les reflets aux bords des objets réfractifs
- * enableAntialiasing: Permet d'activer / désactiver l'antialiasing lors du rendu
+ * Le ray Tracer adaptera alors son rendu en conséquence<br>
+ * <br>
+ * <strong>Paramètres:</strong><br>
+ * <ul>
+	 * <li>nbCore: Détermine le nombre de thread sur lequel sera effectué le rendu des images</li>
+	 * <li>recursionDepth: Gère le nombre d'appel récursif maximum que peut faire le ray tracer. Détermine par exemple le nombre consécutifs de reflets que l'on peut observer dans deux surfaces se réfléchissant l'une l'autre</li>
+	 * <li>antialiasingSampling: Détermine le nombre de sous-pixel calculé pour chaque pixel afin de réduire l'aliasing (effet d'escalier) de l'image</li>
+	 * <li>blurryReflectionsSampleCount: Combien d'échantillons seront utilisés pour calculer les réflexion flous de certains matériaux</li>
+	 * <li>enableAmbient: Permet d'activer ou de désactiver l'effet de lumière ambiante de l'ombrage de Phong</li>
+	 * <li>enableDiffuse: Permet d'activer ou de désactiver l'effet de lumière diffuse de l'ombrage de Phong</li>
+	 * <li>enableReflections: Permet d'activer ou de désactiver les réflexions des matériaux du rendu</li>
+	 * <li>enableBlurryReflections: Permet d'activer / désactiver les réflexions floues des matériaux</li>
+	 * <li>enableRefractions: Permet d'activer ou de désactiver les réfractions des matériaux du rendu</li>
+	 * <li>enableSpecular: Permet d'activer ou de désactiver l'effet de lumière spéculaire de l'ombrage de Phong</li>
+	 * <li>enableFresnel: Permet d'activer ou de désactiver les reflets aux bords des objets réfractifs</li>
+	 * <li>enableAntialiasing: Permet d'activer / désactiver l'antialiasing lors du rendu</li>
+ * </ul>
  */
 public class RayTracerSettings 
 {

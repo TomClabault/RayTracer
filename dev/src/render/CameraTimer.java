@@ -8,10 +8,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.Scene;
 import javafx.event.EventHandler;
 
-import java.util.concurrent.locks.ReentrantLock;
 
 import javafx.animation.AnimationTimer;
-import javafx.concurrent.Task;
 import javafx.scene.input.KeyCode;
 
 /**
@@ -52,10 +50,7 @@ public class CameraTimer extends AnimationTimer {
             {
             	synchronized(scene)
             	{
-            	//if(cameraRenderLock.tryLock() && cameraRenderLock.getHoldCount() == 1)//Si le verrou est disponible
-            	//{
 	                if (event.getCode() == KeyCode.E) {
-	                	System.out.println("E PUSHED");
 	                    upCamera();
 	                } else if (event.getCode() == KeyCode.A) {
 	                    downCamera();
@@ -76,13 +71,9 @@ public class CameraTimer extends AnimationTimer {
 	                } else if (event.getCode() == KeyCode.D) {
 	                    goRightCamera();
 	                }
-	                
-	                //cameraRenderLock.unlock();
-            	//}
             	}
             }
         });
-
     }
 
     /**

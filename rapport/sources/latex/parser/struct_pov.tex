@@ -1,0 +1,17 @@
+\documentclass[../../Rapport RayTracer]{subfiles}
+
+\begin{document}
+
+Dans le sujet, il nous été demandé de parser un fichier au format pov (Persistence Of Vision). La syntaxe d'un fichier pov ressemble assez à celle du langage C. Pour définir une figure, il suffit de préciser son nom. C'est dans le bloc d'un objet, délimité par des accolades, que se trouvent les coordonnées de l'objet, sa couleur, etc. Voici une sphère définit en pov:
+
+ \lstinputlisting[language=pov]{../../code/exemple_sphere.pov}
+
+On retrouve tout d'abord les propriétés intrinsèques de l'objet, donc le centre et le rayon de la sphère dans l'exemple ci-dessus. On peut ensuite rajouter des éléments de couleur dans un bloc pigment et des attributs liés à la lumière, aux ombres dans un bloc finish. On peut aussi rencontrer un bloc interior dans lequel est défini un indice de réfraction.
+Le bloc pigment peut aussi contenir un élément checker qui définit un damier avec deux couleurs que l'on donne.
+\\
+De plus, nous avons fait le choix de rajouter un élément de syntaxe à des fins pratiques. C'est l'attribut size du checker qui permet de choisir plus simplement une taille pour le damier. En effet, la manipulation équivalente en POV est bien plus laborieuse et demande d'initialiser d'autres attributs qui ne sont pas implémentés dans notre lanceur de rayons.
+\\
+ Afin de parser notre fichier, nous avons choisi la classe StreamTokenizer de Java comme moteur pour notre parser. Elle fournit des outils simples mais efficaces pour parser des fichiers ressemblant au C/C++. Son principe est simple, on parcourt le fichier à l'aide d'un jeton, qui est de type entier. Ce jeton prend des valeurs différentes selon les objets qu'il rencontre. S'il se trouve sur un mot, dans ce cas-là, il sera égal à une constante TT\_WORD, idem pour un nombre avec TT\_NUMBER. Lorsque le jeton est égal à la constante TT\_EOF, cela signifie que nous avons atteint la fin du fichier et que l'on peut arrêter le parsing.
+
+
+\end{document}

@@ -3,6 +3,7 @@ package rayTracer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import geometry.Shape;
 import geometry.shapes.Plane;
@@ -99,6 +100,12 @@ public class RayTracer
 	private int renderWidth;
 	private int renderHeight;
 	
+	/*
+	 * Variables utilisées pour calculer la progression du rendu
+	 */
+	private AtomicInteger totalPixelComputed;
+	private int totalPixelToRender;
+	
 	private RayTracerSettings settings;
 	private ThreadsTaskList threadTaskList;
 	private IntBuffer renderedPixels;
@@ -109,6 +116,8 @@ public class RayTracer
 	{
 		this.renderWidth = renderWidth;
 		this.renderHeight = renderHeight;
+		this.totalPixelToRender = renderWidth * renderHeight;
+		this.totalPixelComputed = new AtomicInteger();
 		
 		this.renderedPixels = IntBuffer.allocate(renderWidth*renderHeight);
 		
@@ -179,7 +188,7 @@ public class RayTracer
 	}
 
 	/**
-	 * A partir des informations sur le point d'intersection données en entrée, calcule et renvoie la couleur de la composante diffuse de l'ombrage de Phong au point d'intersection
+	 * A partir des informations sur le point d'intersection données en entrée, calcule et renvoie la couleur de la composante diffuse de l'ombrage de Phong au point d'intersection<br>
 	 * Si le matériau de l'objet n'est pas diffus, la couleur noire rgb(0, 0, 0) est renvoyée
 	 *
 	 * @param intInfos 			Ensemble des informations sur le point d'intersection entre le rayon incident et l'objet qui a été intersecté et dont on souhaite obtenir la couleur diffuse
@@ -201,7 +210,7 @@ public class RayTracer
 	}
 	
 	/**
-	 * A partir d'une couleur donnée en entrée, calcule et renvoie la couleur après application de la composante spéculaire de l'ombrage de Phong pour un matériau et des directions de rayons donnés
+	 * A partir d'une couleur donnée en entrée, calcule et renvoie la couleur après application de la composante spéculaire de l'ombrage de Phong pour un matériau et des directions de rayons donnés<br>
 	 * Si le matériau de l'objet n'est pas spéculaire, la couleur noire rgb(0, 0, 0) est renvoyée
 	 * 
 	 * @param intInfos Ensemble des informations sur le point d'intersection entre le rayon incident et l'objet qui a été intersecté et dont on souhaite obtenir la couleur spéculaire
@@ -225,7 +234,7 @@ public class RayTracer
 	}
 	
 	/**
-	 * A partir d'une couleur donnée en entrée, calcule et renvoie la couleur après application de la réflectivité du matériau.
+	 * A partir d'une couleur donnée en entrée, calcule et renvoie la couleur après application de la réflectivité du matériau.<br>
 	 * Si le matériau de l'objet n'est pas réflexif, la couleur noire rgb(0, 0, 0) est renvoyée
 	 * 
 	 * @param renderScene La scène utilisée pour le rendu
@@ -294,7 +303,7 @@ public class RayTracer
 	}
 	
 	/**
-	 * Calcule les couleurs venant des réfractions et des réflexions d'un objet transparent.
+	 * Calcule les couleurs venant des réfractions et des réflexions d'un objet transparent.<br>
 	 * Si le matériau de l'objet n'est pas réfractif, la couleur noire rgb(0, 0, 0) est renvoyée 
 	 * 
 	 * @param renderScene La scène utilisée pour le rendu
@@ -508,6 +517,7 @@ public class RayTracer
 				pixelColor = ColorOperations.linearTosRGBGamma2_2(pixelColor);
 				
 				this.renderedPixels.put(y*this.renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
+				this.totalPixelComputed.incrementAndGet();
 			}
 		}
 	}
@@ -662,9 +672,9 @@ public class RayTracer
 	}
 
 	/**
-	 * Permet de calculer la prochaine tâche de rendu de la taskList. 
-	 * Cette méthode est exécutée par plusieurs threads en même temps.
-	 * Elle est public afin que TileThread, la classe des threads puisse appeler cette méthode depuis run() des threads 
+	 * Permet de calculer la prochaine tâche de rendu de la taskList.<br> 
+	 * Cette méthode est exécutée par plusieurs threads en même temps.<br>
+	 * Elle est public afin que TileThread, la classe des threads puisse appeler cette méthode depuis run() des threads<br> 
 	 * 
 	 *  @param renderScene La scène qui doit être rendue par le rayTracer
 	 *  @param taskList La liste de tâche préalablement initialisée
@@ -840,7 +850,17 @@ public class RayTracer
 	}
 	
 	/**
-	 * Permet d'obtenir le tableau de pixels correspondant à la dernière image rendue par le RayTracer
+	 * Retourne la progression du rendu de l'image en cours.
+	 * 
+	 * @return Réel entre 0 et 1 représentant le pourcentage de pixels de l'image ayant été calculés jusqu'à présent 
+	 */
+	public double getProgression()
+	{
+		return this.totalPixelComputed.doubleValue() / (double)totalPixelToRender;
+	}
+	
+	/**
+	 * Permet d'obtenir le tableau de pixels correspondant à la dernière image rendue par le RayTracer<br>
 	 * Si aucune image n'a été rendue au préalable, renvoie null
 	 *
 	 * @return Un tableau de Color.RGB(r, g, b) de dimension renderHeight*renderLength. Renvoie null si encore aucune image n'a été rendue
@@ -869,6 +889,9 @@ public class RayTracer
 		this.settings = new RayTracerSettings(renderSettings);//On crée une nouvelle instance de RayTracerSettings pour ne pas "lier dynamiquement" les réglages : cela pourrait causer des déchirement d'image lorsqu'on change les réglages pendant un rendu
 		this.threadTaskList.initTaskList(renderWidth, renderHeight);
 		this.randomGenerator = new Random(0);//On réinitialise le générateur de nombre avec la graine 0
+		this.totalPixelComputed.set(0);
+
+		
 		
 		if(renderScene.hasSkybox())
 			this.skyboxPixelReader = renderScene.getSkyboxPixelReader();

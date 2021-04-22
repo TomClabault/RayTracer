@@ -5,17 +5,20 @@ import materials.textures.*;
 import maths.ColorOperations;
 
 /**
- * Classe permettant définir des matériaux à partir des différentes caractéristiques physiques que peut simuler le rayTracer
+ * Classe permettant définir des matériaux à partir des différentes caractéristiques physiques que peut simuler le rayTracer<br>
+ * <br>
+ * Un matériau est définit par différentes caractéristiques:<br>
  * 
- * Un matériau est définit par différentes caractéristiques:
- * 
- *  - Une caractéristique diffuse: Plus un matériau est diffus, plus la lumière sera renvoyée dans "toute les directions", donnant un aspect mat au matériau
- *  - Une caractéristique spéculaire: Donne de la brillance à l'objet
- *  - Une caractéristique de "brillance" (shininess): Plus cette valeur est haute plus les tâches spéculaires de l'objet seront petites
- *  - Une caractéristique réflective: Plus un matériau est réfléchissant plus il se comportera comme un miroir. 
- *  - Une caractéristique de transparence: Si oui ou non le matériau est transparent. Un matériau transparent réfractera la lumière et aura donc besoin d'un indice de réfraction (décrit ci-dessous) approprié
- *  - Un indice de réfraction: Caractérise à quel point les rayons de lumière sont réfractés par le matériau
- *  - Une dureté: Plus un matériau est dur, plus les rayons de lumières incidents seront dispersés à l'impact avec le matériau  
+ * <ul>
+ 	 * <li> Une caractéristique ambiante: Défini le pourcentage de lumière ambiante que réfléchira le matériau. 0% signifie par exemple que l'objet ne sera éclairé que par la lumière directe de la scène et pas par la luminosité ambiante 	
+	 * <li> Une caractéristique diffuse: Plus un matériau est diffus, plus la lumière sera renvoyée dans "toute les directions", donnant un aspect mat au matériau</li>
+	 * <li> Une caractéristique spéculaire: Donne de la brillance à l'objet</li>
+	 * <li> Une caractéristique de "brillance" (shininess): Plus cette valeur est haute plus les tâches spéculaires de l'objet seront petites</li>
+	 * <li> Une caractéristique réflective: Plus un matériau est réfléchissant plus il se comportera comme un miroir.</li> 
+	 * <li> Une caractéristique de transparence: Si oui ou non le matériau est transparent. Un matériau transparent réfractera la lumière et aura donc besoin d'un indice de réfraction (décrit ci-dessous) approprié</li>
+	 * <li> Un indice de réfraction: Caractérise à quel point les rayons de lumière sont réfractés par le matériau</li>
+	 * <li> Une dureté: Plus un matériau est dur, plus les rayons de lumières incidents seront dispersés à l'impact avec le matériau</li>
+ * </ul>  
  */
 public class Material 
 {	

@@ -10,7 +10,18 @@ import scene.lights.PositionnalLight;
 import util.ImageUtil;
 
 /**
- * Permet de représenter une scène de rendu contenant une caméra, une lumière et une liste de formes
+ * Permet de représenter une scène de rendu.<br>
+ * Une scène doit contenir:
+ * <ul>
+ * 	<li> Une caméra </li>
+ * 	<li> Une ou plusieurs sources de lumière </li>
+ * 	<li> Une ou plusieurs formes </li>
+ * </ul>
+ * 
+ * La scène peut optionellement contenir:
+ * <ul>
+ * 	<li> Une skybox </li>
+ * </ul>
  */
 public class RayTracingScene
 {
