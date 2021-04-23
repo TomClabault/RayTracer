@@ -1,5 +1,6 @@
 La première fenêtre à s'ouvrir sera une fenêtre de choix de fichier.
-L'utilisateur doit sélectionner un fichier POV valide pour que le rendu s'effectue à partir de ce fichier POV.
+L'utilisateur doit sélectionner un fichier POV valide pour que le rendu s'effectue à partir de ce fichier POV. Des fichiers POV
+préfaits sont disponible dans le dossier "resources/povScenes/"
 
 Une fois qu'un fichier POV valide sera sélectionné, une seconde fenêtre s'ouvrira.
 Dans cette fenêtre, l'utilisateur doit entrer la résolution qu'il souhaite pour le rendu.
