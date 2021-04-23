@@ -55,6 +55,7 @@ public abstract class ShapeTriangleUtil
 	
 	/**
 	 * {@link geometry.Shape#getNormal} 
+	 * @deprecated Utiliser 'outNormalAtInter' de {@link geometry.ShapeTriangleUtil#intersect(Ray, Vector)} pour récupérer la normal à un point d'intersection
 	 */
 	public Vector getNormal(Point point)
 	{

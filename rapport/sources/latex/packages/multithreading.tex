@@ -3,11 +3,11 @@
 \begin{document}
 	\label{packageMultithreading}
 	
-	Le package multithreading contient les trois classes qui sont utilisées pour le multithreading de notre ray tracer:
+	Le package multithreading contient les trois classes qui sont utilisées pour la parallélisation des calculs de notre ray tracer:
 	\begin{description}
 		\item [ThreadsTaskList] Maintient la liste des tâches à calculer par les threads
 		\item [TileTask] Représente une tâche à calculer par un thread
-		\item [TileThread] Classe implémentant l'interface Runnable permettant de créer les threads
+		\item [TileThread] Classe héritant de la classe Thread permettant de créer un thread de calcul
 	\end{description}
 	
 	\begin{figure}[h!]
