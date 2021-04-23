@@ -7,7 +7,7 @@ import exceptions.IncompatibleMatricesException;
  */
 public class MatrixD 
 {
-	private double matrix[][];
+	protected double matrix[][];
 	
 	private int m;
 	private int n;
