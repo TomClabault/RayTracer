@@ -33,7 +33,7 @@ enum Attribute
 public abstract class EtatUtil
 {
 
-    int nbBracket = 1;
+    private int nbBracket = 1;
 
     /**
      * Cette méthode sert à renvoyer le prochain état du jeton

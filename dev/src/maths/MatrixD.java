@@ -7,10 +7,10 @@ import exceptions.IncompatibleMatricesException;
  */
 public class MatrixD 
 {
-	double matrix[][];
+	private double matrix[][];
 	
-	int m;
-	int n;
+	private int m;
+	private int n;
 	
 	/**
 	 * Permet de créer une matrice de m lignes et n colonnes dont tous les coefficients sont 0
