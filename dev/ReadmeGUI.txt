@@ -20,4 +20,6 @@ En cliquant sur la fenêtre de rendu, l'utilisateur peut se déplacer.
 - Les touches z,q,s et d servent au déplacement horizontal de la caméra.
 - Les touches a et e servent au déplacement vertical de la caméra.
 
+Des rendus déjà réalisés sont disponibles dans le dossier gallerie.
+
 
