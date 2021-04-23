@@ -18,6 +18,6 @@ La seconde est la Toolbox, elle permet :
 En cliquant sur la fenêtre de rendu, l'utilisateur peut se déplacer.
 - Les flèches du clavier servent à la rotation de la caméra.
 - Les touches z,q,s et d servent au déplacement horizontal de la caméra.
-- Les touches a et e servent au déplacement de la caméra.
+- Les touches a et e servent au déplacement vertical de la caméra.
 
 
