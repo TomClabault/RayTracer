@@ -22,9 +22,9 @@ public class Camera
 	private static final int Y_AXIS = 1;
 	private static final int Z_AXIS = 2;
 	
-	MatrixD CTWMatrix;//Matrice de changement de base entre les coordonnées d'origine du monde [(1, 0, 0), (0, 1, 0), (0, 0, 1)] et les coordoonées de la caméra
+	private MatrixD CTWMatrix;//Matrice de changement de base entre les coordonnées d'origine du monde [(1, 0, 0), (0, 1, 0), (0, 0, 1)] et les coordoonées de la caméra
 	
-	double degreeFOV;//Champ de vision de la caméra
+	private double degreeFOV;//Champ de vision de la caméra
 	
 	/**
 	 * Crée une caméra d'origine le point (0, 0, 0) et de direction (0, 0, -1)
