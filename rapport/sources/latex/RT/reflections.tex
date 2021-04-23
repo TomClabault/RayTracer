@@ -22,7 +22,7 @@ Une autre exigence du sujet (en plus de l'ombrage de Phong section \ref{ombrageP
 	{
 		intersectedObject $\gets$ objet intersecté par $\overrightarrow{R}$\\\hfill\\
 
-		\If(\tcp*[h]{Si l'objet intersecté est réfléchissant}){intersectedObject.isReflexive()}
+		\If(\tcp*[h]{Si l'objet intersecté est réfléchissant}){intersectedObject.getReflectiveCoeff() > 0}
 		{
 			$\overrightarrow{R_{reflect}} \gets$ computeReflectedDirection($\overrightarrow{R}$, $\overrightarrow{normale}$)\\\hfill\\
 
@@ -48,7 +48,7 @@ Avec une scène contenant des sphères réfléchissantes, des sphères mattes et
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=0.5\textwidth]{img/rt/reflectionsDemo.png}}
 
-	\caption{On peut voir une sphère rouge derrière la caméra grâce à la reflexion de la sphère centrale.}
+	\caption{On distingue une sphère rouge derrière la caméra grâce à la reflexion de la sphère centrale.}
 	\label{reflectionsDemo}
 \end{figure}
 \FloatBarrier

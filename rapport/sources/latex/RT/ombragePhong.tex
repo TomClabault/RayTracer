@@ -7,13 +7,13 @@ En appliquant le principe de la section \ref{rayTracingBase}, nous obtenons une 
 \begin{itemize}
 	\item {La composante ambiante. Elle permet de donner une luminosité minimale à la scène.}
 	\item {La composante diffuse. Illumine d'autant plus l'objet que les rayons de lumière le frappe perpendiculairement.}
-	\item {La composante spéculaire. Rend l'objet brillant en tenant compte de l'angle avec lequel les rayons de lumière rebondissent vers la caméra.}
+	\item {La composante spéculaire. Rend l'objet brillant en tenant compte de l'angle avec lequel les rayons de lumière "rebondissent" vers la caméra.}
 \end{itemize}
 
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=0.75\textwidth]{img/rt/phongAddition.png}}
 
-	\caption{Séparation des composantes de l'ombrage de Phong d'une sphère}
+	\caption{Séparation des composantes de l'ombrage de Phong d'une sphère. Les coefficient ambiants, diffus et de spécularité sont indiqués sous les images}
 	\label{finalPhong}
 \end{figure}
 \FloatBarrier

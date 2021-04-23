@@ -3,15 +3,17 @@
 \begin{document}
 
 
-En POV, la définition d'une sphère et d'un plan est exactement la même d'un point de vue syntaxique. Il suffit de donner des coordonnées, définissant le centre pour la sphère, le vecteur normal pour le plan et un nombre, représentant le centre pour la sphère et la distance pour le plan. En temps normal, cela signifie un état pour la sphère et un pour le plan. Cependant, le code à l'intérieur reste le même.
-Afin de gagner en lisibilité et pour factoriser au mieux le code, nous avons donc eu recours à un autre pattern: le pattern Template Method. L'idée de ce pattern est de créer une classe mère abstraite, la classe EtatSpherePlane. Cette classe définit deux types de méthodes:
+En POV, la définition d'une sphère et d'un plan est exactement la même d'un point de vue syntaxique. 
+Afin de gagner en lisibilité et pour factoriser au mieux le code, nous avons donc eu recours à un autre patron de conception: le patron "Template Method".
+L'idée de ce pattern est de créer une classe mère abstraite, la classe EtatSpherePlane. Cette classe définit deux types de méthodes:
 
 \begin{itemize}
 \item abstraites et qui dépendent donc de la figure
 \item concrètes et qui ne dépendent donc pas du type de figure
 \end{itemize}
 
-Dans le cas de notre parser, la seule méthode abstraite est celle qui retourne l'objet parsé, la méthode createInstance. C'est normal car on a besoin de savoir si l'on doit renvoyer une sphère ou un plan.
+Dans le cas de notre parser, la seule méthode abstraite est celle qui retourne l'objet parsé, la méthode createInstance. C'est normal car on a besoin de savoir si
+l'on doit renvoyer une sphère ou un plan.
 
 \begin{figure}[h!]
 	\adjustbox{center}{\includegraphics[width=1\textwidth]{diagrammes/pattern_template_method.png}}

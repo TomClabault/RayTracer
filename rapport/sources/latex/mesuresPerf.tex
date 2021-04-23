@@ -3,7 +3,8 @@
 
 \begin{document}
 
-Comme présenté dans la section \ref{multithreading}, nous application tire partie de toute la puissnce du processeur de la machine. Le but étant de réduire le temps de calcul, nous présentons dans cette section les gains perçus en terme de performances suite au multithreading de notre application.\\
+Comme présenté dans la section \ref{multithreading}, notre application tire partie de toute la puissance du processeur de la machine.
+Le but étant de réduire le temps de calcul, nous présentons dans cette section les gains perçus en terme de performances suite au multithreading de notre application.\\
 Nous comparerons les temps de rendu par image pour différentes résolutions et différents nombre de threads. L'image sera toujours découpée en $nbThread^2$ tuiles.
 
 \begin{figure}[h!]
@@ -14,6 +15,8 @@ Nous comparerons les temps de rendu par image pour différentes résolutions et 
 \end{figure}
 \FloatBarrier
 Toutes les mesures ont été faites sur un CPU disposant de 8 processeurs. La scène rendue est la même que celle de la \figurename\ \ref{reflectionsDemo}.\\
-On observe une réduction significative des temps de rendu quand le nombre de threads utilisé augmente. On passe en effet, pour une résolution de 512*512, de 72.87ms en moyenne à 16.72ms de temps de calcul par image. Cela se traduit par un affichage fluide d'un peu moins de 15 images par seconde avec 1 thread. Avec 8 threads, nous passons à environ 60 images par seconde. Les performances ont donc été multipliées par 4.\\
+On observe une réduction significative des temps de rendu quand le nombre de threads utilisé augmente. On passe en effet, pour une résolution de 512*512,
+de 72.87ms en moyenne à 16.72ms de temps de calcul par image. Cela se traduit par un affichage fluide d'un peu moins de 15 images par seconde avec 1 thread.
+Avec 8 threads, nous passons à environ 60 images par seconde. Les performances ont donc été multipliées par 4.\\
 
 \end{document}

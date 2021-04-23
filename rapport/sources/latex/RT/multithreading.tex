@@ -4,7 +4,10 @@
 \begin{document}
 
 \label{multithreading}
-Les algorithmes de ray tracing sont réputés pour être lents à exécuter. Cependant, chaque pixel pouvant être calculé totalement indépendemment des autres, ces algorithmes sont des cibles parfaites pour la parallélisation de calcul. Nous avons donc mis en place, afin d'accélérer les temps de rendu, un multithreading de l'application grâce aux threads de Java. Pour ce faire, nous découpons l'image à rendre en plusieures "tuiles". Nous construisons ensuite une tâche à partir de chaque tuile. Une tâche consistant en:
+Les algorithmes de ray tracing sont réputés pour être lents à exécuter. Cependant, chaque pixel pouvant être calculé totalement indépendemment des autres,
+ces algorithmes sont des cibles parfaites pour la parallélisation de calcul. Nous avons donc mis en place, afin d'accélérer les temps de rendu, un multithreading de
+l'application grâce aux threads de Java. Pour ce faire, nous découpons l'image à rendre en plusieurs "tuiles". Nous construisons ensuite une tâche à partir de chaque tuile.
+Une tâche consistant en:
 \begin{itemize}
 	\item{Un pixel de départ X et Y sur l'image à rendre}	
 	\item{Un pixel d'arrivée X et Y sur l'image à rendre}
