@@ -4,9 +4,9 @@ import maths.Point;
 
 public class LightBulb implements PositionnalLight 
 {
-	Point center;
+	private Point center;
 	
-	double intensity;
+	private double intensity;
 	
 	public LightBulb(Point center, double lightIntensity)
 	{
