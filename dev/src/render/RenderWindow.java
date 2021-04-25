@@ -245,6 +245,8 @@ public class RenderWindow {
         		futureRenderTask = executortService.submit(renderTask);//On redonne une autre tâche de rendu à faire
         	}
 
+        	RenderWindow.doImage(rayTracer.getRenderedPixels(), pixelWriter, pixelFormat);
+        	
             renderTask.setOnSucceeded((succeededEvent) -> {
             	IntBuffer pixelBuffer = renderTask.getValue();
             	RenderWindow.doImage(pixelBuffer, pixelWriter, pixelFormat);

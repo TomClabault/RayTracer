@@ -120,6 +120,8 @@ public class RayTracer
 		this.totalPixelComputed = new AtomicInteger();
 		
 		this.renderedPixels = IntBuffer.allocate(renderWidth*renderHeight);
+		for(int i = 0; i < renderWidth * renderHeight; i++)
+			this.renderedPixels.put(i, ColorOperations.aRGB2Int(Color.rgb(0, 0, 0)));
 		
 		this.threadTaskList = new ThreadsTaskList();
 		this.randomGenerator= new Random();

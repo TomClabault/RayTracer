@@ -1,6 +1,9 @@
 package render;
 
 import javafx.scene.Scene;
+
+import java.net.URL;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.GridPane;
@@ -24,7 +27,17 @@ public class SetSizeWindow
         Stage stage = new Stage();
         GridPane root = new GridPane();
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(SetSizeWindow.class.getResource("style/window.css").toExternalForm());
+        
+        URL styleURL = SetSizeWindow.class.getResource("style/window.css");
+        if(styleURL == null)
+        {
+        	System.out.println("Impossible de trouver le style de SetSizeWindow");
+        	
+        	Platform.exit();
+        	System.exit(0);
+        }
+        	
+        scene.getStylesheets().add(styleURL.toExternalForm());
 
         stage.setScene(scene);
         stage.setTitle("Selection de la taille de rendu");

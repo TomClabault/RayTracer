@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -56,6 +57,20 @@ public class MainApp extends Application {
      */
     public static boolean AUTO_MODE;
 
+    public File choosePOVFile(Stage stage)
+    {
+	   	ExtensionFilter filter = new ExtensionFilter("POV", "*.pov");
+    	FileChooser fileChooser = new FileChooser();
+    	
+    	fileChooser.setInitialDirectory(new File("."));
+	   	fileChooser.setTitle("Selectionnez un fichier POV");
+	   	fileChooser.getExtensionFilters().add(filter);
+	   	
+	   	File file = fileChooser.showOpenDialog(stage);
+	   	
+	   	return file;
+    }
+    
     /**
      * La méthode main de java
      * @param args
@@ -72,20 +87,17 @@ public class MainApp extends Application {
      */
     public void start(Stage stage) 
     {
-        FileChooser fileChooser = new FileChooser();
-	   	fileChooser.setTitle("Selectionnez un fichier POV");
-	   	ExtensionFilter filter = new ExtensionFilter("POV", "*.pov");
-	   	fileChooser.getExtensionFilters().add(filter);
-	   	File file = fileChooser.showOpenDialog(stage);
-	   	if (file == null) {
-	   		Platform.exit();
+    	File povFile = choosePOVFile(stage);
+    	if(povFile == null)//L'utilisateur n'a pas choisi de fichier / a annulé
+    	{
+    		Platform.exit();
     		System.exit(0);
-		}
+    	}
 
 	   	RayTracingScene rayTracingScene = new RayTracingScene();
 	   	try
 	   	{
-	   		rayTracingScene = Automat.parsePov(file);
+	   		rayTracingScene = Automat.parsePov(povFile);
 	   	}
 	   	catch(InvalidParallelepipedException recExc)
 	   	{
