@@ -83,7 +83,7 @@ public class RenderWindowOld {
         
         this.renderScene = new Scene(stackPane);
         
-        this.renderScene.getStylesheets().add(MainApp.class.getResource("style/fpsCounter.css").toExternalForm());
+        this.renderScene.getStylesheets().add(RenderWindowOld.class.getResource("style/fpsCounter.css").toExternalForm());
         
         WindowTimer windowTimer = new WindowTimer(this.renderScene, this.rayTracer, this.rayTracerSettings, this.rayTracingScene, this.pixelWriter);
         statPane.getChildren().add(windowTimer.getfpsLabel());

@@ -21,6 +21,8 @@ public class ToolboxSaveButton extends Button
 		
 		this.windowStage = windowStage;
 		this.writableImage = writableImage;
+		
+		this.setOnAction(this::buttonCallback);
 	}
 	
 	public void buttonCallback(ActionEvent event)
