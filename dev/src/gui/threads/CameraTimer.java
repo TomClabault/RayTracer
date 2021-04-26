@@ -1,4 +1,4 @@
-package render;
+package gui.threads;
 
 import maths.Point;
 import maths.Vector;
@@ -48,7 +48,7 @@ public class CameraTimer extends AnimationTimer {
             @Override
             public void handle(KeyEvent event) 
             {
-            	synchronized(scene)
+            	synchronized(rayTracingScene)
             	{
 	                if (event.getCode() == KeyCode.E) {
 	                    upCamera();

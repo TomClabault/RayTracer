@@ -99,6 +99,7 @@ public class RayTracer
 	
 	private int renderWidth;
 	private int renderHeight;
+	private boolean renderDone;
 	
 	/*
 	 * Variables utilisées pour calculer la progression du rendu
@@ -116,6 +117,8 @@ public class RayTracer
 	{
 		this.renderWidth = renderWidth;
 		this.renderHeight = renderHeight;
+		this.renderDone = false;
+		
 		this.totalPixelToRender = renderWidth * renderHeight;
 		this.totalPixelComputed = new AtomicInteger();
 		
@@ -467,7 +470,7 @@ public class RayTracer
 			localRandomGenerator = ((TileThread)currentThread).getLocalRandomGenerator();
 		else
 			localRandomGenerator = this.randomGenerator;
-		localRandomGenerator.setSeed(Integer.parseInt(String.format("%d%d", startX, startY)));//On réinitialise la graine du générateur pour la tuile à calculer avec un nombre
+		localRandomGenerator.setSeed(Long.parseLong(String.format("%d%d", startX, startY)));//On réinitialise la graine du générateur pour la tuile à calculer avec un nombre
 		//unique construit à partir des coordonnées de départ de la tuile
 		
 		MatrixD ctwMatrix = renderScene.getCamera().getCTWMatrix();
@@ -873,6 +876,16 @@ public class RayTracer
 	}
 	
 	/**
+	 * @return True si le rendu de l'image actuelle est terminée. False sinon.
+	 * Ne s'applique potentiellement que dans le cas où le rayTracer ne calcule qu'une image. En calculant plusieurs images, en temps
+	 * réel, le rayTracer sera toujours en train de calculer un rendu et cette fonction renverra false la grande majorité du temps
+	 */
+	public boolean isRenderDone()
+	{
+		return this.renderDone;
+	}
+	
+	/**
 	 * Calcule le rendu de la scène donnée avec les réglages donnés
 	 * 
 	 * @param renderScene La scène à rendre
@@ -888,6 +901,7 @@ public class RayTracer
 			return this.getRenderedPixels();//Sera probablement noir puisque la scène n'est pas valide et donc aucun pixel n'a été calculé
 		}
 		
+		this.renderDone = false;
 		this.settings = new RayTracerSettings(renderSettings);//On crée une nouvelle instance de RayTracerSettings pour ne pas "lier dynamiquement" les réglages : cela pourrait causer des déchirement d'image lorsqu'on change les réglages pendant un rendu
 		this.threadTaskList.initTaskList(renderWidth, renderHeight);
 		this.randomGenerator = new Random(0);//On réinitialise le générateur de nombre avec la graine 0
@@ -905,6 +919,8 @@ public class RayTracer
 			this.computeTask(renderScene, threadTaskList);
 
 		this.threadTaskList.resetTasksProgression();
+		
+		this.renderDone = true;
 		return this.getRenderedPixels();
 	}
 	

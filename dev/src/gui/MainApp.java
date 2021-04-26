@@ -1,18 +1,28 @@
-package render;
+package gui;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelFormat;
 import javafx.scene.paint.Color;
 
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import exceptions.InvalidParallelepipedException;
 import exceptions.InvalidSphereException;
 import geometry.Shape;
 import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
+import gui.threads.RefreshRenderThread;
+import gui.threads.RenderTask;
+import gui.toolbox.Toolbox;
+import gui.windows.ChooseRenderSettingsWindow;
+import gui.windows.RenderWindow;
+import gui.windows.RenderWindowOld;
+import gui.windows.SaveRenderWindow;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -42,11 +52,11 @@ import scene.lights.PositionnalLight;
 */
 public class MainApp extends Application {
     /**
-     * La hauteur de la résolution de la fenêtre du rendu définie par {@link render.SetSizeWindow}
+     * La hauteur de la résolution de la fenêtre du rendu définie par {@link gui.windows.ChooseRenderSettingsWindow}
     */
     public static int HEIGHT;
     /**
-     * La largeur de la résolution de la fenêtre du rendu définie par {@link render.SetSizeWindow}
+     * La largeur de la résolution de la fenêtre du rendu définie par {@link gui.windows.ChooseRenderSettingsWindow}
     */
     public static int WIDTH;
 
@@ -55,8 +65,14 @@ public class MainApp extends Application {
      *
      * Le mode automatique maximize la fenêtre de rendu et étire le rendu, le rendu devient pixélisé si la résolution du rendu est inférieur à la taille de la fenêtre
      */
-    public static boolean AUTO_MODE;
+    public static boolean FULLSCREEN_MODE;
 
+    /**
+     * True si le ray tracer ne doit rendre qu'une image et arrêter les calculs. False si le RayTracer doit rendre les images en temps
+     * réel (autorise ainsi les mouvements de caméra)
+     */
+    public static boolean SIMPLE_RENDER;
+    
     public File choosePOVFile(Stage stage)
     {
 	   	ExtensionFilter filter = new ExtensionFilter("POV", "*.pov");
@@ -128,20 +144,35 @@ public class MainApp extends Application {
 		    rayTracingScene.setSkybox(skybox);
 	   	}
 
-	   	SetSizeWindow setSizeWindow = new SetSizeWindow();
+        RayTracerSettings rayTracerSettings = new RayTracerSettings(8, 4, 9, 4);
+       
+	   	ChooseRenderSettingsWindow setSizeWindow = new ChooseRenderSettingsWindow(rayTracerSettings);
         setSizeWindow.execute();
 
-        RayTracer rayTracer = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT);
-        RayTracerSettings rayTracerSettings = new RayTracerSettings(8, 4, 9, 4);
-        rayTracerSettings.enableAntialiasing(false);
-        rayTracerSettings.enableBlurryReflections(true);
+	   	RayTracer rayTracer = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT);
 
-    	RenderWindow renderWindow = new RenderWindow(stage, rayTracer, rayTracingScene, rayTracerSettings);
-        renderWindow.execute();
+        if(!MainApp.SIMPLE_RENDER)//On lance le rendu en temps réel s'il est désiré
+        {
+        	RenderWindowOld renderWindow = new RenderWindowOld(stage, rayTracer, rayTracingScene, rayTracerSettings);
+        	renderWindow.execute();
 
-        Toolbox toolbox = new Toolbox(renderWindow.getRenderScene(), renderWindow.getStatPane(), renderWindow.getProgressBar(), rayTracerSettings, renderWindow.getWritableImage());
-        toolbox.execute();
-
+        	Toolbox toolbox = new Toolbox(renderWindow.getStatPane(), renderWindow.getProgressBar(), rayTracerSettings, renderWindow.getWritableImage());
+        	toolbox.execute();
+        }
+        else
+        {
+        	RenderWindow renderWindow = new RenderWindow(stage);
+        	
+        	RefreshRenderThread refreshRenderThread = new RefreshRenderThread(rayTracer, renderWindow.getPixelWriter(), PixelFormat.getIntArgbInstance());
+        	refreshRenderThread.start();
+        	
+        	SaveRenderWindow saveRenderWindow = new SaveRenderWindow(renderWindow.getWritableImage());
+        	
+        	ExecutorService executorService = Executors.newFixedThreadPool(1);
+        	executorService.submit(new RenderTask(renderWindow.getPixelWriter(), PixelFormat.getIntArgbInstance(), rayTracer, rayTracingScene, rayTracerSettings));
+        	//TODO (tom) faire un refresh thread qu'on pourra utiliser ici pour refresh l'affichage pendant le rendu et qu'on pourra utiliser
+        	//dans renderWindow pour ne pas bloquer l'interface pendant les lourds rendus
+        }
 
 
         stage.setOnCloseRequest(new EventHandler<WindowEvent>(){

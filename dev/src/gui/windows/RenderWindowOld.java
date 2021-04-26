@@ -1,10 +1,13 @@
-package render;
+package gui.windows;
 
 import java.nio.IntBuffer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import gui.MainApp;
+import gui.threads.CameraTimer;
+import gui.threads.RenderTask;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -27,13 +30,13 @@ import scene.RayTracingScene;
 /**
 * La classe gérant la fenêtre principale contenant le rendu.
 */
-public class RenderWindow {
+public class RenderWindowOld {
 
     private WritableImage writableImage;
     private PixelWriter pixelWriter;
     private CameraTimer cameraTimer;
     private WindowTimer windowTimer;
-    private DoImageTask task;
+    private RenderTask task;
     private RayTracer rayTracer;
     private RayTracingScene rayTracingScene;
     private RayTracerSettings rayTracerSettings;
@@ -48,7 +51,7 @@ public class RenderWindow {
      * @param rayTracingScene La scène 3d à utiliser
      * @param rayTracerSettings les paramêtres allant avec l'instance du RayTracer
      */
-    public RenderWindow(Stage stage, RayTracer rayTracer, RayTracingScene rayTracingScene, RayTracerSettings rayTracerSettings)
+    public RenderWindowOld(Stage stage, RayTracer rayTracer, RayTracingScene rayTracingScene, RayTracerSettings rayTracerSettings)
     {
         this.rayTracer = rayTracer;
         this.rayTracingScene = rayTracingScene;
@@ -61,7 +64,7 @@ public class RenderWindow {
         ImageView imageView = new ImageView();
         imageView.setImage(writableImage);
         
-        if(MainApp.AUTO_MODE == true) {
+        if(MainApp.FULLSCREEN_MODE == true) {
         	Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
 			imageView.setFitHeight(primaryScreenBounds.getHeight());
 	        imageView.setFitWidth(primaryScreenBounds.getWidth());
@@ -92,7 +95,7 @@ public class RenderWindow {
         this.cameraTimer = new CameraTimer(this.renderScene, rayTracingScene);
         stage.setTitle("Rendu");
         stage.setScene(this.renderScene);
-        stage.setMaximized(MainApp.AUTO_MODE);
+        stage.setMaximized(MainApp.FULLSCREEN_MODE);
         stage.show();
     }
     /**
@@ -155,12 +158,12 @@ public class RenderWindow {
      * Retourne la tâche javafx responsable de l'exécution du calcul de rendu.
      * @return this.task
      */
-    public DoImageTask getTask() {
+    public RenderTask getTask() {
     	return this.task;
     }
 
     /**
-     * Méthode éxècutant la classe privée {@link WindowTimer} et {@link render.CameraTimer}
+     * Méthode éxècutant la classe privée {@link WindowTimer} et {@link gui.threads.CameraTimer}
      */
     public void execute() {
     	windowTimer.start();
@@ -191,7 +194,7 @@ public class RenderWindow {
         private Label fpsLabel;
 
         private WritablePixelFormat<IntBuffer> pixelFormat;
-        private ExecutorService executortService;
+        private ExecutorService executorService;
         private Scene mainAppScene;
         private RayTracer rayTracer;
         
@@ -218,7 +221,7 @@ public class RenderWindow {
             this.progressBar = new ProgressBar();
             this.mainAppScene = scene;
             this.pixelFormat = PixelFormat.getIntArgbPreInstance();
-            this.executortService = Executors.newFixedThreadPool(1);
+            this.executorService = Executors.newFixedThreadPool(1);
 
         }
         /**
@@ -239,17 +242,15 @@ public class RenderWindow {
          */
         @Override
         public void handle(long actualFrameTime){
-        	DoImageTask renderTask = new DoImageTask(mainAppScene, pixelWriter, PixelFormat.getIntArgbPreInstance(), rayTracer, rayTracingScene, rayTracerSettings);
+        	RenderTask renderTask = new RenderTask(pixelWriter, this.pixelFormat, rayTracer, rayTracingScene, rayTracerSettings);
         	this.progressBar.setProgress(rayTracer.getProgression());
         	if(futureRenderTask == null || futureRenderTask.isDone()){//Si aucune tâche n'a encore été donnée ou si la tâche est terminée
-        		futureRenderTask = executortService.submit(renderTask);//On redonne une autre tâche de rendu à faire
+        		futureRenderTask = executorService.submit(renderTask);//On redonne une autre tâche de rendu à faire
         	}
 
-        	RenderWindow.doImage(rayTracer.getRenderedPixels(), pixelWriter, pixelFormat);
-        	
             renderTask.setOnSucceeded((succeededEvent) -> {
             	IntBuffer pixelBuffer = renderTask.getValue();
-            	RenderWindow.doImage(pixelBuffer, pixelWriter, pixelFormat);
+            	RenderWindowOld.doImage(pixelBuffer, pixelWriter, this.pixelFormat);
             	float dif = actualFrameTime - oldFrameTime;
                 dif  = 1000000000.0f / dif;
                 this.oldFrameTime = actualFrameTime;
