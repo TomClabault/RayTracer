@@ -108,6 +108,8 @@ public class RayTracer
 	private int totalPixelToRender;
 	
 	private RayTracerSettings settings;
+	private RayTracerStats rtStats;
+	
 	private ThreadsTaskList threadTaskList;
 	private IntBuffer renderedPixels;
 	private PixelReader skyboxPixelReader = null;
@@ -118,6 +120,8 @@ public class RayTracer
 		this.renderWidth = renderWidth;
 		this.renderHeight = renderHeight;
 		this.renderDone = false;
+		
+		this.rtStats = new RayTracerStats();
 		
 		this.totalPixelToRender = renderWidth * renderHeight;
 		this.totalPixelComputed = new AtomicInteger();
@@ -166,6 +170,8 @@ public class RayTracer
 
 			Vector newNormalAtInter = new Vector(0, 0, 0);//Ce vecteur va temporairement stocker la normale au point d'intersection trouvé (s'il existe). Si le point d'intersection trouvé et plus proche que les autres, c'est alors cette normale que l'on gardera
 			Point intersection = object.intersect(ray, newNormalAtInter);
+			this.rtStats.incrementIntersectionTestsDone();
+			
 			if(intersection != null)
 			{
 				distRayOriInter = Point.distance(ray.getOrigin(), intersection);
@@ -293,7 +299,7 @@ public class RayTracer
 					reflectDirection = randomBounceDirection;
 				}
 					
-				Color reflectionColor = computePixel(renderScene, new Ray(intInfos.getIntPShift(), reflectDirection), depth - 1);
+				Color reflectionColor = traceRay(renderScene, new Ray(intInfos.getIntPShift(), reflectDirection), depth - 1);
 				
 				summedRed += (int)(reflectionColor.getRed()*255);
 				summedGreen += (int)(reflectionColor.getGreen()*255);
@@ -339,7 +345,7 @@ public class RayTracer
 			if(intObjMat.getIsTransparent())//L'objet est transparent, on va donc calculer les rayons réfractés à l'intérieur de l'objet
 			{
 				if (! refractedRayDir.equals(new Vector(0,0,0)) ) {
-					refractedColor = computePixel(renderScene, refractedRay, depth -1);
+					refractedColor = traceRay(renderScene, refractedRay, depth -1);
 				}
 			}
 			
@@ -371,7 +377,7 @@ public class RayTracer
 			reflectedRay = new Ray(Point.translateMul(rayInterPoint, incidentRayDir, -EPSILON_SHIFT), computeReflectionVector(normalAtInter, incidentRayDir));
 		
 		Color reflectedColor = Color.rgb(0, 0, 0);
-		reflectedColor = computePixel(renderScene, reflectedRay, depth -1);
+		reflectedColor = traceRay(renderScene, reflectedRay, depth -1);
 		
 		return ColorOperations.mulColor(reflectedColor, reflectedLightRatio);
 	}
@@ -507,7 +513,7 @@ public class RayTracer
 					Ray cameraRay = new Ray(MatrixD.mulPointP(new Vector(0, 0, 0), ctwMatrix), rayDirection);
 					cameraRay.normalize();
 	
-					Color subpixelColor = this.computePixel(renderScene, cameraRay, settings.getRecursionDepth());
+					Color subpixelColor = this.traceRay(renderScene, cameraRay, settings.getRecursionDepth());
 
 					summedRed += (int)(subpixelColor.getRed()*255);
 					summedGreen += (int)(subpixelColor.getGreen()*255);
@@ -536,8 +542,10 @@ public class RayTracer
 	 *
 	 * @return La couleur du pixel que traverse le rayon incident 'ray'
 	 */
-	protected Color computePixel(RayTracingScene renderScene, Ray ray, int depth)
+	protected Color traceRay(RayTracingScene renderScene, Ray ray, int depth)
 	{
+		this.rtStats.incrementNbRaysShot();
+		
 		if(depth == 0)
 			return Color.BLACK;
 

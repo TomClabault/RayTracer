@@ -18,11 +18,11 @@ import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
 import gui.threads.RefreshRenderThread;
 import gui.threads.RenderTask;
+import gui.toolbox.SimpleRenderToolbox;
 import gui.toolbox.Toolbox;
 import gui.windows.ChooseRenderSettingsWindow;
 import gui.windows.RenderWindow;
 import gui.windows.RenderWindowOld;
-import gui.windows.SaveRenderWindow;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -166,7 +166,7 @@ public class MainApp extends Application {
         	RefreshRenderThread refreshRenderThread = new RefreshRenderThread(rayTracer, renderWindow.getPixelWriter(), PixelFormat.getIntArgbInstance());
         	refreshRenderThread.start();
         	
-        	SaveRenderWindow saveRenderWindow = new SaveRenderWindow(renderWindow.getWritableImage());
+        	SimpleRenderToolbox saveRenderWindow = new SimpleRenderToolbox(renderWindow.getWritableImage(), renderWindow.getStatsPane());
         	
         	ExecutorService executorService = Executors.newFixedThreadPool(1);
         	executorService.submit(new RenderTask(renderWindow.getPixelWriter(), PixelFormat.getIntArgbInstance(), rayTracer, rayTracingScene, rayTracerSettings));
