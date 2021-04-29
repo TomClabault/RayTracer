@@ -884,6 +884,14 @@ public class RayTracer
 	}
 	
 	/**
+	 * @return Les statistiques du ray tracer. Notamment, combien de rayons ont été lancés, combien d'intersections ont été testées, ...
+	 */
+	public RayTracerStats getStats()
+	{
+		return this.rtStats;
+	}
+	
+	/**
 	 * @return True si le rendu de l'image actuelle est terminée. False sinon.
 	 * Ne s'applique potentiellement que dans le cas où le rayTracer ne calcule qu'une image. En calculant plusieurs images, en temps
 	 * réel, le rayTracer sera toujours en train de calculer un rendu et cette fonction renverra false la grande majorité du temps

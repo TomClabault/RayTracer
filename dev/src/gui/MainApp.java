@@ -16,7 +16,7 @@ import exceptions.InvalidSphereException;
 import geometry.Shape;
 import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
-import gui.threads.RefreshRenderThread;
+import gui.threads.RefreshSimpleRenderThread;
 import gui.threads.RenderTask;
 import gui.toolbox.SimpleRenderToolbox;
 import gui.toolbox.Toolbox;
@@ -163,7 +163,7 @@ public class MainApp extends Application {
         {
         	RenderWindow renderWindow = new RenderWindow(stage);
         	
-        	RefreshRenderThread refreshRenderThread = new RefreshRenderThread(rayTracer, renderWindow.getPixelWriter(), PixelFormat.getIntArgbInstance());
+        	RefreshSimpleRenderThread refreshRenderThread = new RefreshSimpleRenderThread(rayTracer, renderWindow.getPixelWriter(), PixelFormat.getIntArgbInstance(), renderWindow.getStatsPane());
         	refreshRenderThread.start();
         	
         	SimpleRenderToolbox saveRenderWindow = new SimpleRenderToolbox(renderWindow.getWritableImage(), renderWindow.getStatsPane());

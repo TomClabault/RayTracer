@@ -1,8 +1,11 @@
 package gui.windows;
 
 import gui.MainApp;
+import gui.panes.StatsPane;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -24,7 +27,7 @@ public class RenderWindow
 
 	private Label rayTracerStatsLabel;
 	
-	private Pane statsPane; 
+	private StatsPane statsPane; 
 	
 	public RenderWindow(Stage stage)
 	{
@@ -42,33 +45,11 @@ public class RenderWindow
 		StackPane panes = new StackPane();
 		
 		
-		
 		Pane mainPane = new Pane(imageView);
-		GridPane statsPane = new GridPane();
-		ColumnConstraints column1 = new ColumnConstraints();
-		ColumnConstraints column2 = new ColumnConstraints();
-		RowConstraints row1 = new RowConstraints();
-		RowConstraints row2 = new RowConstraints();
-		column1.setPercentWidth(50);
-		column2.setPercentWidth(50);
-		row1.setPercentHeight(50);
-		row2.setPercentHeight(50);
-		
-		statsPane.getColumnConstraints().addAll(column1, column2);
-		statsPane.getRowConstraints().addAll(row1, row2);
-		statsPane.setAlignment(Pos.TOP_RIGHT);
-		
-		this.rayTracerStatsLabel = new Label("1");
-		this.rayTracerStatsLabel.setAlignment(Pos.TOP_RIGHT);
-		statsPane.add(new Label("0"), 0, 0);
-		statsPane.add(new Label("2"), 0, 1);
-		statsPane.add(new Label("3"), 1, 1);
-		statsPane.add(rayTracerStatsLabel, 1, 0);
-		
-		
+		this.statsPane = new StatsPane();
 		
 		panes.getChildren().add(mainPane);
-		panes.getChildren().add(statsPane);
+		panes.getChildren().add(this.statsPane);
 		Scene renderScene = new Scene(panes);
 		
 		stage.setScene(renderScene);
@@ -81,7 +62,7 @@ public class RenderWindow
 		return this.pixelWriter;
 	}
 	
-	public Pane getStatsPane()
+	public StatsPane getStatsPane()
 	{
 		return this.statsPane;
 	}

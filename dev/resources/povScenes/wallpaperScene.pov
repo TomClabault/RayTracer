@@ -18,10 +18,10 @@ plane
 	{
 		ambient 1 
 		diffuse 1
-		reflection 0.5
+		reflection 0.25
 		specular 0.125
 		phong_size 3
-		roughness 0.85
+		roughness 1
 	}
     pigment
     {
