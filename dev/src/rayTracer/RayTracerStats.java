@@ -1,33 +1,38 @@
 package rayTracer;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 public class RayTracerStats 
 {
-	private long nbRaysShot;
-	private long nbIntersectionTestsDone;
+	private AtomicLong nbRaysShot;
+	private AtomicLong nbIntersectionTestsDone;
 	
 	public RayTracerStats() 
 	{
-		this.nbRaysShot = 0;
-		this.nbIntersectionTestsDone = 0;
+		this.nbRaysShot = new AtomicLong();
+		this.nbIntersectionTestsDone = new AtomicLong();
+		
+		this.nbRaysShot.set(0);
+		this.nbIntersectionTestsDone.set(0);
 	}
 	
 	public void incrementNbRaysShot()
 	{
-		this.nbRaysShot++;
+		this.nbRaysShot.incrementAndGet();
 	}
 	
 	public void incrementIntersectionTestsDone()
 	{
-		this.nbIntersectionTestsDone++;
+		this.nbIntersectionTestsDone.incrementAndGet();
 	}
 	
 	public long getNbRaysShot()
 	{
-		return this.nbRaysShot;
+		return this.nbRaysShot.get();
 	}
 	
 	public long getIntersectionTestsDone()
 	{
-		return this.nbIntersectionTestsDone;
+		return this.nbIntersectionTestsDone.get();
 	}
 }

@@ -3,12 +3,12 @@ package geometry.shapes;
 import materials.Material;
 import maths.Point;
 import geometry.Shape;
-import geometry.ShapeTriangleUtil;
+import geometry.ArbitraryTriangleShape;
 
 import java.util.ArrayList;
 
 
-public class Pyramide extends ShapeTriangleUtil implements Shape
+public class Pyramide extends ArbitraryTriangleShape implements Shape
 {
     /*Imagine une pyramide ABCDE
 

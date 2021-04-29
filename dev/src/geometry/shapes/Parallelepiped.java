@@ -5,14 +5,14 @@ import materials.MatteMaterial;
 import javafx.scene.paint.Color;
 import maths.Point;
 import geometry.Shape;
-import geometry.ShapeTriangleUtil;
+import geometry.ArbitraryTriangleShape;
 
 import java.util.ArrayList;
 
 import exceptions.InvalidParallelepipedException;
 
 
-public class Parallelepiped extends ShapeTriangleUtil implements Shape
+public class Parallelepiped extends ArbitraryTriangleShape implements Shape
 {
 
 	private double height,width,length;

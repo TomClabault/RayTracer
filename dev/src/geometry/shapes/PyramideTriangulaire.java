@@ -3,11 +3,11 @@ package geometry.shapes;
 import materials.Material;
 import maths.Point;
 import geometry.Shape;
-import geometry.ShapeTriangleUtil;
+import geometry.ArbitraryTriangleShape;
 
 import java.util.ArrayList;
 
-public class PyramideTriangulaire extends ShapeTriangleUtil implements Shape
+public class PyramideTriangulaire extends ArbitraryTriangleShape implements Shape
 {
 
     /*

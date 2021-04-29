@@ -12,8 +12,8 @@ public class ShowStatsCheckbox extends CheckBox
 	{
 		super(text);
 		
-		this.selectedProperty().addListener(this::checkboxCallback);
 		this.setSelected(true);
+		this.selectedProperty().addListener(this::checkboxCallback);
 		
 		this.statsPane = statPane;
 	}

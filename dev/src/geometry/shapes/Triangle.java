@@ -1,13 +1,13 @@
 package geometry.shapes;
 
 import geometry.Shape;
-import geometry.ShapeTriangleUtil;
+import geometry.ArbitraryTriangleShape;
 import materials.Material;
 import maths.Point;
 import maths.Ray;
 import maths.Vector;
 
-public class Triangle extends ShapeTriangleUtil implements Shape
+public class Triangle extends ArbitraryTriangleShape implements Shape
 {
 	private Point A, B, C;
 	

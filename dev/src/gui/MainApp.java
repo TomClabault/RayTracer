@@ -8,11 +8,14 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import exceptions.InvalidParallelepipedException;
 import exceptions.InvalidSphereException;
+import geometry.ArbitraryTriangleShape;
 import geometry.Shape;
 import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
@@ -39,7 +42,8 @@ import materials.textures.ProceduralTextureCheckerboard;
 import maths.ColorOperations;
 import maths.Point;
 import maths.Vector;
-import povParser.Automat;
+import parsers.plyParser.PlyParser;
+import parsers.povParser.PovAutomat;
 import rayTracer.RayTracer;
 import rayTracer.RayTracerSettings;
 import scene.Camera;
@@ -73,13 +77,23 @@ public class MainApp extends Application {
      */
     public static boolean SIMPLE_RENDER;
     
-    public File choosePOVFile(Stage stage)
+    /**
+     * Ouvre un explorateur de fichier et demande à l'utilisateur de choisir un fichier d'une ou plusieurs
+     * extensions autorisées par 'extensions' 
+     * 
+     * @param stage La fenêtre mère de l'explorateur de fichier
+     * @param description La description des types de fichiers acceptés
+     * @param extensions La liste des extensions de fichiers qui seront autorisées pour le choix du fichier
+     * 
+     * @return Le fichier choisi par l'utilisateur. Null si aucun fichier n'a été choisi
+     */
+    public static File chooseFile(Stage stage, String description, String... extensions)
     {
-	   	ExtensionFilter filter = new ExtensionFilter("POV", "*.pov");
+	   	ExtensionFilter filter = new ExtensionFilter(description, extensions);
     	FileChooser fileChooser = new FileChooser();
     	
     	fileChooser.setInitialDirectory(new File("."));
-	   	fileChooser.setTitle("Selectionnez un fichier POV");
+	   	fileChooser.setTitle("Selectionnez un fichier");
 	   	fileChooser.getExtensionFilters().add(filter);
 	   	
 	   	File file = fileChooser.showOpenDialog(stage);
@@ -96,6 +110,16 @@ public class MainApp extends Application {
         Application.launch(args);
 
     }
+    
+    public static String getFileExtension(File file)
+    {
+    	String fileName = file.getName();
+    	if(fileName.lastIndexOf('.') != -1)
+    		return fileName.substring(fileName.lastIndexOf('.'));
+    	
+    	return "";
+    }
+    
     /**
      * Contient la méthode à Override de {@link javafx.application.Application}
      * Elle est exécutée dans le main
@@ -103,8 +127,9 @@ public class MainApp extends Application {
      */
     public void start(Stage stage) 
     {
-    	File povFile = choosePOVFile(stage);
-    	if(povFile == null)//L'utilisateur n'a pas choisi de fichier / a annulé
+    	File fileChosen = chooseFile(stage, "POV, PLY", "*.pov", "*.ply");
+    
+    	if(fileChosen == null)//L'utilisateur n'a pas choisi de fichier / a annulé
     	{
     		Platform.exit();
     		System.exit(0);
@@ -113,7 +138,20 @@ public class MainApp extends Application {
 	   	RayTracingScene rayTracingScene = new RayTracingScene();
 	   	try
 	   	{
-	   		rayTracingScene = Automat.parsePov(povFile);
+	   		String fileExtension = getFileExtension(fileChosen);
+	   		
+	   		if(fileExtension.equals(".pov"))
+	   			rayTracingScene = PovAutomat.parsePov(fileChosen);
+	   		else if(fileExtension.equals(".ply"))
+	   		{
+	   			rayTracingScene = createBaselineScene();
+	   			
+	   			PlyParser plyParser = new PlyParser(new MirrorMaterial(0.75));
+	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
+	   			
+	   			rayTracingScene.addShape(plyFileShape);
+	   		}
+	   				   		
 	   	}
 	   	catch(InvalidParallelepipedException recExc)
 	   	{
@@ -184,6 +222,34 @@ public class MainApp extends Application {
         });
     }
 
+    public RayTracingScene createBaselineScene()
+    {
+    	Camera cameraRT = new Camera(new Point(0.000, 0.5, 2), 0, 0, 40);
+        PositionnalLight l = new LightBulb(new Point(2, 2, 1), 1);
+
+        ArrayList<Shape> shapeList = new ArrayList<>();
+        shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
+
+        Image skybox = null;
+        URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
+        if(skyboxURL != null)
+        		skybox = new Image(skyboxURL.toExternalForm());
+
+        RayTracingScene sceneRT = null;
+        try
+        {
+        	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1, skybox);
+        }
+        catch (IllegalArgumentException exception)//Skybox mal chargée
+        {
+        	System.err.println(exception.getMessage() + System.lineSeparator() + "Aucune skybox ne sera utilisée.");
+        	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1);
+        }
+
+        sceneRT.addLight(new LightBulb(new Point(-2, 2.5, 1.440), 1));
+        return sceneRT;
+    }
+    
     /**
      * La méthode de test pour ajouter des éléments 3d à une scène
      * @deprecated Les éléments doivent désormais être importés à l'aide d'un fichier POV

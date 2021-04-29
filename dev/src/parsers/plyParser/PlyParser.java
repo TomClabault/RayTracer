@@ -1,0 +1,239 @@
+package parsers.plyParser;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StreamTokenizer;
+import java.util.ArrayList;
+
+import exceptions.PlyParsingException;
+import geometry.ArbitraryTriangleShape;
+import geometry.shapes.Triangle;
+import javafx.application.Platform;
+import javafx.scene.paint.Color;
+import materials.Material;
+import materials.MatteMaterial;
+import maths.Point;
+
+public class PlyParser 
+{
+	private long nbVertices;
+	private long nbTriangles;
+	
+	private ArrayList<Point> vertices;
+	
+	private ArbitraryTriangleShape parsedShape;
+	private Material material;
+	
+	/**
+	 * @param shapeMaterial Matériau qui sera utilisé pour 'texturer' les objets parsé par cette instance de PlyParser
+	 */
+	public PlyParser(Material shapeMaterial)
+	{
+		this.nbVertices = 0;
+		this.nbTriangles = 0;
+		
+		this.vertices = new ArrayList<>();
+
+		this.material = shapeMaterial;
+		this.parsedShape = new ArbitraryTriangleShape(shapeMaterial);
+	}
+	
+	public ArbitraryTriangleShape parsePly(File plyFile)
+	{
+		try 
+		{
+			InputStreamReader inputStream = new InputStreamReader(new FileInputStream(plyFile));
+			StreamTokenizer tokenizer = new StreamTokenizer(new BufferedReader(inputStream));
+			tokenizer.wordChars('_', '_');
+			
+			
+			
+			parseHeader(tokenizer);
+			parseVertices(tokenizer);
+			parseTriangles(tokenizer);
+			
+			return this.parsedShape;//A ce stade, la shape contient tous les triangles du fichier ply
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			
+			Platform.exit();
+			System.exit(0);
+		}
+		
+		return null;
+	}
+	
+	private void parseHeader(StreamTokenizer tokenizer)
+	{
+		boolean headerEnd = false;
+		
+		try
+		{
+			while(!headerEnd)
+			{
+				tokenizer.nextToken();
+				
+				if(tokenizer.ttype == StreamTokenizer.TT_EOF)
+					throw new IllegalArgumentException("Le fichier ply choisi n'est pas valide. end_header introuvable.");
+				
+				if(tokenizer.ttype == StreamTokenizer.TT_WORD)
+				{
+					if(tokenizer.sval.equals("element"))
+					{
+						tokenizer.nextToken();
+						if(tokenizer.sval.equals("vertex"))
+						{
+							tokenizer.nextToken();
+							this.nbVertices = (long)tokenizer.nval;
+						}
+						else if(tokenizer.sval.equals("face"))
+						{
+							tokenizer.nextToken();
+							this.nbTriangles = (long)tokenizer.nval;
+						}
+						else
+							throw new RuntimeException(String.format("Elément de syntaxe non supporté: 'element %s' ligne %d", tokenizer.sval, tokenizer.lineno()));
+					}
+					else if(tokenizer.sval.equals("end_header"))
+					{
+						tokenizer.nextToken();//Skip du end_header
+						headerEnd = true;
+					}
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Lorsqu'un token de la forme XXXe-05 est trouvée, cette méthode permet de parser l'exposant 'e-05' et de calculer la valeur du nombre à partir de
+	 * la mantisse 'XXX' passée en argument
+	 * 
+	 * @param tokenizer Le stream tokenizer courant. Le token courant doit être l'exposant e-05
+	 * @param mantiss Dans un nombre de la forme XXXe-05, 'mantiss' représente le nombre XXX
+	 * 
+	 * @return La mantisse multipliée par l'exposant. En d'autre terme, la valeur du nombre représenté par une chaîne de caractère de la forme 'XXXe-05'
+	 */
+	private double attemptToParseScientificNotation(StreamTokenizer tokenizer, double mantiss) throws PlyParsingException, IOException
+	{
+		String exposantString = tokenizer.sval;
+		
+		double power = 0;
+		
+		if(exposantString.indexOf('-') != -1)
+			power = Double.parseDouble(exposantString.substring(exposantString.indexOf('-')));
+		else
+			throw new PlyParsingException(String.format("Exposant incorrect : %s | Seuls les exposants négatifs sont supportés", tokenizer));
+		
+		try { tokenizer.nextToken();} //On skip l'exposant scientifique qu'on vient de parser
+		catch (IOException e) { throw e; }
+		
+		return mantiss * Math.pow(10, power);
+	}
+	
+	private double parseDoubleNumber(StreamTokenizer tokenizer) throws PlyParsingException, IOException
+	{
+		double mantiss = tokenizer.nval;//Représente la mantisse dans le cas d'un nombre de la forme XXXe-08 et le nombre lui même s'il n'y a pas d'exposant
+		tokenizer.nextToken();
+		
+		try 
+		{
+			if(tokenizer.ttype == StreamTokenizer.TT_NUMBER)//Le nombre n'est pas écrit en notation scientifique
+				return mantiss;
+			else if(tokenizer.ttype == StreamTokenizer.TT_WORD)//Il y a une notation scientifique après la mantisse
+				return attemptToParseScientificNotation(tokenizer, mantiss);
+			else
+				throw new PlyParsingException("Fin de fichier innatendue.");
+		} 
+		catch (Exception e) 
+		{
+			throw e;
+		}
+	}
+	
+	private void parseVertices(StreamTokenizer tokenizer)
+	{
+		try
+		{
+			for(int vertex = 0; vertex < this.nbVertices; vertex++)
+			{
+				double[] coords = new double[3];
+
+				for(int coord = 0; coord < 3; coord++)
+				{
+					if(tokenizer.ttype == StreamTokenizer.TT_WORD)
+						throw new PlyParsingException(String.format("Erreur durant le parsing des vertices. Token innatendu: %s", tokenizer));
+					else if(tokenizer.ttype == StreamTokenizer.TT_EOF)
+						throw new PlyParsingException("Erreur durant le parsing des vertices. Fin de fichier atteinte. Nombre de vertex incorrect.");
+					else if(tokenizer.ttype == StreamTokenizer.TT_NUMBER)
+						coords[coord] = parseDoubleNumber(tokenizer);
+					///L'appel à next token est effectué dans la ligne ci-dessus
+					///pas besoin d'un nouvel appel pour passer au token suivant
+				}
+				
+				this.vertices.add(new Point(coords[0]*4, coords[1]*4, coords[2]*4));
+			}
+		}
+		catch(PlyParsingException e)
+		{
+			System.out.println(e.getMessage());
+			
+			Platform.exit();
+			System.exit(0);
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	private void parseTriangles(StreamTokenizer tokenizer)
+	{
+		try
+		{
+			for(int triangle = 0; triangle < this.nbTriangles; triangle++)
+			{
+				int[] pointsIndex = new int[3];
+
+				tokenizer.nextToken();//Skip du nombre de point en début de ligne, on sait qu'on parse des triangles, le parser
+				//ne supporte pas autre chose
+				for(int coord = 0; coord < 3; coord++)
+				{
+					if(tokenizer.ttype == StreamTokenizer.TT_WORD)
+						throw new PlyParsingException(String.format("Erreur durant le parsing des triangles. Token innatendu: %s", tokenizer));
+					else if(tokenizer.ttype == StreamTokenizer.TT_EOF)
+						throw new PlyParsingException("Erreur durant le parsing des triangles. Fin de fichier atteinte. Nombre de triangles incorrect.");
+					else if(tokenizer.ttype == StreamTokenizer.TT_NUMBER)
+						pointsIndex[coord] = (int)tokenizer.nval;
+					
+					tokenizer.nextToken();
+				}
+				
+				this.parsedShape.addTriangle(new Triangle(
+						this.vertices.get(pointsIndex[0]), 
+						this.vertices.get(pointsIndex[1]), 
+						this.vertices.get(pointsIndex[2]), 
+						this.material));
+			}
+		}
+		catch(PlyParsingException e)
+		{
+			System.out.println(e.getMessage());
+			
+			Platform.exit();
+			System.exit(0);
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+}

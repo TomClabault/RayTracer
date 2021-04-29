@@ -56,7 +56,7 @@ public class Toolbox{
 		Stage stage = new Stage();
 		VBox root = new VBox();
 		Scene scene = new Scene(root);
-        scene.getStylesheets().add(ChooseRenderSettingsWindow.class.getResource("style/window.css").toExternalForm());
+        scene.getStylesheets().add(ChooseRenderSettingsWindow.class.getResource("../styles/windows.css").toExternalForm());
         stage.setScene(scene);
         stage.setTitle("ToolBox");
 

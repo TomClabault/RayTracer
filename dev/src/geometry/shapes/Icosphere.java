@@ -4,7 +4,7 @@ import materials.Material;
 import maths.Point;
 import maths.Vector;
 import geometry.Shape;
-import geometry.ShapeTriangleUtil;
+import geometry.ArbitraryTriangleShape;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /*
 	Les positions des points de l'icosphere de subdivision 1 viennent de: http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
 */
-public class Icosphere extends ShapeTriangleUtil implements Shape
+public class Icosphere extends ArbitraryTriangleShape implements Shape
 {
 	private Point centre;
     private double size;
