@@ -31,7 +31,7 @@ public class ToolboxSliders
 	    slidersPane.setHgap(20);
 	    
 	    Label depthSliderLabel = new Label("Profondeur maximale de récursion:");
-	    this.depthSlider = new Slider(0,10,1);
+	    this.depthSlider = new Slider(0,16,2);
 	    this.depthSlider.setShowTickLabels(true);
 	    this.depthSlider.setShowTickMarks(true);
 	    this.depthSlider.setMajorTickUnit(1);

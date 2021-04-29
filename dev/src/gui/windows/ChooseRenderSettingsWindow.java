@@ -61,7 +61,7 @@ public class ChooseRenderSettingsWindow
         
         Scene scene = new Scene(mainGridPane);
         
-        URL styleURL = ChooseRenderSettingsWindow.class.getResource("../styles/window.css");
+        URL styleURL = ChooseRenderSettingsWindow.class.getResource("../styles/windows.css");
         if(styleURL == null)
         {
         	System.out.println("Impossible de trouver le style de SetSizeWindow");

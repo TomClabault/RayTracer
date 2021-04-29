@@ -36,6 +36,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import materials.GlassMaterial;
 import materials.GlassyMaterial;
 import materials.MatteMaterial;
+import materials.MetallicMaterial;
 import materials.MirrorMaterial;
 import materials.RoughMaterial;
 import materials.textures.ProceduralTextureCheckerboard;
@@ -146,7 +147,7 @@ public class MainApp extends Application {
 	   		{
 	   			rayTracingScene = createBaselineScene();
 	   			
-	   			PlyParser plyParser = new PlyParser(new MirrorMaterial(0.75));
+	   			PlyParser plyParser = new PlyParser(new MetallicMaterial(ColorOperations.sRGBGamma2_2ToLinear(Color.web("D4AF37"))), 4);
 	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
 	   			
 	   			rayTracingScene.addShape(plyFileShape);
@@ -186,7 +187,7 @@ public class MainApp extends Application {
        
 	   	ChooseRenderSettingsWindow setSizeWindow = new ChooseRenderSettingsWindow(rayTracerSettings);
         setSizeWindow.execute();
-
+        
 	   	RayTracer rayTracer = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT);
 
         if(!MainApp.SIMPLE_RENDER)//On lance le rendu en temps réel s'il est désiré

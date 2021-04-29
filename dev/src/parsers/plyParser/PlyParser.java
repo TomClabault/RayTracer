@@ -23,20 +23,27 @@ public class PlyParser
 	private long nbTriangles;
 	
 	private ArrayList<Point> vertices;
-	
+
+	private double shapeScale;
 	private ArbitraryTriangleShape parsedShape;
 	private Material material;
+	
+	public PlyParser()
+	{
+		this(new MatteMaterial(Color.rgb(0, 0, 0)), 1);
+	}
 	
 	/**
 	 * @param shapeMaterial Matériau qui sera utilisé pour 'texturer' les objets parsé par cette instance de PlyParser
 	 */
-	public PlyParser(Material shapeMaterial)
+	public PlyParser(Material shapeMaterial, double shapeScale)
 	{
 		this.nbVertices = 0;
 		this.nbTriangles = 0;
 		
 		this.vertices = new ArrayList<>();
 
+		this.shapeScale = shapeScale;
 		this.material = shapeMaterial;
 		this.parsedShape = new ArbitraryTriangleShape(shapeMaterial);
 	}
@@ -179,7 +186,7 @@ public class PlyParser
 					///pas besoin d'un nouvel appel pour passer au token suivant
 				}
 				
-				this.vertices.add(new Point(coords[0]*4, coords[1]*4, coords[2]*4));
+				this.vertices.add(new Point(coords[0] * this.shapeScale, coords[1] * this.shapeScale, coords[2] * this.shapeScale));
 			}
 		}
 		catch(PlyParsingException e)
