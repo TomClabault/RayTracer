@@ -184,7 +184,7 @@ public class MainApp extends Application {
 		    rayTracingScene.setSkybox(skybox);
 	   	}
 
-        RayTracerSettings rayTracerSettings = new RayTracerSettings(8, 4, 9, 4);
+        RayTracerSettings rayTracerSettings = new RayTracerSettings(Runtime.getRuntime().availableProcessors(), 4, 9, 4);
        
 	   	ChooseRenderSettingsWindow setSizeWindow = new ChooseRenderSettingsWindow(rayTracerSettings);
         setSizeWindow.execute();
