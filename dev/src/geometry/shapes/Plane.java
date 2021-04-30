@@ -1,7 +1,7 @@
 package geometry.shapes;
 
 import materials.Material;
-import accelerationStructures.BVH.BoundingVolume;
+import accelerationStructures.BoundingVolume;
 import geometry.Shape;
 import geometry.ShapeUtil;
 import maths.Point;

@@ -1,7 +1,7 @@
 package geometry.shapes;
 
 import materials.Material;
-import accelerationStructures.BVH.BoundingVolume;
+import accelerationStructures.BoundingVolume;
 import exceptions.InvalidSphereException;
 import geometry.Shape;
 import geometry.ShapeUtil;

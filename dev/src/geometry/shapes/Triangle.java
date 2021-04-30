@@ -1,7 +1,7 @@
 package geometry.shapes;
 
-import accelerationStructures.BVH.BVHAccelerationStructure;
-import accelerationStructures.BVH.BoundingVolume;
+import accelerationStructures.BVHAccelerationStructure;
+import accelerationStructures.BoundingVolume;
 import geometry.Shape;
 import geometry.shapes.strategies.TriangleIntersectionStrategy;
 import geometry.shapes.strategies.TriangleMollerTrumboreStrategy;

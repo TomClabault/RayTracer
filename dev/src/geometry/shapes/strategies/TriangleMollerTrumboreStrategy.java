@@ -55,7 +55,8 @@ public class TriangleMollerTrumboreStrategy implements TriangleIntersectionStrat
         	if(outNormalAtInter != null)
         		outNormalAtInter.copyIn(triangle.getNormal(null));
             
-        	outInterPoint.copyIn(ray.determinePoint(t));
+        	if(outInterPoint != null)//Si on souhaite récupérer le point d'intersection
+        		outInterPoint.copyIn(ray.determinePoint(t));
         	
             return t;
         }

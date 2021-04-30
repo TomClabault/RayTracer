@@ -1,6 +1,6 @@
 package geometry;
 
-import accelerationStructures.BVH.BoundingVolume;
+import accelerationStructures.BoundingVolume;
 import materials.Material;
 import maths.Point;
 import maths.Ray;

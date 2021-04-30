@@ -2,8 +2,8 @@ package geometry;
 
 import java.util.ArrayList;
 
-import accelerationStructures.BVH.BVHAccelerationStructure;
-import accelerationStructures.BVH.BoundingVolume;
+import accelerationStructures.BVHAccelerationStructure;
+import accelerationStructures.BoundingVolume;
 import geometry.shapes.Plane;
 import geometry.shapes.Triangle;
 import javafx.scene.paint.Color;
@@ -99,7 +99,9 @@ public class ArbitraryTriangleShape implements Shape
 			if (intersectedTriangle != null)
 				outNormalAtInter.copyIn(intersectedTriangle.getNormal(null));
 		
-		outInterPoint.copyIn(closestInterPoint);
+		if(closestInterPoint != null && outInterPoint != null)//Si on a trouvé une intersection et que le point de sortie n'est pas null et qu'il
+		//peut donc accueillir le nouveau point d'intersection
+			outInterPoint.copyIn(closestInterPoint);
 		return tMin;
 	}
 	

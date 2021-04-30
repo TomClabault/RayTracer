@@ -157,24 +157,26 @@ public class RayTracer
 	 * structure d'accélération
 	 * @param ray 					Rayon duquel chercher les points d'intersection avec les objets de la scène
 	 * @param intInfos 				Référence vers les informations sur le point d'intersection qui sera éventuellement trouvé par un appel à computeClosestInterPoint. Si un point d'intersection est trouvé, une partie de l'ensemble des informations relatives sera mise à jour 
-	 * @param getNormalAtInter 		True pour récupérer la normale au point d'intersection dans intInfos passé en argument. Si false, la normale ne sera pas récupérer et l'attribut 'normalAtIntersection' de intInfos restera inchangé
+	 * @param updateNormalAtInter 		True pour récupérer la normale au point d'intersection dans intInfos passé en argument. Si false, la normale ne sera pas récupérer et l'attribut 'normalAtIntersection' de intInfos restera inchangé
 	 * @param outClosestInterPoint	Référence vers une instance de Point. Si cette instance est non nulle, elle sera mise à jour si computeClosestInterPoint trouve un point d'intersection entre le rayon et la scène. Si aucun point d'intersection n'est trouvé, l'instance restera inchangée
 	 *
 	 * @return Retourne l'objet avec lequel le rayon a fait son intersection. Si 'outClosestInterPoint' était non nulle à l'appel de la méthode alors outClosestInterPoint contient maintenant le point d'intersection entre le rayon et l'objet renvoyé par la méthode
 	 */
-	protected Shape computeClosestInterPoint(AccelerationStructure accelStruct, Ray ray, RayTracerInterInfos intInfos, boolean getNormalAtInter, Point outClosestInterPoint)
+	protected Shape computeClosestInterPoint(AccelerationStructure accelStruct, Ray ray, RayTracerInterInfos intInfos, boolean updateNormalAtInter, Point outClosestInterPoint)
 	{
-		Vector outNormalAtIntersection = null;
-		//if getNormalAtInter, cela veut que l'on souhaite récupérer la normale au point d'intersection. Dans ce cas, on crée un nouveau vecteur
-		//afin que outNormalAtIntersection ne soit pas null et donc apte à être modifié par l'appel à la méthode intersect()
-		if(getNormalAtInter)
-			outNormalAtIntersection = new Vector(0, 0, 0);
+		Vector outNormalAtIntersection = new Vector(0, 0, 0);;
 		
-		Shape closestObjectIntersected = accelStruct.intersect(ray, outClosestInterPoint, outNormalAtIntersection);
+		Point outInterPoint = new Point(0, 0, 0);
+		Shape closestObjectIntersected = accelStruct.intersect(ray, outInterPoint, outNormalAtIntersection);
 		if(closestObjectIntersected != null)
 		{
-			intInfos.setIntP(outClosestInterPoint);
-			intInfos.setNormInt(outNormalAtIntersection);
+			if(updateNormalAtInter)
+				intInfos.setNormInt(outNormalAtIntersection);
+			
+			if(intInfos != null)
+				intInfos.setIntP(outInterPoint);
+			if(outClosestInterPoint != null)//On souhaite récupérer le point d'intersection
+				outClosestInterPoint.copyIn(outInterPoint);
 		}
 		
 		return closestObjectIntersected;
@@ -531,11 +533,10 @@ public class RayTracer
 		if(depth == 0)
 			return Color.BLACK;
 
-		ArrayList<Shape> objectList = renderScene.getSceneObjects();
 		RayTracerInterInfos interInfos = new RayTracerInterInfos();
 		
 		interInfos.setRay(ray);
-		Shape intersectedObject = computeClosestInterPoint(renderScene.getAccelerationStructure(), ray, interInfos, true, null);//On détermine l'objet intersecté par le rayon et on stocke sa référence dans la intInfos
+		Shape intersectedObject = computeClosestInterPoint(renderScene.getAccelerationStructure(), ray, interInfos, true, new Point(0, 0, 0));//On détermine l'objet intersecté par le rayon et on stocke sa référence dans la intInfos
 
 		if(intersectedObject != null)//Un objet a bien été intersecté
 		{

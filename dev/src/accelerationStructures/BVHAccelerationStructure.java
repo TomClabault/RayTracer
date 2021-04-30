@@ -1,8 +1,7 @@
-package accelerationStructures.BVH;
+package accelerationStructures;
 
 import java.util.ArrayList;
 
-import accelerationStructures.AccelerationStructure;
 import geometry.Shape;
 import maths.Point;
 import maths.Ray;
@@ -33,10 +32,10 @@ public class BVHAccelerationStructure implements AccelerationStructure
 		
 		this.boundingVolumes = new ArrayList<>();
 		
-		computeBoundingVolumes();
+		constructBoundingVolumes();
 	}
 
-	private void computeBoundingVolumes()
+	private void constructBoundingVolumes()
 	{
 		for(Shape shape : sceneShapes)
 			this.boundingVolumes.add(shape.computeBoundingVolume());
@@ -51,6 +50,7 @@ public class BVHAccelerationStructure implements AccelerationStructure
 		
 		Double tMin = null;
 		
+		//TODO (tom) compter le nombre d'intersections calculées
 		for(int boundingIndex = 0; boundingIndex < this.boundingVolumes.size(); boundingIndex++)
 		{
 			BoundingVolume boundingVolume = this.boundingVolumes.get(boundingIndex);
@@ -68,13 +68,16 @@ public class BVHAccelerationStructure implements AccelerationStructure
 				Vector tempNormalAtInter = new Vector(0, 0, 0);
 				
 				Double t = tempInterObject.intersect(ray, tempInterPoint, tempNormalAtInter);
-				if(tMin == null || t < tMin)
+				if(t != null)//Si on a trouvé une intersection
 				{
-					tMin = t;
-					
-					closestInterPoint = tempInterPoint;
-					normalAtClosestsInterPoint = tempNormalAtInter;
-					closestIntersectedObject = tempInterObject;
+					if(tMin == null || t < tMin)
+					{
+						tMin = t;
+						
+						closestInterPoint = tempInterPoint;
+						normalAtClosestsInterPoint = tempNormalAtInter;
+						closestIntersectedObject = tempInterObject;
+					}
 				}
 			}
 		}
