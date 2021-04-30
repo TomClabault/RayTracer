@@ -31,6 +31,7 @@ import gui.windows.RenderWindow;
 import gui.windows.RenderWindowOld;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -150,10 +151,10 @@ public class MainApp extends Application {
 	   		{
 	   			rayTracingScene = createBaselineScene();
 	   			
-	   			PlyParser plyParser = new PlyParser(new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(Color.web("D4AF37")), 0.75), 4);
-	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
-	   			
-	   			rayTracingScene.addShape(plyFileShape);
+//	   			PlyParser plyParser = new PlyParser(new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(Color.web("D4AF37")), 0.75), 4);
+//	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
+//	   			
+//	   			rayTracingScene.addShape(plyFileShape);
 	   		}
 	   	}
 	   	catch(InvalidParallelepipedException recExc)
@@ -185,6 +186,7 @@ public class MainApp extends Application {
 		    rayTracingScene.setSkybox(skybox);
 	   	}
 	   	rayTracingScene.setAccelerationStructure(new BVHAccelerationStructure(rayTracingScene.getSceneObjects()));
+//	   	rayTracingScene.setAccelerationStructure(new NoAccelerationStructure(rayTracingScene.getSceneObjects()));
 	   	
         RayTracerSettings rayTracerSettings = new RayTracerSettings(Runtime.getRuntime().availableProcessors(), 4, 9, 4);
        
@@ -212,7 +214,17 @@ public class MainApp extends Application {
         	SimpleRenderToolbox saveRenderWindow = new SimpleRenderToolbox(renderWindow.getWritableImage(), renderWindow.getStatsPane());
         	
         	ExecutorService executorService = Executors.newFixedThreadPool(1);
-        	executorService.submit(new RenderTask(renderWindow.getPixelWriter(), PixelFormat.getIntArgbInstance(), rayTracer, rayTracingScene, rayTracerSettings));
+        	RenderTask renderTask = new RenderTask(renderWindow.getPixelWriter(), PixelFormat.getIntArgbInstance(), rayTracer, rayTracingScene, rayTracerSettings);
+        	executorService.submit(renderTask);
+        	
+        	renderTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() 
+        	{
+        		@Override
+        		public void handle(WorkerStateEvent arg0) 
+        		{
+        			RenderWindowOld.drawImage(rayTracer.getRenderedPixels(), renderWindow.getPixelWriter(), PixelFormat.getIntArgbInstance());
+        		}
+			});
         }
 
 
@@ -225,6 +237,11 @@ public class MainApp extends Application {
         });
     }
 
+    public void refreshWindow(WorkerStateEvent event)
+    {
+    	RenderWindowOld.drawImage(null, null, null);
+    }
+    
     public RayTracingScene createBaselineScene()
     {
     	Camera cameraRT = new Camera(new Point(0.5, 0.5, 2), 0, 0, 40);
@@ -233,7 +250,7 @@ public class MainApp extends Application {
         ArrayList<Shape> shapeList = new ArrayList<>();
         shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
 
-        //shapeList.add(new Icosphere(new Point(0, 0.5, -2), 1, 3, new GlassMaterial()));
+        shapeList.add(new Icosphere(new Point(0, 0.5, -2), 1, 4, new GlassMaterial()));
         
         Image skybox = null;
         URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");

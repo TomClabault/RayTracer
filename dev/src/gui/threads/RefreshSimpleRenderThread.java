@@ -40,7 +40,7 @@ public class RefreshSimpleRenderThread extends AnimationTimer
 		
 		if(!this.rayTracer.isRenderDone()) 
 		{
-			RenderWindowOld.doImage(rayTracer.getRenderedPixels(), this.pixelWriter, this.pixelFormat);
+			RenderWindowOld.drawImage(rayTracer.getRenderedPixels(), this.pixelWriter, this.pixelFormat);
 			
 			this.statsPane.getRayTracerStatsLabel().setText(String.format("Rays cast: %,d\nIntersections tests: %,d", stats.getNbRaysShot(), stats.getIntersectionTestsDone()));
 			this.statsPane.getRenderTimeLabel().setText(String.format("Render time: %ds", (currentTimeNano - this.startRenderTimeNano)/1000000000));

@@ -176,7 +176,7 @@ public class RenderWindowOld {
      * @param pixelWriter Instance de PixelWriter utilisé par la classe pour afficher le rendu.
      * @param pixelFormat Objet contenant le format des pixels du pixelBuffer.
      */
-    public static void doImage(IntBuffer pixelBuffer, PixelWriter pixelWriter, WritablePixelFormat<IntBuffer> pixelFormat) {
+    public static void drawImage(IntBuffer pixelBuffer, PixelWriter pixelWriter, WritablePixelFormat<IntBuffer> pixelFormat) {
     	pixelWriter.setPixels(0, 0, MainApp.WIDTH, MainApp.HEIGHT, pixelFormat, pixelBuffer, MainApp.WIDTH);
     }
     
@@ -250,7 +250,7 @@ public class RenderWindowOld {
 
             renderTask.setOnSucceeded((succeededEvent) -> {
             	IntBuffer pixelBuffer = renderTask.getValue();
-            	RenderWindowOld.doImage(pixelBuffer, pixelWriter, this.pixelFormat);
+            	RenderWindowOld.drawImage(pixelBuffer, pixelWriter, this.pixelFormat);
             	float dif = actualFrameTime - oldFrameTime;
                 dif  = 1000000000.0f / dif;
                 this.oldFrameTime = actualFrameTime;
