@@ -8,17 +8,11 @@ public class Vector implements CoordinateObject
 	private double x, y, z;
 	
 	/**
-	 * Contruit un vecteur à partir de ses trois composantes x, y et z
-	 *
-	 * @param x Composante x du vecteur
-	 * @param y Composante y du vecteur
-	 * @param z Composante z du vecteur
+	 * Contruit un vecteur nul 
 	 */
-	public Vector(double x, double y, double z)
+	public Vector()
 	{
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		this(0, 0, 0);
 	}
 
 	/**
@@ -43,9 +37,21 @@ public class Vector implements CoordinateObject
 	 */
 	public Vector(Vector u)
 	{
-		this.x = u.x;
-		this.y = u.y;
-		this.z = u.z;
+		this(u.x, u.y, u.z);
+	}
+	
+	/**
+	 * Contruit un vecteur à partir de ses trois composantes x, y et z
+	 *
+	 * @param x Composante x du vecteur
+	 * @param y Composante y du vecteur
+	 * @param z Composante z du vecteur
+	 */
+	public Vector(double x, double y, double z)
+	{
+		this.x = x;
+		this.y = y;
+		this.z = z;
 	}
 
 	/**
@@ -254,6 +260,13 @@ public class Vector implements CoordinateObject
 		return new Vector(normalized.getX(), normalized.getY(), normalized.getZ());
 	}
 
+	public void set(double x, double y, double z)
+	{
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
+	
 	public void setX(double x)
 	{
 		this.x = x;

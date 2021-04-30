@@ -77,17 +77,12 @@ public class ArbitraryTriangleShape implements Shape
 	
 	/**
 	 * {@link geometry.Shape#getNormal} 
-	 * @deprecated Utiliser 'outNormalAtInter' de {@link geometry.ArbitraryTriangleShape#intersect(Ray, Vector)} pour récupérer la normal à un point d'intersection
+	 * @deprecated Utiliser 'outNormalAtInter' de {@link geometry.ArbitraryTriangleShape#intersect(Ray, Vector)} pour récupérer la normal 
+	 * à un point d'intersection.
+	 * Cette méthode n'est pas fonctionnelle
 	 */
 	public Vector getNormal(Point point)
 	{
-		for (int i = 0 ; i < triangleList.size() ;i++)
-		{
-			if (triangleList.get(i).insideOutsideTest(point) == true)
-			{
-				return triangleList.get(i).getNormal(point);
-			}
-		}
 		return null;
 	}
 
