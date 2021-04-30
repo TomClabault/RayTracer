@@ -252,10 +252,6 @@ public class MainApp extends Application {
         }
 
         sceneRT.addLight(new LightBulb(new Point(-2, 2.5, 1.440), 1));
-        sceneRT.addLight(new LightBulb(new Point(-2, 2.5, 1.440), 1));
-        sceneRT.addLight(new LightBulb(new Point(-2, 2.5, 1.440), 1));
-        sceneRT.addLight(new LightBulb(new Point(-2, 2.5, 1.440), 1));
-        sceneRT.addLight(new LightBulb(new Point(-2, 2.5, 1.440), 1));
         return sceneRT;
     }
     
