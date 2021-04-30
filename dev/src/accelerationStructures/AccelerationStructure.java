@@ -1,0 +1,24 @@
+package accelerationStructures;
+
+import geometry.Shape;
+import maths.Point;
+import maths.Ray;
+import maths.Vector;
+
+public interface AccelerationStructure 
+{
+	/**
+	 * Test si le rayon passé en paramètre intersecte des éléments de la structure d'accélération. Calcule et met à disposition le point
+	 * d'intersection le plus proche trouvé (si bel et bien trouvé) ainsi que la normale au point d'intersection trouvé de la surface 
+	 * de l'objet intersecté
+	 * 
+	 * @param ray Le rayon dont on veut tester l'intersection avec la structure
+	 * @param outInterPoint Si un point d'intersection est trouvé, les coordonnées du point d'intersection trouvé seront
+	 * stockées dans ce paramètre. Les coordonnées existantes de ce paramètre seront alors écrasées
+	 * @param outNormalAtInter Si un point d'intersection est trouvé, le vecteur normale au point d'intersection
+	 * de la surface de l'objet sera stocké dans ce paramètre. Les coordonnées existantes de ce paramètre seront alors écrasées. 
+	 * 
+	 * @return L'objet le plus proche de la caméra qui a été intersecté par le rayon. Retourne null si aucun objet n'a été intersecté.
+	 */
+	public Shape intersect(Ray ray, Point outInterPoint, Vector outNormalAtInter);
+}

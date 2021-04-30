@@ -1,5 +1,7 @@
 package geometry.shapes;
 
+import accelerationStructures.BVH.BVHAccelerationStructure;
+import accelerationStructures.BVH.BoundingVolume;
 import geometry.Shape;
 import geometry.shapes.strategies.TriangleIntersectionStrategy;
 import geometry.shapes.strategies.TriangleMollerTrumboreStrategy;
@@ -33,6 +35,34 @@ public class Triangle implements Shape
 		this.interStrategy = intersectionStrategy;
 	}
 
+	/**
+	 * {@link geometry.Shape#computeBoundingVolume()}
+	 */
+	public BoundingVolume computeBoundingVolume()
+	{
+		BoundingVolume volume = new BoundingVolume();
+		
+		for(int i = 0; i < BVHAccelerationStructure.PLANE_SET_NORMAL_COUNT; i++)
+		{
+			double dNear = Double.MAX_VALUE;
+			double dFar = Double.MIN_VALUE;
+			
+			for(int vertexIndex = 0; vertexIndex < 3; vertexIndex++)
+			{
+				Point vertex = vertexIndex == 0 ? this.getA() : vertexIndex == 1 ? this.getB() : this.getC();
+				
+				double d = Vector.dotProduct(BVHAccelerationStructure.PLANE_SET_NORMALS[i], vertex.toVector());
+				
+				dNear = Math.min(dNear, d);
+				dFar = Math.max(dFar, d);
+			}
+			
+			volume.setBounds(dNear, dFar, i);
+		}
+		
+		return volume;
+	}
+	
 	public Point getA() {return this.A;}
 	public Point getB() {return this.B;}
 	public Point getC() {return this.C;}
@@ -83,9 +113,9 @@ public class Triangle implements Shape
 	public Point getUVCoords(Point point) { return null; }
 
 	@Override
-	public Point intersect(Ray ray, Vector outNormalAtInter) 
+	public Double intersect(Ray ray, Point outInterPoint, Vector outNormalAtInter) 
 	{
-		return this.interStrategy.intersect(this, ray, outNormalAtInter);
+		return this.interStrategy.intersect(this, ray, outInterPoint, outNormalAtInter);
 	}
 
 	@Override

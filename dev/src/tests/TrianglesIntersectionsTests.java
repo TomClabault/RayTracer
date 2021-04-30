@@ -11,7 +11,9 @@ public class TrianglesIntersectionsTests
 {
 	public static void testInter(Triangle triangle, Ray ray, Point interPointExpected)
 	{
-		Point inter = triangle.intersect(ray, null);
+		Point inter = new Point(0, 0, 0);
+		
+		triangle.intersect(ray, inter, null);
 		System.out.println(inter + " ; Expected = " + interPointExpected);	
 	}
 	

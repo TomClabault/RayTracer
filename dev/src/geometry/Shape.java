@@ -1,5 +1,6 @@
 package geometry;
 
+import accelerationStructures.BVH.BoundingVolume;
 import materials.Material;
 import maths.Point;
 import maths.Ray;
@@ -7,6 +8,11 @@ import maths.Vector;
 
 public interface Shape
 {
+	/**
+	 * Calcule et retourne le BoundingVolume de la forme
+	 */
+	public BoundingVolume computeBoundingVolume();
+	
 	/**
 	 * Permet de récupérer le matériau de la forme
 	 * 
@@ -36,13 +42,16 @@ public interface Shape
 	 * Calcule le point d'intersection avec un rayon et le renvoie si existant. Le point d'intersection n'est cherché que "en face" du rayon.
 	 * 
 	 * @param ray 				Rayon avec lequel chercher une intersection
+	 * @param outInterPoint		Si un point d'intersection est trouvé, les coordonnées du point d'intersection trouvé remplaceront les coordonées
+	 * 							de cette instance de point. 
 	 * @param outNormalAtInter 	Si un point d'intersection est trouvé, la méthode intersect redéfini ce vecteur pour qu'il représente la normale au point d'intersection trouvé de la forme
 	 * 							Si aucun point d'intersection n'est trouvé, ce vecteur reste inchangé
 	 * 							Si outNormalAtInter est null à l'appel de la méthode, intersect ne calculera pas la normale à l'intersection et laissera le vecteur inchangé
 	 * 
-	 * @return Renvoie le point d'intersection du rayon et de l'objet. Null s'il n'y a pas de point d'intersection
+	 * @return Renvoie le coefficient t qui, appliquer au rayon, donne les coordonnées du point d'intersection.
+	 * Retourne null si aucun point d'intersection n'a été trouvé
 	 */
-	public Point intersect(Ray ray, Vector outNormalAtInter);
+	public Double intersect(Ray ray, Point outInterPoint, Vector outNormalAtInter);
 	
 	/**
 	 * Permet de redéfinir le matériau qui sera utilisé pour le rendu de l'objet
@@ -50,5 +59,4 @@ public interface Shape
 	 * @param newMaterial Le nouveau matériau de l'objet
 	 */
 	public void setMaterial(Material newMaterial);
-	
 }

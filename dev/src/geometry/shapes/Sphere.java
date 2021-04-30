@@ -1,6 +1,7 @@
 package geometry.shapes;
 
 import materials.Material;
+import accelerationStructures.BVH.BoundingVolume;
 import exceptions.InvalidSphereException;
 import geometry.Shape;
 import geometry.ShapeUtil;
@@ -34,6 +35,16 @@ public class Sphere extends ShapeUtil implements Shape
 		this.radius = radius;
 		
 		super.material = material;
+	}
+	
+	/**
+	 * {@link geometry.Shape#computeBoundingVolume()}
+	 */
+	@Override
+	public BoundingVolume computeBoundingVolume() 
+	{
+		return null;//Un bounding volume serait plus coûteux à intersecter que la sphère elle même, on renvoie null
+		//signifiant qu'on utilisera pas de bounding volume pour intersecter cet objet
 	}
 	
 	/**
@@ -102,13 +113,15 @@ public class Sphere extends ShapeUtil implements Shape
 	 * Calcule de façon analytique l'intersection d'un rayon et d'une sphère
 	 * 
 	 * @param ray 				Le rayon avec lequel l'intersection avec la sphère doit être calculée
+	 * @param outInterPoint		Si un point d'intersection est trouvé, les coordonnées du point d'intersection seront placées dans ce paramètre,
+	 * 							écrasant toutes coordonées pré-existantes
 	 * @param outNormalAtInter 	La normale au point d'intersection s'il existe. Inchangé s'il n'y a pas de point d'intersection avec le rayon passé en argument. Si ce paramètre est null, la normale ne sera pas automatiquement calculée
 	 * 
 	 * @return Retourne le point d'intersection avec la sphère s'il existe (s'il y a deux points d'intersection, ne retourne que le point le plus près de l'origine du rayon). Retourne null sinon.
 	 * intersect modifie le paramètre outNormalAtInter pour y stocker la normale au point d'intersection (si outNormalAtInter n'est pas null à l'appel de la méthode). 
 	 * S'il n'y a pas de point d'intersection, le vecteur reste inchangé.
 	 */
-	public Point intersect(Ray ray, Vector outNormalAtInter)
+	public Double intersect(Ray ray, Point outInterPoint, Vector outNormalAtInter)
 	{
 		Point intersection = null;
 
@@ -160,8 +173,9 @@ public class Sphere extends ShapeUtil implements Shape
 		intersection = ray.determinePoint(k1);
 		if(outNormalAtInter != null)
 			outNormalAtInter.copyIn(this.getNormal(intersection));//On défini la normale au point d'intersection
+		outInterPoint.copyIn(intersection);
 		
-		return intersection;
+		return k1;
 	}
 	
 	/**

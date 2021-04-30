@@ -1,6 +1,7 @@
 package geometry.shapes;
 
 import materials.Material;
+import accelerationStructures.BVH.BoundingVolume;
 import geometry.Shape;
 import geometry.ShapeUtil;
 import maths.Point;
@@ -41,6 +42,16 @@ public class Plane extends ShapeUtil implements Shape
 	}
 	
 	/**
+	 * {@link geometry.Shape#computeBoundingVolume()}
+	 */
+	@Override
+	public BoundingVolume computeBoundingVolume() 
+	{
+		return null;//Un bounding volume serait plus coûteux à intersecter que le plan, on renvoie donc null
+		//signifiant qu'on utilisera pas de bounding volume pour intersecter cet objet
+	}
+	
+	/**
 	 * Permet d'obtenir la normal du plan
 	 * 
 	 * @param point Paramètre ignoré
@@ -65,12 +76,14 @@ public class Plane extends ShapeUtil implements Shape
 	 * Calcule de façon analytique l'intersection d'un rayon et d'une sphère
 	 * 
 	 * @param ray Le rayon avec lequel l'intersection avec la sphère doit être calculée
+	 * @param outInterPoint		Si un point d'intersection est trouvé, les coordonnées du point d'intersection seront placées dans ce paramètre,
+	 * 							écrasant toutes coordonées pré-existantes
 	 * @param outNormalAtInter 	Ce vecteur contiendra la normale du plan si un point d'intersection a été trouvé. Ce paramètre est inchangé sinon. 
 	 * 							Si ce paramètre est null, la normale au point d'intersection ne sera pas stockée dans outNormalAtInter, même si un point d'intersection a été trouvé
 	 * 
 	 * @return Retourne le point d'intersection avec la sphère s'il existe (s'il y a deux points d'intersection, ne retourne que le point le plus près de l'origine du rayon). Retourne null sinon.
 	 */
-	public Point intersect(Ray ray, Vector outNormalAtInter) 
+	public Double intersect(Ray ray, Point outInterPoint, Vector outNormalAtInter) 
 	{
 		double NDir = Vector.dotProduct(normal, ray.getDirection());
 		if(NDir > 0.0000001d && NDir < 0.0000001d)//Le rayon et le plan sont parallèles
@@ -85,7 +98,8 @@ public class Plane extends ShapeUtil implements Shape
 	    	if(outNormalAtInter != null)
 	    		outNormalAtInter.copyIn(this.getNormal(null));
 	    	
-			return ray.determinePoint(coeffVectorPoint);
+	    	outInterPoint.copyIn(ray.determinePoint(coeffVectorPoint));
+			return coeffVectorPoint;
 	    }
 	    else
 			return null;

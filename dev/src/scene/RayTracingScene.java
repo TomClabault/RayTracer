@@ -2,6 +2,7 @@ package scene;
 
 import java.util.ArrayList;
 
+import accelerationStructures.AccelerationStructure;
 import geometry.Shape;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
@@ -29,7 +30,8 @@ public class RayTracingScene
 	private ArrayList<PositionnalLight> lights;
 
 	private ArrayList<Shape> shapes;
-
+	private AccelerationStructure accelerationStructure;
+	
 	private Image skyboxTexture;
 	private PixelReader skyboxPixelReader;
 	private int skyboxWidth;
@@ -139,6 +141,16 @@ public class RayTracingScene
 
 		this.backgroundColor = backgroundColor;
 		this.ambientLightIntensity = ambientLightIntensity;
+	}
+	
+	public AccelerationStructure getAccelerationStructure()
+	{
+		return this.accelerationStructure;
+	}
+	
+	public void setAccelerationStructure(AccelerationStructure structure)
+	{
+		this.accelerationStructure = structure;
 	}
 	
 	/**

@@ -7,13 +7,13 @@ import maths.Vector;
 
 /**
  * Implémentation de: https://fr.wikipedia.org/wiki/Algorithme_d%27intersection_de_M%C3%B6ller%E2%80%93Trumbore
- *
+ * Légèrement modifié pour satisfaire les besoins de notre ray tracer
  */
 public class TriangleMollerTrumboreStrategy implements TriangleIntersectionStrategy
 {
     private static double EPSILON = 0.0000001;
 
-	public Point intersect(Triangle triangle, Ray ray, Vector outNormalAtInter)
+	public Double intersect(Triangle triangle, Ray ray, Point outInterPoint, Vector outNormalAtInter)
 	{
         Point vertex0 = triangle.getA();
         Point vertex1 = triangle.getB();
@@ -55,8 +55,11 @@ public class TriangleMollerTrumboreStrategy implements TriangleIntersectionStrat
         	if(outNormalAtInter != null)
         		outNormalAtInter.copyIn(triangle.getNormal(null));
             
-            return ray.determinePoint(t);
-        } else // On a bien une intersection de droite, mais pas de rayon.
+        	outInterPoint.copyIn(ray.determinePoint(t));
+        	
+            return t;
+        }
+        else // On a bien une intersection de droite, mais pas de rayon.
         {
             return null;
         }

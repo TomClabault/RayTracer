@@ -2,6 +2,9 @@ package geometry;
 
 import java.util.ArrayList;
 
+import accelerationStructures.BVH.BVHAccelerationStructure;
+import accelerationStructures.BVH.BoundingVolume;
+import geometry.shapes.Plane;
 import geometry.shapes.Triangle;
 import javafx.scene.paint.Color;
 import materials.Material;
@@ -35,44 +38,69 @@ public class ArbitraryTriangleShape implements Shape
 		this.triangleList.add(triangle);
 	}
 	
+	public BoundingVolume computeBoundingVolume()
+	{
+		BoundingVolume volume = new BoundingVolume();
+		
+		for(int i = 0; i < BVHAccelerationStructure.PLANE_SET_NORMAL_COUNT; i++)
+		{
+			double dNear = Double.MAX_VALUE;
+			double dFar = Double.MIN_VALUE;
+			
+			for(Triangle triangle : this.triangleList)
+			{
+				for(int vertexIndex = 0; vertexIndex < 3; vertexIndex++)
+				{
+					Point vertex = vertexIndex == 0 ? triangle.getA() : vertexIndex == 1 ? triangle.getB() : triangle.getC();
+					
+					double d = Vector.dotProduct(BVHAccelerationStructure.PLANE_SET_NORMALS[i], vertex.toVector());
+					
+					dNear = Math.min(dNear, d);
+					dFar = Math.max(dFar, d);
+				}
+			}
+			
+			volume.setBounds(dNear, dFar, i);
+		}
+		
+		return volume;
+	}
+	
 	/**
 	 * {@link geometry.Shape#intersect} 
 	 */
-	public Point intersect(Ray ray, Vector outNormalAtInter)
+	public Double intersect(Ray ray, Point outInterPoint, Vector outNormalAtInter)
 	{
-		Double distancemin = null;
-		Point intersection = null;
-		Point closestInterPoint = null;
+		Double tMin = null;
+		
 		Triangle intersectedTriangle = null;
+		
+		Point intersectionPoint = null;
+		Point closestInterPoint = null;
 		
 		for (int i = 0; i < triangleList.size(); i++)
 		{
 			Triangle triangle = triangleList.get(i);
-			intersection = triangle.intersect(ray, null);
-			if(intersection != null)
+			Double t = triangle.intersect(ray, intersectionPoint, null);
+			if(t != null)
 			{
-				double distance = Point.distance(intersection, ray.getOrigin());
-				if(distancemin == null || distance < distancemin )
+				if(tMin == null || t < tMin )
 				{
-					distancemin = distance;
+					tMin = t;
 					
-					closestInterPoint = intersection;
+					closestInterPoint = intersectionPoint;
 					intersectedTriangle = triangleList.get(i);
 				}
 			}
-
-
-		}
-		if (outNormalAtInter != null)
-		{
-			if (intersectedTriangle != null)
-			{
-				outNormalAtInter.copyIn(intersectedTriangle.getNormal(null));
-			}
 		}
 		
-		return closestInterPoint;
-
+		
+		if (outNormalAtInter != null)
+			if (intersectedTriangle != null)
+				outNormalAtInter.copyIn(intersectedTriangle.getNormal(null));
+		
+		outInterPoint.copyIn(closestInterPoint);
+		return tMin;
 	}
 	
 	/**

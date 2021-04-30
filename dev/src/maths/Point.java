@@ -162,6 +162,14 @@ public class Point implements CoordinateObject
     }
     
     /**
+     * @return Pour this, le point de coordonnées (x, y, z), retourne le vecteur de coordonnée (x, y, z)
+     */
+    public Vector toVector()
+    {
+    	return new Vector(this.x, this.y, this.z);
+    }
+    
+    /**
      * Translate le point a le long du vecteur u "k fois"
      * 
      *  @param a Un point de coordonnées (x, y, z)

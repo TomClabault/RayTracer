@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import accelerationStructures.BVH.BVHAccelerationStructure;
 import exceptions.InvalidParallelepipedException;
 import exceptions.InvalidSphereException;
 import geometry.ArbitraryTriangleShape;
@@ -148,12 +149,13 @@ public class MainApp extends Application {
 	   		{
 	   			rayTracingScene = createBaselineScene();
 	   			
-	   			PlyParser plyParser = new PlyParser(new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(Color.web("D4AF37")), 0.75), 4);
-	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
-	   			
-	   			rayTracingScene.addShape(plyFileShape);
+//	   			PlyParser plyParser = new PlyParser(new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(Color.web("D4AF37")), 0.75), 4);
+//	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
+//	   			
+//	   			rayTracingScene.addShape(plyFileShape);
 	   		}
-	   				   		
+
+	   		rayTracingScene = createTestingScene();
 	   	}
 	   	catch(InvalidParallelepipedException recExc)
 	   	{
@@ -183,7 +185,8 @@ public class MainApp extends Application {
 
 		    rayTracingScene.setSkybox(skybox);
 	   	}
-
+	   	rayTracingScene.setAccelerationStructure(new BVHAccelerationStructure(rayTracingScene.getSceneObjects()));
+	   	
         RayTracerSettings rayTracerSettings = new RayTracerSettings(Runtime.getRuntime().availableProcessors(), 4, 9, 4);
        
 	   	ChooseRenderSettingsWindow setSizeWindow = new ChooseRenderSettingsWindow(rayTracerSettings);
@@ -231,7 +234,7 @@ public class MainApp extends Application {
         ArrayList<Shape> shapeList = new ArrayList<>();
         shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
 
-        //shapeList.add(new Icosphere(new Point(0, 0.5, -2), 1, 3, new GlassMaterial()));
+        shapeList.add(new Icosphere(new Point(0, 0.5, -2), 1, 3, new GlassMaterial()));
         
         Image skybox = null;
         URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
@@ -250,6 +253,23 @@ public class MainApp extends Application {
         }
 
         sceneRT.addLight(new LightBulb(new Point(-2, 2.5, 1.440), 1));
+        return sceneRT;
+    }
+    
+    public RayTracingScene createTestingScene()
+    {
+    	Camera cameraRT = new Camera(new Point(0, 0, 0), 0, 0, 40);
+        PositionnalLight l = new LightBulb(new Point(2, 2, 1), 1);
+
+        ArrayList<Shape> shapeList = new ArrayList<>();
+
+        shapeList.add(new Sphere(new Point(0, 0, -2), 1, new MatteMaterial(Color.rgb(0, 0, 0))));
+        
+        RayTracingScene sceneRT = null;
+        
+        sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1);
+        sceneRT.addLight(new LightBulb(new Point(-2, 2.5, 1.440), 1));
+        
         return sceneRT;
     }
     

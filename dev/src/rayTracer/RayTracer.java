@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import accelerationStructures.AccelerationStructure;
 import geometry.ArbitraryTriangleShape;
 import geometry.Shape;
 import geometry.shapes.Plane;
@@ -152,7 +153,8 @@ public class RayTracer
 	/**
 	 * Calcule le premier point d'intersection du rayon passé en argument avec les objets de la scène
 	 *
-	 * @param objectList 			Liste des objets de la scène. Obtenable avec MyScene.getSceneObjects()
+	 * @param accelStruct 			Structure d'accélération wrappant les objets de la scène. Le rayon passé en paramètre sera tester contre cette
+	 * structure d'accélération
 	 * @param ray 					Rayon duquel chercher les points d'intersection avec les objets de la scène
 	 * @param intInfos 				Référence vers les informations sur le point d'intersection qui sera éventuellement trouvé par un appel à computeClosestInterPoint. Si un point d'intersection est trouvé, une partie de l'ensemble des informations relatives sera mise à jour 
 	 * @param getNormalAtInter 		True pour récupérer la normale au point d'intersection dans intInfos passé en argument. Si false, la normale ne sera pas récupérer et l'attribut 'normalAtIntersection' de intInfos restera inchangé
@@ -160,45 +162,21 @@ public class RayTracer
 	 *
 	 * @return Retourne l'objet avec lequel le rayon a fait son intersection. Si 'outClosestInterPoint' était non nulle à l'appel de la méthode alors outClosestInterPoint contient maintenant le point d'intersection entre le rayon et l'objet renvoyé par la méthode
 	 */
-	protected Shape computeClosestInterPoint(ArrayList<Shape> objectList, Ray ray, RayTracerInterInfos intInfos, boolean getNormalAtInter, Point outClosestInterPoint)
+	protected Shape computeClosestInterPoint(AccelerationStructure accelStruct, Ray ray, RayTracerInterInfos intInfos, boolean getNormalAtInter, Point outClosestInterPoint)
 	{
-		Shape closestObjectIntersected = null;
-		Double distanceMin = null;
-
-		for(Shape object : objectList)
+		Vector outNormalAtIntersection = null;
+		//if getNormalAtInter, cela veut que l'on souhaite récupérer la normale au point d'intersection. Dans ce cas, on crée un nouveau vecteur
+		//afin que outNormalAtIntersection ne soit pas null et donc apte à être modifié par l'appel à la méthode intersect()
+		if(getNormalAtInter)
+			outNormalAtIntersection = new Vector(0, 0, 0);
+		
+		Shape closestObjectIntersected = accelStruct.intersect(ray, outClosestInterPoint, outNormalAtIntersection);
+		if(closestObjectIntersected != null)
 		{
-			double distRayOriInter = -1;
-
-			Vector newNormalAtInter = new Vector(0, 0, 0);//Ce vecteur va temporairement stocker la normale au point d'intersection trouvé (s'il existe). Si le point d'intersection trouvé et plus proche que les autres, c'est alors cette normale que l'on gardera
-			Point intersection = object.intersect(ray, newNormalAtInter);
-			if(object instanceof ArbitraryTriangleShape)
-				this.rtStats.incrementIntersectionTestsBy(((ArbitraryTriangleShape)object).getTriangleList().size());
-			else
-				this.rtStats.incrementIntersectionTestsDone();
-			
-			if(intersection != null)
-			{
-				distRayOriInter = Point.distance(ray.getOrigin(), intersection);
-
-				if(distanceMin == null || distRayOriInter < distanceMin)//Si c'est le premier point d'intersection qu'on trouve ou si on a trouvé un point d'intersection plus proche que celui qu'on avait avant
-				{
-					distanceMin = distRayOriInter;
-
-					if(intInfos != null)
-					{
-						intInfos.setIntP(intersection);
-						if(getNormalAtInter)//Si on souhaite récupérer la normale au point d'intersection
-							intInfos.setNormInt(newNormalAtInter);;//On a trouvé un point plus proche donc on peut actualiser la normale avec la normale correpondant au point le plus proche
-					}
-					
-					if(outClosestInterPoint != null)
-						outClosestInterPoint.copyIn(intersection);
-					
-					closestObjectIntersected = object;
-				}
-			}
+			intInfos.setIntP(outClosestInterPoint);
+			intInfos.setNormInt(outNormalAtIntersection);
 		}
-
+		
 		return closestObjectIntersected;
 	}
 
@@ -557,7 +535,7 @@ public class RayTracer
 		RayTracerInterInfos interInfos = new RayTracerInterInfos();
 		
 		interInfos.setRay(ray);
-		Shape intersectedObject = computeClosestInterPoint(objectList, ray, interInfos, true, null);//On détermine l'objet intersecté par le rayon et on stocke sa référence dans la intInfos
+		Shape intersectedObject = computeClosestInterPoint(renderScene.getAccelerationStructure(), ray, interInfos, true, null);//On détermine l'objet intersecté par le rayon et on stocke sa référence dans la intInfos
 
 		if(intersectedObject != null)//Un objet a bien été intersecté
 		{
@@ -612,7 +590,7 @@ public class RayTracer
 	
 				//On cherche une intersection avec un objet qui se trouverait entre la lampe et l'origine du shadow ray
 				Point shadowInterPoint = new Point(0, 0, 0);
-				Shape shadowInterObject = computeClosestInterPoint(objectList, interInfos.getShadowRay(), null, false, shadowInterPoint);
+				Shape shadowInterObject = computeClosestInterPoint(renderScene.getAccelerationStructure(), interInfos.getShadowRay(), null, false, shadowInterPoint);
 	
 				double interToShadowInterDist = 0;
 				if(shadowInterObject != null)
@@ -957,6 +935,9 @@ public class RayTracer
 			return false;
 		
 		if(renderScene.getLights() == null || renderScene.getLights().size() == 0)//Pas de source de lumière
+			return false;
+		
+		if(renderScene.getAccelerationStructure() == null)
 			return false;
 		
 		return true;
