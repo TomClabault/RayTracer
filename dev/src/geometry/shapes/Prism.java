@@ -102,15 +102,15 @@ public class Prism extends ArbitraryTriangleShape implements Shape
         Triangle tr8 = new Triangle(E,B,A, material);
 
         /*on ajoute dans le array des triangles*/
-        super.listeTriangle = new ArrayList<Triangle>();
-        super.listeTriangle.add(tr1);
-        super.listeTriangle.add(tr2);
-        super.listeTriangle.add(tr3);
-        super.listeTriangle.add(tr4);
-        super.listeTriangle.add(tr5);
-        super.listeTriangle.add(tr6);
-        super.listeTriangle.add(tr7);
-        super.listeTriangle.add(tr8);
+        super.triangleList = new ArrayList<Triangle>();
+        super.triangleList.add(tr1);
+        super.triangleList.add(tr2);
+        super.triangleList.add(tr3);
+        super.triangleList.add(tr4);
+        super.triangleList.add(tr5);
+        super.triangleList.add(tr6);
+        super.triangleList.add(tr7);
+        super.triangleList.add(tr8);
 
     }
 }

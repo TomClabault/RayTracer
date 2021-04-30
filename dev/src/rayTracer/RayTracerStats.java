@@ -26,6 +26,11 @@ public class RayTracerStats
 		this.nbIntersectionTestsDone.incrementAndGet();
 	}
 	
+	public void incrementIntersectionTestsBy(long increment)
+	{
+		this.nbIntersectionTestsDone.addAndGet(increment);
+	}
+	
 	public long getNbRaysShot()
 	{
 		return this.nbRaysShot.get();

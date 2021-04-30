@@ -12,7 +12,7 @@ import maths.Vector;
 public class ArbitraryTriangleShape implements Shape
 {
 	protected Material material;
-	protected ArrayList<Triangle> listeTriangle;
+	protected ArrayList<Triangle> triangleList;
 	
 	public ArbitraryTriangleShape()
 	{
@@ -22,7 +22,7 @@ public class ArbitraryTriangleShape implements Shape
 	public ArbitraryTriangleShape(Material material)
 	{
 		this.material = material;
-		this.listeTriangle = new ArrayList<>();
+		this.triangleList = new ArrayList<>();
 	}
 	
 	/**
@@ -32,7 +32,7 @@ public class ArbitraryTriangleShape implements Shape
 	 */
 	public void addTriangle(Triangle triangle)
 	{
-		this.listeTriangle.add(triangle);
+		this.triangleList.add(triangle);
 	}
 	
 	/**
@@ -45,9 +45,9 @@ public class ArbitraryTriangleShape implements Shape
 		Point closestInterPoint = null;
 		Triangle intersectedTriangle = null;
 		
-		for (int i = 0; i < listeTriangle.size(); i++)
+		for (int i = 0; i < triangleList.size(); i++)
 		{
-			Triangle triangle = listeTriangle.get(i);
+			Triangle triangle = triangleList.get(i);
 			intersection = triangle.intersect(ray, null);
 			if(intersection != null)
 			{
@@ -57,7 +57,7 @@ public class ArbitraryTriangleShape implements Shape
 					distancemin = distance;
 					
 					closestInterPoint = intersection;
-					intersectedTriangle = listeTriangle.get(i);
+					intersectedTriangle = triangleList.get(i);
 				}
 			}
 
@@ -81,11 +81,11 @@ public class ArbitraryTriangleShape implements Shape
 	 */
 	public Vector getNormal(Point point)
 	{
-		for (int i = 0 ; i < listeTriangle.size() ;i++)
+		for (int i = 0 ; i < triangleList.size() ;i++)
 		{
-			if (listeTriangle.get(i).insideOutsideTest(point) == true)
+			if (triangleList.get(i).insideOutsideTest(point) == true)
 			{
-				return listeTriangle.get(i).getNormal(point);
+				return triangleList.get(i).getNormal(point);
 			}
 		}
 		return null;
@@ -97,6 +97,14 @@ public class ArbitraryTriangleShape implements Shape
 	public Material getMaterial()
 	{
 		return material;
+	}
+	
+	/**
+	 * @return La liste des triangles composant l'objet
+	 */
+	public ArrayList<Triangle> getTriangleList()
+	{
+		return this.triangleList;
 	}
 	
 	/**
@@ -123,7 +131,7 @@ public class ArbitraryTriangleShape implements Shape
 	{
 		String output = "";
 		
-		for(Triangle triangle : this.listeTriangle)
+		for(Triangle triangle : this.triangleList)
 			output += triangle + System.lineSeparator();
 		
 		return output;

@@ -111,21 +111,21 @@ public class Parallelepiped extends ArbitraryTriangleShape implements Shape
 		Triangle tr12 = new Triangle(H,F,G, material);
 
 		/*on ajoute dans le array des triangles*/
-		super.listeTriangle = new ArrayList<Triangle>();
-		super.listeTriangle.add(tr1);
-		super.listeTriangle.add(tr2);
-		super.listeTriangle.add(tr3);
-		super.listeTriangle.add(tr4);
-		super.listeTriangle.add(tr5);
-		super.listeTriangle.add(tr6);
-		super.listeTriangle.add(tr7);
-		super.listeTriangle.add(tr8);
-		super.listeTriangle.add(tr9);
-		super.listeTriangle.add(tr10);
-		super.listeTriangle.add(tr11);
-		super.listeTriangle.add(tr12);
+		super.triangleList = new ArrayList<Triangle>();
+		super.triangleList.add(tr1);
+		super.triangleList.add(tr2);
+		super.triangleList.add(tr3);
+		super.triangleList.add(tr4);
+		super.triangleList.add(tr5);
+		super.triangleList.add(tr6);
+		super.triangleList.add(tr7);
+		super.triangleList.add(tr8);
+		super.triangleList.add(tr9);
+		super.triangleList.add(tr10);
+		super.triangleList.add(tr11);
+		super.triangleList.add(tr12);
 
-		for(Triangle triangle : listeTriangle)
+		for(Triangle triangle : triangleList)
 		{
 			System.out.println(triangle + "normal = " + triangle.getNormal(null));
 		}

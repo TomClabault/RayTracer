@@ -76,27 +76,27 @@ public class Icosphere extends ArbitraryTriangleShape implements Shape
         Triangle tr20 = new Triangle(G,D,C, material);
 
         /*on ajoute dans le array des triangles*/
-        super.listeTriangle = new ArrayList<Triangle>();
-        super.listeTriangle.add(tr1);
-        super.listeTriangle.add(tr2);
-        super.listeTriangle.add(tr3);
-        super.listeTriangle.add(tr4);
-        super.listeTriangle.add(tr5);
-        super.listeTriangle.add(tr6);
-        super.listeTriangle.add(tr7);
-        super.listeTriangle.add(tr8);
-        super.listeTriangle.add(tr9);
-        super.listeTriangle.add(tr10);
-        super.listeTriangle.add(tr11);
-        super.listeTriangle.add(tr12);
-        super.listeTriangle.add(tr13);
-        super.listeTriangle.add(tr14);
-        super.listeTriangle.add(tr15);
-        super.listeTriangle.add(tr16);
-        super.listeTriangle.add(tr17);
-        super.listeTriangle.add(tr18);
-        super.listeTriangle.add(tr19);
-        super.listeTriangle.add(tr20);
+        super.triangleList = new ArrayList<Triangle>();
+        super.triangleList.add(tr1);
+        super.triangleList.add(tr2);
+        super.triangleList.add(tr3);
+        super.triangleList.add(tr4);
+        super.triangleList.add(tr5);
+        super.triangleList.add(tr6);
+        super.triangleList.add(tr7);
+        super.triangleList.add(tr8);
+        super.triangleList.add(tr9);
+        super.triangleList.add(tr10);
+        super.triangleList.add(tr11);
+        super.triangleList.add(tr12);
+        super.triangleList.add(tr13);
+        super.triangleList.add(tr14);
+        super.triangleList.add(tr15);
+        super.triangleList.add(tr16);
+        super.triangleList.add(tr17);
+        super.triangleList.add(tr18);
+        super.triangleList.add(tr19);
+        super.triangleList.add(tr20);
 
         
 
@@ -104,13 +104,13 @@ public class Icosphere extends ArbitraryTriangleShape implements Shape
         // on va boucler selon combien de subdivision souhaite
         for (int itr = 0 ; itr < this.subdivision - 1; itr++ )
         {
-            int listsize = listeTriangle.size();
+            int listsize = triangleList.size();
             for (int i = 0; i < listsize; i++)
             {
             // on recupere les points du triangle a chaque bouclage
-            Point Atr = listeTriangle.get(i).getA();
-            Point Btr = listeTriangle.get(i).getB();
-            Point Ctr = listeTriangle.get(i).getC();
+            Point Atr = triangleList.get(i).getA();
+            Point Btr = triangleList.get(i).getB();
+            Point Ctr = triangleList.get(i).getC();
 
             // on trouve le milieu de chaque segment du triangle
             Point ABmid = Vector.normalizeP(Point.midPoint(Atr, Btr));
@@ -124,10 +124,10 @@ public class Icosphere extends ArbitraryTriangleShape implements Shape
             Triangle tribot = new Triangle(ABmid, Btr, BCmid, material);
 
             // on ajout ces triangles dans la liste des triangles
-            super.listeTriangle.add(trimid);
-            super.listeTriangle.add(trileft);
-            super.listeTriangle.add(triright);
-            super.listeTriangle.add(tribot);
+            super.triangleList.add(trimid);
+            super.triangleList.add(trileft);
+            super.triangleList.add(triright);
+            super.triangleList.add(tribot);
 
             }
             //supprimer les triangles de la subdiv avant
@@ -136,14 +136,14 @@ public class Icosphere extends ArbitraryTriangleShape implements Shape
 	            double subdivavant = 20 * Math.pow(4, itr - 1);
 	            for(int j = 0; j < subdivavant ; j++)
 	            {
-	                super.listeTriangle.remove(0);
+	                super.triangleList.remove(0);
 	            }
             }
                                   
             
         }
         //On va multiplier les triangles avec la taille souhaitee puis additioner avec le point de depart
-        for(Triangle triangle:listeTriangle) 
+        for(Triangle triangle:triangleList) 
         {
         	Point Atr = triangle.getA();
         	Point Btr = triangle.getB();

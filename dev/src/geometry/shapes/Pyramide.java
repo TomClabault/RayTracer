@@ -76,13 +76,13 @@ public class Pyramide extends ArbitraryTriangleShape implements Shape
         Triangle tr6 = new Triangle(D, B, C, material);
 
         /*on va ajouter les triangles dans la listeTriangle*/
-        super.listeTriangle = new ArrayList<Triangle>();
-        super.listeTriangle.add(tr1);
-        super.listeTriangle.add(tr2);
-        super.listeTriangle.add(tr3);
-        super.listeTriangle.add(tr4);
-        super.listeTriangle.add(tr5);
-        super.listeTriangle.add(tr6);
+        super.triangleList = new ArrayList<Triangle>();
+        super.triangleList.add(tr1);
+        super.triangleList.add(tr2);
+        super.triangleList.add(tr3);
+        super.triangleList.add(tr4);
+        super.triangleList.add(tr5);
+        super.triangleList.add(tr6);
 
     }
 }

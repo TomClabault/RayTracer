@@ -17,6 +17,7 @@ import exceptions.InvalidParallelepipedException;
 import exceptions.InvalidSphereException;
 import geometry.ArbitraryTriangleShape;
 import geometry.Shape;
+import geometry.shapes.Icosphere;
 import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
 import gui.threads.RefreshSimpleRenderThread;
@@ -147,7 +148,7 @@ public class MainApp extends Application {
 	   		{
 	   			rayTracingScene = createBaselineScene();
 	   			
-	   			PlyParser plyParser = new PlyParser(new MetallicMaterial(ColorOperations.sRGBGamma2_2ToLinear(Color.web("D4AF37"))), 4);
+	   			PlyParser plyParser = new PlyParser(new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(Color.web("D4AF37")), 0.75), 4);
 	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
 	   			
 	   			rayTracingScene.addShape(plyFileShape);
@@ -192,6 +193,7 @@ public class MainApp extends Application {
 
         if(!MainApp.SIMPLE_RENDER)//On lance le rendu en temps réel s'il est désiré
         {
+        	//TODO (tom) clean render window old
         	RenderWindowOld renderWindow = new RenderWindowOld(stage, rayTracer, rayTracingScene, rayTracerSettings);
         	renderWindow.execute();
 
@@ -209,8 +211,6 @@ public class MainApp extends Application {
         	
         	ExecutorService executorService = Executors.newFixedThreadPool(1);
         	executorService.submit(new RenderTask(renderWindow.getPixelWriter(), PixelFormat.getIntArgbInstance(), rayTracer, rayTracingScene, rayTracerSettings));
-        	//TODO (tom) faire un refresh thread qu'on pourra utiliser ici pour refresh l'affichage pendant le rendu et qu'on pourra utiliser
-        	//dans renderWindow pour ne pas bloquer l'interface pendant les lourds rendus
         }
 
 
@@ -225,12 +225,14 @@ public class MainApp extends Application {
 
     public RayTracingScene createBaselineScene()
     {
-    	Camera cameraRT = new Camera(new Point(0.000, 0.5, 2), 0, 0, 40);
+    	Camera cameraRT = new Camera(new Point(0.5, 0.5, 2), 0, 0, 40);
         PositionnalLight l = new LightBulb(new Point(2, 2, 1), 1);
 
         ArrayList<Shape> shapeList = new ArrayList<>();
         shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
 
+        //shapeList.add(new Icosphere(new Point(0, 0.5, -2), 1, 3, new GlassMaterial()));
+        
         Image skybox = null;
         URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
         if(skyboxURL != null)

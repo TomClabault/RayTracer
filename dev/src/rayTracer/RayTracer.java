@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import geometry.ArbitraryTriangleShape;
 import geometry.Shape;
 import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
@@ -170,7 +171,10 @@ public class RayTracer
 
 			Vector newNormalAtInter = new Vector(0, 0, 0);//Ce vecteur va temporairement stocker la normale au point d'intersection trouvé (s'il existe). Si le point d'intersection trouvé et plus proche que les autres, c'est alors cette normale que l'on gardera
 			Point intersection = object.intersect(ray, newNormalAtInter);
-			this.rtStats.incrementIntersectionTestsDone();
+			if(object instanceof ArbitraryTriangleShape)
+				this.rtStats.incrementIntersectionTestsBy(((ArbitraryTriangleShape)object).getTriangleList().size());
+			else
+				this.rtStats.incrementIntersectionTestsDone();
 			
 			if(intersection != null)
 			{
