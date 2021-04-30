@@ -21,6 +21,9 @@ Rapport RayTracer.synctex.gz
 *.dia~
 *.dia.autosave
 
+#Fichiers resources lourds
+*.ply
+
 #Fichiers geogebra
 *.ggb
 rapport/sources/img/rt/photoshop
