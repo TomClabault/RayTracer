@@ -82,7 +82,8 @@ public class TriangleNaiveStrategy implements TriangleIntersectionStrategy
 			if(outNormalAtInter != null)
 				outNormalAtInter.copyIn(planeNormal);
 			
-			outInterPoint.copyIn(intersection);
+			if(outInterPoint != null)
+				outInterPoint.copyIn(intersection);
 			
 			return coeffVectorPoint;//On le retourne
 		}

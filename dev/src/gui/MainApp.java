@@ -185,13 +185,13 @@ public class MainApp extends Application {
 
 		    rayTracingScene.setSkybox(skybox);
 	   	}
-	   	rayTracingScene.setAccelerationStructure(new BVHAccelerationStructure(rayTracingScene.getSceneObjects()));
-//	   	rayTracingScene.setAccelerationStructure(new NoAccelerationStructure(rayTracingScene.getSceneObjects()));
+	   	//rayTracingScene.setAccelerationStructure(new BVHAccelerationStructure(rayTracingScene.getSceneObjects()));
+	   	rayTracingScene.setAccelerationStructure(new NoAccelerationStructure(rayTracingScene.getSceneObjects()));
 	   	
         RayTracerSettings rayTracerSettings = new RayTracerSettings(Runtime.getRuntime().availableProcessors(), 4, 9, 4);
        
-	   	ChooseRenderSettingsWindow setSizeWindow = new ChooseRenderSettingsWindow(rayTracerSettings);
-        setSizeWindow.execute();
+	   	ChooseRenderSettingsWindow renderSettingsWindow = new ChooseRenderSettingsWindow(rayTracerSettings);
+        renderSettingsWindow.execute();
         
 	   	RayTracer rayTracer = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT);
 
@@ -237,11 +237,6 @@ public class MainApp extends Application {
         });
     }
 
-    public void refreshWindow(WorkerStateEvent event)
-    {
-    	RenderWindowOld.drawImage(null, null, null);
-    }
-    
     public RayTracingScene createBaselineScene()
     {
     	Camera cameraRT = new Camera(new Point(0.5, 0.5, 2), 0, 0, 40);
@@ -250,7 +245,7 @@ public class MainApp extends Application {
         ArrayList<Shape> shapeList = new ArrayList<>();
         shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
 
-        shapeList.add(new Icosphere(new Point(0, 0.5, -2), 1, 4, new GlassMaterial()));
+        shapeList.add(new Icosphere(new Point(0.5, 0.5, -2), 1, 3, new GlassMaterial()));
         
         Image skybox = null;
         URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");

@@ -31,7 +31,7 @@ public class NoAccelerationStructure implements AccelerationStructure
 			Vector tempNormalAtInter = new Vector(0, 0, 0);
 				
 			Double t = shape.intersect(ray, tempInterPoint, tempNormalAtInter);
-			if(t != null)//Si on a trouvé une intersection
+			if(t != null && t > 0)//Si on a trouvé une intersection
 			{
 				if(tMin == null || t < tMin)
 				{

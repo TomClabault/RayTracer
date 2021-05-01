@@ -2,6 +2,7 @@ package gui.panes;
 
 import java.net.URL;
 
+import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Label;
@@ -38,7 +39,16 @@ public class StatsPane extends GridPane
 		GridPane.setValignment(rayTracerStatsLabel, VPos.TOP);
 		GridPane.setValignment(renderTimeLabel, VPos.TOP);		
 		
-		this.getStylesheets().add(StatsPane.class.getResource("../styles/HUDText.css").toExternalForm());
+		URL cssHUDFile = StatsPane.class.getResource("../styles/HUDText.css");
+		if(cssHUDFile == null)
+		{
+			System.out.println("Impossible de trouver le style HUDText.css");
+			
+			Platform.exit();
+			System.exit(0);
+		}
+		
+		this.getStylesheets().add(cssHUDFile.toExternalForm());
 	}
 	
 	public Label getRayTracerStatsLabel()
