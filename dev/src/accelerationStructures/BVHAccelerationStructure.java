@@ -57,7 +57,7 @@ public class BVHAccelerationStructure implements AccelerationStructure
 		{
 			BoundingVolume boundingVolume = this.boundingVolumes.get(boundingIndex);
 			
-			if(boundingVolume == null || boundingVolume.intersect(ray, outNormalAtInter))
+			if(boundingVolume == null || boundingVolume.intersect(ray))
 			{
 				//Si le bounding volume est null, un des objets de la scène a renvoyé null pour son bounding volumes lors de la 
 				//construction des bounding volumes de la scène. Cela signifie probablement qu'intersecter l'objet directement

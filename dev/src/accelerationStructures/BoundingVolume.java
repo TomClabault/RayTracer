@@ -5,6 +5,10 @@ import maths.Point;
 import maths.Ray;
 import maths.Vector;
 
+/**
+ * Représente le volume constitué de 7 paires de plans parallèles encadrant au mieux un objet de la scène donné
+ * Peut être vu comme une BoundingBox plus évoluée
+ */
 public class BoundingVolume 
 {
 	private double[] dNear;
@@ -25,7 +29,7 @@ public class BoundingVolume
 	 * 'gros' que le bouding volume courant, le volume courant sera étendu et sera, arès l'appel à la fonction, au moins
 	 * aussi gros que 'extender'
 	 * 
-	 * @param extender Le volume qui va tenter d'étender le volume courant (this)
+	 * @param extender Le volume qui va tenter d'étendre le volume courant (this)
 	 */
 	public void extendsBy(BoundingVolume extender)
 	{
@@ -35,28 +39,55 @@ public class BoundingVolume
 			if(extender.getDFar(i) > this.getDFar(i)) this.dFar[i] = extender.getDFar(i);
 		}
 	}
-	
+
+	/**
+	 * @return Le point de coordonnées (x, y, z) représentant le centroïde du volume
+	 */
 	public Point getCentroid()
 	{
 		return new Point((this.dNear[0] + this.dFar[0]) / 2, (this.dNear[1] + this.dFar[1]) / 2,(this.dNear[2] + this.dFar[2]) / 2);
 	}
 	
+	/**
+	 * Permet d'obtenir le paramètre dNear d'une paire de plan représentant le BoundingVolume
+	 * 
+	 * @param index L'indice de la paire de plan dont le paramètre d est souhaité. Entier entre 0 et 7
+	 * 
+	 * @return Le paramètre dNear de la paire de plan numéro 'index'
+	 */
 	public double getDNear(int index)
 	{
 		return this.dNear[index];
 	}
 	
+	/**
+	 * Permet d'obtenir le paramètre dFar d'une paire de plan représentant le BoundingVolume
+	 * 
+	 * @param index L'indice de la paire de plan dont le paramètre d est souhaité. Entier entre 0 et 7
+	 * 
+	 * @return Le paramètre dFar de la paire de plan numéro 'index'
+	 */
 	public double getDFar(int index)
 	{
 		return this.dFar[index];
 	}
 	
+	/**
+	 * @return L'objet encadré par le bounding volume
+	 */
 	public Shape getEnclosedObject()
 	{
 		return this.enclosedObject;
 	}
 	
-	public boolean intersect(Ray ray, Vector outNormalAtInter)
+	/**
+	 * Détermine si le rayon 'ray' passé en paramètre intersecte le BoundingVolume ou non
+	 * 
+	 * @param ray Le rayon qui doit être testé contre le bounding volume
+	 * 
+	 * @return True si le rayon a au moins une intersection avec le bounding volume, false sinon
+	 */
+	public boolean intersect(Ray ray)
 	{
 		Double tNearIntersect = null;
 		Double tFarIntersect = null;
@@ -96,6 +127,13 @@ public class BoundingVolume
 		return true;
 	}
 	
+	/**
+	 * Permet de redéfinir les paramètres dNear et dFar d'une paire de plan du bouding volume
+	 * 
+	 * @param near 	Le nouveau paramètre de dNear
+	 * @param far 	Le nouveau paramètre de dFar
+	 * @param index	Le numéro de la paire de plan dont les dNear dFar vont être redéfinis. Entier entre 0 et 7
+	 */
 	public void setBounds(double near, double far, int index)
 	{
 		this.dNear[index] = near;

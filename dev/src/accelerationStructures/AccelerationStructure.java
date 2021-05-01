@@ -6,12 +6,17 @@ import maths.Ray;
 import maths.Vector;
 import rayTracer.RayTracerStats;
 
+/**
+ * Définit une structure d'accélération que peut utiliser le ray-tracer pour accélérer ses temps de rendu. Une structure d'accélération
+ * doit fournir un moyen de tester un rayon contre les objets de la scène au moyen d'une méthode 'intersect'. Pour tout rayon passé à
+ * 'intersect', la structure doit alors renvoyer l'objet le plus proche intersecté par ce rayon
+ */
 public interface AccelerationStructure 
 {
 	/**
 	 * Test si le rayon passé en paramètre intersecte des éléments de la structure d'accélération. Calcule et met à disposition le point
 	 * d'intersection le plus proche trouvé (si bel et bien trouvé) ainsi que la normale au point d'intersection trouvé de la surface 
-	 * de l'objet intersecté
+	 * de l'objet intersecté.
 	 * 
 	 * @param interStats La structure contenant des statistiques à propos du nombre de tests d'intersection effectués. Sera automatiquement mise
 	 * à jour. Possibilité de passer null pour ne pas mettre à jour de statistiques
