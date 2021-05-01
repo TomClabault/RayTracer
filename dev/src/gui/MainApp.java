@@ -132,6 +132,7 @@ public class MainApp extends Application {
      */
     public void start(Stage stage) 
     {
+    	//TODO (tom) clean le main avec des fonctions --> commence à être le bordel
     	File fileChosen = chooseFile(stage, "POV, PLY", "*.pov", "*.ply");
     
     	if(fileChosen == null)//L'utilisateur n'a pas choisi de fichier / a annulé
@@ -185,8 +186,8 @@ public class MainApp extends Application {
 
 		    rayTracingScene.setSkybox(skybox);
 	   	}
-	   	//rayTracingScene.setAccelerationStructure(new BVHAccelerationStructure(rayTracingScene.getSceneObjects()));
-	   	rayTracingScene.setAccelerationStructure(new NoAccelerationStructure(rayTracingScene.getSceneObjects()));
+	   	rayTracingScene.setAccelerationStructure(new BVHAccelerationStructure(rayTracingScene.getSceneObjects()));
+	   	//rayTracingScene.setAccelerationStructure(new NoAccelerationStructure(rayTracingScene.getSceneObjects()));
 	   	
         RayTracerSettings rayTracerSettings = new RayTracerSettings(Runtime.getRuntime().availableProcessors(), 4, 9, 4);
        
@@ -245,7 +246,7 @@ public class MainApp extends Application {
         ArrayList<Shape> shapeList = new ArrayList<>();
         shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
 
-        shapeList.add(new Icosphere(new Point(0.5, 0.5, -2), 1, 3, new GlassMaterial()));
+        shapeList.add(new Icosphere(new Point(0, 0.5, -2), 1, 3, new MirrorMaterial(0.1)));
         
         Image skybox = null;
         URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
@@ -263,7 +264,7 @@ public class MainApp extends Application {
         	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1);
         }
 
-        sceneRT.addLight(new LightBulb(new Point(-2, 2.5, 1.440), 1));
+        //sceneRT.addLight(new LightBulb(new Point(-2, 2.5, 1.440), 1));
         return sceneRT;
     }
     

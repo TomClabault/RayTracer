@@ -1,12 +1,10 @@
 package rayTracer;
 
 import java.nio.IntBuffer;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import accelerationStructures.AccelerationStructure;
-import geometry.ArbitraryTriangleShape;
 import geometry.Shape;
 import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
@@ -157,26 +155,28 @@ public class RayTracer
 	 * structure d'accélération
 	 * @param ray 					Rayon duquel chercher les points d'intersection avec les objets de la scène
 	 * @param intInfos 				Référence vers les informations sur le point d'intersection qui sera éventuellement trouvé par un appel à computeClosestInterPoint. Si un point d'intersection est trouvé, une partie de l'ensemble des informations relatives sera mise à jour 
-	 * @param updateNormalAtInter 		True pour récupérer la normale au point d'intersection dans intInfos passé en argument. Si false, la normale ne sera pas récupérer et l'attribut 'normalAtIntersection' de intInfos restera inchangé
+	 * @param updateNormalAtInter 	True pour récupérer la normale au point d'intersection dans intInfos passé en argument. Si false, la normale ne sera pas récupérer et l'attribut 'normalAtIntersection' de intInfos restera inchangé
 	 * @param outClosestInterPoint	Référence vers une instance de Point. Si cette instance est non nulle, elle sera mise à jour si computeClosestInterPoint trouve un point d'intersection entre le rayon et la scène. Si aucun point d'intersection n'est trouvé, l'instance restera inchangée
 	 *
 	 * @return Retourne l'objet avec lequel le rayon a fait son intersection. Si 'outClosestInterPoint' était non nulle à l'appel de la méthode alors outClosestInterPoint contient maintenant le point d'intersection entre le rayon et l'objet renvoyé par la méthode
 	 */
-	protected Shape computeClosestInterPoint(AccelerationStructure accelStruct, Ray ray, RayTracerInterInfos intInfos, boolean updateNormalAtInter, Point outClosestInterPoint)
+	protected Shape computeClosestInterPoint(AccelerationStructure accelStruct, Ray ray, RayTracerStats interStats, RayTracerInterInfos intInfos, boolean updateNormalAtInter, Point outClosestInterPoint)
 	{
 		Vector outNormalAtIntersection = new Vector(0, 0, 0);;
 		
-		Point outInterPoint = new Point(0, 0, 0);
-		Shape closestObjectIntersected = accelStruct.intersect(ray, outInterPoint, outNormalAtIntersection);
-		if(closestObjectIntersected != null)
+		Point interPoint = new Point(0, 0, 0);
+		Shape closestObjectIntersected = accelStruct.intersect(interStats, ray, interPoint, outNormalAtIntersection);
+		if(closestObjectIntersected != null)//On a trouvé une intersection
 		{
-			if(updateNormalAtInter)
-				intInfos.setNormInt(outNormalAtIntersection);
-			
 			if(intInfos != null)
-				intInfos.setIntP(outInterPoint);
+			{
+				if(updateNormalAtInter)
+					intInfos.setNormInt(outNormalAtIntersection);
+				intInfos.setIntP(interPoint);
+			}
+			
 			if(outClosestInterPoint != null)//On souhaite récupérer le point d'intersection
-				outClosestInterPoint.copyIn(outInterPoint);
+				outClosestInterPoint.copyIn(interPoint);
 		}
 		
 		return closestObjectIntersected;
@@ -536,10 +536,22 @@ public class RayTracer
 		RayTracerInterInfos interInfos = new RayTracerInterInfos();
 		
 		interInfos.setRay(ray);
-		Shape intersectedObject = computeClosestInterPoint(renderScene.getAccelerationStructure(), ray, interInfos, true, new Point(0, 0, 0));//On détermine l'objet intersecté par le rayon et on stocke sa référence dans la intInfos
+		Shape intersectedObject = computeClosestInterPoint(renderScene.getAccelerationStructure(), ray, rtStats, interInfos, true, null);//On détermine l'objet intersecté par le rayon et on stocke sa référence dans la intInfos
 
 		if(intersectedObject != null)//Un objet a bien été intersecté
 		{
+//			try 
+//			{
+//				debugOutputFile.write(intersectedObject.toString() + System.lineSeparator());
+//				debugOutputFile.write(interInfos.getIntP().toString() + System.lineSeparator());
+//				debugOutputFile.write(interInfos.getNormInt().toString() + System.lineSeparator());
+//				debugOutputFile.write(System.lineSeparator());
+//			} 
+//			catch (IOException e) 
+//			{
+//				e.printStackTrace();
+//			}
+			
 			interInfos.setIntO(intersectedObject);//On set l'objet intersecté dans les informations d'intersection
 			
 			double lightIntensity = 0;
@@ -591,7 +603,7 @@ public class RayTracer
 	
 				//On cherche une intersection avec un objet qui se trouverait entre la lampe et l'origine du shadow ray
 				Point shadowInterPoint = new Point(0, 0, 0);
-				Shape shadowInterObject = computeClosestInterPoint(renderScene.getAccelerationStructure(), interInfos.getShadowRay(), null, false, shadowInterPoint);
+				Shape shadowInterObject = computeClosestInterPoint(renderScene.getAccelerationStructure(), interInfos.getShadowRay(), rtStats, null, false, shadowInterPoint);
 	
 				double interToShadowInterDist = 0;
 				if(shadowInterObject != null)

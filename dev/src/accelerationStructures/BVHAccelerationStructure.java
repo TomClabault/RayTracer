@@ -2,10 +2,12 @@ package accelerationStructures;
 
 import java.util.ArrayList;
 
+import geometry.ArbitraryTriangleShape;
 import geometry.Shape;
 import maths.Point;
 import maths.Ray;
 import maths.Vector;
+import rayTracer.RayTracerStats;
 import scene.RayTracingScene;
 
 public class BVHAccelerationStructure implements AccelerationStructure 
@@ -42,7 +44,7 @@ public class BVHAccelerationStructure implements AccelerationStructure
 	}
 	
 	@Override
-	public Shape intersect(Ray ray, Point outInterPoint, Vector outNormalAtInter) 
+	public Shape intersect(RayTracerStats interStats, Ray ray, Point outInterPoint, Vector outNormalAtInter) 
 	{
 		Shape closestIntersectedObject = null;
 		Point closestInterPoint = null;
@@ -63,11 +65,18 @@ public class BVHAccelerationStructure implements AccelerationStructure
 				//que son bounding volume.
 				//Si une intersection avec le bounding volume a été trouvée, on récupère l'objet correspondant au bounding volume
 				//et on l'intersecte
-				Shape tempInterObject = this.sceneShapes.get(boundingIndex);
+				Shape tempInterObject = boundingVolume == null ? this.sceneShapes.get(boundingIndex) : boundingVolume.getEnclosedObject();
 				Point tempInterPoint = new Point(0, 0, 0);
 				Vector tempNormalAtInter = new Vector(0, 0, 0);
 				
 				Double t = tempInterObject.intersect(ray, tempInterPoint, tempNormalAtInter);
+				if(tempInterObject instanceof ArbitraryTriangleShape)//Si l'objet est une composition de triangles
+					//On augmente le nombre d'intersection testées par le nombre de triangle de l'objet
+					interStats.incrementIntersectionTestsBy(((ArbitraryTriangleShape)tempInterObject).getTriangleList().size());
+				else
+					//Sinon on augment de 1 puisqu'on ne vas tester l'intersection qu'avec l'objet lui même, 1 seul objet
+					interStats.incrementIntersectionTestsDone();
+				
 				if(t != null)//Si on a trouvé une intersection
 				{
 					if(tMin == null || t < tMin)

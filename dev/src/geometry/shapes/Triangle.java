@@ -21,7 +21,7 @@ public class Triangle implements Shape
 	
 	public Triangle(Point A, Point B, Point C, Material material)
 	{
-		this(A, B, C, material, new TriangleMollerTrumboreStrategy());
+		this(A, B, C, material, new TriangleNaiveStrategy());
 	}
 	
 	public Triangle(Point A, Point B, Point C, Material material, TriangleIntersectionStrategy intersectionStrategy)
@@ -40,7 +40,7 @@ public class Triangle implements Shape
 	 */
 	public BoundingVolume computeBoundingVolume()
 	{
-		BoundingVolume volume = new BoundingVolume();
+		BoundingVolume volume = new BoundingVolume(this);
 		
 		for(int i = 0; i < BVHAccelerationStructure.PLANE_SET_NORMAL_COUNT; i++)
 		{

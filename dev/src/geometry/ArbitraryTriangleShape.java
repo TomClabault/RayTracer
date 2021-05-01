@@ -40,7 +40,7 @@ public class ArbitraryTriangleShape implements Shape
 	
 	public BoundingVolume computeBoundingVolume()
 	{
-		BoundingVolume volume = new BoundingVolume();
+		BoundingVolume volume = new BoundingVolume(this);
 		
 		for(int i = 0; i < BVHAccelerationStructure.PLANE_SET_NORMAL_COUNT; i++)
 		{
@@ -75,8 +75,8 @@ public class ArbitraryTriangleShape implements Shape
 		
 		Triangle intersectedTriangle = null;
 		
-		Point intersectionPoint = null;
-		Point closestInterPoint = null;
+		Point intersectionPoint = new Point(0, 0, 0);
+		Point closestInterPoint = new Point(0, 0, 0);
 		
 		for (int i = 0; i < triangleList.size(); i++)
 		{
@@ -88,7 +88,7 @@ public class ArbitraryTriangleShape implements Shape
 				{
 					tMin = t;
 					
-					closestInterPoint = intersectionPoint;
+					closestInterPoint.copyIn(intersectionPoint);
 					intersectedTriangle = triangleList.get(i);
 				}
 			}
@@ -102,6 +102,7 @@ public class ArbitraryTriangleShape implements Shape
 		if(closestInterPoint != null && outInterPoint != null)//Si on a trouvé une intersection et que le point de sortie n'est pas null et qu'il
 		//peut donc accueillir le nouveau point d'intersection
 			outInterPoint.copyIn(closestInterPoint);
+		
 		return tMin;
 	}
 	

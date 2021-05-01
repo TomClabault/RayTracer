@@ -4,6 +4,7 @@ import geometry.Shape;
 import maths.Point;
 import maths.Ray;
 import maths.Vector;
+import rayTracer.RayTracerStats;
 
 public interface AccelerationStructure 
 {
@@ -12,6 +13,8 @@ public interface AccelerationStructure
 	 * d'intersection le plus proche trouvé (si bel et bien trouvé) ainsi que la normale au point d'intersection trouvé de la surface 
 	 * de l'objet intersecté
 	 * 
+	 * @param interStats La structure contenant des statistiques à propos du nombre de tests d'intersection effectués. Sera automatiquement mise
+	 * à jour. Possibilité de passer null pour ne pas mettre à jour de statistiques
 	 * @param ray Le rayon dont on veut tester l'intersection avec la structure
 	 * @param outInterPoint Si un point d'intersection est trouvé, les coordonnées du point d'intersection trouvé seront
 	 * stockées dans ce paramètre. Les coordonnées existantes de ce paramètre seront alors écrasées
@@ -20,5 +23,5 @@ public interface AccelerationStructure
 	 * 
 	 * @return L'objet le plus proche de la caméra qui a été intersecté par le rayon. Retourne null si aucun objet n'a été intersecté.
 	 */
-	public Shape intersect(Ray ray, Point outInterPoint, Vector outNormalAtInter);
+	public Shape intersect(RayTracerStats interStats, Ray ray, Point outInterPoint, Vector outNormalAtInter);
 }

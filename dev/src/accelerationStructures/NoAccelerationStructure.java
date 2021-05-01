@@ -6,6 +6,7 @@ import geometry.Shape;
 import maths.Point;
 import maths.Ray;
 import maths.Vector;
+import rayTracer.RayTracerStats;
 
 public class NoAccelerationStructure implements AccelerationStructure
 {
@@ -17,11 +18,11 @@ public class NoAccelerationStructure implements AccelerationStructure
 	}
 
 	@Override
-	public Shape intersect(Ray ray, Point outInterPoint, Vector outNormalAtInter) 
+	public Shape intersect(RayTracerStats interStats, Ray ray, Point outInterPoint, Vector outNormalAtInter) 
 	{
 		Shape closestIntersectedObject = null;
 		Point closestInterPoint = null;
-		Vector normalAtClosestsInterPoint = null;
+		Vector normalAtClosestInterPoint = null;
 		
 		Double tMin = null;
 		
@@ -31,14 +32,14 @@ public class NoAccelerationStructure implements AccelerationStructure
 			Vector tempNormalAtInter = new Vector(0, 0, 0);
 				
 			Double t = shape.intersect(ray, tempInterPoint, tempNormalAtInter);
-			if(t != null && t > 0)//Si on a trouvé une intersection
+			if(t != null)//Si on a trouvé une intersection
 			{
 				if(tMin == null || t < tMin)
 				{
 					tMin = t;
 					
 					closestInterPoint = tempInterPoint;
-					normalAtClosestsInterPoint = tempNormalAtInter;
+					normalAtClosestInterPoint = tempNormalAtInter;
 					closestIntersectedObject = shape;
 				}
 			}
@@ -49,7 +50,7 @@ public class NoAccelerationStructure implements AccelerationStructure
 			if(outInterPoint != null)
 				outInterPoint.copyIn(closestInterPoint);
 			if(outNormalAtInter != null)
-				outNormalAtInter.copyIn(normalAtClosestsInterPoint);
+				outNormalAtInter.copyIn(normalAtClosestInterPoint);
 			
 			return closestIntersectedObject;
 		}
