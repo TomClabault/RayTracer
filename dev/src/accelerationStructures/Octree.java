@@ -1,4 +1,3 @@
-				
 package accelerationStructures;
 
 import java.util.ArrayList;
@@ -9,30 +8,32 @@ import maths.Point;
 public class Octree 
 {
 	private OctreeNode root;
-	private ArrayList<Shape> shapes;
-
-	private Point centroid;
+	private ArrayList<Shape> sceneShapes;
+	private ArrayList<BoundingVolume> shapesVolumes;
+	
 	private BoundingVolume boundingVolume;
 	private BoundingBox bounds;
 	
-	public Octree(ArrayList<Shape> shapes)
+	public Octree(ArrayList<Shape> sceneShapes)
 	{
-		this.shapes = shapes;
-		this.bounds = new BoundingBox(new Point(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE), new Point(Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE));
+		this.sceneShapes = sceneShapes;
+		this.shapesVolumes = new ArrayList<>();
+		this.boundingVolume = new BoundingVolume();
 		
+		this.bounds = new BoundingBox(new Point(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE), new Point(Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE));
+		this.root = new OctreeNode(0);//Racine = nouveau noeud de profondeur 0
+		
+		computeBoundingVolumes();
 		computeShapesBoundingBox();
 		squareifyBoundingBox();
-		computeCentroid();
-	}
-	
-	private void computeCentroid()
-	{
-		this.centroid = Point.scalarMul(0.5, Point.add(bounds.getBounds(0), bounds.getBounds(1)));
+		
+		for(BoundingVolume volume : shapesVolumes)
+			root.insert(volume, bounds.getBounds(0), bounds.getBounds(1));
 	}
 	
 	private void computeShapesBoundingBox() 
 	{
-		for(Shape shape : shapes)
+		for(Shape shape : sceneShapes)
 		{
 			BoundingBox shapeBoundingBox = shape.getBoundingBox();
 			if(shapeBoundingBox != null)
@@ -63,5 +64,16 @@ public class Octree
 		
 		this.bounds.setBound(Point.add(bound0, diffPoint), 0);
 		this.bounds.setBound(Point.add(bound1, diffPoint), 1);
+	}
+	
+	private void computeBoundingVolumes()
+	{
+		for(Shape shape : sceneShapes)
+		{
+			BoundingVolume shapeVolume = shape.getBoundingVolume();
+			
+			this.shapesVolumes.add(shapeVolume);
+			this.boundingVolume.extendsBy(shapeVolume);
+		}
 	}
 }

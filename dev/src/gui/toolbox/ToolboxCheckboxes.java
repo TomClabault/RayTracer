@@ -5,6 +5,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.layout.GridPane;
 import rayTracer.RayTracerSettings;
 
+//TODO (tom) extends GridPane
 public class ToolboxCheckboxes 
 {
 	private RayTracerSettings rayTracerSettings;
