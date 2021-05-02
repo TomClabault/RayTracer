@@ -12,6 +12,8 @@ import scene.RayTracingScene;
 
 public class BVHAccelerationStructure implements AccelerationStructure 
 {
+	public static final int MAX_DEPTH = 16;
+	
 	private ArrayList<Shape> sceneShapes;
 	private ArrayList<BoundingVolume> boundingVolumes;
 	

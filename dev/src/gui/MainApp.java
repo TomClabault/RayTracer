@@ -157,6 +157,7 @@ public class MainApp extends Application {
 	   			
 	   			PlyParser plyParser = new PlyParser(new MatteMaterial(Color.RED), 4);
 	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
+	   			plyFileShape.getTriangleList().trimToSize();
 	   			
 	   			rayTracingScene.addShape(plyFileShape);
 	   		}
