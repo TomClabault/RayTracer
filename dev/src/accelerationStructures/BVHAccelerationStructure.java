@@ -12,19 +12,6 @@ import scene.RayTracingScene;
 
 public class BVHAccelerationStructure implements AccelerationStructure 
 {
-	public static final int PLANE_SET_NORMAL_COUNT = 7;
-	
-	public static final Vector[] PLANE_SET_NORMALS = new Vector[] 
-	{
-		new Vector(1, 0, 1),
-		new Vector(0, 1, 0),
-		new Vector(0, 0, 1),
-		new Vector( Math.sqrt(3) / 3.f,  Math.sqrt(3) / 3.f, Math.sqrt(3) / 3.f), 
-	    new Vector(-Math.sqrt(3) / 3.f,  Math.sqrt(3) / 3.f, Math.sqrt(3) / 3.f), 
-	    new Vector(-Math.sqrt(3) / 3.f, -Math.sqrt(3) / 3.f, Math.sqrt(3) / 3.f), 
-	    new Vector( Math.sqrt(3) / 3.f, -Math.sqrt(3) / 3.f, Math.sqrt(3) / 3.f)
-	};
-	
 	private ArrayList<Shape> sceneShapes;
 	private ArrayList<BoundingVolume> boundingVolumes;
 	
@@ -40,7 +27,7 @@ public class BVHAccelerationStructure implements AccelerationStructure
 	private void constructBoundingVolumes()
 	{
 		for(Shape shape : sceneShapes)
-			this.boundingVolumes.add(shape.computeBoundingVolume());
+			this.boundingVolumes.add(shape.getBoundingVolume());
 	}
 	
 	@Override

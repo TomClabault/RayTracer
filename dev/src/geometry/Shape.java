@@ -1,5 +1,6 @@
 package geometry;
 
+import accelerationStructures.BoundingBox;
 import accelerationStructures.BoundingVolume;
 import materials.Material;
 import maths.Point;
@@ -9,9 +10,20 @@ import maths.Vector;
 public interface Shape
 {
 	/**
-	 * Calcule et retourne le BoundingVolume de la forme
+	 * Calcule et retourne la boundinx box de la forme
+	 * 
+	 * @return La bounding box de la forme {@link accelerationStructures.BoundingBox}.
+	 * Retourne null si la forme n'a pas de bounding box (un plan par exemple) 
 	 */
-	public BoundingVolume computeBoundingVolume();
+	public BoundingBox getBoundingBox();
+	
+	/**
+	 * Calcule et retourne le BoundingVolume de la forme
+	 * 
+	 * @return Le bounding volume de la forme. {@link accelerationStructures.BoundingVolume}
+	 * Retourne null si la forme n'a pas de bounding volume (un plan par exemple)
+	 */
+	public BoundingVolume getBoundingVolume();
 	
 	/**
 	 * Permet de récupérer le matériau de la forme

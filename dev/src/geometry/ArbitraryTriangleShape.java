@@ -2,9 +2,8 @@ package geometry;
 
 import java.util.ArrayList;
 
-import accelerationStructures.BVHAccelerationStructure;
+import accelerationStructures.BoundingBox;
 import accelerationStructures.BoundingVolume;
-import geometry.shapes.Plane;
 import geometry.shapes.Triangle;
 import javafx.scene.paint.Color;
 import materials.Material;
@@ -38,11 +37,30 @@ public class ArbitraryTriangleShape implements Shape
 		this.triangleList.add(triangle);
 	}
 	
-	public BoundingVolume computeBoundingVolume()
+	/**
+	 * {@link geometry.Shape#getBoundingBox()}
+	 */
+	@Override
+	public BoundingBox getBoundingBox() 
 	{
-		BoundingVolume volume = new BoundingVolume(this);
+		BoundingBox boundingBox = new BoundingBox(new Point(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE),
+												  new Point(Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE));
 		
-		for(int i = 0; i < BVHAccelerationStructure.PLANE_SET_NORMAL_COUNT; i++)
+		for(Triangle triangle : triangleList)
+			boundingBox.extendBy(triangle.getBoundingBox());
+		
+		return boundingBox;
+	}
+	
+	/**
+	 * {@link geometry.Shape#getBoundingVolume()}
+	 */
+	@Override
+	public BoundingVolume getBoundingVolume()
+	{
+		BoundingVolume volume = new BoundingVolume();
+		
+		for(int i = 0; i < BoundingVolume.PLANE_SET_NORMAL_COUNT; i++)
 		{
 			double dNear = Double.MAX_VALUE;
 			double dFar = Double.MIN_VALUE;
@@ -53,7 +71,7 @@ public class ArbitraryTriangleShape implements Shape
 				{
 					Point vertex = vertexIndex == 0 ? triangle.getA() : vertexIndex == 1 ? triangle.getB() : triangle.getC();
 					
-					double d = Vector.dotProduct(BVHAccelerationStructure.PLANE_SET_NORMALS[i], vertex.toVector());
+					double d = Vector.dotProduct(BoundingVolume.PLANE_SET_NORMALS[i], vertex.toVector());
 					
 					dNear = Math.min(dNear, d);
 					dFar = Math.max(dFar, d);
@@ -62,6 +80,7 @@ public class ArbitraryTriangleShape implements Shape
 			
 			volume.setBounds(dNear, dFar, i);
 		}
+		volume.setEnclosedObject(this);
 		
 		return volume;
 	}

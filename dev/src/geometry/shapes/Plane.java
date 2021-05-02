@@ -1,6 +1,7 @@
 package geometry.shapes;
 
 import materials.Material;
+import accelerationStructures.BoundingBox;
 import accelerationStructures.BoundingVolume;
 import geometry.Shape;
 import geometry.ShapeUtil;
@@ -42,13 +43,21 @@ public class Plane extends ShapeUtil implements Shape
 	}
 	
 	/**
-	 * {@link geometry.Shape#computeBoundingVolume()}
+	 * {@link geometry.Shape#getBoundingBox()}
 	 */
 	@Override
-	public BoundingVolume computeBoundingVolume() 
+	public BoundingBox getBoundingBox()
 	{
-		return null;//Un bounding volume serait plus coûteux à intersecter que le plan, on renvoie donc null
-		//signifiant qu'on utilisera pas de bounding volume pour intersecter cet objet
+		return null;//Un plan est infini, pas de bounding box
+	}
+	
+	/**
+	 * {@link geometry.Shape#getBoundingVolume()}
+	 */
+	@Override
+	public BoundingVolume getBoundingVolume() 
+	{
+		return null;//Un plan n'a pas de bounding volume. Un plan est infini
 	}
 	
 	/**

@@ -1,6 +1,7 @@
 package geometry.shapes;
 
 import accelerationStructures.BVHAccelerationStructure;
+import accelerationStructures.BoundingBox;
 import accelerationStructures.BoundingVolume;
 import geometry.Shape;
 import geometry.shapes.strategies.TriangleIntersectionStrategy;
@@ -36,13 +37,29 @@ public class Triangle implements Shape
 	}
 
 	/**
-	 * {@link geometry.Shape#computeBoundingVolume()}
+	 * {@link geometry.Shape#getBoundingBox()}
 	 */
-	public BoundingVolume computeBoundingVolume()
+	@Override
+	public BoundingBox getBoundingBox() 
 	{
-		BoundingVolume volume = new BoundingVolume(this);
+		Point minPoint = new Point(Math.min(A.getX(), Math.min(B.getX(), C.getX())), 
+								   Math.min(A.getY(), Math.min(B.getY(), C.getY())), 
+								   Math.min(A.getZ(), Math.min(B.getZ(), C.getZ())));
+		Point maxPoint = new Point(Math.max(A.getX(), Math.max(B.getX(), C.getX())), 
+				   				   Math.max(A.getY(), Math.max(B.getY(), C.getY())), 
+				   				   Math.max(A.getZ(), Math.max(B.getZ(), C.getZ())));
 		
-		for(int i = 0; i < BVHAccelerationStructure.PLANE_SET_NORMAL_COUNT; i++)
+		return new BoundingBox(minPoint, maxPoint);
+	}
+	
+	/**
+	 * {@link geometry.Shape#getBoundingVolume()}
+	 */
+	public BoundingVolume getBoundingVolume()
+	{
+		BoundingVolume volume = new BoundingVolume();
+		
+		for(int i = 0; i < BoundingVolume.PLANE_SET_NORMAL_COUNT; i++)
 		{
 			double dNear = Double.MAX_VALUE;
 			double dFar = Double.MIN_VALUE;
@@ -51,7 +68,7 @@ public class Triangle implements Shape
 			{
 				Point vertex = vertexIndex == 0 ? this.getA() : vertexIndex == 1 ? this.getB() : this.getC();
 				
-				double d = Vector.dotProduct(BVHAccelerationStructure.PLANE_SET_NORMALS[i], vertex.toVector());
+				double d = Vector.dotProduct(BoundingVolume.PLANE_SET_NORMALS[i], vertex.toVector());
 				
 				dNear = Math.min(dNear, d);
 				dFar = Math.max(dFar, d);
@@ -59,6 +76,7 @@ public class Triangle implements Shape
 			
 			volume.setBounds(dNear, dFar, i);
 		}
+		volume.setEnclosedObject(this);
 		
 		return volume;
 	}

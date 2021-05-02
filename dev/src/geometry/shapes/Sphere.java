@@ -1,6 +1,7 @@
 package geometry.shapes;
 
 import materials.Material;
+import accelerationStructures.BoundingBox;
 import accelerationStructures.BoundingVolume;
 import exceptions.InvalidSphereException;
 import geometry.Shape;
@@ -38,13 +39,31 @@ public class Sphere extends ShapeUtil implements Shape
 	}
 	
 	/**
-	 * {@link geometry.Shape#computeBoundingVolume()}
+	 * {@link geometry.Shape#getBoundingBox()}
+	 */
+	public BoundingBox getBoundingBox()
+	{
+		return new BoundingBox(Point.translateMul(center, new Vector(-1, -1, -1), radius), Point.translateMul(center, new Vector(1, 1, 1), radius));
+	}
+	
+	/**
+	 * {@link geometry.Shape#getBoundingVolume()}
 	 */
 	@Override
-	public BoundingVolume computeBoundingVolume() 
+	public BoundingVolume getBoundingVolume() 
 	{
-		return null;//Un bounding volume serait plus coûteux à intersecter que la sphère elle même, on renvoie null
-		//signifiant qu'on utilisera pas de bounding volume pour intersecter cet objet
+		BoundingVolume boundingVolume = new BoundingVolume();
+
+		for(int i = 0; i < BoundingVolume.PLANE_SET_NORMAL_COUNT; i++)
+		{
+			double dNear = Vector.dotProduct(BoundingVolume.PLANE_SET_NORMALS[i].getNegated(), Point.translateMul(center, BoundingVolume.PLANE_SET_NORMALS[i].getNegated(), radius).toVector());
+			double dFar = Vector.dotProduct(BoundingVolume.PLANE_SET_NORMALS[i], Point.translateMul(center, BoundingVolume.PLANE_SET_NORMALS[i], radius).toVector());
+			
+			boundingVolume.setBounds(dNear, dFar, i);
+		}
+		boundingVolume.setEnclosedObject(this);
+		
+		return boundingVolume;
 	}
 	
 	/**

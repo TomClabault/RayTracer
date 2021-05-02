@@ -11,17 +11,31 @@ import maths.Vector;
  */
 public class BoundingVolume 
 {
+	public static final int PLANE_SET_NORMAL_COUNT = 7;
+	
+	public static final Vector[] PLANE_SET_NORMALS = new Vector[] 
+	{
+		new Vector(1, 0, 1),
+		new Vector(0, 1, 0),
+		new Vector(0, 0, 1),
+		new Vector( Math.sqrt(3) / 3,  Math.sqrt(3) / 3, Math.sqrt(3) / 3), 
+	    new Vector(-Math.sqrt(3) / 3,  Math.sqrt(3) / 3, Math.sqrt(3) / 3), 
+	    new Vector(-Math.sqrt(3) / 3, -Math.sqrt(3) / 3, Math.sqrt(3) / 3), 
+	    new Vector( Math.sqrt(3) / 3, -Math.sqrt(3) / 3, Math.sqrt(3) / 3)
+	};
+	
 	private double[] dNear;
 	private double[] dFar;
 	
 	private Shape enclosedObject;
 	
-	public BoundingVolume(Shape enclosedObject)
+	/**
+	 * Crée un bounding volume mais ne définit pas ses limites.
+	 */
+	public BoundingVolume()
 	{
-		this.dNear = new double[BVHAccelerationStructure.PLANE_SET_NORMAL_COUNT];
-		this.dFar = new double[BVHAccelerationStructure.PLANE_SET_NORMAL_COUNT];
-		
-		this.enclosedObject = enclosedObject;
+		this.dNear = new double[BoundingVolume.PLANE_SET_NORMAL_COUNT];
+		this.dFar = new double[BoundingVolume.PLANE_SET_NORMAL_COUNT];
 	}
 	
 	/**
@@ -33,7 +47,7 @@ public class BoundingVolume
 	 */
 	public void extendsBy(BoundingVolume extender)
 	{
-		for(int i = 0; i < BVHAccelerationStructure.PLANE_SET_NORMAL_COUNT; i++)
+		for(int i = 0; i < BoundingVolume.PLANE_SET_NORMAL_COUNT; i++)
 		{
 			if(extender.getDNear(i) < this.getDNear(i)) this.dNear[i] = extender.getDNear(i);
 			if(extender.getDFar(i) > this.getDFar(i)) this.dFar[i] = extender.getDFar(i);
@@ -92,10 +106,10 @@ public class BoundingVolume
 		Double tNearIntersect = null;
 		Double tFarIntersect = null;
 		
-		for(int i = 0; i < BVHAccelerationStructure.PLANE_SET_NORMAL_COUNT; i++)
+		for(int i = 0; i < BoundingVolume.PLANE_SET_NORMAL_COUNT; i++)
 		{
-			double normalDotOrigin = Vector.dotProduct(BVHAccelerationStructure.PLANE_SET_NORMALS[i], ray.getOrigin().toVector());
-			double normalDotDirection = Vector.dotProduct(BVHAccelerationStructure.PLANE_SET_NORMALS[i], ray.getDirection());
+			double normalDotOrigin = Vector.dotProduct(BoundingVolume.PLANE_SET_NORMALS[i], ray.getOrigin().toVector());
+			double normalDotDirection = Vector.dotProduct(BoundingVolume.PLANE_SET_NORMALS[i], ray.getDirection());
 			
 			double currentDNear = this.dNear[i];
 			double currentDFar = this.dFar[i];
@@ -125,6 +139,16 @@ public class BoundingVolume
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * Redéfini l'objet encadré par le bounding volume
+	 * 
+	 * @param enclosedObject L'objet encadré par le bounding volume
+	 */
+	public void setEnclosedObject(Shape enclosedObject)
+	{
+		this.enclosedObject = enclosedObject;
 	}
 	
 	/**
