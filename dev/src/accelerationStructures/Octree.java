@@ -4,41 +4,50 @@ import java.util.ArrayList;
 
 import geometry.Shape;
 import maths.Point;
+import maths.Ray;
+import maths.Vector;
 
 public class Octree 
 {
 	private OctreeNode root;
-	private ArrayList<Shape> sceneShapes;
 	private ArrayList<BoundingVolume> shapesVolumes;
 	
-	private BoundingVolume boundingVolume;
 	private BoundingBox bounds;
 	
-	public Octree(ArrayList<Shape> sceneShapes)
+	public Octree(ArrayList<BoundingVolume> sceneObjectsVolumes)
 	{
-		this.sceneShapes = sceneShapes;
-		this.shapesVolumes = new ArrayList<>();
-		this.boundingVolume = new BoundingVolume();
+		this.shapesVolumes = sceneObjectsVolumes;
 		
 		this.bounds = new BoundingBox(new Point(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE), new Point(Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE));
 		this.root = new OctreeNode(0);//Racine = nouveau noeud de profondeur 0
 		
-		computeBoundingVolumes();
-		computeShapesBoundingBox();
+		computeOctreeBoundingBox();
 		squareifyBoundingBox();
 		
 		for(BoundingVolume volume : shapesVolumes)
 			root.insert(volume, bounds.getBounds(0), bounds.getBounds(1));
+		
+		this.computeNodesBoundingVolumes();
 	}
 	
-	private void computeShapesBoundingBox() 
+	private void computeNodesBoundingVolumes()
 	{
-		for(Shape shape : sceneShapes)
-		{
-			BoundingBox shapeBoundingBox = shape.getBoundingBox();
-			if(shapeBoundingBox != null)
-				this.bounds.extendBy(shapeBoundingBox);
-		}
+		root.computeBoundingVolume();
+	}
+	
+	private void computeOctreeBoundingBox() 
+	{
+		for(BoundingVolume volume : this.shapesVolumes)
+			this.bounds.extendBy(volume);
+	}
+	
+	public Shape intersect(Ray ray, Point outInterPoint, Vector outNormalAtInter)
+	{
+		Shape intersectedObject = null;
+		
+		intersectedObject = root.intersect(ray, outInterPoint, outNormalAtInter);
+		
+		return intersectedObject;
 	}
 	
 	private void squareifyBoundingBox()
@@ -64,16 +73,5 @@ public class Octree
 		
 		this.bounds.setBound(Point.add(bound0, diffPoint), 0);
 		this.bounds.setBound(Point.add(bound1, diffPoint), 1);
-	}
-	
-	private void computeBoundingVolumes()
-	{
-		for(Shape shape : sceneShapes)
-		{
-			BoundingVolume shapeVolume = shape.getBoundingVolume();
-			
-			this.shapesVolumes.add(shapeVolume);
-			this.boundingVolume.extendsBy(shapeVolume);
-		}
 	}
 }

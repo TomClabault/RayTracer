@@ -155,11 +155,28 @@ public class MainApp extends Application {
 	   		{
 	   			rayTracingScene = createEmptyScene();
 	   			
+	   			Color gold = Color.web("D4AF37");
 	   			PlyParser plyParser = new PlyParser(new MatteMaterial(Color.RED), 4);
 	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
 	   			plyFileShape.getTriangleList().trimToSize();
 	   			
-	   			rayTracingScene.addShape(plyFileShape);
+	   			ArbitraryTriangleShape shape1 = new ArbitraryTriangleShape(new MatteMaterial(Color.RED));
+	   			ArbitraryTriangleShape shape2 = new ArbitraryTriangleShape(new MatteMaterial(Color.RED));
+
+	   			int shapeSize = plyFileShape.getTriangleList().size();
+	   			for(int i = 0; i < shapeSize; i++)
+	   			{
+   					Triangle triangle = plyFileShape.getTriangleList().get(i);
+   					triangle.setMaterial(new MatteMaterial(Color.RED));
+
+	   				if(i < shapeSize / 2)
+	   					shape1.addTriangle(triangle);
+	   				else
+	   					shape2.addTriangle(triangle);
+	   			}
+	   			
+	   			rayTracingScene.addShape(shape1);
+	   			rayTracingScene.addShape(shape2);
 	   		}
 	   	}
 	   	catch(InvalidParallelepipedException recExc)
@@ -244,11 +261,11 @@ public class MainApp extends Application {
 
     public RayTracingScene createEmptyScene()
     {
-    	Camera cameraRT = new Camera(new Point(0.5, 0.5, 2), 0, 0, 40);
+    	Camera cameraRT = new Camera(new Point(0.7, 0.75, 2), 0, 0, 40);
         PositionnalLight l = new LightBulb(new Point(2, 2, 1), 1);
 
         ArrayList<Shape> shapeList = new ArrayList<>();
-        shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
+        //shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
         
         Image skybox = null;
         URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");

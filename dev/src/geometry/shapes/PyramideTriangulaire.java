@@ -46,12 +46,12 @@ public class PyramideTriangulaire extends ArbitraryTriangleShape implements Shap
     */
     public PyramideTriangulaire(Point A, Point B, Point C, Point D, Material material)
     {
+    	super(material);
+    	
         this.A = A;
         this.B = B;
         this.C = C;
         this.D = D;
-
-        super.material = material;
 
         this.buildPyramide();
     }
@@ -59,15 +59,13 @@ public class PyramideTriangulaire extends ArbitraryTriangleShape implements Shap
     /* Constructeur pour construire une pyramide triangulaire equilaterale */
     public PyramideTriangulaire(Point depart, double height, double width, Material material)
     {
+    	super(material);
+    	
         this.A = depart;
 
         this.D = new Point(this.A.getX() + width/4, this.A.getY() + height, this.A.getZ() + width*3/4);
         this.B = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ() + width);
         this.C = new Point(this.A.getX(), this.A.getY(), this.A.getZ() + width);
-
-
-        super.material = material;
-
 
         this.buildPyramide();
     }

@@ -60,7 +60,7 @@ public interface Shape
 	 * 							Si aucun point d'intersection n'est trouvé, ce vecteur reste inchangé
 	 * 							Si outNormalAtInter est null à l'appel de la méthode, intersect ne calculera pas la normale à l'intersection et laissera le vecteur inchangé
 	 * 
-	 * @return Renvoie le coefficient t qui, appliquer au rayon, donne les coordonnées du point d'intersection.
+	 * @return Renvoie le coefficient t qui, appliqué à l'équation du rayon, donne les coordonnées du point d'intersection.
 	 * Retourne null si aucun point d'intersection n'a été trouvé
 	 */
 	public Double intersect(Ray ray, Point outInterPoint, Vector outNormalAtInter);

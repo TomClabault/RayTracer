@@ -25,6 +25,25 @@ public class BoundingBox
 		this.bounds[1].setY(Math.min(this.bounds[0].getZ(), extender.getBounds(1).getZ()));
 	}
 	
+	public void extendBy(BoundingVolume extender)
+	{
+		Point bound0 = this.bounds[0];
+		Point bound1 = this.bounds[1];
+		
+		if(extender.getDNear(0) < bound0.getX())
+			bound0.setX(extender.getDNear(0));
+		if(extender.getDNear(1) < bound0.getY())
+			bound0.setY(extender.getDNear(1));
+		if(extender.getDNear(2) < bound0.getZ())
+			bound0.setZ(extender.getDNear(2));
+		
+		if(extender.getDFar(0) < bound1.getY())
+			bound1.setY(extender.getDFar(0));
+		if(extender.getDFar(1) < bound1.getY())
+			bound1.setY(extender.getDFar(1));
+		if(extender.getDFar(2) < bound1.getY())
+			bound1.setY(extender.getDFar(2));
+	}
 	/*
 	 * Intersect from: https://www.scratchapixel.com/code.php?id=10&origin=/lessons/3d-basic-rendering/ray-tracing-rendering-simple-shapes&src=1
 	 */

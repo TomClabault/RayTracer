@@ -36,6 +36,12 @@ public class BoundingVolume
 	{
 		this.dNear = new double[BoundingVolume.PLANE_SET_NORMAL_COUNT];
 		this.dFar = new double[BoundingVolume.PLANE_SET_NORMAL_COUNT];
+		
+		for(int i = 0; i < BoundingVolume.PLANE_SET_NORMAL_COUNT; i++)
+		{
+			this.dNear[i] = Double.POSITIVE_INFINITY;
+			this.dFar[i] = Double.NEGATIVE_INFINITY;
+		}
 	}
 	
 	/**

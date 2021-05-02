@@ -2,7 +2,10 @@ package accelerationStructures;
 
 import java.util.ArrayList;
 
+import geometry.Shape;
 import maths.Point;
+import maths.Ray;
+import maths.Vector;
 
 public class OctreeNode 
 {
@@ -10,7 +13,7 @@ public class OctreeNode
 	private boolean isLeaf;//Le noeud est une feuille de l'arbre ?
 	
 	private BoundingVolume nodeVolume;
-	private ArrayList<BoundingVolume> boundingVolumes;
+	private ArrayList<BoundingVolume> boundingVolumes;//Bounding volumes contenant les objets hiérarchiés par l'octree
 	private OctreeNode[] children;
 	
 	public OctreeNode(int depth)
@@ -65,6 +68,33 @@ public class OctreeNode
 			minBound.setZ((currentMinBound.getZ() + currentMaxBound.getZ()) * 0.5);
 			maxBound.setZ(currentMaxBound.getZ());
 		}
+	}
+	
+	public void computeBoundingVolume()
+	{
+		this.nodeVolume = new BoundingVolume();
+		
+		if(isLeaf)
+		{
+			for(BoundingVolume childVolume : this.boundingVolumes)
+				this.nodeVolume.extendsBy(childVolume);
+		}
+		else
+		{
+			for(OctreeNode child : this.children)
+			{
+				if(child != null)
+				{
+					child.computeBoundingVolume();
+					this.nodeVolume.extendsBy(child.getBoundingVolume());
+				}
+			}
+		}
+	}
+	
+	public BoundingVolume getBoundingVolume()
+	{
+		return this.nodeVolume;
 	}
 	
 	public void insert(BoundingVolume volume, Point minNodeBound, Point maxNodeBound)
@@ -123,5 +153,52 @@ public class OctreeNode
 				this.children[octantIndex] = new OctreeNode(depth + 1);//On le crée
 			this.children[octantIndex].insert(volume, newMinBounds, newMaxBounds);//Et on ajoute le volume à l'octant
 		}
+	}
+	
+	public Shape intersect(Ray ray, Point outInterPoint, Vector outNormlAtInter)
+	{
+		Shape closestIntersectedObject = null;
+		
+		if(this.nodeVolume.intersect(ray))
+		{
+			if(isLeaf)
+			{
+				Double tMin = null;
+				
+				for(BoundingVolume volume : this.boundingVolumes)
+				{
+					if(volume.intersect(ray))
+					{
+						Point tempInterPoint = new Point(0, 0, 0);
+						Vector tempNormalAtInter = new Vector(0, 0, 0);
+						
+						Double t = volume.getEnclosedObject().intersect(ray, tempInterPoint, tempNormalAtInter);
+						
+						if(t != null)//On a trouvé une intersection
+						{
+							if(tMin == null || tMin > t)
+							{
+								tMin = t;
+								
+								closestIntersectedObject = volume.getEnclosedObject();
+								outInterPoint.copyIn(tempInterPoint);
+								outNormlAtInter.copyIn(tempNormalAtInter);
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				for(OctreeNode child : this.children)
+				{
+					if(child != null)
+						closestIntersectedObject = child.intersect(ray, outInterPoint, outNormlAtInter);
+				}
+			}
+		}
+		
+		return closestIntersectedObject;
+			
 	}
 }

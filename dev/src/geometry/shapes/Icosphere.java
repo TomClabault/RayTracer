@@ -21,6 +21,8 @@ public class Icosphere extends ArbitraryTriangleShape implements Shape
 
     public Icosphere(Point depart, double size,int subdivision, Material material)
     {
+    	super(material);
+    	
     	double t = ((1 + Math.sqrt(5))/2);
     	
         if (subdivision > 0)
@@ -30,7 +32,6 @@ public class Icosphere extends ArbitraryTriangleShape implements Shape
 
         this.centre = depart;
         this.size = size;
-        super.material = material;
 
 
         Point A, B, C, D, E, F, G, H, I, J, K, L;

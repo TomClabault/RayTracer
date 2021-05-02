@@ -45,6 +45,8 @@ public class Parallelepiped extends ArbitraryTriangleShape implements Shape
 
 	public Parallelepiped(Point coin1, Point coin2, Material material)
 	{
+		super(material);
+		
 		if(coin1.getX() == coin2.getX()
 		|| coin1.getY() == coin2.getY() 
 		|| coin1.getZ() == coin2.getZ())//Si le rectangle est "plat"
@@ -56,13 +58,14 @@ public class Parallelepiped extends ArbitraryTriangleShape implements Shape
 		this.length = this.G.getX() - this.A.getX();
 		this.width = this.G.getZ() - this.A.getZ();
 		this.height = this.G.getY() - this.A.getY();
-		super.material = material;
 		
 		this.buildParallelepiped();
 	}
 
 	public Parallelepiped(Point A, double height, double length, double width, Material material)
 	{	/*ici coin1 peut etre considere comme le point de depart*/
+		super(material);
+		
 		if(height == 0 || length == 0 || width == 0)
 			throw new InvalidParallelepipedException("Le parallélépipède que vous avez essayé de créer était plat.");
 		
@@ -75,8 +78,6 @@ public class Parallelepiped extends ArbitraryTriangleShape implements Shape
 		this.G.setZ(this.A.getZ() + this.width);
 		this.G.setY(this.A.getY() + this.height);
 
-		super.material = new MatteMaterial(Color.rgb(200, 200, 200));
-		
 		this.buildParallelepiped();
 	}
 

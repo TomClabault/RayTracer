@@ -16,11 +16,6 @@ public class ArbitraryTriangleShape implements Shape
 	protected Material material;
 	protected ArrayList<Triangle> triangleList;
 	
-	public ArbitraryTriangleShape()
-	{
-		this(new Material(Color.rgb(0, 0, 0), 0, 0, 0, 0, 0, false, 0, 0));
-	}
-	
 	public ArbitraryTriangleShape(Material material)
 	{
 		this.material = material;
@@ -168,17 +163,17 @@ public class ArbitraryTriangleShape implements Shape
 		this.material = material;
 	}
 	
-	/**
-	 * Peut produire de très grosses chaîne de caractère.
-	 */
-	@Override
-	public String toString()
-	{
-		String output = "";
-		
-		for(Triangle triangle : this.triangleList)
-			output += triangle + System.lineSeparator();
-		
-		return output;
-	}
+//	/**
+//	 * Peut produire de très grosses chaîne de caractère.
+//	 */
+//	@Override
+//	public String toString()
+//	{
+//		String output = "";
+//		
+//		for(Triangle triangle : this.triangleList)
+//			output += triangle + System.lineSeparator();
+//		
+//		return output;
+//	}
 }

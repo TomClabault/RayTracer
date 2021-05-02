@@ -34,31 +34,30 @@ public class Pyramide extends ArbitraryTriangleShape implements Shape
 
 	private Point A, B, C, D, E;
 
-    public Pyramide(Point A, Point B, Point C, Point D, Point E, Material material) {
+    public Pyramide(Point A, Point B, Point C, Point D, Point E, Material material) 
+    {
+    	super(material);
+    	
         this.A = A;
         this.B = B;
         this.C = C;
         this.D = D;
         this.E = E;
 
-        super.material = material;
-
         buildPyramide();
     }
 
     // Constructeur pour creer une pyramide equilaterale
-    public Pyramide(Point depart, double height, double width, Material material) {
+    public Pyramide(Point depart, double height, double width, Material material) 
+    {
+    	super(material);
+    	
         this.A = depart;
 
         this.C = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ() + width);
         this.D = new Point(this.A.getX(), this.A.getY(), this.A.getZ() + width);
         this.B = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ());
         this.E = new Point(this.A.getX() + width / 2, this.A.getY() + height, this.A.getZ() + width / 2);
-
-        // b --> c , c --> d , d --> b
-
-
-        super.material = material;
 
         buildPyramide();
 

@@ -252,7 +252,7 @@ public class RayTracer
 			int summedGreen = 0;
 			int summedBlue = 0;
 			
-			int blurSampleCount = (this.settings.isEnableBlurryReflections() && intInfos.getIntObjMat().getRoughness() > 0) ? this.settings.getBlurryReflectionsSampleCount() : 1;
+			int blurSampleCount = (this.settings.isEnableBlurryReflections() && intInfos.getIntObjMat().getRoughness() < 1) ? this.settings.getBlurryReflectionsSampleCount() : 1;
 			for(int blurSample = 0; blurSample < blurSampleCount; blurSample++)
 			{
 				Vector reflectDirection = null;

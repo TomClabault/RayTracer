@@ -54,6 +54,8 @@ public class Prism extends ArbitraryTriangleShape implements Shape
 
     public Prism(Point A, Point B, Point C, Point D, Point E, Point F, Material material)
     {
+    	super(material);
+    	
         this.A = A;
         this.B = B;
         this.C = C;
@@ -61,14 +63,14 @@ public class Prism extends ArbitraryTriangleShape implements Shape
         this.E = E;
         this.F = F;
 
-        super. material = material;
-
         buildPrism();
 
     }
 
     public Prism(Point depart, double height, double width, Material material)
     {
+    	super(material);
+    	
         this.A = depart;
 
         this.B = new Point(this.A.getX() + width, this.A.getY(), this.A.getZ());
@@ -76,11 +78,6 @@ public class Prism extends ArbitraryTriangleShape implements Shape
         this.D = new Point(this.A.getX(), this.A.getY(), this.A.getZ() + width);
         this.E = new Point(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ());
         this.F = new Point(this.A.getX() + width/2, this.A.getY() + height, this.A.getZ() + width);
-
-
-
-        super.material = material;
-
 
         buildPrism();
     }
