@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import accelerationStructures.BoundingBox;
 import accelerationStructures.BoundingVolume;
 import geometry.shapes.Triangle;
-import javafx.scene.paint.Color;
 import materials.Material;
 import maths.Point;
 import maths.Ray;
@@ -140,6 +139,17 @@ public class ArbitraryTriangleShape implements Shape
 	}
 	
 	/**
+	 * {@link geometry.Shape#getSubObjectCount()}
+	 * 
+	 * @return Le nombre de triangles dont est composée la forme
+	 */
+	@Override
+	public int getSubObjectCount() 
+	{
+		return this.triangleList.size();
+	}
+	
+	/**
 	 * @return La liste des triangles composant l'objet
 	 */
 	public ArrayList<Triangle> getTriangleList()
@@ -163,17 +173,17 @@ public class ArbitraryTriangleShape implements Shape
 		this.material = material;
 	}
 	
-//	/**
-//	 * Peut produire de très grosses chaîne de caractère.
-//	 */
-//	@Override
-//	public String toString()
-//	{
-//		String output = "";
-//		
-//		for(Triangle triangle : this.triangleList)
-//			output += triangle + System.lineSeparator();
-//		
-//		return output;
-//	}
+	/**
+	 * Peut produire de très grosses chaîne de caractère.
+	 */
+	@Override
+	public String toString()
+	{
+		String output = "";
+		
+		for(Triangle triangle : this.triangleList)
+			output += triangle + System.lineSeparator();
+		
+		return output;
+	}
 }

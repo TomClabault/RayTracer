@@ -42,6 +42,15 @@ public interface Shape
 	public Vector getNormal(Point point);
 	
 	/**
+	 * Retourne le nombre d'objet dont est composée la forme. Certaines étant composées d'une multitude triangle, cette
+	 * méthode retournerait donc le nombre de triangles dont est composée la forme. Pour des formes telle que les sphères,
+	 * doit retourner 1 puisqu'une sphère n'est composée que d'un seul objet, elle même.
+	 *  
+	 * @return Le nombre d'objet dont est composée la forme. 
+	 */
+	public int getSubObjectCount();
+	
+	/**
 	 * Permet de récupérer les coordonnées (u, v) de la forme au point donné
 	 * 
 	 * @param point Le point auquel on souhaite récupérer les coordonnées u et v 

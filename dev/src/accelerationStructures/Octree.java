@@ -6,6 +6,7 @@ import geometry.Shape;
 import maths.Point;
 import maths.Ray;
 import maths.Vector;
+import rayTracer.RayTracerStats;
 
 public class Octree 
 {
@@ -46,11 +47,11 @@ public class Octree
 			this.bounds.extendBy(volume);
 	}
 	
-	public Shape intersect(Ray ray, Point outInterPoint, Vector outNormalAtInter)
+	public Shape intersect(RayTracerStats interStats, Ray ray, Point outInterPoint, Vector outNormalAtInter)
 	{
 		Shape intersectedObject = null;
 		
-		intersectedObject = root.intersect(noVolumeShapes, ray, outInterPoint, outNormalAtInter);
+		intersectedObject = root.intersect(interStats, noVolumeShapes, ray, outInterPoint, outNormalAtInter);
 		
 		return intersectedObject;
 	}

@@ -3,7 +3,6 @@ package gui.threads;
 import java.nio.IntBuffer;
 
 import javafx.concurrent.Task;
-import javafx.scene.Scene;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritablePixelFormat;
 import rayTracer.RayTracer;

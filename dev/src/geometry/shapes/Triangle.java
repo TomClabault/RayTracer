@@ -115,30 +115,51 @@ public class Triangle implements Shape
 	{
 		this.C = C;
 	}
-	
-	public String toString()
-	{
-		return String.format("Shape triangle: A = %s | B = %s | C = %s", A, B, C);
-	}
 
+	/**
+	 * {@link geometry.Shape#getMaterial()}
+	 */
 	@Override
 	public Material getMaterial() 
 	{
 		return this.material;
 	}
 
+	/**
+	 * {@link geometry.Shape#getSubObjectCount()}
+	 */
+	@Override
+	public int getSubObjectCount() 
+	{
+		return 1;
+	}
+	
+	/**
+	 * {@link geometry.Shape#getUVCoords(Point)}
+	 */
 	@Override
 	public Point getUVCoords(Point point) { return null; }
 
+	/**
+	 * {@link geometry.Shape#intersect(Ray, Point, Vector)}
+	 */
 	@Override
 	public Double intersect(Ray ray, Point outInterPoint, Vector outNormalAtInter) 
 	{
 		return this.interStrategy.intersect(this, ray, outInterPoint, outNormalAtInter);
 	}
 
+	/**
+	 * {@link geometry.Shape#setMaterial(Material)}
+	 */
 	@Override
 	public void setMaterial(Material newMaterial) 
 	{
 		this.material = newMaterial;
+	}
+	
+	public String toString()
+	{
+		return String.format("Shape triangle: A = %s | B = %s | C = %s", A, B, C);
 	}
 }

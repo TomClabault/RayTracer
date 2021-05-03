@@ -31,6 +31,7 @@ public class NoAccelerationStructure implements AccelerationStructure
 			Point tempInterPoint = new Point(0, 0, 0);
 			Vector tempNormalAtInter = new Vector(0, 0, 0);
 				
+			interStats.incrementIntersectionTestsBy(shape.getSubObjectCount());
 			Double t = shape.intersect(ray, tempInterPoint, tempNormalAtInter);
 			if(t != null)//Si on a trouvé une intersection
 			{

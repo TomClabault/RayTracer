@@ -13,12 +13,8 @@ import javafx.stage.Stage;
 
 public class SimpleRenderToolbox 
 {
-	private Pane statsPane;
-	
 	public SimpleRenderToolbox(WritableImage writableImage, Pane statsPane)
 	{
-		this.statsPane = statsPane;
-		
 		Stage saveRenderWindowStage = new Stage();
 		saveRenderWindowStage.setTitle("Toolbox");
 		saveRenderWindowStage.setResizable(false);

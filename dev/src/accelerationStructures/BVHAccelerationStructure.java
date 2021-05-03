@@ -10,6 +10,7 @@ import maths.Vector;
 import rayTracer.RayTracerStats;
 import scene.RayTracingScene;
 
+//TODO (tom) opti intersection octree avec la priority list
 public class BVHAccelerationStructure implements AccelerationStructure 
 {
 	private ArrayList<Shape> sceneShapes;
@@ -46,6 +47,6 @@ public class BVHAccelerationStructure implements AccelerationStructure
 	@Override
 	public Shape intersect(RayTracerStats interStats, Ray ray, Point outInterPoint, Vector outNormalAtInter) 
 	{
-		return this.octree.intersect(ray, outInterPoint, outNormalAtInter);
+		return this.octree.intersect(interStats, ray, outInterPoint, outNormalAtInter);
 	}
 }

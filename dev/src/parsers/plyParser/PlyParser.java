@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import materials.Material;
 import materials.MatteMaterial;
 import maths.Point;
+import maths.Vector;
 
 public class PlyParser 
 {
@@ -24,25 +25,27 @@ public class PlyParser
 	
 	private ArrayList<Point> vertices;
 
+	private Vector translateVector;
 	private double shapeScale;
 	private ArbitraryTriangleShape parsedShape;
 	private Material material;
 	
 	public PlyParser()
 	{
-		this(new MatteMaterial(Color.rgb(0, 0, 0)), 1);
+		this(new MatteMaterial(Color.rgb(0, 0, 0)), 1, new Vector(0, 0, 0));
 	}
 	
 	/**
 	 * @param shapeMaterial Matériau qui sera utilisé pour 'texturer' les objets parsé par cette instance de PlyParser
 	 */
-	public PlyParser(Material shapeMaterial, double shapeScale)
+	public PlyParser(Material shapeMaterial, double shapeScale, Vector translateVector)
 	{
 		this.nbVertices = 0;
 		this.nbTriangles = 0;
 		
 		this.vertices = new ArrayList<>();
 
+		this.translateVector = translateVector;
 		this.shapeScale = shapeScale;
 		this.material = shapeMaterial;
 		this.parsedShape = new ArbitraryTriangleShape(shapeMaterial);
@@ -186,7 +189,8 @@ public class PlyParser
 					///pas besoin d'un nouvel appel pour passer au token suivant
 				}
 				
-				this.vertices.add(new Point(coords[0] * this.shapeScale, coords[1] * this.shapeScale, coords[2] * this.shapeScale));
+				Point verticesCoords = new Point(coords[0] * this.shapeScale, coords[1] * this.shapeScale, coords[2] * this.shapeScale);
+				this.vertices.add(Point.translateMul(verticesCoords, translateVector, 1));
 			}
 		}
 		catch(PlyParsingException e)

@@ -3,7 +3,6 @@ package gui.windows;
 import javafx.scene.Scene;
 
 import java.net.URL;
-import java.util.Observable;
 
 import gui.MainApp;
 import gui.toolbox.ToolboxCheckboxes;
@@ -13,7 +12,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
@@ -21,9 +19,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import rayTracer.RayTracerSettings;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 

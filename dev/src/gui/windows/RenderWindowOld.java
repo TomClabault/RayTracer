@@ -195,7 +195,6 @@ public class RenderWindowOld {
 
         private WritablePixelFormat<IntBuffer> pixelFormat;
         private ExecutorService executorService;
-        private Scene mainAppScene;
         private RayTracer rayTracer;
         
         private Future<?> futureRenderTask = null;
@@ -219,7 +218,6 @@ public class RenderWindowOld {
             this.fpsLabel = fpsLabel;
             fpsLabel.setId("fpsLabel");
             this.progressBar = new ProgressBar();
-            this.mainAppScene = scene;
             this.pixelFormat = PixelFormat.getIntArgbPreInstance();
             this.executorService = Executors.newFixedThreadPool(1);
 

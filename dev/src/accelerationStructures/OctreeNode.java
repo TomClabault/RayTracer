@@ -7,6 +7,7 @@ import materials.Material;
 import maths.Point;
 import maths.Ray;
 import maths.Vector;
+import rayTracer.RayTracerStats;
 
 public class OctreeNode 
 {
@@ -183,18 +184,19 @@ public class OctreeNode
 		}
 	}
 	
-	public Shape intersect(ArrayList<Shape> noVolumeShapes, Ray ray, Point outInterPoint, Vector outNormalAtInter)
+	public Shape intersect(RayTracerStats interStats, ArrayList<Shape> noVolumeShapes, Ray ray, Point outInterPoint, Vector outNormalAtInter)
 	{
 		ObjectContainer intersectedObject = new ObjectContainer();
 		
 		//On intersecte d'abord toutes les formes de la hiérarchie
-		Double tMin = intersect(ray, outInterPoint, outNormalAtInter, intersectedObject);
+		Double tMin = intersect(interStats, ray, outInterPoint, outNormalAtInter, intersectedObject);
 		
 		for(Shape shape : noVolumeShapes)
 		{
 			Point tempInterPoint = new Point(0, 0, 0);
 			Vector tempNormalInter = new Vector(0, 0, 0);
 			
+			interStats.incrementIntersectionTestsDone();
 			Double t = shape.intersect(ray, tempInterPoint, tempNormalInter);
 			if(t != null)
 			{
@@ -212,7 +214,7 @@ public class OctreeNode
 		return intersectedObject.getContainedShape();
 	}
 	
-	private Double intersect(Ray ray, Point outInterPoint, Vector outNormalAtInter, ObjectContainer outIntersectedObject)
+	private Double intersect(RayTracerStats interStats, Ray ray, Point outInterPoint, Vector outNormalAtInter, ObjectContainer outIntersectedObject)
 	{
 		Double tMin = null;
 		
@@ -227,6 +229,7 @@ public class OctreeNode
 						Point tempInterPoint = new Point(0, 0, 0);
 						Vector tempNormalAtInter = new Vector(0, 0, 0);
 						
+						interStats.incrementIntersectionTestsBy(volume.getEnclosedObject().getSubObjectCount());
 						Double t = volume.getEnclosedObject().intersect(ray, tempInterPoint, tempNormalAtInter);
 						
 						if(t != null)//On a trouvé une intersection
@@ -253,7 +256,7 @@ public class OctreeNode
 						Vector tempNormalAtInter = new Vector(0, 0, 0);
 						ObjectContainer tempContainer = new ObjectContainer();
 						
-						Double t = child.intersect(ray, tempInterPoint, tempNormalAtInter, tempContainer);
+						Double t = child.intersect(interStats, ray, tempInterPoint, tempNormalAtInter, tempContainer);
 						if(t != null)
 						{
 							if(tMin == null || tMin > t)

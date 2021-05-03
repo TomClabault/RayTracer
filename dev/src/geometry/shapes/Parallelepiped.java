@@ -1,8 +1,6 @@
 package geometry.shapes;
 
 import materials.Material;
-import materials.MatteMaterial;
-import javafx.scene.paint.Color;
 import maths.Point;
 import geometry.Shape;
 import geometry.ArbitraryTriangleShape;

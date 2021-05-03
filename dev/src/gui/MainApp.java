@@ -5,13 +5,8 @@ import javafx.scene.image.PixelFormat;
 import javafx.scene.paint.Color;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -22,7 +17,6 @@ import exceptions.InvalidSphereException;
 import geometry.ArbitraryTriangleShape;
 import geometry.Shape;
 import geometry.shapes.Icosphere;
-import geometry.shapes.Parallelepiped;
 import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
 import geometry.shapes.Triangle;
@@ -44,7 +38,6 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import materials.GlassMaterial;
 import materials.GlassyMaterial;
 import materials.MatteMaterial;
-import materials.MetallicMaterial;
 import materials.MirrorMaterial;
 import materials.RoughMaterial;
 import materials.textures.ProceduralTextureCheckerboard;
@@ -137,6 +130,8 @@ public class MainApp extends Application {
     public void start(Stage stage) 
     {
     	//TODO (tom) clean le main avec des fonctions --> commence à être le bordel
+    	//TODO (tom) n'activer le comptage du nombre d'intersections que sur demande (une feature 'debug' en gros) parce que ça tape dans les perfs
+    	//mine de rien
     	File fileChosen = chooseFile(stage, "POV, PLY", "*.pov", "*.ply");
     
     	if(fileChosen == null)//L'utilisateur n'a pas choisi de fichier / a annulé
@@ -158,7 +153,7 @@ public class MainApp extends Application {
 	   			rayTracingScene = createEmptyScene();
 	   			
 	   			Color gold = Color.web("D4AF37");
-	   			PlyParser plyParser = new PlyParser(new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(gold), 0.75), 4);
+	   			PlyParser plyParser = new PlyParser(new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(gold), 1), 4, new Vector(0, -0.5, 0));
 	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
 	   			plyFileShape.getTriangleList().trimToSize();
 	   			
@@ -194,8 +189,8 @@ public class MainApp extends Application {
 
 		    rayTracingScene.setSkybox(skybox);
 	   	}
-	   	//rayTracingScene.setAccelerationStructure(new BVHAccelerationStructure(rayTracingScene.getSceneObjects(), 16));
-	   	rayTracingScene.setAccelerationStructure(new NoAccelerationStructure(rayTracingScene.getSceneObjects()));
+	   	rayTracingScene.setAccelerationStructure(new BVHAccelerationStructure(rayTracingScene.getSceneObjects(), 16));
+	   	//rayTracingScene.setAccelerationStructure(new NoAccelerationStructure(rayTracingScene.getSceneObjects()));
 	   	
         RayTracerSettings rayTracerSettings = new RayTracerSettings(Runtime.getRuntime().availableProcessors(), 4, 9, 4);
        
@@ -248,13 +243,11 @@ public class MainApp extends Application {
 
     public RayTracingScene createEmptyScene()
     {
-    	Camera cameraRT = new Camera(new Point(0, 0.3, 2), 0, 0, 40);
+    	Camera cameraRT = new Camera(new Point(0, 0, 2), 0, 0, 40);
         PositionnalLight l = new LightBulb(new Point(2, 2, 1), 1);
 
         ArrayList<Shape> shapeList = new ArrayList<>();
-        //shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
-        
-        shapeList.add(new Sphere(new Point(0, 0, 0), 2, new MatteMaterial(Color.RED)));
+        shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
         
         Image skybox = null;
         URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");

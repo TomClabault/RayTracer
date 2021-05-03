@@ -89,6 +89,15 @@ public class Sphere extends ShapeUtil implements Shape
 	}
 	
 	/**
+	 * {@link geometry.Shape#getSubObjectCount()}
+	 */
+	@Override
+	public int getSubObjectCount() 
+	{
+		return 1;
+	}
+	
+	/**
 	 * {@link geometry.Shape#getUVCoords}
 	 */
 	@Override
