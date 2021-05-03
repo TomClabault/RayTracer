@@ -30,19 +30,20 @@ public class BoundingBox
 		Point bound0 = this.bounds[0];
 		Point bound1 = this.bounds[1];
 		
-		if(extender.getDNear(0) < bound0.getX())
-			bound0.setX(extender.getDNear(0));
-		if(extender.getDNear(1) < bound0.getY())
-			bound0.setY(extender.getDNear(1));
-		if(extender.getDNear(2) < bound0.getZ())
-			bound0.setZ(extender.getDNear(2));
 		
-		if(extender.getDFar(0) < bound1.getY())
-			bound1.setY(extender.getDFar(0));
-		if(extender.getDFar(1) < bound1.getY())
-			bound1.setY(extender.getDFar(1));
-		if(extender.getDFar(2) < bound1.getY())
-			bound1.setY(extender.getDFar(2));
+		if(extender.getDMin(0) < bound0.getX())
+			bound0.setX(extender.getDMin(0));
+		if(extender.getDMin(1) < bound0.getY())
+			bound0.setY(extender.getDMin(1));
+		if(extender.getDMin(2) < bound0.getZ())
+			bound0.setZ(extender.getDMin(2));
+		
+		if(extender.getDMax(0) > bound1.getX())
+			bound1.setX(extender.getDMax(0));
+		if(extender.getDMax(1) > bound1.getY())
+			bound1.setY(extender.getDMax(1));
+		if(extender.getDMax(2) > bound1.getZ())
+			bound1.setZ(extender.getDMax(2));
 	}
 	/*
 	 * Intersect from: https://www.scratchapixel.com/code.php?id=10&origin=/lessons/3d-basic-rendering/ray-tracing-rendering-simple-shapes&src=1
@@ -52,8 +53,8 @@ public class BoundingBox
 		Point rayOrigin = ray.getOrigin();
 		Vector rayDirection = ray.getDirection();
 		
-	    double tmin = Math.abs(rayDirection.getX()) < EPSILON ? Double.MAX_VALUE * Math.signum((bounds[0].getX() - rayOrigin.getX())): (bounds[0].getX() - rayOrigin.getX()) / rayDirection.getX(); 
-	    double tmax = Math.abs(rayDirection.getX()) < EPSILON ? Double.MAX_VALUE * Math.signum((bounds[1].getX() - rayOrigin.getX())): (bounds[1].getX() - rayOrigin.getX()) / rayDirection.getX(); 
+	    double tmin = Math.abs(rayDirection.getX()) < EPSILON ? Double.POSITIVE_INFINITY * Math.signum((bounds[0].getX() - rayOrigin.getX())): (bounds[0].getX() - rayOrigin.getX()) / rayDirection.getX(); 
+	    double tmax = Math.abs(rayDirection.getX()) < EPSILON ? Double.POSITIVE_INFINITY * Math.signum((bounds[1].getX() - rayOrigin.getX())): (bounds[1].getX() - rayOrigin.getX()) / rayDirection.getX(); 
 	 
 	    if (tmin > tmax)
     	{
@@ -62,8 +63,8 @@ public class BoundingBox
     		tmax = temp; 
     	}
 	 
-	    double tymin = Math.abs(rayDirection.getY()) < EPSILON ? Double.MAX_VALUE * Math.signum((bounds[0].getY()) - rayOrigin.getY()): (bounds[0].getY() - rayOrigin.getY()) / rayDirection.getY(); 
-	    double tymax = Math.abs(rayDirection.getY()) < EPSILON ? Double.MAX_VALUE * Math.signum((bounds[1].getY() - rayOrigin.getY())): (bounds[1].getY() - rayOrigin.getY()) / rayDirection.getY(); 
+	    double tymin = Math.abs(rayDirection.getY()) < EPSILON ? Double.POSITIVE_INFINITY * Math.signum((bounds[0].getY()) - rayOrigin.getY()): (bounds[0].getY() - rayOrigin.getY()) / rayDirection.getY(); 
+	    double tymax = Math.abs(rayDirection.getY()) < EPSILON ? Double.POSITIVE_INFINITY * Math.signum((bounds[1].getY() - rayOrigin.getY())): (bounds[1].getY() - rayOrigin.getY()) / rayDirection.getY(); 
 	 
 	    if (tymin > tymax)
     	{
@@ -81,8 +82,8 @@ public class BoundingBox
 	    if (tymax < tmax) 
 	        tmax = tymax; 
 	 
-	    double tzmin = Math.abs(rayDirection.getZ()) < EPSILON ? Double.MAX_VALUE * Math.signum((bounds[0].getZ() - rayOrigin.getZ())) : (bounds[0].getZ() - rayOrigin.getZ()) / rayDirection.getZ(); 
-	    double tzmax = Math.abs(rayDirection.getZ()) < EPSILON ? Double.MAX_VALUE * Math.signum((bounds[1].getZ() - rayOrigin.getZ())) : (bounds[1].getZ() - rayOrigin.getZ()) / rayDirection.getZ(); 
+	    double tzmin = Math.abs(rayDirection.getZ()) < EPSILON ? Double.POSITIVE_INFINITY * Math.signum((bounds[0].getZ() - rayOrigin.getZ())) : (bounds[0].getZ() - rayOrigin.getZ()) / rayDirection.getZ(); 
+	    double tzmax = Math.abs(rayDirection.getZ()) < EPSILON ? Double.POSITIVE_INFINITY * Math.signum((bounds[1].getZ() - rayOrigin.getZ())) : (bounds[1].getZ() - rayOrigin.getZ()) / rayDirection.getZ(); 
 	 
 	    if (tzmin > tzmax)
     	{

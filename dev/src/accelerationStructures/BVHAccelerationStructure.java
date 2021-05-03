@@ -12,28 +12,35 @@ import scene.RayTracingScene;
 
 public class BVHAccelerationStructure implements AccelerationStructure 
 {
-	public static final int MAX_DEPTH = 16;
-	
 	private ArrayList<Shape> sceneShapes;
+	private ArrayList<Shape> noVolumeShapes;//Liste des formes qui n'ont pas de bounding volume
 	private ArrayList<BoundingVolume> boundingVolumes;
 	
 	private Octree octree;
 	
-	public BVHAccelerationStructure(ArrayList<Shape> sceneShapes)
+	public BVHAccelerationStructure(ArrayList<Shape> sceneShapes, int maxDepth)
 	{
 		this.sceneShapes = sceneShapes;
 		
+		this.noVolumeShapes = new ArrayList<>();
 		this.boundingVolumes = new ArrayList<>();
 		
 		constructBoundingVolumes();
 		
-		this.octree = new Octree(this.boundingVolumes);
+		this.octree = new Octree(this.noVolumeShapes, this.boundingVolumes, maxDepth);
 	}
 
 	private void constructBoundingVolumes()
 	{
 		for(Shape shape : sceneShapes)
-			this.boundingVolumes.add(shape.getBoundingVolume());
+		{
+			BoundingVolume volume = shape.getBoundingVolume();
+			
+			if(volume != null)
+				this.boundingVolumes.add(volume);
+			else
+				this.noVolumeShapes.add(shape);
+		}
 	}
 	
 	@Override
@@ -41,63 +48,4 @@ public class BVHAccelerationStructure implements AccelerationStructure
 	{
 		return this.octree.intersect(ray, outInterPoint, outNormalAtInter);
 	}
-//	public Shape intersect(RayTracerStats interStats, Ray ray, Point outInterPoint, Vector outNormalAtInter) 
-//	{
-//		Shape closestIntersectedObject = null;
-//		Point closestInterPoint = null;
-//		Vector normalAtClosestsInterPoint = null;
-//		
-//		Double tMin = null;
-//		
-//		//TODO (tom) compter le nombre d'intersections calculées
-//		for(int boundingIndex = 0; boundingIndex < this.boundingVolumes.size(); boundingIndex++)
-//		{
-//			BoundingVolume boundingVolume = this.boundingVolumes.get(boundingIndex);
-//			
-//			if(boundingVolume == null || boundingVolume.intersect(ray))
-//			{
-//				//Si le bounding volume est null, un des objets de la scène a renvoyé null pour son bounding volumes lors de la 
-//				//construction des bounding volumes de la scène. Cela signifie probablement qu'intersecter l'objet directement
-//				//est moins coûteux que d'intersecter un bounding volume, on va donc intersecter l'objet directement plutôt
-//				//que son bounding volume.
-//				//Si une intersection avec le bounding volume a été trouvée, on récupère l'objet correspondant au bounding volume
-//				//et on l'intersecte
-//				Shape tempInterObject = boundingVolume == null ? this.sceneShapes.get(boundingIndex) : boundingVolume.getEnclosedObject();
-//				Point tempInterPoint = new Point(0, 0, 0);
-//				Vector tempNormalAtInter = new Vector(0, 0, 0);
-//				
-//				Double t = tempInterObject.intersect(ray, tempInterPoint, tempNormalAtInter);
-//				if(tempInterObject instanceof ArbitraryTriangleShape)//Si l'objet est une composition de triangles
-//					//On augmente le nombre d'intersection testées par le nombre de triangle de l'objet
-//					interStats.incrementIntersectionTestsBy(((ArbitraryTriangleShape)tempInterObject).getTriangleList().size());
-//				else
-//					//Sinon on augment de 1 puisqu'on ne vas tester l'intersection qu'avec l'objet lui même, 1 seul objet
-//					interStats.incrementIntersectionTestsDone();
-//				
-//				if(t != null)//Si on a trouvé une intersection
-//				{
-//					if(tMin == null || t < tMin)
-//					{
-//						tMin = t;
-//						
-//						closestInterPoint = tempInterPoint;
-//						normalAtClosestsInterPoint = tempNormalAtInter;
-//						closestIntersectedObject = tempInterObject;
-//					}
-//				}
-//			}
-//		}
-//		
-//		if(closestIntersectedObject != null)//Si on a bel et bien trouvé un point d'intersection entre le rayon et un objet de la scène
-//		{
-//			if(outInterPoint != null)
-//				outInterPoint.copyIn(closestInterPoint);
-//			if(outNormalAtInter != null)
-//				outNormalAtInter.copyIn(normalAtClosestsInterPoint);
-//			
-//			return closestIntersectedObject;
-//		}
-//		
-//		return null;
-//	}
 }

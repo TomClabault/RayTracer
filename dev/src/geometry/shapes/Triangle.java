@@ -61,8 +61,8 @@ public class Triangle implements Shape
 		
 		for(int i = 0; i < BoundingVolume.PLANE_SET_NORMAL_COUNT; i++)
 		{
-			double dNear = Double.MAX_VALUE;
-			double dFar = Double.MIN_VALUE;
+			double dMin = Double.POSITIVE_INFINITY;
+			double dMax = Double.NEGATIVE_INFINITY;
 			
 			for(int vertexIndex = 0; vertexIndex < 3; vertexIndex++)
 			{
@@ -70,11 +70,11 @@ public class Triangle implements Shape
 				
 				double d = Vector.dotProduct(BoundingVolume.PLANE_SET_NORMALS[i], vertex.toVector());
 				
-				dNear = Math.min(dNear, d);
-				dFar = Math.max(dFar, d);
+				dMin = Math.min(dMin, d);
+				dMax = Math.max(dMax, d);
 			}
 			
-			volume.setBounds(dNear, dFar, i);
+			volume.setBounds(dMin, dMax, i);
 		}
 		volume.setEnclosedObject(this);
 		

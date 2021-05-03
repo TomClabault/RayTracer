@@ -22,6 +22,7 @@ import exceptions.InvalidSphereException;
 import geometry.ArbitraryTriangleShape;
 import geometry.Shape;
 import geometry.shapes.Icosphere;
+import geometry.shapes.Parallelepiped;
 import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
 import geometry.shapes.Triangle;
@@ -150,33 +151,19 @@ public class MainApp extends Application {
 	   		String fileExtension = getFileExtension(fileChosen);
 	   		
 	   		if(fileExtension.equals(".pov"))
+	   			//rayTracingScene = createEmptyScene();
 	   			rayTracingScene = PovAutomat.parsePov(fileChosen);
 	   		else if(fileExtension.equals(".ply"))
 	   		{
 	   			rayTracingScene = createEmptyScene();
 	   			
 	   			Color gold = Color.web("D4AF37");
-	   			PlyParser plyParser = new PlyParser(new MatteMaterial(Color.RED), 4);
+	   			PlyParser plyParser = new PlyParser(new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(gold), 0.75), 4);
 	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
 	   			plyFileShape.getTriangleList().trimToSize();
 	   			
-	   			ArbitraryTriangleShape shape1 = new ArbitraryTriangleShape(new MatteMaterial(Color.RED));
-	   			ArbitraryTriangleShape shape2 = new ArbitraryTriangleShape(new MatteMaterial(Color.RED));
-
-	   			int shapeSize = plyFileShape.getTriangleList().size();
-	   			for(int i = 0; i < shapeSize; i++)
-	   			{
-   					Triangle triangle = plyFileShape.getTriangleList().get(i);
-   					triangle.setMaterial(new MatteMaterial(Color.RED));
-
-	   				if(i < shapeSize / 2)
-	   					shape1.addTriangle(triangle);
-	   				else
-	   					shape2.addTriangle(triangle);
-	   			}
-	   			
-	   			rayTracingScene.addShape(shape1);
-	   			rayTracingScene.addShape(shape2);
+	   			for(Triangle triangle : plyFileShape.getTriangleList())
+	   				rayTracingScene.addShape(triangle);
 	   		}
 	   	}
 	   	catch(InvalidParallelepipedException recExc)
@@ -207,8 +194,8 @@ public class MainApp extends Application {
 
 		    rayTracingScene.setSkybox(skybox);
 	   	}
-	   	rayTracingScene.setAccelerationStructure(new BVHAccelerationStructure(rayTracingScene.getSceneObjects()));
-	   	//rayTracingScene.setAccelerationStructure(new NoAccelerationStructure(rayTracingScene.getSceneObjects()));
+	   	//rayTracingScene.setAccelerationStructure(new BVHAccelerationStructure(rayTracingScene.getSceneObjects(), 16));
+	   	rayTracingScene.setAccelerationStructure(new NoAccelerationStructure(rayTracingScene.getSceneObjects()));
 	   	
         RayTracerSettings rayTracerSettings = new RayTracerSettings(Runtime.getRuntime().availableProcessors(), 4, 9, 4);
        
@@ -261,11 +248,13 @@ public class MainApp extends Application {
 
     public RayTracingScene createEmptyScene()
     {
-    	Camera cameraRT = new Camera(new Point(0.7, 0.75, 2), 0, 0, 40);
+    	Camera cameraRT = new Camera(new Point(0, 0.3, 2), 0, 0, 40);
         PositionnalLight l = new LightBulb(new Point(2, 2, 1), 1);
 
         ArrayList<Shape> shapeList = new ArrayList<>();
         //shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
+        
+        shapeList.add(new Sphere(new Point(0, 0, 0), 2, new MatteMaterial(Color.RED)));
         
         Image skybox = null;
         URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
@@ -283,7 +272,6 @@ public class MainApp extends Application {
         	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1);
         }
 
-        //sceneRT.addLight(new LightBulb(new Point(-2, 2.5, 1.440), 1));
         return sceneRT;
     }
     

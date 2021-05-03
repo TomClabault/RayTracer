@@ -11,21 +11,26 @@ public class Octree
 {
 	private OctreeNode root;
 	private ArrayList<BoundingVolume> shapesVolumes;
+	private ArrayList<Shape> noVolumeShapes;//Shapes qui n'ont pas de bounding volume et doivent être traitées spécifiquement
+	//par la strucutre. Les plans par exemple sont infinis, ils n'ont pas de bounding volume. Ces formes ne seront
+	//pas insérées dans la hiérarchie
 	
 	private BoundingBox bounds;
 	
-	public Octree(ArrayList<BoundingVolume> sceneObjectsVolumes)
+	public Octree(ArrayList<Shape> noVolumeShapes, ArrayList<BoundingVolume> sceneObjectsVolumes, int maxDepth)
 	{
 		this.shapesVolumes = sceneObjectsVolumes;
+		this.noVolumeShapes = noVolumeShapes;
 		
-		this.bounds = new BoundingBox(new Point(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE), new Point(Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE));
+		this.bounds = new BoundingBox(new Point(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY), new Point(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY));
 		this.root = new OctreeNode(0);//Racine = nouveau noeud de profondeur 0
 		
 		computeOctreeBoundingBox();
 		squareifyBoundingBox();
 		
-		for(BoundingVolume volume : shapesVolumes)
-			root.insert(volume, bounds.getBounds(0), bounds.getBounds(1));
+		//Ajout des bounding volumes à la hiérarchie
+		for(int i = 0; i < shapesVolumes.size(); i++)
+			root.insert(sceneObjectsVolumes.get(i), bounds.getBounds(0), bounds.getBounds(1), maxDepth);
 		
 		this.computeNodesBoundingVolumes();
 	}
@@ -45,7 +50,7 @@ public class Octree
 	{
 		Shape intersectedObject = null;
 		
-		intersectedObject = root.intersect(ray, outInterPoint, outNormalAtInter);
+		intersectedObject = root.intersect(noVolumeShapes, ray, outInterPoint, outNormalAtInter);
 		
 		return intersectedObject;
 	}

@@ -38,8 +38,8 @@ public class ArbitraryTriangleShape implements Shape
 	@Override
 	public BoundingBox getBoundingBox() 
 	{
-		BoundingBox boundingBox = new BoundingBox(new Point(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE),
-												  new Point(Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE));
+		BoundingBox boundingBox = new BoundingBox(new Point(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY),
+												  new Point(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY));
 		
 		for(Triangle triangle : triangleList)
 			boundingBox.extendBy(triangle.getBoundingBox());
@@ -57,8 +57,8 @@ public class ArbitraryTriangleShape implements Shape
 		
 		for(int i = 0; i < BoundingVolume.PLANE_SET_NORMAL_COUNT; i++)
 		{
-			double dNear = Double.MAX_VALUE;
-			double dFar = Double.MIN_VALUE;
+			double dMin = Double.POSITIVE_INFINITY;
+			double dMax = Double.NEGATIVE_INFINITY;
 			
 			for(Triangle triangle : this.triangleList)
 			{
@@ -68,12 +68,12 @@ public class ArbitraryTriangleShape implements Shape
 					
 					double d = Vector.dotProduct(BoundingVolume.PLANE_SET_NORMALS[i], vertex.toVector());
 					
-					dNear = Math.min(dNear, d);
-					dFar = Math.max(dFar, d);
+					dMin = Math.min(dMin, d);
+					dMax = Math.max(dMax, d);
 				}
 			}
 			
-			volume.setBounds(dNear, dFar, i);
+			volume.setBounds(dMin, dMax, i);
 		}
 		volume.setEnclosedObject(this);
 		

@@ -40,12 +40,12 @@ public class ToolboxSliders
 	    this.depthSlider.valueProperty().addListener(this::depthSliderCallback);
 	    
 	    Label nbCoreSliderLabel = new Label("Nombre de thread utilisé pour le rendu:");
-	    this.nbCoreSlider = new Slider(1, 8, 1);
+	    this.nbCoreSlider = new Slider(1, Runtime.getRuntime().availableProcessors(), 1);
 	    this.nbCoreSlider.setShowTickLabels(true);
 	    this.nbCoreSlider.setShowTickMarks(true);
 	    this.nbCoreSlider.setMajorTickUnit(1);
 	    this.nbCoreSlider.setMinorTickCount(0);
-	    this.nbCoreSlider.setValue(8);
+	    this.nbCoreSlider.setValue(Runtime.getRuntime().availableProcessors());
 	    this.nbCoreSlider.valueProperty().addListener(this::nbCoreSliderCallback);
 	    
 	    Label blurrySamplesSliderLabel = new Label("Nombre d'échantillons rough réflexions:");

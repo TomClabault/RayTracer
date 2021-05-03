@@ -3,6 +3,7 @@ package accelerationStructures;
 import java.util.ArrayList;
 
 import geometry.Shape;
+import materials.Material;
 import maths.Point;
 import maths.Ray;
 import maths.Vector;
@@ -15,6 +16,33 @@ public class OctreeNode
 	private BoundingVolume nodeVolume;
 	private ArrayList<BoundingVolume> boundingVolumes;//Bounding volumes contenant les objets hiérarchiés par l'octree
 	private OctreeNode[] children;
+	
+	/**
+	 * Permet de stocker l'objet intersecté par les rayons. Sans cette classe, nous ne pourrions pas ET retourner le coefficient
+	 * t du rayon ET l'objet intersecté. Cette classe est donc utilisée pour contenir l'objet intersecté et agir comme un
+	 * pointeur sur l'objet intersecté. On peut donc passer cette classe en
+	 * paramètre de {@link accelerationStructures.OctreeNode#intersect(Ray, Point, Vector, ObjectContainer)} et ainsi obtenir
+	 * l'objet intersecté
+	 */
+	private final class ObjectContainer
+	{
+		private Shape containedShape;
+		
+		public ObjectContainer() 
+		{
+			this.containedShape = null;
+		}
+		
+		public Shape getContainedShape() 
+		{
+			return containedShape;
+		}
+		
+		public void setContainedShape(Shape containedShape) 
+		{
+			this.containedShape = containedShape;
+		}
+	}
 	
 	public OctreeNode(int depth)
 	{
@@ -65,8 +93,8 @@ public class OctreeNode
 		}
 		else
 		{
-			minBound.setZ((currentMinBound.getZ() + currentMaxBound.getZ()) * 0.5);
-			maxBound.setZ(currentMaxBound.getZ());
+			minBound.setX((currentMinBound.getX() + currentMaxBound.getX()) * 0.5);
+			maxBound.setX(currentMaxBound.getX());
 		}
 	}
 	
@@ -97,7 +125,7 @@ public class OctreeNode
 		return this.nodeVolume;
 	}
 	
-	public void insert(BoundingVolume volume, Point minNodeBound, Point maxNodeBound)
+	public void insert(BoundingVolume volume, Point minNodeBound, Point maxNodeBound, int maxDepth)
 	{
 		//Un noeud est une feuille s'il n'y pas encore de volume inséré dedans où si le noeud se trouve à la profondeur
 		//maximale autorisée de l'arbre. Dans ce cas, on va ajouter le volume au noeud
@@ -106,7 +134,7 @@ public class OctreeNode
 			//On autorise l'ajout du noeud si le noeud contient 0 volume ou alors si le noeud est à la profondeur
 			//maximale. Dans ce cas, on va juste stacker tous les volumes dans le noeud puisque de toute façon
 			//on a pas le droit de construire l'arbre plus loin, on est à la profondeur maximale
-			if(this.boundingVolumes.size() == 0 || this.depth == BVHAccelerationStructure.MAX_DEPTH)
+			if(this.boundingVolumes.size() == 0 || this.depth == maxDepth)
 				boundingVolumes.add(volume);
 			else//S'il y avait déjà un volume dans le noeud et qu'on est pas à la profondeur maximale
 			{
@@ -121,13 +149,13 @@ public class OctreeNode
 				{
 					BoundingVolume volumeToInsert = this.boundingVolumes.get(0);
 					
-					this.insert(volumeToInsert, minNodeBound, maxNodeBound);
+					this.insert(volumeToInsert, minNodeBound, maxNodeBound, maxDepth);
 					
 					this.boundingVolumes.remove(0);
 					volumesCount = this.boundingVolumes.size();
 				}
 				
-				this.insert(volume, minNodeBound, maxNodeBound);//On insert également le volume actuel qu'on voulait insérer depuis
+				this.insert(volume, minNodeBound, maxNodeBound, maxDepth);//On insert également le volume actuel qu'on voulait insérer depuis
 				//le début
 			}
 		}
@@ -151,20 +179,47 @@ public class OctreeNode
 			
 			if(this.children[octantIndex] == null)//Si l'octant n'a pas déjà été créé
 				this.children[octantIndex] = new OctreeNode(depth + 1);//On le crée
-			this.children[octantIndex].insert(volume, newMinBounds, newMaxBounds);//Et on ajoute le volume à l'octant
+			this.children[octantIndex].insert(volume, newMinBounds, newMaxBounds, maxDepth);//Et on ajoute le volume à l'octant
 		}
 	}
 	
-	public Shape intersect(Ray ray, Point outInterPoint, Vector outNormlAtInter)
+	public Shape intersect(ArrayList<Shape> noVolumeShapes, Ray ray, Point outInterPoint, Vector outNormalAtInter)
 	{
-		Shape closestIntersectedObject = null;
+		ObjectContainer intersectedObject = new ObjectContainer();
+		
+		//On intersecte d'abord toutes les formes de la hiérarchie
+		Double tMin = intersect(ray, outInterPoint, outNormalAtInter, intersectedObject);
+		
+		for(Shape shape : noVolumeShapes)
+		{
+			Point tempInterPoint = new Point(0, 0, 0);
+			Vector tempNormalInter = new Vector(0, 0, 0);
+			
+			Double t = shape.intersect(ray, tempInterPoint, tempNormalInter);
+			if(t != null)
+			{
+				if(tMin == null || t < tMin)
+				{
+					tMin = t;
+					
+					intersectedObject.setContainedShape(shape);
+					outInterPoint.copyIn(tempInterPoint);
+					outNormalAtInter.copyIn(tempNormalInter);
+				}
+			}
+		}
+		
+		return intersectedObject.getContainedShape();
+	}
+	
+	private Double intersect(Ray ray, Point outInterPoint, Vector outNormalAtInter, ObjectContainer outIntersectedObject)
+	{
+		Double tMin = null;
 		
 		if(this.nodeVolume.intersect(ray))
 		{
 			if(isLeaf)
 			{
-				Double tMin = null;
-				
 				for(BoundingVolume volume : this.boundingVolumes)
 				{
 					if(volume.intersect(ray))
@@ -180,9 +235,9 @@ public class OctreeNode
 							{
 								tMin = t;
 								
-								closestIntersectedObject = volume.getEnclosedObject();
+								outIntersectedObject.setContainedShape(volume.getEnclosedObject());
 								outInterPoint.copyIn(tempInterPoint);
-								outNormlAtInter.copyIn(tempNormalAtInter);
+								outNormalAtInter.copyIn(tempNormalAtInter);
 							}
 						}
 					}
@@ -193,12 +248,29 @@ public class OctreeNode
 				for(OctreeNode child : this.children)
 				{
 					if(child != null)
-						closestIntersectedObject = child.intersect(ray, outInterPoint, outNormlAtInter);
+					{
+						Point tempInterPoint = new Point(0, 0, 0);
+						Vector tempNormalAtInter = new Vector(0, 0, 0);
+						ObjectContainer tempContainer = new ObjectContainer();
+						
+						Double t = child.intersect(ray, tempInterPoint, tempNormalAtInter, tempContainer);
+						if(t != null)
+						{
+							if(tMin == null || tMin > t)
+							{
+								tMin = t;
+								
+								outIntersectedObject.setContainedShape(tempContainer.getContainedShape());
+								outInterPoint.copyIn(tempInterPoint);
+								outNormalAtInter.copyIn(tempNormalAtInter);
+							}
+						}
+					}
 				}
 			}
 		}
 		
-		return closestIntersectedObject;
+		return tMin;
 			
 	}
 }

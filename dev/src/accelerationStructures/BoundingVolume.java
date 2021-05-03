@@ -15,7 +15,7 @@ public class BoundingVolume
 	
 	public static final Vector[] PLANE_SET_NORMALS = new Vector[] 
 	{
-		new Vector(1, 0, 1),
+		new Vector(1, 0, 0),
 		new Vector(0, 1, 0),
 		new Vector(0, 0, 1),
 		new Vector( Math.sqrt(3) / 3,  Math.sqrt(3) / 3, Math.sqrt(3) / 3), 
@@ -24,8 +24,8 @@ public class BoundingVolume
 	    new Vector( Math.sqrt(3) / 3, -Math.sqrt(3) / 3, Math.sqrt(3) / 3)
 	};
 	
-	private double[] dNear;
-	private double[] dFar;
+	private double[] dMin;
+	private double[] dMax;
 	
 	private Shape enclosedObject;
 	
@@ -34,13 +34,13 @@ public class BoundingVolume
 	 */
 	public BoundingVolume()
 	{
-		this.dNear = new double[BoundingVolume.PLANE_SET_NORMAL_COUNT];
-		this.dFar = new double[BoundingVolume.PLANE_SET_NORMAL_COUNT];
+		this.dMin = new double[BoundingVolume.PLANE_SET_NORMAL_COUNT];
+		this.dMax = new double[BoundingVolume.PLANE_SET_NORMAL_COUNT];
 		
 		for(int i = 0; i < BoundingVolume.PLANE_SET_NORMAL_COUNT; i++)
 		{
-			this.dNear[i] = Double.POSITIVE_INFINITY;
-			this.dFar[i] = Double.NEGATIVE_INFINITY;
+			this.dMin[i] = Double.POSITIVE_INFINITY;
+			this.dMax[i] = Double.NEGATIVE_INFINITY;
 		}
 	}
 	
@@ -55,8 +55,8 @@ public class BoundingVolume
 	{
 		for(int i = 0; i < BoundingVolume.PLANE_SET_NORMAL_COUNT; i++)
 		{
-			if(extender.getDNear(i) < this.getDNear(i)) this.dNear[i] = extender.getDNear(i);
-			if(extender.getDFar(i) > this.getDFar(i)) this.dFar[i] = extender.getDFar(i);
+			if(extender.getDMin(i) < this.getDMin(i)) this.dMin[i] = extender.getDMin(i);
+			if(extender.getDMax(i) > this.getDMax(i)) this.dMax[i] = extender.getDMax(i);
 		}
 	}
 
@@ -65,31 +65,31 @@ public class BoundingVolume
 	 */
 	public Point getCentroid()
 	{
-		return new Point((this.dNear[0] + this.dFar[0]) / 2, (this.dNear[1] + this.dFar[1]) / 2,(this.dNear[2] + this.dFar[2]) / 2);
+		return new Point((this.dMin[0] + this.dMax[0]) / 2, (this.dMin[1] + this.dMax[1]) / 2,(this.dMin[2] + this.dMax[2]) / 2);
 	}
 	
 	/**
-	 * Permet d'obtenir le paramètre dNear d'une paire de plan représentant le BoundingVolume
+	 * Permet d'obtenir le paramètre dMin d'une paire de plan représentant le BoundingVolume
 	 * 
 	 * @param index L'indice de la paire de plan dont le paramètre d est souhaité. Entier entre 0 et 7
 	 * 
-	 * @return Le paramètre dNear de la paire de plan numéro 'index'
+	 * @return Le paramètre dMin de la paire de plan numéro 'index'
 	 */
-	public double getDNear(int index)
+	public double getDMin(int index)
 	{
-		return this.dNear[index];
+		return this.dMin[index];
 	}
 	
 	/**
-	 * Permet d'obtenir le paramètre dFar d'une paire de plan représentant le BoundingVolume
+	 * Permet d'obtenir le paramètre dMax d'une paire de plan représentant le BoundingVolume
 	 * 
 	 * @param index L'indice de la paire de plan dont le paramètre d est souhaité. Entier entre 0 et 7
 	 * 
-	 * @return Le paramètre dFar de la paire de plan numéro 'index'
+	 * @return Le paramètre dMax de la paire de plan numéro 'index'
 	 */
-	public double getDFar(int index)
+	public double getDMax(int index)
 	{
-		return this.dFar[index];
+		return this.dMax[index];
 	}
 	
 	/**
@@ -117,18 +117,18 @@ public class BoundingVolume
 			double normalDotOrigin = Vector.dotProduct(BoundingVolume.PLANE_SET_NORMALS[i], ray.getOrigin().toVector());
 			double normalDotDirection = Vector.dotProduct(BoundingVolume.PLANE_SET_NORMALS[i], ray.getDirection());
 			
-			double currentDNear = this.dNear[i];
-			double currentDFar = this.dFar[i];
+			double currentdMin = this.dMin[i];
+			double currentDMax = this.dMax[i];
 			
 			if(normalDotDirection < 0)
 			{
-				double temp = currentDNear;
-				currentDNear = currentDFar;
-				currentDFar = temp;
+				double temp = currentdMin;
+				currentdMin = currentDMax;
+				currentDMax = temp;
 			}
 			
-			double tNear = (currentDNear - normalDotOrigin) / normalDotDirection; 
-			double tFar= (currentDFar - normalDotOrigin) / normalDotDirection;
+			double tNear = (currentdMin - normalDotOrigin) / normalDotDirection; 
+			double tFar= (currentDMax - normalDotOrigin) / normalDotDirection;
 			
 			if(tNearIntersect == null || tNearIntersect < tNear) 
 				tNearIntersect = tNear;
@@ -158,15 +158,15 @@ public class BoundingVolume
 	}
 	
 	/**
-	 * Permet de redéfinir les paramètres dNear et dFar d'une paire de plan du bouding volume
+	 * Permet de redéfinir les paramètres dMin et dMax d'une paire de plan du bouding volume
 	 * 
-	 * @param near 	Le nouveau paramètre de dNear
-	 * @param far 	Le nouveau paramètre de dFar
-	 * @param index	Le numéro de la paire de plan dont les dNear dFar vont être redéfinis. Entier entre 0 et 7
+	 * @param near 	Le nouveau paramètre de dMin
+	 * @param far 	Le nouveau paramètre de dMax
+	 * @param index	Le numéro de la paire de plan dont les dMin dMax vont être redéfinis. Entier entre 0 et 7
 	 */
 	public void setBounds(double near, double far, int index)
 	{
-		this.dNear[index] = near;
-		this.dFar[index] = far;
+		this.dMin[index] = near;
+		this.dMax[index] = far;
 	}
 }

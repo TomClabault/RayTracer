@@ -56,10 +56,10 @@ public class Sphere extends ShapeUtil implements Shape
 
 		for(int i = 0; i < BoundingVolume.PLANE_SET_NORMAL_COUNT; i++)
 		{
-			double dNear = Vector.dotProduct(BoundingVolume.PLANE_SET_NORMALS[i].getNegated(), Point.translateMul(center, BoundingVolume.PLANE_SET_NORMALS[i].getNegated(), radius).toVector());
-			double dFar = Vector.dotProduct(BoundingVolume.PLANE_SET_NORMALS[i], Point.translateMul(center, BoundingVolume.PLANE_SET_NORMALS[i], radius).toVector());
+			double dMin = Vector.dotProduct(BoundingVolume.PLANE_SET_NORMALS[i], Point.translateMul(center, BoundingVolume.PLANE_SET_NORMALS[i].getNegated(), radius).toVector());
+			double dMax = Vector.dotProduct(BoundingVolume.PLANE_SET_NORMALS[i], Point.translateMul(center, BoundingVolume.PLANE_SET_NORMALS[i], radius).toVector());
 			
-			boundingVolume.setBounds(dNear, dFar, i);
+			boundingVolume.setBounds(dMin, dMax, i);
 		}
 		boundingVolume.setEnclosedObject(this);
 		
