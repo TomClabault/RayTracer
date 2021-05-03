@@ -2,6 +2,7 @@ package accelerationStructures;
 
 import java.util.ArrayList;
 
+import geometry.ObjectContainer;
 import geometry.Shape;
 import maths.Point;
 import maths.Ray;
@@ -18,9 +19,8 @@ public class NoAccelerationStructure implements AccelerationStructure
 	}
 
 	@Override
-	public Shape intersect(RayTracerStats interStats, Ray ray, Point outInterPoint, Vector outNormalAtInter) 
+	public Double intersect(RayTracerStats interStats, Ray ray, Point outInterPoint, Vector outNormalAtInter, ObjectContainer objectContainer) 
 	{
-		Shape closestIntersectedObject = null;
 		Point closestInterPoint = null;
 		Vector normalAtClosestInterPoint = null;
 		
@@ -41,21 +41,21 @@ public class NoAccelerationStructure implements AccelerationStructure
 					
 					closestInterPoint = tempInterPoint;
 					normalAtClosestInterPoint = tempNormalAtInter;
-					closestIntersectedObject = shape;
+					objectContainer.setContainedShape(shape);
 				}
 			}
 		}
 		
-		if(closestIntersectedObject != null)//Si on a bel et bien trouvé un point d'intersection entre le rayon et un objet de la scène
+		if(tMin != null)//Si on a bel et bien trouvé un point d'intersection entre le rayon et un objet de la scène
 		{
 			if(outInterPoint != null)
 				outInterPoint.copyIn(closestInterPoint);
 			if(outNormalAtInter != null)
 				outNormalAtInter.copyIn(normalAtClosestInterPoint);
 			
-			return closestIntersectedObject;
+			return tMin;
 		}
 		
-		return null;
+		return null;//Aucune intersection trouvée
 	}
 }

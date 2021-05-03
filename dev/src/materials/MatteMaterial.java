@@ -2,6 +2,7 @@ package materials;
 
 import javafx.scene.paint.Color;
 import materials.textures.*;
+import maths.Vector;
 
 public class MatteMaterial extends Material
 {
@@ -23,6 +24,6 @@ public class MatteMaterial extends Material
 	 */
 	public MatteMaterial(Color color, ProceduralTexture proceduralTexture)
 	{
-		super(color, 1, 0.75, 0, 0.05, 1, false, 0, 0, proceduralTexture);
+		super(color, 1, 0.75, 0, 0.05, 1, false, 0, new Vector(0, 0, 0), 0, proceduralTexture);
 	}
 }

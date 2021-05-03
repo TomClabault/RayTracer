@@ -2,13 +2,14 @@ package accelerationStructures;
 
 import java.util.ArrayList;
 
+import geometry.ObjectContainer;
 import geometry.Shape;
-import materials.Material;
 import maths.Point;
 import maths.Ray;
 import maths.Vector;
 import rayTracer.RayTracerStats;
 
+//TODO (tom) compter le nombre d'intersection avec les volumes etc...
 public class OctreeNode 
 {
 	private int depth;//Profondeur dans l'octree du noeud actuel
@@ -17,33 +18,6 @@ public class OctreeNode
 	private BoundingVolume nodeVolume;
 	private ArrayList<BoundingVolume> boundingVolumes;//Bounding volumes contenant les objets hiérarchiés par l'octree
 	private OctreeNode[] children;
-	
-	/**
-	 * Permet de stocker l'objet intersecté par les rayons. Sans cette classe, nous ne pourrions pas ET retourner le coefficient
-	 * t du rayon ET l'objet intersecté. Cette classe est donc utilisée pour contenir l'objet intersecté et agir comme un
-	 * pointeur sur l'objet intersecté. On peut donc passer cette classe en
-	 * paramètre de {@link accelerationStructures.OctreeNode#intersect(Ray, Point, Vector, ObjectContainer)} et ainsi obtenir
-	 * l'objet intersecté
-	 */
-	private final class ObjectContainer
-	{
-		private Shape containedShape;
-		
-		public ObjectContainer() 
-		{
-			this.containedShape = null;
-		}
-		
-		public Shape getContainedShape() 
-		{
-			return containedShape;
-		}
-		
-		public void setContainedShape(Shape containedShape) 
-		{
-			this.containedShape = containedShape;
-		}
-	}
 	
 	public OctreeNode(int depth)
 	{
@@ -184,12 +158,10 @@ public class OctreeNode
 		}
 	}
 	
-	public Shape intersect(RayTracerStats interStats, ArrayList<Shape> noVolumeShapes, Ray ray, Point outInterPoint, Vector outNormalAtInter)
+	public Double intersect(RayTracerStats interStats, ArrayList<Shape> noVolumeShapes, Ray ray, Point outInterPoint, Vector outNormalAtInter, ObjectContainer objectContainer)
 	{
-		ObjectContainer intersectedObject = new ObjectContainer();
-		
 		//On intersecte d'abord toutes les formes de la hiérarchie
-		Double tMin = intersect(interStats, ray, outInterPoint, outNormalAtInter, intersectedObject);
+		Double tMin = intersect(interStats, ray, outInterPoint, outNormalAtInter, objectContainer);
 		
 		for(Shape shape : noVolumeShapes)
 		{
@@ -204,14 +176,14 @@ public class OctreeNode
 				{
 					tMin = t;
 					
-					intersectedObject.setContainedShape(shape);
 					outInterPoint.copyIn(tempInterPoint);
 					outNormalAtInter.copyIn(tempNormalInter);
+					objectContainer.setContainedShape(shape);
 				}
 			}
 		}
 		
-		return intersectedObject.getContainedShape();
+		return tMin;
 	}
 	
 	private Double intersect(RayTracerStats interStats, Ray ray, Point outInterPoint, Vector outNormalAtInter, ObjectContainer outIntersectedObject)

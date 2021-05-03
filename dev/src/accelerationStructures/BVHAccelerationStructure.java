@@ -3,6 +3,7 @@ package accelerationStructures;
 import java.util.ArrayList;
 
 import geometry.ArbitraryTriangleShape;
+import geometry.ObjectContainer;
 import geometry.Shape;
 import maths.Point;
 import maths.Ray;
@@ -45,8 +46,8 @@ public class BVHAccelerationStructure implements AccelerationStructure
 	}
 	
 	@Override
-	public Shape intersect(RayTracerStats interStats, Ray ray, Point outInterPoint, Vector outNormalAtInter) 
+	public Double intersect(RayTracerStats interStats, Ray ray, Point outInterPoint, Vector outNormalAtInter, ObjectContainer objectContainer) 
 	{
-		return this.octree.intersect(interStats, ray, outInterPoint, outNormalAtInter);
+		return this.octree.intersect(interStats, ray, outInterPoint, outNormalAtInter, objectContainer);
 	}
 }

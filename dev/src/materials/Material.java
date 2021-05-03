@@ -3,6 +3,7 @@ package materials;
 import javafx.scene.paint.Color;
 import materials.textures.*;
 import maths.ColorOperations;
+import maths.Vector;
 
 /**
  * Classe permettant définir des matériaux à partir des différentes caractéristiques physiques que peut simuler le rayTracer<br>
@@ -23,6 +24,8 @@ import maths.ColorOperations;
 public class Material 
 {	
 	private Color color;
+	
+	private Vector absorption;
 	
 	private double ambientCoeff;
 	private double diffuseCoeff;
@@ -50,18 +53,7 @@ public class Material
 	 */
 	public Material(Color color, double ambientCoeff, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess, boolean isTransparent, double refractionIndex, double roughness)
 	{
-		this.color = color;
-		
-		this.ambientCoeff = ambientCoeff;
-		this.diffuseCoeff = diffuseCoeff;
-		this.reflectiveCoeff = reflectiveCoeff;
-		this.specularCoeff = specularCoeff;
-		this.shininess = shininess;
-		this.isTransparent = isTransparent;
-		this.refractionIndex = refractionIndex;
-		this.roughness = roughness;
-		
-		this.proceduralTexture = null;//Pas de texture par défaut
+		this(color, ambientCoeff, diffuseCoeff, reflectiveCoeff, specularCoeff, shininess, isTransparent, refractionIndex, new Vector(0, 0, 0), roughness, null);
 	}
 	
 	/**
@@ -78,9 +70,12 @@ public class Material
 	 * @param roughness Le coefficient de dispersion des rayons de lumière à l'impact du matériau. Responsable de réflexions floues notamment
 	 * @param proceduralTexture La texture procédurale de l'objet
 	 */
-	public Material(Color color, double ambientCoeff, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess, boolean isTransparent, double refractionIndex, double roughness, ProceduralTexture proceduralTexture)
+	//TODO (tom) doc absorption
+	public Material(Color color, double ambientCoeff, double diffuseCoeff, double reflectiveCoeff, double specularCoeff, int shininess, boolean isTransparent, double refractionIndex, Vector absorption, double roughness, ProceduralTexture proceduralTexture)
 	{
 		this.color = color;
+		
+		this.setAbsorption(absorption);
 		
 		this.ambientCoeff = ambientCoeff;
 		this.diffuseCoeff = diffuseCoeff;
@@ -276,5 +271,19 @@ public class Material
 		String transparencyString = String.format("%b", isTransparent);
 		
 		return String.format("Color: %-15s | AmbientCoeff: %.3f | DiffuseCoeff: %.3f | ReflectiveCoeff: %.3f | SpecularCoeff: %.3f | Shininess: %-3d | Transparency: %-5s | RefractionIndex: %.3f | Roughness: %.3f | ProceduralTexture: %s", ColorOperations.colorToString(color), ambientCoeff, diffuseCoeff, reflectiveCoeff, specularCoeff, shininess, transparencyString, refractionIndex, roughness, proceduralTexture);
+	}
+
+	/**
+	 * @return the absorption
+	 */
+	public Vector getAbsorption() {
+		return absorption;
+	}
+
+	/**
+	 * @param absorption the absorption to set
+	 */
+	public void setAbsorption(Vector absorption) {
+		this.absorption = absorption;
 	}
 }

@@ -2,6 +2,7 @@ package materials;
 
 import javafx.scene.paint.Color;
 import materials.textures.*;
+import maths.Vector;
 
 public class MetallicMaterial extends Material
 {
@@ -23,6 +24,6 @@ public class MetallicMaterial extends Material
 	 */
 	public MetallicMaterial(Color color, ProceduralTexture proceduralTexture)
 	{
-		super(color, 1, 1, 0.06, 1, 200, false, 0, 0, proceduralTexture);
+		super(color, 1, 1, 0.06, 1, 200, false, 0, new Vector(0, 0, 0), 0, proceduralTexture);
 	}
 }

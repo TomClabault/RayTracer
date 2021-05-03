@@ -2,6 +2,7 @@ package accelerationStructures;
 
 import java.util.ArrayList;
 
+import geometry.ObjectContainer;
 import geometry.Shape;
 import maths.Point;
 import maths.Ray;
@@ -47,13 +48,13 @@ public class Octree
 			this.bounds.extendBy(volume);
 	}
 	
-	public Shape intersect(RayTracerStats interStats, Ray ray, Point outInterPoint, Vector outNormalAtInter)
+	public Double intersect(RayTracerStats interStats, Ray ray, Point outInterPoint, Vector outNormalAtInter, ObjectContainer objectContainer)
 	{
 		Shape intersectedObject = null;
 		
-		intersectedObject = root.intersect(interStats, noVolumeShapes, ray, outInterPoint, outNormalAtInter);
+		Double t = root.intersect(interStats, noVolumeShapes, ray, outInterPoint, outNormalAtInter, objectContainer);
 		
-		return intersectedObject;
+		return t;
 	}
 	
 	private void squareifyBoundingBox()

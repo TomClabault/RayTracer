@@ -286,6 +286,16 @@ public class ColorOperations
 		return Color.rgb(newRed, newGreen, newBlue);
 	}
 	
+	//TODO (tom) doc
+	public static Color mulColorVector(Color colorToMul, Vector vector)
+	{
+		int newRed = (int)(colorToMul.getRed() * vector.getX() * 255); newRed = newRed > 255 ? 255 : newRed;
+		int newGreen = (int)(colorToMul.getGreen() * vector.getY() * 255); newGreen = newGreen > 255 ? 255 : newGreen;
+		int newBlue = (int)(colorToMul.getBlue() * vector.getZ()  * 255); newBlue = newBlue > 255 ? 255 : newBlue;
+		
+		return Color.rgb(newRed, newGreen, newBlue);
+	}
+	
 	/**
 	 * Permet d'élever toutes les composantes d'une couleur à une certaine puissance
 	 * 

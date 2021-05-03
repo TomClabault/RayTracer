@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import accelerationStructures.AccelerationStructure;
+import geometry.ObjectContainer;
 import geometry.Shape;
 import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
@@ -34,6 +35,8 @@ public class RayTracer
 	 */
 	private class RayTracerInterInfos
 	{
+		private Double tCoeff;
+		
 		private Shape intersectedObject;
 		
 		private Material intersectedObjectMaterial;
@@ -55,6 +58,8 @@ public class RayTracer
 		
 
 		
+		public Double getTCoeff() { return tCoeff; }
+		
 		public Shape getIntObj() {return this.intersectedObject;}
 		
 		public Material getIntObjMat() {return this.intersectedObjectMaterial;}
@@ -73,6 +78,8 @@ public class RayTracer
 		public Ray getShadowRay() {return this.shadowRay;}
 		
 		
+		
+		public void setTCoeff(Double newT) { this.tCoeff = newT; }
 		
 		public void setIntO(Shape newIntersectedObject) {this.intersectedObject = newIntersectedObject; this.intersectedObjectMaterial = newIntersectedObject.getMaterial();}
 		
@@ -165,21 +172,24 @@ public class RayTracer
 		Vector outNormalAtIntersection = new Vector(0, 0, 0);;
 		
 		Point interPoint = new Point(0, 0, 0);
-		Shape closestObjectIntersected = accelStruct.intersect(interStats, ray, interPoint, outNormalAtIntersection);
-		if(closestObjectIntersected != null)//On a trouvé une intersection
+		ObjectContainer objectContainer = new ObjectContainer();
+		Double t = accelStruct.intersect(interStats, ray, interPoint, outNormalAtIntersection, objectContainer);
+		
+		if(t != null)//On a trouvé une intersection
 		{
 			if(intInfos != null)
 			{
 				if(updateNormalAtInter)
 					intInfos.setNormInt(outNormalAtIntersection);
 				intInfos.setIntP(interPoint);
+				intInfos.setTCoeff(t);
 			}
 			
 			if(outClosestInterPoint != null)//On souhaite récupérer le point d'intersection
 				outClosestInterPoint.copyIn(interPoint);
 		}
 		
-		return closestObjectIntersected;
+		return objectContainer.getContainedShape();
 	}
 
 	/**
@@ -316,6 +326,7 @@ public class RayTracer
 		
 		Point rayInterPoint = intInfos.getIntP();
 		
+		//TODO (tom) absorption pour la spécularité ? cf shadertoy 
 		if (intObjMat.getRefractionIndex() != 0)//L'objet est réfractif 
 		{
 			Vector refractedRayDir = computeRefractedVector(incidentRayDir, normalAtInter, intObjMat.getRefractionIndex());
@@ -333,7 +344,14 @@ public class RayTracer
 				}
 			}
 			
-			return ColorOperations.mulColor(refractedColor, transmittedLightRatio);
+			double absorbDistance = intInfos.getTCoeff();
+			
+			Vector materialAbsorption = intInfos.getIntObjMat().getAbsorption();
+	        Vector absorbColor = new Vector(Math.exp(absorbDistance*materialAbsorption.getX()), 
+	        								Math.exp(absorbDistance*materialAbsorption.getY()), 
+	        								Math.exp(absorbDistance*materialAbsorption.getZ()));
+	        
+			return ColorOperations.mulColorVector(ColorOperations.mulColor(refractedColor, transmittedLightRatio), absorbColor);
 		}
 		else//L'objet n'est pas réfractif
 			return Color.rgb(0, 0, 0);

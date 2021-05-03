@@ -153,7 +153,7 @@ public class MainApp extends Application {
 	   			rayTracingScene = createEmptyScene();
 	   			
 	   			Color gold = Color.web("D4AF37");
-	   			PlyParser plyParser = new PlyParser(new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(gold), 1), 4, new Vector(0, -0.5, 0));
+	   			PlyParser plyParser = new PlyParser(new GlassMaterial(new Vector(8.0, 0, 0)), 4, new Vector(0, -0.5, 0));
 	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
 	   			plyFileShape.getTriangleList().trimToSize();
 	   			
