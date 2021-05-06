@@ -130,8 +130,8 @@ public class MainApp extends Application {
     public void start(Stage stage) 
     {
     	//TODO (tom) clean le main avec des fonctions --> commence à être le bordel
-    	//TODO (tom) n'activer le comptage du nombre d'intersections que sur demande (une feature 'debug' en gros) parce que ça tape dans les perfs
-    	//mine de rien
+    	//TODO (tom) n'activer le comptage du nombre d'intersections que sur demande (une feature 'debug' en gros) parce que ça tape dans 
+    	//les perfs mine de rien
     	File fileChosen = chooseFile(stage, "POV, PLY", "*.pov", "*.ply");
     
     	if(fileChosen == null)//L'utilisateur n'a pas choisi de fichier / a annulé

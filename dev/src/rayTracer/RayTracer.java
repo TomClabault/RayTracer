@@ -36,6 +36,7 @@ public class RayTracer
 	private class RayTracerInterInfos
 	{
 		private Double tCoeff;
+		private double absorbtionDistance = 0;
 		
 		private Shape intersectedObject;
 		
@@ -58,7 +59,8 @@ public class RayTracer
 		
 
 		
-		public Double getTCoeff() { return tCoeff; }
+		public Double getTCoeff() { return this.tCoeff; }
+		public double getAbsorbDist() { return this.absorbtionDistance; }
 		
 		public Shape getIntObj() {return this.intersectedObject;}
 		
@@ -80,6 +82,8 @@ public class RayTracer
 		
 		
 		public void setTCoeff(Double newT) { this.tCoeff = newT; }
+		public void setAbsorbDist(double absorbtionDistance) { this.absorbtionDistance = absorbtionDistance; }
+		public void incrementAbsorbDist(double increment) { this.absorbtionDistance += increment; }
 		
 		public void setIntO(Shape newIntersectedObject) {this.intersectedObject = newIntersectedObject; this.intersectedObjectMaterial = newIntersectedObject.getMaterial();}
 		
@@ -102,7 +106,7 @@ public class RayTracer
 	
 	
 	public static final double AIR_REFRACTION_INDEX = 1.000293;
-	public static final double EPSILON_SHIFT = 0.0001;
+	public static final double EPSILON = 0.0001;
 	
 	private int renderWidth;
 	private int renderHeight;
@@ -332,19 +336,19 @@ public class RayTracer
 			Vector refractedRayDir = computeRefractedVector(incidentRayDir, normalAtInter, intObjMat.getRefractionIndex());
 			Ray refractedRay = null;
 			if (Vector.dotProduct(incidentRayDir, normalAtInter) > 0)
-				refractedRay = new Ray(Point.translateMul(rayInterPoint, incidentRayDir, EPSILON_SHIFT), refractedRayDir);
+				refractedRay = new Ray(Point.translateMul(rayInterPoint, incidentRayDir, EPSILON), refractedRayDir);
 			else
-				refractedRay = new Ray(Point.translateMul(rayInterPoint, incidentRayDir, EPSILON_SHIFT), refractedRayDir);
+				refractedRay = new Ray(Point.translateMul(rayInterPoint, incidentRayDir, EPSILON), refractedRayDir);
 			
 			Color refractedColor = Color.rgb(0,0,0);
 			if(intObjMat.getIsTransparent())//L'objet est transparent, on va donc calculer les rayons réfractés à l'intérieur de l'objet
 			{
 				if (! refractedRayDir.equals(new Vector(0,0,0)) ) {
-					refractedColor = traceRay(renderScene, refractedRay, depth -1);
+					refractedColor = traceRay(renderScene, refractedRay, depth - 1);
 				}
 			}
 			
-			double absorbDistance = intInfos.getTCoeff();
+			double absorbDistance = intInfos.getAbsorbDist();
 			
 			Vector materialAbsorption = intInfos.getIntObjMat().getAbsorption();
 	        Vector absorbColor = new Vector(Math.exp(absorbDistance*materialAbsorption.getX()), 
@@ -376,7 +380,7 @@ public class RayTracer
 		if (Vector.dotProduct(incidentRayDir, normalAtInter) > 0)
 			reflectedRay = new Ray(intInfos.getIntPShift(), computeReflectionVector(normalAtInter, incidentRayDir));
 		else
-			reflectedRay = new Ray(Point.translateMul(rayInterPoint, incidentRayDir, -EPSILON_SHIFT), computeReflectionVector(normalAtInter, incidentRayDir));
+			reflectedRay = new Ray(Point.translateMul(rayInterPoint, incidentRayDir, -EPSILON), computeReflectionVector(normalAtInter, incidentRayDir));
 		
 		Color reflectedColor = Color.rgb(0, 0, 0);
 		reflectedColor = traceRay(renderScene, reflectedRay, depth -1);
@@ -558,18 +562,6 @@ public class RayTracer
 
 		if(intersectedObject != null)//Un objet a bien été intersecté
 		{
-//			try 
-//			{
-//				debugOutputFile.write(intersectedObject.toString() + System.lineSeparator());
-//				debugOutputFile.write(interInfos.getIntP().toString() + System.lineSeparator());
-//				debugOutputFile.write(interInfos.getNormInt().toString() + System.lineSeparator());
-//				debugOutputFile.write(System.lineSeparator());
-//			} 
-//			catch (IOException e) 
-//			{
-//				e.printStackTrace();
-//			}
-			
 			interInfos.setIntO(intersectedObject);//On set l'objet intersecté dans les informations d'intersection
 			
 			double lightIntensity = 0;
@@ -603,7 +595,7 @@ public class RayTracer
 			
 			
 			interInfos.setReflVec(computeReflectionVector(interInfos.getNormInt(), ray.getDirection()));
-			interInfos.setIntPShift(Point.translateMul(interInfos.getIntP(), interInfos.getReflVec(), EPSILON_SHIFT));//On translate légèrement le point d'intersection dans la direction d'un  rayon parfaitement réfléchi pour ne pas directement réintersecter l'objet avec lequel nous avons déjà trouvé un point d'intersection
+			interInfos.setIntPShift(Point.translateMul(interInfos.getIntP(), interInfos.getReflVec(), EPSILON));//On translate légèrement le point d'intersection dans la direction d'un  rayon parfaitement réfléchi pour ne pas directement réintersecter l'objet avec lequel nous avons déjà trouvé un point d'intersection
 			
 			boolean accessToLight = false;//Si le point de la scène que l'on est en train de calculer a un accès direct à une (ou plusieures) source de lumière, alors on n'ombragera pas ce point et cette variable passera à true
 			boolean reflectionsDone = false;//Permet de ne pas recalculer les reflexions pour chaque source de lumière
@@ -646,6 +638,11 @@ public class RayTracer
 					{
 						double reflectedLightRatio = fresnel(interInfos.getRayDir(), interInfos.getNormInt(), interInfos.getIntObjMat().getRefractionIndex());
 						double transmittedLightRatio = 1 - reflectedLightRatio;
+						
+						if(transmittedLightRatio > EPSILON)//Si on est dans un cas de réflexion interne totale
+							interInfos.incrementAbsorbDist(interInfos.getTCoeff());//on augmente la distance d'absorption
+						else
+							interInfos.setAbsorbDist(0);
 						
 						if(this.settings.isEnableRefractions() && !refractionsDone)
 						{
