@@ -12,10 +12,10 @@ public class Point implements CoordinateObject
 	}
 	
 	/*
-     * Additionne deux points entre eux et retourne le point résultant
+     * Additionne deux points entre eux et retourne le point resultant
      * 
-     * @param a Le premier point de coordonnées (a1, a2, a3)
-     * @param b Le deuxième point de coordonnées (b1, b2, b3)
+     * @param a Le premier point de coordonnees (a1, a2, a3)
+     * @param b Le deuxieme point de coordonnees (b1, b2, b3)
      * 
      * @return a + b = (a1 + b1, a2 + b2, a3 + b3)
      */
@@ -25,9 +25,9 @@ public class Point implements CoordinateObject
     }
     
     /*
-     * Permet de copier un point passé en argument dans l'instance du point appelante
+     * Permet de copier un point passe en argument dans l'instance du point appelante
      * 
-     * @param pointToCopy Point dont les coordonnées vont être copiées dans l'instance actuelle
+     * @param pointToCopy Point dont les coordonnees vont etre copiees dans l'instance actuelle
      */
     public void copyIn(Point pointToCopy)
     {
@@ -40,7 +40,7 @@ public class Point implements CoordinateObject
      * Calcule et retourne la distance entre deux points
      * 
      * @param p1 Le premier point
-     * @param p2 Le deuxième point
+     * @param p2 Le deuxieme point
      * 
      * @return La distance entre les deux points
      */
@@ -89,10 +89,10 @@ public class Point implements CoordinateObject
 	}
 	
 	/**
-	 * Permet de déterminer le point représentant le milieu du segment formé par les points a et b passés en argument
+	 * Permet de determiner le point representant le milieu du segment forme par les points a et b passes en argument
 	 * 
-	 *  @param a Le premier point du segment dont on veut déterminer le milieu
-	 *  @param b Le deuxième point du segment dont on veut déterminer le milieu
+	 *  @param a Le premier point du segment dont on veut determiner le milieu
+	 *  @param b Le deuxieme point du segment dont on veut determiner le milieu
 	 *  
 	 *  @return Le point au milieu du segement [ab] 
 	 */
@@ -102,12 +102,12 @@ public class Point implements CoordinateObject
 	}
 	
 	/**
-     * Multiplie les coordonnées d'un point par un scalaire et retourne le point résultant
+     * Multiplie les coordonnees d'un point par un scalaire et retourne le point resultant
      * 
      * @param scalar 	Un scalaire
-     * @param a 		Un point de coordonnées (a, b , c)
+     * @param a 		Un point de coordonnees (a, b , c)
      * 
-     * @return Le point de coordonnées (a*scalar, b*scalar, c*scalar)
+     * @return Le point de coordonnees (a*scalar, b*scalar, c*scalar)
      */
     public static Point scalarMul(double scalar, Point a)
     {
@@ -141,12 +141,12 @@ public class Point implements CoordinateObject
 	}
     
     /**
-     * Soustrait deux points coordonnées à coordonnées et retourne le point résultant
+     * Soustrait deux points coordonnees a coordonnees et retourne le point resultant
      * 
-     * @param a Le premier point de coordoonées (a1, a2, a3)
-     * @param b Le deuxième point de coordonnées (b1, b2, b3)
+     * @param a Le premier point de coordoonees (a1, a2, a3)
+     * @param b Le deuxieme point de coordonnees (b1, b2, b3)
      * 
-     * @return Le point de coordonnées (a1 - b1, a2 - b2, a3 - b3)
+     * @return Le point de coordonnees (a1 - b1, a2 - b2, a3 - b3)
      */
     public static Point sub(Point a, Point b)
     {
@@ -162,7 +162,7 @@ public class Point implements CoordinateObject
     }
     
     /**
-     * @return Pour this, le point de coordonnées (x, y, z), retourne le vecteur de coordonnée (x, y, z)
+     * @return Pour this, le point de coordonnees (x, y, z), retourne le vecteur de coordonnee (x, y, z)
      */
     public Vector toVector()
     {
@@ -172,11 +172,11 @@ public class Point implements CoordinateObject
     /**
      * Translate le point a le long du vecteur u "k fois"
      * 
-     *  @param a Un point de coordonnées (x, y, z)
-     *  @param u Un vecteur de coordonnées (a, b, c)
+     *  @param a Un point de coordonnees (x, y, z)
+     *  @param u Un vecteur de coordonnees (a, b, c)
      *  @param k Un coefficient de translation
      *  
-     *  @return Un nouveau point de coordonnée (x + a*k, y + b*k, z + c*k)
+     *  @return Un nouveau point de coordonnee (x + a*k, y + b*k, z + c*k)
      */
     public static Point translateMul(Point a, Vector u, double k)
     {

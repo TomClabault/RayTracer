@@ -5,7 +5,7 @@ import parsers.povParser.PovAutomat;
 import scene.Camera;
 
 /**
- * différents attributs que peut prendre la caméra ainsi que les éléments de syntaxe qui représentent différents états
+ * differents attributs que peut prendre la camera ainsi que les elements de syntaxe qui representent differents etats
  */
 enum CameraContent
 {
@@ -14,23 +14,23 @@ enum CameraContent
     ENDING_BRACKET,
     LOCATION, //position
     DIRECTION,
-    LOOK_AT, // orientation de la caméra
+    LOOK_AT, // orientation de la camera
     ANGLE, // angle horizontal: fov (champ de vision)
 
 }
 
 /**
- * Classe représentant l'état camera, c'est à dire que le jeton courant est le mot
- * camera dans le fichier pov. C'est ici que tout le parsing de la camera est effectué.
+ * Classe representant l'etat camera, c'est a dire que le jeton courant est le mot
+ * camera dans le fichier pov. C'est ici que tout le parsing de la camera est effectue.
  */
 public class StateCamera implements StateToken
 {
 
     /**
-     * Cette fonction sert à parser une coordonnée de type c1, c2, c3 et retourne
+     * Cette fonction sert a parser une coordonnee de type c1, c2, c3 et retourne
      * le tableau des 3 composantes
      * @param context Le contexte courant de l'automate
-     * @return Le tableau contenant les coordonnées parsées
+     * @return Le tableau contenant les coordonnees parsees
      */
     public double[] parseAndGetCoord(PovAutomat context)
     {
@@ -46,9 +46,9 @@ public class StateCamera implements StateToken
     }
 
     /**
-     * méthode servant à donner le prochain état du jeton (OUTSIDE si aucun mot connue)
+     * methode servant a donner le prochain etat du jeton (OUTSIDE si aucun mot connue)
      * @param context
-     * @return retourne l'état suivant du jeton
+     * @return retourne l'etat suivant du jeton
      */
     public CameraContent getNextAttribute(PovAutomat context)
     {
@@ -76,7 +76,7 @@ public class StateCamera implements StateToken
     }
 
     /**
-     * Cette méthode effectue le parsing d'un objet camera
+     * Cette methode effectue le parsing d'un objet camera
      * @param context contexte courant de l'automate
      */
     @Override

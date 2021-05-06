@@ -10,7 +10,7 @@ import parsers.povParser.PovAutomat;
 import java.io.StreamTokenizer;
 
 /**
- * énumération des différents états d'un objet box
+ * enumeration des differents etats d'un objet box
  */
 enum Boxcontent
 {
@@ -28,9 +28,9 @@ enum Boxcontent
 public class StateBox extends StateUtil implements StateToken
 {
     /**
-     * Méthode permettant de parser la box
+     * Methode permettant de parser la box
      * @param context contexte courant de l'automate
-     * @return Un objet de type shape contenant les coordonnées parsées etc.
+     * @return Un objet de type shape contenant les coordonnees parsees etc.
      */
     @Override
     public Shape parse(PovAutomat context)

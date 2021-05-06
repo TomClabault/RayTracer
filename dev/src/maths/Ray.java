@@ -6,7 +6,7 @@ public class Ray
 	private Point origin;
 	
 	/**
-	 * Construit un rayon à partir de son point d'origine ainsi que d'un vecteur indiquant sa direction
+	 * Construit un rayon a partir de son point d'origine ainsi que d'un vecteur indiquant sa direction
 	 * 
 	 * @param origin Origine du rayon
 	 * @param direction Vecteur directeur du rayon
@@ -25,7 +25,7 @@ public class Ray
 	/**
 	 * Permet d'obtenir la direction du rayon	
 	 * 
-	 * @return Vecteur représentant la direction du rayon
+	 * @return Vecteur representant la direction du rayon
 	 */
 	public Vector getDirection()
 	{
@@ -35,7 +35,7 @@ public class Ray
 	/**
 	 * Permet d'obtenir l'origine du rayon
 	 * 
-	 * @return Un point représentant l'origin du rayon
+	 * @return Un point representant l'origin du rayon
 	 */
 	public Point getOrigin()
 	{
@@ -43,7 +43,7 @@ public class Ray
 	}
 	
 	/**
-	 * Retourne l'opposé du vecteur de direction du rayon. Ne modifie pas l'instance appelante 
+	 * Retourne l'oppose du vecteur de direction du rayon. Ne modifie pas l'instance appelante 
 	 * 
 	 * @return Si d = (x, y, z) le vecteur de direction du rayon, retourne v = (-x, -y, -z)
 	 */
@@ -61,9 +61,9 @@ public class Ray
 	}
 	
 	/**
-	 * Retourne une chaîne de caractère représentant le rayon.
+	 * Retourne une chaîne de caractere representant le rayon.
 	 * 
-	 * @return Une chaîne de caractère de la forme:
+	 * @return Une chaîne de caractere de la forme:
 	 * 
 	 * Origine: (x, y, z)
 	 * Direciton: (x, y, z)

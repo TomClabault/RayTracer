@@ -39,10 +39,10 @@ public class PyramideTriangulaire extends ArbitraryTriangleShape implements Shap
 
     /**
     *  @param A Premier point de la base triangulaire de la pyramide
-    *  @param B Deuxième point de la base triangulaire de la pyramide
-    *  @param C Troisième point de la base triangulaire de la pyramide
+    *  @param B Deuxieme point de la base triangulaire de la pyramide
+    *  @param C Troisieme point de la base triangulaire de la pyramide
     *  @param D sera le "point sommet" de la pyramide
-    *  @param material Le matériau qui sera utilisé pour le rendu de la pyramide
+    *  @param material Le materiau qui sera utilise pour le rendu de la pyramide
     */
     public PyramideTriangulaire(Point A, Point B, Point C, Point D, Material material)
     {

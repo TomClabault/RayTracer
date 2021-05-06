@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import rayTracer.RayTracerSettings;
 
 /**
- * La classe contenant le code de la toolbox, c'est-à-dire la fenêtre contenant les paramêtres que l'ont peux manipuler pendant l'affichage du rendu.
+ * La classe contenant le code de la toolbox, c'est-a-dire la fenetre contenant les parametres que l'ont peux manipuler pendant l'affichage du rendu.
  */
 public class Toolbox{
 
@@ -28,9 +28,9 @@ public class Toolbox{
 	private WritableImage writableImage;
 	
 	/**
-	 * @param renderScene la scène javafx contenant le rendu.
+	 * @param renderScene la scene javafx contenant le rendu.
 	 * @param statPane le Pane contenant les statistiques du rendu (typiquement les fps).
-	 * @param rayTracerSettings les paramêtres du rayTracer.
+	 * @param rayTracerSettings les parametres du rayTracer.
 	 */
 	public Toolbox(Pane statPane, ProgressBar progressBar, RayTracerSettings rayTracerSettings, WritableImage writableImage) {
 		this.statPane = statPane;
@@ -40,7 +40,7 @@ public class Toolbox{
 	}
 
 	/**
-	 * Méthode affichant la toolbox.
+	 * Methode affichant la toolbox.
 	 */
 	public void execute() {
 

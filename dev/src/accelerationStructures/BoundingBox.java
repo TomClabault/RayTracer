@@ -105,11 +105,11 @@ public class BoundingBox
 	} 
 
 	/**
-	 * Retourne la limite inférieure ou supérieure de la bounding box en fonction de l'index passé en paramètre
+	 * Retourne la limite inferieure ou superieure de la bounding box en fonction de l'index passe en parametre
 	 * 
 	 * @param index Entier entre 0 et 1. 
 	 * 
-	 * @return Retourne la limite inférieure de la bounding box si index == 0, limite supérieure si index == 1
+	 * @return Retourne la limite inferieure de la bounding box si index == 0, limite superieure si index == 1
 	 */
 	public Point getBounds(int index)
 	{

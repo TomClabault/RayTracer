@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import materials.textures.ProceduralTexture;
 
 /**
- * Défini des matériaux dont les réflexions sont floues
+ * Defini des materiaux dont les reflexions sont floues
  */
 public class RoughMaterial extends Material 
 {
@@ -21,7 +21,7 @@ public class RoughMaterial extends Material
 	
 	public static int computeSpecularSize(double roughness)
 	{
-		//Fonction obtenue par curve_fit avec scipy sur jupyter notebook et ajustée pour ramener toutes les valeurs < 1 à 1
+		//Fonction obtenue par curve_fit avec scipy sur jupyter notebook et ajustee pour ramener toutes les valeurs < 1 a 1
 		return (int)Math.round(0.481415*Math.exp(roughness*6.2106) - 47.7517) < 1 ? 1 : (int)Math.round(0.481415*Math.exp(roughness*6.2106) - 47.7517);
 	}
 	

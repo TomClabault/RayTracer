@@ -10,7 +10,7 @@ public class TriangleNaiveStrategy implements TriangleIntersectionStrategy
 	/**
 	 * Test si un point appartient au triangle
 	 * 
-	 * @param point Le point à tester
+	 * @param point Le point a tester
 	 * 
 	 * @return true si le point appartient au triangle. False sinon
 	 */
@@ -26,7 +26,7 @@ public class TriangleNaiveStrategy implements TriangleIntersectionStrategy
 		Vector normalLocal;
 		
 		normalLocal = Vector.crossProduct(sideAB, vecAP);
-		if(Vector.dotProduct(normalLocal, planeNormal) < 0)//Le point est sur le côté droit du segment AB du triangle, pas dans le triangle donc
+		if(Vector.dotProduct(normalLocal, planeNormal) < 0)//Le point est sur le cote droit du segment AB du triangle, pas dans le triangle donc
 			return false;
 		
 		
@@ -35,7 +35,7 @@ public class TriangleNaiveStrategy implements TriangleIntersectionStrategy
 		Vector vecBP = new Vector(B, point);
 		
 		normalLocal = Vector.crossProduct(sideBC, vecBP);
-		if(Vector.dotProduct(normalLocal, planeNormal) < 0)//Le point est sur le côté droit du segment BC, pas à l'intérieur du triangle
+		if(Vector.dotProduct(normalLocal, planeNormal) < 0)//Le point est sur le cote droit du segment BC, pas a l'interieur du triangle
 			return false;
 		
 		
@@ -44,7 +44,7 @@ public class TriangleNaiveStrategy implements TriangleIntersectionStrategy
 		Vector vecCP = new Vector(C, point);
 		
 		normalLocal = Vector.crossProduct(sideCA, vecCP);
-		if(Vector.dotProduct(normalLocal, planeNormal) < 0)//Le point est sur le côté droit du segment BC, pas à l'intérieur du triangle
+		if(Vector.dotProduct(normalLocal, planeNormal) < 0)//Le point est sur le cote droit du segment BC, pas a l'interieur du triangle
 			return false;
 		
 		return true;
@@ -62,7 +62,7 @@ public class TriangleNaiveStrategy implements TriangleIntersectionStrategy
 		Point intersection = null;
 		double denom =  -Vector.dotProduct(planeNormal, ray.getDirection());
 		
-		if(Math.abs(denom) < 0.0000001d)//Si la normale du plan et la direction du rayon sont perpendiculaires, le plan et le rayon sont parallèles, pas d'intersection
+		if(Math.abs(denom) < 0.0000001d)//Si la normale du plan et la direction du rayon sont perpendiculaires, le plan et le rayon sont paralleles, pas d'intersection
 			return null;
 		
 		Point originMinA = Point.sub(ray.getOrigin(), A);
@@ -71,10 +71,10 @@ public class TriangleNaiveStrategy implements TriangleIntersectionStrategy
 		double sup = Vector.dotProduct(originMinAVec, planeNormal);
 		double coeffVectorPoint = sup/denom;
 		
-		if(coeffVectorPoint < 0)//L'intersection est dans la direction opposée du rayon, c'est à dire derrière la caméra
+		if(coeffVectorPoint < 0)//L'intersection est dans la direction opposee du rayon, c'est a dire derriere la camera
 			return null;
 		
-		//Calcule les coordonnées du point d'intersection entre le rayon et le plan formé par les 3 points du triangle grâce à l'équation P = ray.origin + coeff.ray.direction
+		//Calcule les coordonnees du point d'intersection entre le rayon et le plan forme par les 3 points du triangle grâce a l'equation P = ray.origin + coeff.ray.direction
 		intersection = ray.determinePoint(coeffVectorPoint);
 		
 		if(this.insideOutsideTest(triangle, intersection))//Si le point d'intersection du rayon et du plan est dans le triangle, on a trouve notre point d'intersection
@@ -87,7 +87,7 @@ public class TriangleNaiveStrategy implements TriangleIntersectionStrategy
 			
 			return coeffVectorPoint;//On le retourne
 		}
-		else//Cela veut dire que le rayon intersecte le plan formé par le triangle mais pas le triangle lui même
+		else//Cela veut dire que le rayon intersecte le plan forme par le triangle mais pas le triangle lui meme
 			return null;
 	}
 }

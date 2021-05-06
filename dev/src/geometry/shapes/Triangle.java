@@ -15,7 +15,7 @@ import maths.Vector;
 public class Triangle implements Shape
 {
 	private Point A, B, C;
-	private Vector planeNormal;//Vecteur normal du plan formé par les 3 points du triangle
+	private Vector planeNormal;//Vecteur normal du plan forme par les 3 points du triangle
 
 	private Material material;
 	private TriangleIntersectionStrategy interStrategy;
@@ -91,7 +91,7 @@ public class Triangle implements Shape
 	}
 		
 	/**
-	 * Permet de redéfinir le point A du triangle
+	 * Permet de redefinir le point A du triangle
 	 * 
 	 * @param A Le nouveau point A du triangle
 	 */
@@ -101,7 +101,7 @@ public class Triangle implements Shape
 	}
 	
 	/**
-	 * Analogue à @link{geometry.shapes.Triangle#setA}
+	 * Analogue a @link{geometry.shapes.Triangle#setA}
 	 */
 	public void setB(Point B)
 	{
@@ -109,7 +109,7 @@ public class Triangle implements Shape
 	}
 	
 	/**
-	 * Analogue à @link{geometry.shapes.Triangle#setA}
+	 * Analogue a @link{geometry.shapes.Triangle#setA}
 	 */
 	public void setC(Point C)
 	{

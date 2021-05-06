@@ -36,7 +36,7 @@ public class PlyParser
 	}
 	
 	/**
-	 * @param shapeMaterial Matériau qui sera utilisé pour 'texturer' les objets parsé par cette instance de PlyParser
+	 * @param shapeMaterial Materiau qui sera utilise pour 'texturer' les objets parse par cette instance de PlyParser
 	 */
 	public PlyParser(Material shapeMaterial, double shapeScale, Vector translateVector)
 	{
@@ -107,7 +107,7 @@ public class PlyParser
 							this.nbTriangles = (long)tokenizer.nval;
 						}
 						else
-							throw new RuntimeException(String.format("Elément de syntaxe non supporté: 'element %s' ligne %d", tokenizer.sval, tokenizer.lineno()));
+							throw new RuntimeException(String.format("Element de syntaxe non supporte: 'element %s' ligne %d", tokenizer.sval, tokenizer.lineno()));
 					}
 					else if(tokenizer.sval.equals("end_header"))
 					{
@@ -124,13 +124,13 @@ public class PlyParser
 	}
 	
 	/**
-	 * Lorsqu'un token de la forme XXXe-05 est trouvée, cette méthode permet de parser l'exposant 'e-05' et de calculer la valeur du nombre à partir de
-	 * la mantisse 'XXX' passée en argument
+	 * Lorsqu'un token de la forme XXXe-05 est trouvee, cette methode permet de parser l'exposant 'e-05' et de calculer la valeur du nombre a partir de
+	 * la mantisse 'XXX' passee en argument
 	 * 
-	 * @param tokenizer Le stream tokenizer courant. Le token courant doit être l'exposant e-05
-	 * @param mantiss Dans un nombre de la forme XXXe-05, 'mantiss' représente le nombre XXX
+	 * @param tokenizer Le stream tokenizer courant. Le token courant doit etre l'exposant e-05
+	 * @param mantiss Dans un nombre de la forme XXXe-05, 'mantiss' represente le nombre XXX
 	 * 
-	 * @return La mantisse multipliée par l'exposant. En d'autre terme, la valeur du nombre représenté par une chaîne de caractère de la forme 'XXXe-05'
+	 * @return La mantisse multipliee par l'exposant. En d'autre terme, la valeur du nombre represente par une chaîne de caractere de la forme 'XXXe-05'
 	 */
 	private double attemptToParseScientificNotation(StreamTokenizer tokenizer, double mantiss) throws PlyParsingException, IOException
 	{
@@ -141,7 +141,7 @@ public class PlyParser
 		if(exposantString.indexOf('-') != -1)
 			power = Double.parseDouble(exposantString.substring(exposantString.indexOf('-')));
 		else
-			throw new PlyParsingException(String.format("Exposant incorrect : %s | Seuls les exposants négatifs sont supportés", tokenizer));
+			throw new PlyParsingException(String.format("Exposant incorrect : %s | Seuls les exposants negatifs sont supportes", tokenizer));
 		
 		try { tokenizer.nextToken();} //On skip l'exposant scientifique qu'on vient de parser
 		catch (IOException e) { throw e; }
@@ -151,14 +151,14 @@ public class PlyParser
 	
 	private double parseDoubleNumber(StreamTokenizer tokenizer) throws PlyParsingException, IOException
 	{
-		double mantiss = tokenizer.nval;//Représente la mantisse dans le cas d'un nombre de la forme XXXe-08 et le nombre lui même s'il n'y a pas d'exposant
+		double mantiss = tokenizer.nval;//Represente la mantisse dans le cas d'un nombre de la forme XXXe-08 et le nombre lui meme s'il n'y a pas d'exposant
 		tokenizer.nextToken();
 		
 		try 
 		{
-			if(tokenizer.ttype == StreamTokenizer.TT_NUMBER)//Le nombre n'est pas écrit en notation scientifique
+			if(tokenizer.ttype == StreamTokenizer.TT_NUMBER)//Le nombre n'est pas ecrit en notation scientifique
 				return mantiss;
-			else if(tokenizer.ttype == StreamTokenizer.TT_WORD)//Il y a une notation scientifique après la mantisse
+			else if(tokenizer.ttype == StreamTokenizer.TT_WORD)//Il y a une notation scientifique apres la mantisse
 				return attemptToParseScientificNotation(tokenizer, mantiss);
 			else
 				throw new PlyParsingException("Fin de fichier innatendue.");
@@ -185,7 +185,7 @@ public class PlyParser
 						throw new PlyParsingException("Erreur durant le parsing des vertices. Fin de fichier atteinte. Nombre de vertex incorrect.");
 					else if(tokenizer.ttype == StreamTokenizer.TT_NUMBER)
 						coords[coord] = parseDoubleNumber(tokenizer);
-					///L'appel à next token est effectué dans la ligne ci-dessus
+					///L'appel a next token est effectue dans la ligne ci-dessus
 					///pas besoin d'un nouvel appel pour passer au token suivant
 				}
 				
@@ -214,7 +214,7 @@ public class PlyParser
 			{
 				int[] pointsIndex = new int[3];
 
-				tokenizer.nextToken();//Skip du nombre de point en début de ligne, on sait qu'on parse des triangles, le parser
+				tokenizer.nextToken();//Skip du nombre de point en debut de ligne, on sait qu'on parse des triangles, le parser
 				//ne supporte pas autre chose
 				for(int coord = 0; coord < 3; coord++)
 				{

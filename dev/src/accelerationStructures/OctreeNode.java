@@ -15,15 +15,15 @@ public class OctreeNode
 	private boolean isLeaf;//Le noeud est une feuille de l'arbre ?
 	
 	private BoundingVolume nodeVolume;
-	private ArrayList<BoundingVolume> boundingVolumes;//Bounding volumes contenant les objets hiérarchiés par l'octree
+	private ArrayList<BoundingVolume> boundingVolumes;//Bounding volumes contenant les objets hierarchies par l'octree
 	private OctreeNode[] children;
 	
 	/**
-	 * Permet de stocker l'objet intersecté par les rayons. Sans cette classe, nous ne pourrions pas ET retourner le coefficient
-	 * t du rayon ET l'objet intersecté. Cette classe est donc utilisée pour contenir l'objet intersecté et agir comme un
-	 * pointeur sur l'objet intersecté. On peut donc passer cette classe en
-	 * paramètre de {@link accelerationStructures.OctreeNode#intersect(Ray, Point, Vector, ObjectContainer)} et ainsi obtenir
-	 * l'objet intersecté
+	 * Permet de stocker l'objet intersecte par les rayons. Sans cette classe, nous ne pourrions pas ET retourner le coefficient
+	 * t du rayon ET l'objet intersecte. Cette classe est donc utilisee pour contenir l'objet intersecte et agir comme un
+	 * pointeur sur l'objet intersecte. On peut donc passer cette classe en
+	 * parametre de {@link accelerationStructures.OctreeNode#intersect(Ray, Point, Vector, ObjectContainer)} et ainsi obtenir
+	 * l'objet intersecte
 	 */
 	private final class ObjectContainer
 	{
@@ -58,10 +58,10 @@ public class OctreeNode
 	 * Recalcule les dimensions de la bounding box d'un octant
 	 * 
 	 * @param octantIndex 		Indice de l'octant. Entre 0 et 7
-	 * @param currentMinBound	La limite inférieure de la bounding box du noeud courrant	
-	 * @param currentMaxBound	La limite supérieure de la bounding box du noeud courrant
-	 * @param outMinBound		La limite inférieure de la bounding box de l'octant sera placée dans ce paramètre
-	 * @param outMaxBound		La limite supérieure de la bounding box de l'octant sera placée dans ce paramètre
+	 * @param currentMinBound	La limite inferieure de la bounding box du noeud courrant	
+	 * @param currentMaxBound	La limite superieure de la bounding box du noeud courrant
+	 * @param outMinBound		La limite inferieure de la bounding box de l'octant sera placee dans ce parametre
+	 * @param outMaxBound		La limite superieure de la bounding box de l'octant sera placee dans ce parametre
 	 */
 	private void computeNewBounds(int octantIndex, Point currentMinBound, Point currentMaxBound, Point minBound, Point maxBound)
 	{
@@ -128,22 +128,22 @@ public class OctreeNode
 	
 	public void insert(BoundingVolume volume, Point minNodeBound, Point maxNodeBound, int maxDepth)
 	{
-		//Un noeud est une feuille s'il n'y pas encore de volume inséré dedans où si le noeud se trouve à la profondeur
-		//maximale autorisée de l'arbre. Dans ce cas, on va ajouter le volume au noeud
+		//Un noeud est une feuille s'il n'y pas encore de volume insere dedans où si le noeud se trouve a la profondeur
+		//maximale autorisee de l'arbre. Dans ce cas, on va ajouter le volume au noeud
 		if(isLeaf)
 		{
-			//On autorise l'ajout du noeud si le noeud contient 0 volume ou alors si le noeud est à la profondeur
+			//On autorise l'ajout du noeud si le noeud contient 0 volume ou alors si le noeud est a la profondeur
 			//maximale. Dans ce cas, on va juste stacker tous les volumes dans le noeud puisque de toute façon
-			//on a pas le droit de construire l'arbre plus loin, on est à la profondeur maximale
+			//on a pas le droit de construire l'arbre plus loin, on est a la profondeur maximale
 			if(this.boundingVolumes.size() == 0 || this.depth == maxDepth)
 				boundingVolumes.add(volume);
-			else//S'il y avait déjà un volume dans le noeud et qu'on est pas à la profondeur maximale
+			else//S'il y avait deja un volume dans le noeud et qu'on est pas a la profondeur maximale
 			{
 				//Le noeud n'est plus une feuille
 				this.isLeaf = false;
 				
-				//Maintenant que le noeud n'est plus une feuille, on va réinsérer tous les volumes du noeud dans le noeud actuel
-				//cela va avoir pour effet de rentrer dans le 'else' (!isLeaf) et donc d'insérer les volumes un niveau plus bas dans 
+				//Maintenant que le noeud n'est plus une feuille, on va reinserer tous les volumes du noeud dans le noeud actuel
+				//cela va avoir pour effet de rentrer dans le 'else' (!isLeaf) et donc d'inserer les volumes un niveau plus bas dans 
 				//l'arbre, dans les octants qui conviennent 
 				int volumesCount = this.boundingVolumes.size();
 				while(volumesCount != 0)
@@ -156,31 +156,31 @@ public class OctreeNode
 					volumesCount = this.boundingVolumes.size();
 				}
 				
-				this.insert(volume, minNodeBound, maxNodeBound, maxDepth);//On insert également le volume actuel qu'on voulait insérer depuis
-				//le début
+				this.insert(volume, minNodeBound, maxNodeBound, maxDepth);//On insert egalement le volume actuel qu'on voulait inserer depuis
+				//le debut
 			}
 		}
-		//On va insérer le volume dans le bon octant du noeud courant
+		//On va inserer le volume dans le bon octant du noeud courant
 		else
 		{
 			Point volumeCentroid = volume.getCentroid();
 			Point nodeCentroid = Point.scalarMul(0.5, Point.add(minNodeBound, maxNodeBound));
 
-			//On détermine dans quel octant on va placer le volume courant en fonction de la position du centroïde
+			//On determine dans quel octant on va placer le volume courant en fonction de la position du centroïde
 			//du volume par rapport au centroïde de la bounding box du noeud courant 
 			int octantIndex = 0;
 			if(volumeCentroid.getX() > nodeCentroid.getX()) octantIndex += 4;
 			if(volumeCentroid.getY() > nodeCentroid.getY()) octantIndex += 2;
 			if(volumeCentroid.getZ() > nodeCentroid.getZ()) octantIndex += 1;
 			
-			//Recalcul des limites inférieures et supérieures du nouvel octant
+			//Recalcul des limites inferieures et superieures du nouvel octant
 			Point newMinBounds = new Point(0, 0, 0);
 			Point newMaxBounds = new Point(0, 0, 0);
 			computeNewBounds(octantIndex, minNodeBound, maxNodeBound, newMinBounds, newMaxBounds);
 			
-			if(this.children[octantIndex] == null)//Si l'octant n'a pas déjà été créé
-				this.children[octantIndex] = new OctreeNode(depth + 1);//On le crée
-			this.children[octantIndex].insert(volume, newMinBounds, newMaxBounds, maxDepth);//Et on ajoute le volume à l'octant
+			if(this.children[octantIndex] == null)//Si l'octant n'a pas deja ete cree
+				this.children[octantIndex] = new OctreeNode(depth + 1);//On le cree
+			this.children[octantIndex].insert(volume, newMinBounds, newMaxBounds, maxDepth);//Et on ajoute le volume a l'octant
 		}
 	}
 	
@@ -188,7 +188,7 @@ public class OctreeNode
 	{
 		ObjectContainer intersectedObject = new ObjectContainer();
 		
-		//On intersecte d'abord toutes les formes de la hiérarchie
+		//On intersecte d'abord toutes les formes de la hierarchie
 		Double tMin = intersect(interStats, ray, outInterPoint, outNormalAtInter, intersectedObject);
 		
 		for(Shape shape : noVolumeShapes)
@@ -232,7 +232,7 @@ public class OctreeNode
 						interStats.incrementIntersectionTestsBy(volume.getEnclosedObject().getSubObjectCount());
 						Double t = volume.getEnclosedObject().intersect(ray, tempInterPoint, tempNormalAtInter);
 						
-						if(t != null)//On a trouvé une intersection
+						if(t != null)//On a trouve une intersection
 						{
 							if(tMin == null || tMin > t)
 							{

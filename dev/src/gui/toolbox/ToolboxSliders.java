@@ -30,7 +30,7 @@ public class ToolboxSliders
 		GridPane slidersPane = new GridPane();
 	    slidersPane.setHgap(20);
 	    
-	    Label depthSliderLabel = new Label("Profondeur maximale de récursion:");
+	    Label depthSliderLabel = new Label("Profondeur maximale de recursion:");
 	    this.depthSlider = new Slider(0,16,2);
 	    this.depthSlider.setShowTickLabels(true);
 	    this.depthSlider.setShowTickMarks(true);
@@ -39,7 +39,7 @@ public class ToolboxSliders
 	    this.depthSlider.setValue(5);
 	    this.depthSlider.valueProperty().addListener(this::depthSliderCallback);
 	    
-	    Label nbCoreSliderLabel = new Label("Nombre de thread utilisé pour le rendu:");
+	    Label nbCoreSliderLabel = new Label("Nombre de thread utilise pour le rendu:");
 	    this.nbCoreSlider = new Slider(1, Runtime.getRuntime().availableProcessors(), 1);
 	    this.nbCoreSlider.setShowTickLabels(true);
 	    this.nbCoreSlider.setShowTickMarks(true);
@@ -48,7 +48,7 @@ public class ToolboxSliders
 	    this.nbCoreSlider.setValue(Runtime.getRuntime().availableProcessors());
 	    this.nbCoreSlider.valueProperty().addListener(this::nbCoreSliderCallback);
 	    
-	    Label blurrySamplesSliderLabel = new Label("Nombre d'échantillons rough réflexions:");
+	    Label blurrySamplesSliderLabel = new Label("Nombre d'echantillons rough reflexions:");
 	    this.blurrySamplesSlider = new Slider(1, 16, 1);
 	    this.blurrySamplesSlider.setShowTickLabels(true);
 	    this.blurrySamplesSlider.setShowTickMarks(true);
@@ -57,7 +57,7 @@ public class ToolboxSliders
 	    this.blurrySamplesSlider.setValue(4);
 	    this.blurrySamplesSlider.valueProperty().addListener(this::blurrySamplesSliderCallback);
 	    
-	    Label antialiasingSliderLabel = new Label("Nombre d'échantillons d'anti-aliasing:");
+	    Label antialiasingSliderLabel = new Label("Nombre d'echantillons d'anti-aliasing:");
 	    CheckBox antialiasingCheckbox = new CheckBox("Anti-aliasing");
 	    this.antialiasingSlider = new Slider(2, 8, 1);
 	    this.antialiasingSlider.setShowTickLabels(true);
@@ -101,13 +101,13 @@ public class ToolboxSliders
 	
 	private void depthSliderCallback(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
 	{
-		this.depthSlider.setValue(Math.round(newValue.doubleValue()));//On arrondi à chaque fois la valeur du curseur et on set la valeur arrondie
+		this.depthSlider.setValue(Math.round(newValue.doubleValue()));//On arrondi a chaque fois la valeur du curseur et on set la valeur arrondie
 	    		
         rayTracerSettings.setRecursionDepth((int)this.depthSlider.getValue());
 	}
 	
 	/**
-	 * Méthode gérant le slider javafx du nombre de Thread
+	 * Methode gerant le slider javafx du nombre de Thread
 	 * @param observableValue
 	 * @param oldValue
 	 * @param newValue
@@ -121,7 +121,7 @@ public class ToolboxSliders
 	}
 	
 	/**
-	 * Méthode gérant le slider d'échantillon rough reflexion.
+	 * Methode gerant le slider d'echantillon rough reflexion.
 	 * @param observableValue
 	 * @param oldValue
 	 * @param newValue
@@ -135,7 +135,7 @@ public class ToolboxSliders
 	}
 	
 	/**
-	 * Méthode gérant le slider d'antialiasing
+	 * Methode gerant le slider d'antialiasing
 	 * @param observableValue
 	 * @param oldValue
 	 * @param newValue

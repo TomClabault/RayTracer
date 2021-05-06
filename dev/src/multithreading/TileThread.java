@@ -7,8 +7,8 @@ import scene.RayTracingScene;
 
 /**
  * Thread s'occupant du rendu des tâches d'une instance de {@link multithreading.ThreadsTaskList}.<br>
- * Chaque TileThread dispose d'un générateur de nombre aléatoire qui lui est propre, permettant ainsi une consistence des nombres aléatoires
- * générés d'une image à l'autre (pourvu que la graîne des générateurs soit gérée de façon appropriée).
+ * Chaque TileThread dispose d'un generateur de nombre aleatoire qui lui est propre, permettant ainsi une consistence des nombres aleatoires
+ * generes d'une image a l'autre (pourvu que la graîne des generateurs soit geree de façon appropriee).
  */
 public class TileThread extends Thread
 {
@@ -17,7 +17,7 @@ public class TileThread extends Thread
 	private RayTracer rayTracerInstance;
 	private RayTracingScene renderScene;
 	
-	private Random randomGenerator;//Générateur de nombre aléatoire local au thread pour éviter le surcôut de synchronisation d'un seul générateur qui serait utilisé pour tous les threads
+	private Random randomGenerator;//Generateur de nombre aleatoire local au thread pour eviter le surcout de synchronisation d'un seul generateur qui serait utilise pour tous les threads
 	
 	public TileThread(ThreadsTaskList taskList, RayTracer rayTracerInstance, RayTracingScene renderScene) 
 	{
@@ -33,11 +33,11 @@ public class TileThread extends Thread
 	@Override
 	public void run() 
 	{
-		while(this.rayTracerInstance.computeTask(this.renderScene, this.taskList)) {}//On calcule des tiles tant qu'il y en a à calculer
+		while(this.rayTracerInstance.computeTask(this.renderScene, this.taskList)) {}//On calcule des tiles tant qu'il y en a a calculer
 	}
 	
 	/**
-	 * Permet d'obtenir le générateur de nombre aléatoire local au thrad
+	 * Permet d'obtenir le generateur de nombre aleatoire local au thrad
 	 */
 	public Random getLocalRandomGenerator()
 	{
@@ -45,9 +45,9 @@ public class TileThread extends Thread
 	}
 	
 	/**
-	 * Permet de réinitialiser le générateur de nombre aléatoire local au thread avec la graine passée en paramètre  
+	 * Permet de reinitialiser le generateur de nombre aleatoire local au thread avec la graine passee en parametre  
 	 * 
-	 * @param seed La graîne avec laquelle le générateur sera réinitialisé.
+	 * @param seed La graîne avec laquelle le generateur sera reinitialise.
 	 */
 	public void setLocalRandomGenerator(long seed)
 	{

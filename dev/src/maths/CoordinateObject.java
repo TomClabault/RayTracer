@@ -1,12 +1,12 @@
 package maths;
 
 /*
- * Interface permettant de représenter un objet disposant de 3 coordonnées tel que les points ou les vecteurs par exemple
+ * Interface permettant de representer un objet disposant de 3 coordonnees tel que les points ou les vecteurs par exemple
  */
 public interface CoordinateObject 
 {
 	/**
-	 * Constante utilisée pour déterminer à quelle niveau de précision de objet sont considérés égaux
+	 * Constante utilisee pour determiner a quelle niveau de precision de objet sont consideres egaux
 	 */
 	static final double EPSILON_EQUALS = 0.00000001;
 	

@@ -2,7 +2,7 @@ package exceptions;
 
 /**
  * 
- * Exception jetée lors de la création d'un parallélépipède incorrect, notamment plat.
+ * Exception jetee lors de la creation d'un parallelepipede incorrect, notamment plat.
  *
  */
 public class InvalidParallelepipedException extends IllegalArgumentException 

@@ -3,7 +3,7 @@ package maths;
 import scene.Camera;
 
 /**
- * Cette classe représente la matrice permettant le changement de base des coordonnées des pixels en fonction de la position de la caméra et de ses angles de rotation
+ * Cette classe represente la matrice permettant le changement de base des coordonnees des pixels en fonction de la position de la camera et de ses angles de rotation
  */
 public class CTWMatrix extends MatrixD
 {
@@ -19,8 +19,8 @@ public class CTWMatrix extends MatrixD
 			{0, 0, 1}		
 		});
 		
-		RotationMatrix rotateVerti = new RotationMatrix(0, angleVerti);//Création de la matrice de rotation pour l'axe vertical
-		RotationMatrix rotateHori = new RotationMatrix(1, angleHori);//Création de la matrice de rotation pour l'axe horizontal 
+		RotationMatrix rotateVerti = new RotationMatrix(0, angleVerti);//Creation de la matrice de rotation pour l'axe vertical
+		RotationMatrix rotateHori = new RotationMatrix(1, angleHori);//Creation de la matrice de rotation pour l'axe horizontal 
 		
 		double rotateHori3x3[][] = new double[3][3];
 		double rotateVerti3x3[][] = new double[3][3];

@@ -8,9 +8,9 @@ public abstract class ShapeUtil
 	protected Material material;
 	
 	/**
-	 * Permet d'obtenir le matériau de l'objet
+	 * Permet d'obtenir le materiau de l'objet
 	 * 
-	 * @return Retourne le matériau actuel de l'objet
+	 * @return Retourne le materiau actuel de l'objet
 	 */
 	public Material getMaterial()
 	{
@@ -23,9 +23,9 @@ public abstract class ShapeUtil
 	public abstract Point getUVCoords(Point point);
 	
 	/**
-	 * Permet de redéfinir le matériau de l'objet
+	 * Permet de redefinir le materiau de l'objet
 	 * 
-	 * @param material Le nouveau matériau de l'objet
+	 * @param material Le nouveau materiau de l'objet
 	 */
 	public void setMaterial(Material material)
 	{

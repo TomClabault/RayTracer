@@ -11,8 +11,8 @@ import scene.RayTracingScene;
 
 /**
  * 
- * Cette classe est une tâche de javafx, elle exécute les calculs de rendu.
- * Elle extends Task pour rendre le calcul indépendant de l'interface et permet de ne pas bloquer l'interface à cause des calculs.
+ * Cette classe est une tâche de javafx, elle execute les calculs de rendu.
+ * Elle extends Task pour rendre le calcul independant de l'interface et permet de ne pas bloquer l'interface a cause des calculs.
  */
 public class RenderTask extends Task<IntBuffer> {
 

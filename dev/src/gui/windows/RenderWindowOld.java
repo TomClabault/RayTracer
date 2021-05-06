@@ -28,7 +28,7 @@ import rayTracer.RayTracerSettings;
 import scene.RayTracingScene;
 
 /**
-* La classe gérant la fenêtre principale contenant le rendu.
+* La classe gerant la fenetre principale contenant le rendu.
 */
 public class RenderWindowOld {
 
@@ -46,10 +46,10 @@ public class RenderWindowOld {
 
     /**
      * 
-     * @param stage Le stage de la fenêtre de rendu
+     * @param stage Le stage de la fenetre de rendu
      * @param rayTracer L'instance du RayTracer
-     * @param rayTracingScene La scène 3d à utiliser
-     * @param rayTracerSettings les paramêtres allant avec l'instance du RayTracer
+     * @param rayTracingScene La scene 3d a utiliser
+     * @param rayTracerSettings les parametres allant avec l'instance du RayTracer
      */
     public RenderWindowOld(Stage stage, RayTracer rayTracer, RayTracingScene rayTracingScene, RayTracerSettings rayTracerSettings)
     {
@@ -74,7 +74,7 @@ public class RenderWindowOld {
         renderPane.getChildren().add(imageView);
         
         this.statPane = new Pane();
-        this.statPane.setVisible(false);//Désactivation des stats par défaut pour ne pas cacher l'affichage
+        this.statPane.setVisible(false);//Desactivation des stats par defaut pour ne pas cacher l'affichage
         
         
         StackPane stackPane = new StackPane();
@@ -99,7 +99,7 @@ public class RenderWindowOld {
         stage.show();
     }
     /**
-     * Définie this.rayTracingScene
+     * Definie this.rayTracingScene
      * @param rayTracingScene
      */
     public void setRayTracingScene(RayTracingScene rayTracingScene) {
@@ -107,7 +107,7 @@ public class RenderWindowOld {
     }
     
     /**
-     * Retourne la RayTracingScene utilisée dans la classe
+     * Retourne la RayTracingScene utilisee dans la classe
      * @return this.rayTracingScene
      */
     public RayTracingScene getRayTracingScene() {
@@ -115,7 +115,7 @@ public class RenderWindowOld {
     }
     
     /**
-     * Retourne la writableImage utilisé dans la classe
+     * Retourne la writableImage utilise dans la classe
      * @return this.writableImage
      */
     public WritableImage getWritableImage() {
@@ -139,7 +139,7 @@ public class RenderWindowOld {
     }
     
     /**
-     * Retourne la scène javafx contenant le rendu
+     * Retourne la scene javafx contenant le rendu
      * @return this.renderScene
      */
     public Scene getRenderScene() {
@@ -147,7 +147,7 @@ public class RenderWindowOld {
     }
 
     /**
-     * Retourne l'instance de WindowTimer utilisée par la classe
+     * Retourne l'instance de WindowTimer utilisee par la classe
      * @return this.windowTimer
      */
     public WindowTimer getWindowTimer() {
@@ -155,7 +155,7 @@ public class RenderWindowOld {
     }
     
     /**
-     * Retourne la tâche javafx responsable de l'exécution du calcul de rendu.
+     * Retourne la tâche javafx responsable de l'execution du calcul de rendu.
      * @return this.task
      */
     public RenderTask getTask() {
@@ -163,7 +163,7 @@ public class RenderWindowOld {
     }
 
     /**
-     * Méthode éxècutant la classe privée {@link WindowTimer} et {@link gui.threads.CameraTimer}
+     * Methode executant la classe privee {@link WindowTimer} et {@link gui.threads.CameraTimer}
      */
     public void execute() {
     	windowTimer.start();
@@ -171,9 +171,9 @@ public class RenderWindowOld {
     }
     
     /**
-     * Méthode calculant le rendu, exécutée par la classe {@link WindowTimer}
+     * Methode calculant le rendu, executee par la classe {@link WindowTimer}
      * @param pixelBuffer Objet contenant la valeur des pixels.
-     * @param pixelWriter Instance de PixelWriter utilisé par la classe pour afficher le rendu.
+     * @param pixelWriter Instance de PixelWriter utilise par la classe pour afficher le rendu.
      * @param pixelFormat Objet contenant le format des pixels du pixelBuffer.
      */
     public static void drawImage(IntBuffer pixelBuffer, PixelWriter pixelWriter, WritablePixelFormat<IntBuffer> pixelFormat) {
@@ -201,11 +201,11 @@ public class RenderWindowOld {
 		private ProgressBar progressBar;
 
         /**
-         * @param scene La Scene javafx de la fenêtre du rendu.
-         * @param rayTracer L'instance de RayTracer utilisé par la classe.
-         * @param rayTracerSettings L'instance de RayTracerSettings contenant les paramêtres de l'instance de RayTracer
+         * @param scene La Scene javafx de la fenetre du rendu.
+         * @param rayTracer L'instance de RayTracer utilise par la classe.
+         * @param rayTracerSettings L'instance de RayTracerSettings contenant les parametres de l'instance de RayTracer
          * @param rayTracingScene L'objet contenant les formes 3d
-         * @param pixelWriter L'instance de pixelWriter utilisé par la classe pour afficher le rendu.
+         * @param pixelWriter L'instance de pixelWriter utilise par la classe pour afficher le rendu.
          */
         private WindowTimer(Scene scene, RayTracer rayTracer, RayTracerSettings rayTracerSettings, RayTracingScene rayTracingScene, PixelWriter pixelWriter) {
             this.rayTracingScene = rayTracingScene;
@@ -236,14 +236,14 @@ public class RenderWindowOld {
 
         
         /**
-         * Exécutée à chaque frame, lance les calculs de rendus si les précédents sont terminés. Calcul également les fps.
+         * Executee a chaque frame, lance les calculs de rendus si les precedents sont termines. Calcul egalement les fps.
          */
         @Override
         public void handle(long actualFrameTime){
         	RenderTask renderTask = new RenderTask(pixelWriter, this.pixelFormat, rayTracer, rayTracingScene, rayTracerSettings);
         	this.progressBar.setProgress(rayTracer.getProgression());
-        	if(futureRenderTask == null || futureRenderTask.isDone()){//Si aucune tâche n'a encore été donnée ou si la tâche est terminée
-        		futureRenderTask = executorService.submit(renderTask);//On redonne une autre tâche de rendu à faire
+        	if(futureRenderTask == null || futureRenderTask.isDone()){//Si aucune tâche n'a encore ete donnee ou si la tâche est terminee
+        		futureRenderTask = executorService.submit(renderTask);//On redonne une autre tâche de rendu a faire
         	}
 
             renderTask.setOnSucceeded((succeededEvent) -> {
@@ -254,7 +254,7 @@ public class RenderWindowOld {
                 this.oldFrameTime = actualFrameTime;
                 
                 String fpsString = String.format("FPS : %.2f", dif);
-                if(this.rayTracingScene.getCamera() != null)//On vérifie quand même que la caméra n'est pas null
+                if(this.rayTracingScene.getCamera() != null)//On verifie quand meme que la camera n'est pas null
                 	fpsString += String.format("\n%s\nH: %.2f°\nV: %.2f°", this.rayTracingScene.getCamera().getPosition().toString(), this.rayTracingScene.getCamera().getAngleHori(), this.rayTracingScene.getCamera().getAngleVerti());
                 fpsLabel.setText(fpsString);
             });

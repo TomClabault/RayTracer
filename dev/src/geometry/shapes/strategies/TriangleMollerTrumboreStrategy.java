@@ -6,8 +6,8 @@ import maths.Ray;
 import maths.Vector;
 
 /**
- * Implémentation de: https://fr.wikipedia.org/wiki/Algorithme_d%27intersection_de_M%C3%B6ller%E2%80%93Trumbore
- * Légèrement modifié pour satisfaire les besoins de notre ray tracer
+ * Implementation de: https://fr.wikipedia.org/wiki/Algorithme_d%27intersection_de_M%C3%B6ller%E2%80%93Trumbore
+ * Legerement modifie pour satisfaire les besoins de notre ray tracer
  */
 public class TriangleMollerTrumboreStrategy implements TriangleIntersectionStrategy
 {
@@ -33,7 +33,7 @@ public class TriangleMollerTrumboreStrategy implements TriangleIntersectionStrat
         h = Vector.crossProduct(rayDirection, edge2);
         a = Vector.dotProduct(edge1, h);
         if (a > -EPSILON && a < EPSILON) {
-            return null;// Le rayon est parallèle au triangle.
+            return null;// Le rayon est parallele au triangle.
         }
         f = 1.0 / a;
         
@@ -55,7 +55,7 @@ public class TriangleMollerTrumboreStrategy implements TriangleIntersectionStrat
         	if(outNormalAtInter != null)
         		outNormalAtInter.copyIn(triangle.getNormal(null));
             
-        	if(outInterPoint != null)//Si on souhaite récupérer le point d'intersection
+        	if(outInterPoint != null)//Si on souhaite recuperer le point d'intersection
         		outInterPoint.copyIn(ray.determinePoint(t));
         	
             return t;

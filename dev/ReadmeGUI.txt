@@ -1,26 +1,26 @@
-La première fenêtre à s'ouvrir sera une fenêtre de choix de fichier.
-L'utilisateur doit sélectionner un fichier POV valide pour que le rendu s'effectue à partir de ce fichier POV. Des fichiers POV
-préfaits sont disponible dans le dossier "resources/povScenes/"
+La premiere fenetre a s'ouvrir sera une fenetre de choix de fichier.
+L'utilisateur doit selectionner un fichier POV valide pour que le rendu s'effectue a partir de ce fichier POV. Des fichiers POV
+prefaits sont disponible dans le dossier "resources/povScenes/"
 
-Une fois qu'un fichier POV valide sera sélectionné, une seconde fenêtre s'ouvrira.
-Dans cette fenêtre, l'utilisateur doit entrer la résolution qu'il souhaite pour le rendu.
+Une fois qu'un fichier POV valide sera selectionne, une seconde fenetre s'ouvrira.
+Dans cette fenetre, l'utilisateur doit entrer la resolution qu'il souhaite pour le rendu.
 Il peut ou non cocher mode automatique:
-- si oui, la fenêtre du rendu sera étirée et pixelisée au besoin, mais sera maximisée.
-- si non, la fenêtre s'affichera à la taille de la résolution choisie.
+- si oui, la fenetre du rendu sera etiree et pixelisee au besoin, mais sera maximisee.
+- si non, la fenetre s'affichera a la taille de la resolution choisie.
 
-Une fois validée, deux fenêtres s'ouvriront : 
-La première contiendra le rendu du fichier POV à l'aide du logiciel de rendu.
+Une fois validee, deux fenetres s'ouvriront : 
+La premiere contiendra le rendu du fichier POV a l'aide du logiciel de rendu.
 La seconde est la Toolbox, elle permet : 
 - de sauvegarder le rendu au format png
-- de modifier certaines valeurs du rendu (l'antialiasing doit être coché pour être activé).
+- de modifier certaines valeurs du rendu (l'antialiasing doit etre coche pour etre active).
 - d'observer l'avancement du rendu (barre de progression en bas).
-- d'activer ou de désactiver certaines fonctionnalités du rendu.
+- d'activer ou de desactiver certaines fonctionnalites du rendu.
 
-En cliquant sur la fenêtre de rendu, l'utilisateur peut se déplacer.
-- Les flèches du clavier servent à la rotation de la caméra.
-- Les touches z,q,s et d servent au déplacement horizontal de la caméra.
-- Les touches a et e servent au déplacement vertical de la caméra.
+En cliquant sur la fenetre de rendu, l'utilisateur peut se deplacer.
+- Les fleches du clavier servent a la rotation de la camera.
+- Les touches z,q,s et d servent au deplacement horizontal de la camera.
+- Les touches a et e servent au deplacement vertical de la camera.
 
-Des rendus déjà réalisés sont disponibles dans le dossier gallerie.
+Des rendus deja realises sont disponibles dans le dossier gallerie.
 
 

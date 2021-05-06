@@ -6,16 +6,16 @@ import materials.Material;
 import maths.Point;
 
 /**
- * Classe décrivant l'état d'une sphère
+ * Classe decrivant l'etat d'une sphere
  */
 public class StateSphere extends StateSpherePlane
 {
     /**
-     * Méthode permettant de renvoyer un objet plan parsée par le classe mère EtatSpherePlane
-     * @param center centre de la sphère
-     * @param radius rayon de la sphère
-     * @param material les différents modificateurs de textures, couleurs, etc.
-     * @return un objet de type Shape qui décrit le plan
+     * Methode permettant de renvoyer un objet plan parsee par le classe mere EtatSpherePlane
+     * @param center centre de la sphere
+     * @param radius rayon de la sphere
+     * @param material les differents modificateurs de textures, couleurs, etc.
+     * @return un objet de type Shape qui decrit le plan
      */
     @Override
     protected Shape createInstance(double[] center, Double radius, Material material)

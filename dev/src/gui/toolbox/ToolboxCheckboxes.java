@@ -27,10 +27,10 @@ public class ToolboxCheckboxes
         
         CheckBox ambiantCheckbox = new CheckBox("Ambiante");
         CheckBox diffuseCheckbox = new CheckBox("Diffuse");
-        CheckBox reflectionsCheckbox = new CheckBox("Réflexions");
-        CheckBox roughReflectionsCheckbox = new CheckBox("Rough réflexions");
-        CheckBox refractionsCheckbox = new CheckBox("Réfractions"); 
-        CheckBox specularCheckbox = new CheckBox("Spécularité"); 
+        CheckBox reflectionsCheckbox = new CheckBox("Reflexions");
+        CheckBox roughReflectionsCheckbox = new CheckBox("Rough reflexions");
+        CheckBox refractionsCheckbox = new CheckBox("Refractions"); 
+        CheckBox specularCheckbox = new CheckBox("Specularite"); 
         CheckBox fresnelCheckbox = new CheckBox("Fresnel");  
         
         ambiantCheckbox.setSelected(true);

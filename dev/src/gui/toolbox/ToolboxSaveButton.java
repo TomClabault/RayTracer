@@ -37,7 +37,7 @@ public class ToolboxSaveButton extends Button
        		 try 
        		 {
        			 util.ImageUtil.writeWritableImageToDisk(writableImage, file);
-       			 System.out.println("Image sauvegardée en : " + file);
+       			 System.out.println("Image sauvegardee en : " + file);
        		 } 
        		 catch (IOException e) 
        		 {
@@ -47,7 +47,7 @@ public class ToolboxSaveButton extends Button
        	 } 
        	 else 
        	 {
-       		 System.out.println("Aucun dossier n'a été sélectionné.");
+       		 System.out.println("Aucun dossier n'a ete selectionne.");
        	 }
 	}
 }

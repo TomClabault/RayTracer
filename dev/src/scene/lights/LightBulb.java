@@ -21,9 +21,9 @@ public class LightBulb implements PositionnalLight
 	}
 	
 	/**
-	 * Permet d'obtenir l'intensité de la lumière
+	 * Permet d'obtenir l'intensite de la lumiere
 	 * 
-	 * @return Un réel entre 0 et 1 représentant l'intensité de la lumière
+	 * @return Un reel entre 0 et 1 representant l'intensite de la lumiere
 	 */
 	public double getIntensity()
 	{

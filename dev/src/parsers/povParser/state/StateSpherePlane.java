@@ -10,7 +10,7 @@ import java.io.StreamTokenizer;
 import java.util.ArrayList;
 
 /**
- * différents états d'un objet de type sphère ou plan
+ * differents etats d'un objet de type sphere ou plan
  */
 enum SpherePlanecontent
 {
@@ -23,24 +23,24 @@ enum SpherePlanecontent
 }
 
 /**
- * Classe abstraire effectuant le parsing d'un objet de type sphère ou plan (car la syntaxe
- * est la même)
+ * Classe abstraire effectuant le parsing d'un objet de type sphere ou plan (car la syntaxe
+ * est la meme)
  */
 public abstract class StateSpherePlane extends StateUtil implements StateToken
 {
     /**
-     * Méthode permettant de renvoyer un objet plan ou sphère
-     * @param coord vecteur normal dans le cas du plan, centre dans le cas de la sphère
-     * @param dist distance dans le cas du plan, rayon dans le cas de la sphère
-     * @param material les différents modificateurs de textures, couleurs, etc.
-     * @return un objet de type Shape qui décrit un plan ou une sphère
+     * Methode permettant de renvoyer un objet plan ou sphere
+     * @param coord vecteur normal dans le cas du plan, centre dans le cas de la sphere
+     * @param dist distance dans le cas du plan, rayon dans le cas de la sphere
+     * @param material les differents modificateurs de textures, couleurs, etc.
+     * @return un objet de type Shape qui decrit un plan ou une sphere
      */
     protected abstract Shape createInstance(double[] coord, Double dist, Material material);
 
     /**
-     * Méthode permettant de parser une sphère ou un plan
+     * Methode permettant de parser une sphere ou un plan
      * @param context contexte courant de l'automate
-     * @return Un objet de type shape contenant les coordonnées parsées etc.
+     * @return Un objet de type shape contenant les coordonnees parsees etc.
      */
     @Override
     public Shape parse(PovAutomat context)

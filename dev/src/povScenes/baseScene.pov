@@ -81,7 +81,7 @@ sphere
 }
 
 /*
-Green glassy derrière le verre
+Green glassy derriere le verre
 */
 sphere 
 { 
@@ -159,7 +159,7 @@ sphere
 }
 
 /*
-	deux sphères checkerboard sur les côtés
+	deux spheres checkerboard sur les cotes
 */
 
 sphere 

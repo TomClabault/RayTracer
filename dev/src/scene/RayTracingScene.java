@@ -11,15 +11,15 @@ import scene.lights.PositionnalLight;
 import util.ImageUtil;
 
 /**
- * Permet de représenter une scène de rendu.<br>
- * Une scène doit contenir:
+ * Permet de representer une scene de rendu.<br>
+ * Une scene doit contenir:
  * <ul>
- * 	<li> Une caméra </li>
- * 	<li> Une ou plusieurs sources de lumière </li>
+ * 	<li> Une camera </li>
+ * 	<li> Une ou plusieurs sources de lumiere </li>
  * 	<li> Une ou plusieurs formes </li>
  * </ul>
  * 
- * La scène peut optionellement contenir:
+ * La scene peut optionellement contenir:
  * <ul>
  * 	<li> Une skybox </li>
  * </ul>
@@ -41,7 +41,7 @@ public class RayTracingScene
 	private double ambientLightIntensity;
 	
 	/*
-	 * Crée une scène vide
+	 * Cree une scene vide
 	 */
 	public RayTracingScene()
 	{
@@ -50,13 +50,13 @@ public class RayTracingScene
 
 
 	/**
-	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
+	 * Cree la scene a partir d'une camera, d'une lumiere et d'une liste de forme
 	 * 
-	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
-	 * @param light La lumière permettant d'illuminer la scène
+	 * @param camera La camera de la scene a travers laquelle le rendu sera fait
+	 * @param light La lumiere permettant d'illuminer la scene
 	 * @param shapes Liste de forme qui seront rendues
-	 * @param backgroundColor La couleur de fond qui sera utilisée pour la scène. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scène
-	 * @param ambientLightIntensity L'intensité de la luminosité ambiante de la scène. Défini l'intensité lumineuse minimale par laquelle seront éclairés tous les points de la scène
+	 * @param backgroundColor La couleur de fond qui sera utilisee pour la scene. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scene
+	 * @param ambientLightIntensity L'intensite de la luminosite ambiante de la scene. Defini l'intensite lumineuse minimale par laquelle seront eclaires tous les points de la scene
 	 */
 	public RayTracingScene(Camera camera, PositionnalLight light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity) 
 	{
@@ -64,13 +64,13 @@ public class RayTracingScene
 	}
 	
 	/**
-	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
+	 * Cree la scene a partir d'une camera, d'une lumiere et d'une liste de forme
 	 * 
-	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
-	 * @param lights Les sources de lumière qui seront utilisées pour le rendu de la scène
+	 * @param camera La camera de la scene a travers laquelle le rendu sera fait
+	 * @param lights Les sources de lumiere qui seront utilisees pour le rendu de la scene
 	 * @param shapes Liste de forme qui seront rendues
-	 * @param backgroundColor La couleur de fond qui sera utilisée pour la scène. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scène
-	 * @param ambientLightIntensity L'intensité de la luminosité ambiante de la scène. Défini l'intensité lumineuse minimale par laquelle seront éclairés tous les points de la scène
+	 * @param backgroundColor La couleur de fond qui sera utilisee pour la scene. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scene
+	 * @param ambientLightIntensity L'intensite de la luminosite ambiante de la scene. Defini l'intensite lumineuse minimale par laquelle seront eclaires tous les points de la scene
 	 */
 	public RayTracingScene(Camera camera, ArrayList<PositionnalLight> lights, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity) 
 	{
@@ -78,13 +78,13 @@ public class RayTracingScene
 	}
 	
 	/**
-	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
+	 * Cree la scene a partir d'une camera, d'une lumiere et d'une liste de forme
 	 * 
-	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
-	 * @param light La lumière permettant d'illuminer la scène
+	 * @param camera La camera de la scene a travers laquelle le rendu sera fait
+	 * @param light La lumiere permettant d'illuminer la scene
 	 * @param shapes Liste de forme qui seront rendues
-	 * @param backgroundColor La couleur de fond qui sera utilisée pour la scène. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scène. Si le paramètre skyboxTexture est utilisé, le paramètre backgroundColor sera ignoré
-	 * @param ambientLightIntensity L'intensité de la luminosité ambiante de la scène. Défini l'intensité lumineuse minimale par laquelle seront éclairés tous les points de la scène
+	 * @param backgroundColor La couleur de fond qui sera utilisee pour la scene. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scene. Si le parametre skyboxTexture est utilise, le parametre backgroundColor sera ignore
+	 * @param ambientLightIntensity L'intensite de la luminosite ambiante de la scene. Defini l'intensite lumineuse minimale par laquelle seront eclaires tous les points de la scene
 	 * @param skyboxTexturePath Chemin vers la texture de la skybox a utiliser
 	 */
 	public RayTracingScene(Camera camera, PositionnalLight light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, String skyboxTexturePath) 
@@ -93,14 +93,14 @@ public class RayTracingScene
 	}
 	
 	/**
-	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
+	 * Cree la scene a partir d'une camera, d'une lumiere et d'une liste de forme
 	 * 
-	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
-	 * @param lights Liste des sources de lumière qui illumineront la scène
+	 * @param camera La camera de la scene a travers laquelle le rendu sera fait
+	 * @param lights Liste des sources de lumiere qui illumineront la scene
 	 * @param shapes Liste de forme qui seront rendues
-	 * @param backgroundColor La couleur de fond qui sera utilisée pour la scène. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scène. Si le paramètre skyboxTexture est utilisé, le paramètre backgroundColor sera ignoré
-	 * @param ambientLightIntensity L'intensité de la luminosité ambiante de la scène. Défini l'intensité lumineuse minimale par laquelle seront éclairés tous les points de la scène
-	 * @param skyboxTexture javafx.scene.image.Image chargé de la texture a utiliser pour la skybox de la scène. null si aucune skybox n'est voulue
+	 * @param backgroundColor La couleur de fond qui sera utilisee pour la scene. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scene. Si le parametre skyboxTexture est utilise, le parametre backgroundColor sera ignore
+	 * @param ambientLightIntensity L'intensite de la luminosite ambiante de la scene. Defini l'intensite lumineuse minimale par laquelle seront eclaires tous les points de la scene
+	 * @param skyboxTexture javafx.scene.image.Image charge de la texture a utiliser pour la skybox de la scene. null si aucune skybox n'est voulue
 	 */
 	public RayTracingScene(Camera camera, ArrayList<PositionnalLight> lights, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, Image skyboxTexture) 
 	{
@@ -111,16 +111,16 @@ public class RayTracingScene
 	}
 	
 	/**
-	 * Crée la scène à partir d'une caméra, d'une lumière et d'une liste de forme
+	 * Cree la scene a partir d'une camera, d'une lumiere et d'une liste de forme
 	 * 
-	 * @param camera La camera de la scène à travers laquelle le rendu sera fait
-	 * @param light La lumière permettant d'illuminer la scène
+	 * @param camera La camera de la scene a travers laquelle le rendu sera fait
+	 * @param light La lumiere permettant d'illuminer la scene
 	 * @param shapes Liste de forme qui seront rendues
-	 * @param backgroundColor La couleur de fond qui sera utilisée pour la scène. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scène. Si le paramètre skyboxTexture est utilisé, le paramètre backgroundColor sera ignoré
-	 * @param ambientLightIntensity L'intensité de la luminosité ambiante de la scène. Défini l'intensité lumineuse minimale par laquelle seront éclairés tous les points de la scène
-	 * @param skyboxTexture javafx.scene.image.Image chargé de la texture a utiliser pour la skybox de la scène. null si aucune skybox n'est voulue
+	 * @param backgroundColor La couleur de fond qui sera utilisee pour la scene. Ce sera la couleur visible lorsqu'un rayon n'intersectera aucun objet de la scene. Si le parametre skyboxTexture est utilise, le parametre backgroundColor sera ignore
+	 * @param ambientLightIntensity L'intensite de la luminosite ambiante de la scene. Defini l'intensite lumineuse minimale par laquelle seront eclaires tous les points de la scene
+	 * @param skyboxTexture javafx.scene.image.Image charge de la texture a utiliser pour la skybox de la scene. null si aucune skybox n'est voulue
 	 * 
-	 * @throws IllegalArgumentException quand l'argument skyboxTexture passé ne constitue pas une image correcte. i.e. l'image n'a peut être pas été ouverte correctement, introuvable, format non supporté, ...
+	 * @throws IllegalArgumentException quand l'argument skyboxTexture passe ne constitue pas une image correcte. i.e. l'image n'a peut etre pas ete ouverte correctement, introuvable, format non supporte, ...
 	 */
 	public RayTracingScene(Camera camera, PositionnalLight light, ArrayList<Shape> shapes, Color backgroundColor, double ambientLightIntensity, Image skyboxTexture) throws IllegalArgumentException
 	{
@@ -154,9 +154,9 @@ public class RayTracingScene
 	}
 	
 	/**
-	 * Permet d'ajouter une source de lumière à la scène
+	 * Permet d'ajouter une source de lumiere a la scene
 	 * 
-	 * @param light La source de lumière à ajouter
+	 * @param light La source de lumiere a ajouter
 	 */
 	public void addLight(PositionnalLight light)
 	{
@@ -164,9 +164,9 @@ public class RayTracingScene
 	}
 	
 	/**
-	 * Permet d'ajouter un objet à la scène
+	 * Permet d'ajouter un objet a la scene
 	 * 
-	 * @param shape La forme à ajouter
+	 * @param shape La forme a ajouter
 	 */
 	public void addShape(Shape shape)
 	{
@@ -174,9 +174,9 @@ public class RayTracingScene
 	}
 	
 	/**
-	 * Permet d'obtenir l'intensité de la lumière ambiante de la scène
+	 * Permet d'obtenir l'intensite de la lumiere ambiante de la scene
 	 * 
-	 * @return L'intensité de la lumière ambiante de la scène, un réel entre 0 et 1
+	 * @return L'intensite de la lumiere ambiante de la scene, un reel entre 0 et 1
 	 */
 	public double getAmbientLightIntensity() 
 	{
@@ -184,9 +184,9 @@ public class RayTracingScene
 	}
 
 	/**
-	 * Permet d'obtenir la couleur du fond de la scène
+	 * Permet d'obtenir la couleur du fond de la scene
 	 * 
-	 * @return La couleur du fond de la scène sous la forme d'un objet Color
+	 * @return La couleur du fond de la scene sous la forme d'un objet Color
 	 */
 	public Color getBackgroundColor()
 	{
@@ -194,9 +194,9 @@ public class RayTracingScene
 	}
 	
 	/**
-	 * Retourne la caméra de la scène
+	 * Retourne la camera de la scene
 	 * 
-	 * @return La caméra de la scène
+	 * @return La camera de la scene
 	 */
 	public Camera getCamera() 
 	{
@@ -204,11 +204,11 @@ public class RayTracingScene
 	}
 
 	/**
-	 * Retourne la source de lumière de la scène numéro i
+	 * Retourne la source de lumiere de la scene numero i
 	 * 
-	 * @param i l'indice de la source de lumière que l'on veut récupérer
+	 * @param i l'indice de la source de lumiere que l'on veut recuperer
 	 * 
-	 * @return La source de lumière de la scène
+	 * @return La source de lumiere de la scene
 	 */
 	public PositionnalLight getLight(int i) 
 	{
@@ -216,9 +216,9 @@ public class RayTracingScene
 	}
 	
 	/**
-	 * Retourne la liste des sources de lumière de la scène
+	 * Retourne la liste des sources de lumiere de la scene
 	 * 
-	 * @return Les sources de lumière de la scène
+	 * @return Les sources de lumiere de la scene
 	 */
 	public ArrayList<PositionnalLight> getLights() 
 	{
@@ -226,9 +226,9 @@ public class RayTracingScene
 	}
 
 	/**
-	 * Permet d'obtenir la liste des formes de la scène
+	 * Permet d'obtenir la liste des formes de la scene
 	 * 
-	 * @return Une {@link java.util.ArrayList} of {@link geometry.Shape} contenant toutes les formes de la scène
+	 * @return Une {@link java.util.ArrayList} of {@link geometry.Shape} contenant toutes les formes de la scene
 	 */
 	public ArrayList<Shape> getSceneObjects() 
 	{
@@ -238,7 +238,7 @@ public class RayTracingScene
 	/**
 	 * Permet d'obtenir la hauteur de la texture de la skybox
 	 * 
-	 * @return Un entier représentant la hauteur de la texture de la skybox
+	 * @return Un entier representant la hauteur de la texture de la skybox
 	 */
 	public int getSkyboxHeight()
 	{
@@ -248,7 +248,7 @@ public class RayTracingScene
 	/**
 	 * Permet d'obtenir la largeur de la texture de la skybox
 	 * 
-	 * @return Un entier représentant la largeur de la texture de la skybox
+	 * @return Un entier representant la largeur de la texture de la skybox
 	 */
 	public int getSkyboxWidth()
 	{
@@ -256,7 +256,7 @@ public class RayTracingScene
 	}
 	
 	/**
-	 * Permet d'obtenir le pixelReader de la texture de la skybox. Utile pour récupérer la couleur d'un pixel donné de la texture
+	 * Permet d'obtenir le pixelReader de la texture de la skybox. Utile pour recuperer la couleur d'un pixel donne de la texture
 	 * 
 	 * @return Retourne une nouvelle instance d'un PixelReader sur la texture de la skybox
 	 */
@@ -266,9 +266,9 @@ public class RayTracingScene
 	}
 	
 	/**
-	 * Permet de déterminer si la scène possède une skybox ou non
+	 * Permet de determiner si la scene possede une skybox ou non
 	 * 
-	 * @return Retourne true si la scène a une skybox, false sinon.
+	 * @return Retourne true si la scene a une skybox, false sinon.
 	 */
 	public boolean hasSkybox()
 	{
@@ -301,11 +301,11 @@ public class RayTracingScene
 	}
 	
 	/**
-	 * Permet d'attribuer une skybox à la scène
+	 * Permet d'attribuer une skybox a la scene
 	 * 
-	 * @param skyboxTexture L'image de la skybox a utiliser pour le rendu de la scène
+	 * @param skyboxTexture L'image de la skybox a utiliser pour le rendu de la scene
 	 * 
-	 * @throws IllegalArgumentException Si 'skyboxTexture' ne peut pas être chargé correctement
+	 * @throws IllegalArgumentException Si 'skyboxTexture' ne peut pas etre charge correctement
 	 */
 	public void setSkybox(Image skyboxTexture) throws IllegalArgumentException
 	{

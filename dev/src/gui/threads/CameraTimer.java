@@ -13,20 +13,20 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
 
 /**
-* Déplace la caméra en fonction des touches pressées
+* Deplace la camera en fonction des touches pressees
 */
 public class CameraTimer extends AnimationTimer {
 
     /**
-    * Sensibilité du déplacement droite/gauche de la caméra
+    * Sensibilite du deplacement droite/gauche de la camera
     */
     private static final Double DELTA_MOVE = 0.16;
     /**
-    * Sensibilité du déplacement haut/bas de la caméra
+    * Sensibilite du deplacement haut/bas de la camera
     */
     private static final Double DELTA_MOVE_Y = 0.1;
     /**
-    * Sensibilité de la rotation de la caméra
+    * Sensibilite de la rotation de la camera
     */
     private static final Double DELTA_ANGLE = 1.5;
 
@@ -77,7 +77,7 @@ public class CameraTimer extends AnimationTimer {
     }
 
     /**
-    * Permet de déplacer la caméra verticalement vers le haut
+    * Permet de deplacer la camera verticalement vers le haut
     */
     public void upCamera()
     {
@@ -87,7 +87,7 @@ public class CameraTimer extends AnimationTimer {
     }
 
     /**
-    * Permet de déplacer la caméra verticalement vers le bas
+    * Permet de deplacer la camera verticalement vers le bas
     */
     public void downCamera()
     {
@@ -97,7 +97,7 @@ public class CameraTimer extends AnimationTimer {
     }
 
     /**
-    * Permet de pivoter la caméra vers le haut
+    * Permet de pivoter la camera vers le haut
     */
     public void turnUpCamera()
     {
@@ -105,7 +105,7 @@ public class CameraTimer extends AnimationTimer {
     }
 
     /**
-    * Permet de pivoter la caméra vers le bas
+    * Permet de pivoter la camera vers le bas
     */
     public void turnDownCamera()
     {
@@ -113,7 +113,7 @@ public class CameraTimer extends AnimationTimer {
     }
 
     /**
-    * Permet de pivoter la caméra vers la droite
+    * Permet de pivoter la camera vers la droite
     */
     public void turnRightCamera()
     {
@@ -121,7 +121,7 @@ public class CameraTimer extends AnimationTimer {
     }
 
     /**
-    * Permet de pivoter la caméra vers le gauche
+    * Permet de pivoter la camera vers le gauche
     */
     public void turnLeftCamera()
     {
@@ -129,7 +129,7 @@ public class CameraTimer extends AnimationTimer {
     }
 
     /**
-    * Permet de déplacer la caméra vers l'avant
+    * Permet de deplacer la camera vers l'avant
     */
     public void goForwardCamera()
     {
@@ -140,7 +140,7 @@ public class CameraTimer extends AnimationTimer {
     }
 
     /**
-    * Permet de déplacer la caméra verticalement vers l'arrière
+    * Permet de deplacer la camera verticalement vers l'arriere
     */
     public void goBackwardCamera()
     {
@@ -151,7 +151,7 @@ public class CameraTimer extends AnimationTimer {
     }
 
     /**
-    * Permet de déplacer la caméra verticalement vers la gauche
+    * Permet de deplacer la camera verticalement vers la gauche
     */
     public void goLeftCamera()
     {
@@ -162,7 +162,7 @@ public class CameraTimer extends AnimationTimer {
     }
 
     /**
-    * Permet de déplacer la caméra verticalement vers la droite
+    * Permet de deplacer la camera verticalement vers la droite
     */
     public void goRightCamera()
     {

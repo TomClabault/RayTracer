@@ -2,7 +2,7 @@ package exceptions;
 
 /**
  * 
- * Exception jetée lors de la création d'une sphère incorrecte (rayon négatif par exemple)
+ * Exception jetee lors de la creation d'une sphere incorrecte (rayon negatif par exemple)
  *
  */
 public class InvalidSphereException extends IllegalArgumentException

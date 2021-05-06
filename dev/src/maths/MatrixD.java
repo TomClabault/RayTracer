@@ -3,7 +3,7 @@ package maths;
 import exceptions.IncompatibleMatricesException;
 
 /**
- * Permet de créer des matrices de taille variable à coefficients réels
+ * Permet de creer des matrices de taille variable a coefficients reels
  */
 public class MatrixD 
 {
@@ -13,7 +13,7 @@ public class MatrixD
 	private int n;
 	
 	/**
-	 * Permet de créer une matrice de m lignes et n colonnes dont tous les coefficients sont 0
+	 * Permet de creer une matrice de m lignes et n colonnes dont tous les coefficients sont 0
 	 * 
 	 * @param m Nombre de lignes de la matrice
 	 * @param n Nombre de colonnes de la matrice
@@ -30,18 +30,18 @@ public class MatrixD
 	}
 	
 	/**
-	 * Permet de créer une matrice de taille m*n et de l'initialisé avec le tableau de coefficients passé en argument
+	 * Permet de creer une matrice de taille m*n et de l'initialise avec le tableau de coefficients passe en argument
 	 * 
 	 * @param m Nombre de lignes de la matrice
 	 * @param n Nombre de colonnes de la matrice
-	 * @param coefficients Tableau de coefficients de taille m lignes et n colonnes utilisé pour initialiser les coefficients de la matrice créée
+	 * @param coefficients Tableau de coefficients de taille m lignes et n colonnes utilise pour initialiser les coefficients de la matrice creee
 	 * 
-	 * @throws IllegalArgumentException Jète cette exception si la taille du tableau de coefficient passé n'est pas la même que la taille de la matrice souhaitée (arguments m et n) 
+	 * @throws IllegalArgumentException Jete cette exception si la taille du tableau de coefficient passe n'est pas la meme que la taille de la matrice souhaitee (arguments m et n) 
 	 */
 	public MatrixD(int m, int n, double[][] coefficients)
 	{
 		if(coefficients.length == 0 || coefficients.length != m || coefficients[0].length != n)
-			throw new IllegalArgumentException("La taille du tableau de coefficients passé en argument n'est pas la même que la taille de la matrice souhaitée");
+			throw new IllegalArgumentException("La taille du tableau de coefficients passe en argument n'est pas la meme que la taille de la matrice souhaitee");
 		
 		
 		this.matrix = new double[m][n];
@@ -69,17 +69,17 @@ public class MatrixD
 	/**
 	 * Multiplie deux matrices
 	 * 
-	 * @param m1 Première matrice de taille m*p
-	 * @param m2 Deuxième matrice de taille p*n
+	 * @param m1 Premiere matrice de taille m*p
+	 * @param m2 Deuxieme matrice de taille p*n
 	 * 
 	 * @return Retourne m1*m2 de taille m*n
 	 * 
-	 * @throws exceptions.IncompatibleMatricesException Jète cette exception si le nombre de colonnes de m1 n'est pas égal au nombre de lignes de m2. Les matrices ne peuvent pas être multipliée dans l'ordre donné
+	 * @throws exceptions.IncompatibleMatricesException Jete cette exception si le nombre de colonnes de m1 n'est pas egal au nombre de lignes de m2. Les matrices ne peuvent pas etre multipliee dans l'ordre donne
 	 */
 	public static MatrixD mulMatrix(MatrixD m1, MatrixD m2)
 	{
 		if(m1.n != m2.m)
-			throw new IncompatibleMatricesException("Les deux matrices passées en argument ne peuvent pas être multipliées");
+			throw new IncompatibleMatricesException("Les deux matrices passees en argument ne peuvent pas etre multipliees");
 		
 		double[][] newCoeffs = new double[m1.m][m2.n];
 		
@@ -100,17 +100,17 @@ public class MatrixD
 			for(int j = 0; j < 4; j++)
 				convertedPointCoords[i] += pointToConvertCoords[j] * transformMatrix.matrix[j][i];
 		
-		//On retourne le point de coordoonées exprimées dans la base de la matrice passée en paramètre 
+		//On retourne le point de coordoonees exprimees dans la base de la matrice passee en parametre 
 		return new Point(convertedPointCoords[0], convertedPointCoords[1], convertedPointCoords[2]);
 	}
 	
 	/**
-	 * Change la base de l'objet 'objectToConvert' vers la base de l'espace vectoriel de la caméra
+	 * Change la base de l'objet 'objectToConvert' vers la base de l'espace vectoriel de la camera
 	 * 
-	 * @param objectToConvert Object dont les coordonnées doivent être converties vers la base de l'espace vectoriel de la caméra.
-	 * @param transformMatrix La matrice de transformation qui sera utilisée pour le changement de base
+	 * @param objectToConvert Object dont les coordonnees doivent etre converties vers la base de l'espace vectoriel de la camera.
+	 * @param transformMatrix La matrice de transformation qui sera utilisee pour le changement de base
 	 * 
-	 * @return Crée un nouveau point dont les coordoonnées (initialement de objectToConvert) sont exprimées dans la base de l'espace vectoriel de la caméra 
+	 * @return Cree un nouveau point dont les coordoonnees (initialement de objectToConvert) sont exprimees dans la base de l'espace vectoriel de la camera 
 	 */
 	public static Point mulPointP(CoordinateObject objectToConvert, MatrixD transformMatrix)
 	{
@@ -118,22 +118,22 @@ public class MatrixD
 	}
 	
 	/**
-	 * Change la base de l'objet 'objectToConvert' vers la base de l'espace vectoriel de la caméra
+	 * Change la base de l'objet 'objectToConvert' vers la base de l'espace vectoriel de la camera
 	 * 
-	 * @param objectToConvert Object dont les coordonnées doivent être converties vers la base de l'espace vectoriel de la caméra.
-	 * @param transformMatrix La matrice de transformation qui sera utilisée pour le changement de base
+	 * @param objectToConvert Object dont les coordonnees doivent etre converties vers la base de l'espace vectoriel de la camera.
+	 * @param transformMatrix La matrice de transformation qui sera utilisee pour le changement de base
 	 * 
-	 * @return Un nouveau vecteur dont les coordoonnées (initialement de objectToConvert) sont exprimées dans la base de l'espace vectoriel de la caméra 
+	 * @return Un nouveau vecteur dont les coordoonnees (initialement de objectToConvert) sont exprimees dans la base de l'espace vectoriel de la camera 
 	 */
 	public static Vector mulPointV(CoordinateObject objectToConvert, MatrixD transformMatrix)
 	{
 		Point pointMul = mulPoint(objectToConvert, transformMatrix);
-		//On retourne le point de coordoonées exprimées dans la base de la matrice passée en paramètre 
+		//On retourne le point de coordoonees exprimees dans la base de la matrice passee en parametre 
 		return new Vector(pointMul.getX(), pointMul.getY(), pointMul.getZ());
 	}
 	
 	/**
-	 * Redéfinition de la méthode toString pour afficher la matrice comme suit (exemple avec la matrice identité):
+	 * Redefinition de la methode toString pour afficher la matrice comme suit (exemple avec la matrice identite):
 	 * 
 	 * 1.00 0.00 0.00 0.00
 	 * 0.00 1.00 0.00 0.00

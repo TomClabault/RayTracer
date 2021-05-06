@@ -5,16 +5,16 @@ import maths.Point;
 public interface PositionnalLight 
 {
 	/**
-	 * Permet d'obtenir la position de la lumière
+	 * Permet d'obtenir la position de la lumiere
 	 * 
-	 *  @return Retourne le point de coordonnées (x, y, z) représentant le centre de la source de lumière
+	 *  @return Retourne le point de coordonnees (x, y, z) representant le centre de la source de lumiere
 	 */
 	public abstract Point getCenter();
 	
 	/**
-	 * Permet de récupérer l'intensité lumineuse de la source de lumière
+	 * Permet de recuperer l'intensite lumineuse de la source de lumiere
 	 * 
-	 * @return Un réel entre 0 et 1 représentant l'intensité lumineuse de la source lumineuse 
+	 * @return Un reel entre 0 et 1 representant l'intensite lumineuse de la source lumineuse 
 	 */
 	public abstract double getIntensity();
 }

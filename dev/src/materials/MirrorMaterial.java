@@ -5,9 +5,9 @@ import javafx.scene.paint.Color;
 public class MirrorMaterial extends Material
 {
 	/**
-	 * Crée un matériau réflechissant
+	 * Cree un materiau reflechissant
 	 * 
-	 * @param reflectiveness Poucentage de réflexion du matériau. Le matériau est tout noir à 0 puisqu'il sera équivalent à un miroir réfléchissant 0% de la lumière --> rien
+	 * @param reflectiveness Poucentage de reflexion du materiau. Le materiau est tout noir a 0 puisqu'il sera equivalent a un miroir reflechissant 0% de la lumiere --> rien
 	 */
 	public MirrorMaterial(double reflectiveness)
 	{

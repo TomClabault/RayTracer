@@ -7,7 +7,7 @@ import scene.lights.LightBulb;
 import scene.lights.PositionnalLight;
 
 /**
- * différents attributs que peut prendre la lumière ainsi que les éléments de syntaxe qui représentent différents états
+ * differents attributs que peut prendre la lumiere ainsi que les elements de syntaxe qui representent differents etats
  */
 enum LightContent
 {
@@ -19,16 +19,16 @@ enum LightContent
 }
 
 /**
- * Classe représentant l'état lumière, c'est à dire que le jeton courant est le mot
- * light_source dans le fichier pov. C'est ici que tout le parsing de la lumière est effectué.
+ * Classe representant l'etat lumiere, c'est a dire que le jeton courant est le mot
+ * light_source dans le fichier pov. C'est ici que tout le parsing de la lumiere est effectue.
  */
 public class StateLightSource implements StateToken
 {
 
     /**
      * @param context contexte courant de l'automate
-     * Cette méthode effectue le parsing d'un objet light_source (point light)
-     * @return un objet de type positionnal light qui décrit la source de lumière
+     * Cette methode effectue le parsing d'un objet light_source (point light)
+     * @return un objet de type positionnal light qui decrit la source de lumiere
      */
     @Override
     public PositionnalLight parse(PovAutomat context)

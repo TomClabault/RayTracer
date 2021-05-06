@@ -2,40 +2,40 @@ package rayTracer;
 
 /**
  * 
- * Représente les réglages de rendu qui seront utilisés par le ray tracer. Ces réglages sont dynamiques et peuvent être modifiés pendant le rendu.
- * Le ray Tracer adaptera alors son rendu en conséquence<br>
+ * Represente les reglages de rendu qui seront utilises par le ray tracer. Ces reglages sont dynamiques et peuvent etre modifies pendant le rendu.
+ * Le ray Tracer adaptera alors son rendu en consequence<br>
  * <br>
- * <strong>Paramètres:</strong><br>
+ * <strong>Parametres:</strong><br>
  * <ul>
-	 * <li>nbCore: Détermine le nombre de thread sur lequel sera effectué le rendu des images</li>
-	 * <li>recursionDepth: Gère le nombre d'appel récursif maximum que peut faire le ray tracer. Détermine par exemple le nombre consécutifs de reflets que l'on peut observer dans deux surfaces se réfléchissant l'une l'autre</li>
-	 * <li>antialiasingSampling: Détermine le nombre de sous-pixel calculé pour chaque pixel afin de réduire l'aliasing (effet d'escalier) de l'image</li>
-	 * <li>blurryReflectionsSampleCount: Combien d'échantillons seront utilisés pour calculer les réflexion flous de certains matériaux</li>
-	 * <li>enableAmbient: Permet d'activer ou de désactiver l'effet de lumière ambiante de l'ombrage de Phong</li>
-	 * <li>enableDiffuse: Permet d'activer ou de désactiver l'effet de lumière diffuse de l'ombrage de Phong</li>
-	 * <li>enableReflections: Permet d'activer ou de désactiver les réflexions des matériaux du rendu</li>
-	 * <li>enableBlurryReflections: Permet d'activer / désactiver les réflexions floues des matériaux</li>
-	 * <li>enableRefractions: Permet d'activer ou de désactiver les réfractions des matériaux du rendu</li>
-	 * <li>enableSpecular: Permet d'activer ou de désactiver l'effet de lumière spéculaire de l'ombrage de Phong</li>
-	 * <li>enableFresnel: Permet d'activer ou de désactiver les reflets aux bords des objets réfractifs</li>
-	 * <li>enableAntialiasing: Permet d'activer / désactiver l'antialiasing lors du rendu</li>
+	 * <li>nbCore: Determine le nombre de thread sur lequel sera effectue le rendu des images</li>
+	 * <li>recursionDepth: Gere le nombre d'appel recursif maximum que peut faire le ray tracer. Determine par exemple le nombre consecutifs de reflets que l'on peut observer dans deux surfaces se reflechissant l'une l'autre</li>
+	 * <li>antialiasingSampling: Determine le nombre de sous-pixel calcule pour chaque pixel afin de reduire l'aliasing (effet d'escalier) de l'image</li>
+	 * <li>blurryReflectionsSampleCount: Combien d'echantillons seront utilises pour calculer les reflexion flous de certains materiaux</li>
+	 * <li>enableAmbient: Permet d'activer ou de desactiver l'effet de lumiere ambiante de l'ombrage de Phong</li>
+	 * <li>enableDiffuse: Permet d'activer ou de desactiver l'effet de lumiere diffuse de l'ombrage de Phong</li>
+	 * <li>enableReflections: Permet d'activer ou de desactiver les reflexions des materiaux du rendu</li>
+	 * <li>enableBlurryReflections: Permet d'activer / desactiver les reflexions floues des materiaux</li>
+	 * <li>enableRefractions: Permet d'activer ou de desactiver les refractions des materiaux du rendu</li>
+	 * <li>enableSpecular: Permet d'activer ou de desactiver l'effet de lumiere speculaire de l'ombrage de Phong</li>
+	 * <li>enableFresnel: Permet d'activer ou de desactiver les reflets aux bords des objets refractifs</li>
+	 * <li>enableAntialiasing: Permet d'activer / desactiver l'antialiasing lors du rendu</li>
  * </ul>
  */
 public class RayTracerSettings 
 {
-	private int nbCore;//Détermine le nombre de thread sur lequel sera effectué le rendu des images
-	private int recursionDepth;//Gère le nombre d'appel récursif maximum que peut faire le ray tracer. Détermine par exemple le nombre consécutifs de reflets que l'on peut observer dans deux surfaces se réfléchissant l'une l'autre
-	private int antialiasingSampling;//Détermine le nombre de sous-pixel calculé pour chaque pixel afin de réduire l'aliasing (effet d'escalier) de l'image
-	private int blurryReflectionsSampleCount;//Combien d'échantillons seront utilisés pour calculer les réflexion flous de certains matériaux 
+	private int nbCore;//Determine le nombre de thread sur lequel sera effectue le rendu des images
+	private int recursionDepth;//Gere le nombre d'appel recursif maximum que peut faire le ray tracer. Determine par exemple le nombre consecutifs de reflets que l'on peut observer dans deux surfaces se reflechissant l'une l'autre
+	private int antialiasingSampling;//Determine le nombre de sous-pixel calcule pour chaque pixel afin de reduire l'aliasing (effet d'escalier) de l'image
+	private int blurryReflectionsSampleCount;//Combien d'echantillons seront utilises pour calculer les reflexion flous de certains materiaux 
 	
-	private boolean enableAmbient;//Permet d'activer ou de désactiver l'effet de lumière ambiante de l'ombrage de Phong
-	private boolean enableDiffuse;//Permet d'activer ou de désactiver l'effet de lumière diffuse de l'ombrage de Phong
-	private boolean enableReflections;//Permet d'activer ou de désactiver les réflexions des matériaux du rendu
-	private boolean enableBlurryReflections;//Permet d'activer / désactiver les réflexions floues des matériaux
-	private boolean enableRefractions;//Permet d'activer ou de désactiver les réfractions des matériaux du rendu
-	private boolean enableSpecular;//Permet d'activer ou de désactiver l'effet de lumière spéculaire de l'ombrage de Phong
-	private boolean enableFresnel;//Permet d'activer ou de désactiver les reflets aux bords des objets réfractifs
-	private boolean enableAntialiasing;//Permet d'activer / désactiver l'antialiasing lors du rendu
+	private boolean enableAmbient;//Permet d'activer ou de desactiver l'effet de lumiere ambiante de l'ombrage de Phong
+	private boolean enableDiffuse;//Permet d'activer ou de desactiver l'effet de lumiere diffuse de l'ombrage de Phong
+	private boolean enableReflections;//Permet d'activer ou de desactiver les reflexions des materiaux du rendu
+	private boolean enableBlurryReflections;//Permet d'activer / desactiver les reflexions floues des materiaux
+	private boolean enableRefractions;//Permet d'activer ou de desactiver les refractions des materiaux du rendu
+	private boolean enableSpecular;//Permet d'activer ou de desactiver l'effet de lumiere speculaire de l'ombrage de Phong
+	private boolean enableFresnel;//Permet d'activer ou de desactiver les reflets aux bords des objets refractifs
+	private boolean enableAntialiasing;//Permet d'activer / desactiver l'antialiasing lors du rendu
 	
 	public RayTracerSettings()
 	{
@@ -69,25 +69,25 @@ public class RayTracerSettings
 	}
 	
 	/**
-	 * Initialise les réglages qui seront utiliés pour le rendu de la scène
+	 * Initialise les reglages qui seront utilies pour le rendu de la scene
 	 * 
-	 * @param nbCore Le nombre de threads sur lequel sera effectué le rendu
-	 * @param recursionDepth La profondeur de récursion maximale autorisée pour le rendu des réflexions / réfractions
-	 * @param antialiasingSampleCount Le nombre d'échantillons par pixel qui sera utilisé pour l'antialiasing de la scène. Doit être le carré d'un entier >= 2
-	 * @param enableAmbient Active ou désactive le calcule de la luminosité ambiante lors du rendu
-	 * @param enableDiffuse Active ou désactive le calcule de l'illumination diffuse lors du rendu
-	 * @param enableReflections Active ou désactive le calcule des réflexions lors du rendu
-	 * @param enableRefractions Active ou désactive le calcule des réfractions lors du rendu. Désactivera par exemple le rendu des matériaux tels que le verre i.e. les matériaux transparents qui réfractent les rayons de lumière
-	 * @param enableSpecular Active ou désactive le calcule de la spécularité lors du rendu
-	 * @param enableFresnel Active ou désactive le calcule des réflexions de Fresnel lors du rendu. Ce sont les réflexions à la surface des objets réfractifs sans pour autant s'agir de réfractions à part entière.
-	 * @param enableAntialiasing Active ou désactive l'antialiasing (anti-crénelage) du rendu. L'antialiasing évite les effets d'escaliers sur les bords des objets.
+	 * @param nbCore Le nombre de threads sur lequel sera effectue le rendu
+	 * @param recursionDepth La profondeur de recursion maximale autorisee pour le rendu des reflexions / refractions
+	 * @param antialiasingSampleCount Le nombre d'echantillons par pixel qui sera utilise pour l'antialiasing de la scene. Doit etre le carre d'un entier >= 2
+	 * @param enableAmbient Active ou desactive le calcule de la luminosite ambiante lors du rendu
+	 * @param enableDiffuse Active ou desactive le calcule de l'illumination diffuse lors du rendu
+	 * @param enableReflections Active ou desactive le calcule des reflexions lors du rendu
+	 * @param enableRefractions Active ou desactive le calcule des refractions lors du rendu. Desactivera par exemple le rendu des materiaux tels que le verre i.e. les materiaux transparents qui refractent les rayons de lumiere
+	 * @param enableSpecular Active ou desactive le calcule de la specularite lors du rendu
+	 * @param enableFresnel Active ou desactive le calcule des reflexions de Fresnel lors du rendu. Ce sont les reflexions a la surface des objets refractifs sans pour autant s'agir de refractions a part entiere.
+	 * @param enableAntialiasing Active ou desactive l'antialiasing (anti-crenelage) du rendu. L'antialiasing evite les effets d'escaliers sur les bords des objets.
 	 * 
-	 * @throws IllegalArgumentException si "antialiasingSampleCount" n'est pas le carré d'un entier >= 2
+	 * @throws IllegalArgumentException si "antialiasingSampleCount" n'est pas le carre d'un entier >= 2
 	 */
 	public RayTracerSettings(int nbCore, int recursionDepth, int antialiasingSampleCount, int blurryReflectionsSampleCount, boolean enableAmbient, boolean enableDiffuse, boolean enableReflections, boolean enableBlurryReflections, boolean enableRefractions, boolean enableSpecular, boolean enableFresnel, boolean enableAntialiasing) throws IllegalArgumentException 
 	{
 		if(!verifAntialiasingSampleCount(antialiasingSampleCount))
-			throw new IllegalArgumentException("Nombre d'échantillons d'antialiasing incorrect. Doit être le carré d'un entier >= 2");
+			throw new IllegalArgumentException("Nombre d'echantillons d'antialiasing incorrect. Doit etre le carre d'un entier >= 2");
 			
 		this.nbCore = nbCore;
 		this.recursionDepth = recursionDepth;
@@ -220,26 +220,26 @@ public class RayTracerSettings
 	}
 	
 	/**
-	 * Permet de redéfinir le nombre d'échantillons calculés par pixels pour l'antiailiasing du rendu
+	 * Permet de redefinir le nombre d'echantillons calcules par pixels pour l'antiailiasing du rendu
 	 * 
-	 * @param sampleCount	Le nombre d'échantillons par pixel à utiliser pour l'antialiasing. Doit être le carré d'un entier >= 2.  
+	 * @param sampleCount	Le nombre d'echantillons par pixel a utiliser pour l'antialiasing. Doit etre le carre d'un entier >= 2.  
 	 * 
-	 * @throws IllegalArgumentException Si sampleCount n'est pas le carré d'un entier >= 2
+	 * @throws IllegalArgumentException Si sampleCount n'est pas le carre d'un entier >= 2
 	 */
 	public void setAntialiasingSampling(int sampleCount) throws IllegalArgumentException
 	{
 		if(!verifAntialiasingSampleCount(sampleCount))
-			throw new IllegalArgumentException("Nombre d'échantillons d'antialiasing incorrect. Doit être le carré d'un entier >= 2");
+			throw new IllegalArgumentException("Nombre d'echantillons d'antialiasing incorrect. Doit etre le carre d'un entier >= 2");
 			
 		this.antialiasingSampling = sampleCount;
 	}
 	
 	/**
-	 * Permet de vérifier si sampleCount est le carré d'un entier >= 2
+	 * Permet de verifier si sampleCount est le carre d'un entier >= 2
 	 * 
-	 * @param sampleCount Le nombre d'échantillons par pixel à utliser pour l'antialiasing. Cette méthode détermine si c'est le carré d'un entier >= 2
+	 * @param sampleCount Le nombre d'echantillons par pixel a utliser pour l'antialiasing. Cette methode determine si c'est le carre d'un entier >= 2
 	 * 
-	 *  @return false si 'sampleCount' n'est pas le carré d'un entier >= 2, true si c'en est un
+	 *  @return false si 'sampleCount' n'est pas le carre d'un entier >= 2, true si c'en est un
 	 */
 	private boolean verifAntialiasingSampleCount(double sampleCount)
 	{

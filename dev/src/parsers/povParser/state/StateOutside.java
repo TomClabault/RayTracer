@@ -4,14 +4,14 @@ import geometry.Shape;
 import parsers.povParser.PovAutomat;
 
 /**
- * Classe décrivant tout simplement un état vide
+ * Classe decrivant tout simplement un etat vide
  */
 public class StateOutside implements StateToken
 {
     /**
-     * Méthode permettant de passer le dernier jeton
+     * Methode permettant de passer le dernier jeton
      * @param context contexte courant de l'automate
-     * @return null car aucune figure n'est parsée dans cet état
+     * @return null car aucune figure n'est parsee dans cet etat
      */
     @Override
     public Shape parse(PovAutomat context)

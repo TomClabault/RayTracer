@@ -12,10 +12,10 @@ public class ProceduralTextureCheckerboard implements ProceduralTexture
 	private double size;
 	
 	/**
-	 * Crée la texture procédurale d'un checkerboard à partir des deux couleurs de son damier. Les cases sont des carrés de 2x2 unité
+	 * Cree la texture procedurale d'un checkerboard a partir des deux couleurs de son damier. Les cases sont des carres de 2x2 unite
 	 * 
-	 * @param color1 La première couleur qui sera utilisée pour le damier
-	 * @param color2 La deuxième couleur qui sera utilisée pour le damier
+	 * @param color1 La premiere couleur qui sera utilisee pour le damier
+	 * @param color2 La deuxieme couleur qui sera utilisee pour le damier
 	 */
 	public ProceduralTextureCheckerboard(Color color1, Color color2) 
 	{
@@ -23,10 +23,10 @@ public class ProceduralTextureCheckerboard implements ProceduralTexture
 	}
 	
 	/**
-	 * Crée la texture procédurale d'un checkerboard à partir des deux couleurs de son damier et de la taille des cases
+	 * Cree la texture procedurale d'un checkerboard a partir des deux couleurs de son damier et de la taille des cases
 	 * 
-	 * @param color1 La première couleur qui sera utilisée pour le damier
-	 * @param color2 La deuxième couleur qui sera utilisée pour le damier
+	 * @param color1 La premiere couleur qui sera utilisee pour le damier
+	 * @param color2 La deuxieme couleur qui sera utilisee pour le damier
 	 * @param size 	 La taille des cases du damier
 	 */
 	public ProceduralTextureCheckerboard(Color color1, Color color2, double size) 
@@ -52,9 +52,9 @@ public class ProceduralTextureCheckerboard implements ProceduralTexture
 	}
 	
 	/**
-	 * Permet de redéfinir la première couleur des cases du damier
+	 * Permet de redefinir la premiere couleur des cases du damier
 	 * 
-	 * @param color La nouvelle couleur des première cases du damier
+	 * @param color La nouvelle couleur des premiere cases du damier
 	 */
 	public void setColor1(Color color)
 	{
@@ -62,9 +62,9 @@ public class ProceduralTextureCheckerboard implements ProceduralTexture
 	}
 	
 	/**
-	 * Permet de redéfinir la deuxième couleur des cases du damier
+	 * Permet de redefinir la deuxieme couleur des cases du damier
 	 * 
-	 * @param color La nouvelle couleur des deuxièmes cases du damier
+	 * @param color La nouvelle couleur des deuxiemes cases du damier
 	 */
 	public void setColor2(Color color)
 	{

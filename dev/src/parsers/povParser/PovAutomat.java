@@ -13,24 +13,24 @@ public class PovAutomat
 {
 
     /**
-     * état courant
+     * etat courant
      */
     private StateToken etatToken;
 
     /**
-     * instance de StreamTokenizer utilisée pour effectuer le parsing
+     * instance de StreamTokenizer utilisee pour effectuer le parsing
      */
     private StreamTokenizer streamTokenizer;
 
     /**
-     * jeton courant du StreamTokenizer, c'est un entier qui peut être cast en char pour récupérer des charactères (comme '<', '{')
+     * jeton courant du StreamTokenizer, c'est un entier qui peut etre cast en char pour recuperer des characteres (comme '<', '{')
      */
     private int currentToken;
 
     /**
      * Constructeur complet d'Automat
-     * @param streamTokenizer Une instance de classe StreamTokenizer qui va servir de base à l'automat
-     * @param currentState état courant de Figure
+     * @param streamTokenizer Une instance de classe StreamTokenizer qui va servir de base a l'automat
+     * @param currentState etat courant de Figure
      */
     public PovAutomat(StreamTokenizer streamTokenizer)
     {
@@ -38,8 +38,8 @@ public class PovAutomat
     }
 
     /**
-     * Mutateur servant à fixer la valeur de l'état courant (qui est une sous classe de EtatToken) qui va être prochainement parsé
-     * @param etatToken Classe d'état qui implémente EtatToken
+     * Mutateur servant a fixer la valeur de l'etat courant (qui est une sous classe de EtatToken) qui va etre prochainement parse
+     * @param etatToken Classe d'etat qui implemente EtatToken
      */
     public void setState(StateToken etatToken)
     {
@@ -47,8 +47,8 @@ public class PovAutomat
     }
 
     /**
-     * Méthode servant à lancer le parsing de la figure courante, c'est à dire d'appeler la méthode action de la classe d'état courante
-     * @return Elle retourne l'objet résultant du parsing, ensuite casté en une figure, lumière etc. (polymorphisme)
+     * Methode servant a lancer le parsing de la figure courante, c'est a dire d'appeler la methode action de la classe d'etat courante
+     * @return Elle retourne l'objet resultant du parsing, ensuite caste en une figure, lumiere etc. (polymorphisme)
      */
     public Object action()
     {
@@ -65,7 +65,7 @@ public class PovAutomat
     }
 
     /**
-     * Cette méthode teste si le type du streamTokenizer est un mot
+     * Cette methode teste si le type du streamTokenizer est un mot
      * @return retourne true si c'est un mot, false sinon
      */
     public boolean isCurrentTokenAWord()
@@ -74,9 +74,9 @@ public class PovAutomat
     }
 
     /**
-     * Cette méthode teste si un mot donné est égal au jeton courant du streamTokenizer
-     * @param word le mot à tester
-     * @return retourne true si le mot passé en argument est égal au jeton courant, false sinon
+     * Cette methode teste si un mot donne est egal au jeton courant du streamTokenizer
+     * @param word le mot a tester
+     * @return retourne true si le mot passe en argument est egal au jeton courant, false sinon
      */
     public boolean currentWord(String word)
     {
@@ -84,7 +84,7 @@ public class PovAutomat
     }
 
     /**
-     * Méthode appelant simplement le prochain jeton dans le fichier
+     * Methode appelant simplement le prochain jeton dans le fichier
      * @return retourne l'entier correspondant au jeton
      */
     public int callNextToken()
@@ -109,8 +109,8 @@ public class PovAutomat
     }
 
     /**
-     * Cette méthode renvoit la valeur du nombre parsée
-     * @return nombre parsé
+     * Cette methode renvoit la valeur du nombre parsee
+     * @return nombre parse
      */
     public double getNumberValue()
     {
@@ -118,7 +118,7 @@ public class PovAutomat
     }
 
     /**
-     * Cette méthode teste si le prochain jeton est une figure valide
+     * Cette methode teste si le prochain jeton est une figure valide
      * @return true si la figure est valide, false sinon
      */
     public boolean isValidState()
@@ -161,8 +161,8 @@ public class PovAutomat
     }
 
     /**
-     * Méthode donnant l'état courant (figure, light...) que l'on va parser
-     * @return une constante de l'énumération State
+     * Methode donnant l'etat courant (figure, light...) que l'on va parser
+     * @return une constante de l'enumeration State
      */
     public PovObjectsState getState()
     {
@@ -194,10 +194,10 @@ public class PovAutomat
     }
 
     /**
-     * Méthode permettant de créer une scène à partir d'un fichier pov (langage de description de scène). Cette méthode
-     * permet de parser le fichier de scène et de créer les objets à ajouter dans la scène de notre lanceur de rayons
-     * @param povFile fichier pov à parser
-     * @return La scène créée à partir du fichier pov contenant les différentes figures
+     * Methode permettant de creer une scene a partir d'un fichier pov (langage de description de scene). Cette methode
+     * permet de parser le fichier de scene et de creer les objets a ajouter dans la scene de notre lanceur de rayons
+     * @param povFile fichier pov a parser
+     * @return La scene creee a partir du fichier pov contenant les differentes figures
      */
     public static RayTracingScene parsePov(File povFile)
     {

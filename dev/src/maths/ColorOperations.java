@@ -3,12 +3,12 @@ package maths;
 import javafx.scene.paint.Color;
 
 /**
- * Classe permettant d'effectuer des opérations sur les objets javafx.scene.paint.Color
+ * Classe permettant d'effectuer des operations sur les objets javafx.scene.paint.Color
  */
 public class ColorOperations 
 {
 	/*
-	 * Tables de transposition utilisées pour accélérer les calculs de correction de gamma
+	 * Tables de transposition utilisees pour accelerer les calculs de correction de gamma
 	 */
 	public static final int[] sRGB2_2ToLinearTable = ColorOperations.computeSRGBToLinearTable(2.2);
 	public static final int[] sRGB2_4ToLinearTable = ColorOperations.computeSRGBToLinearTable(2.4);
@@ -17,16 +17,16 @@ public class ColorOperations
 	public static final int[] linearTosRGB2_4Table = ColorOperations.computeLinearToSRGBTable(2.4);
 	
 	/**
-	 * Calcule la sRGBToLinearTable : table de transposition des valeurs sRGB de gamma 'gammaValue' vers RGB linéaire
+	 * Calcule la sRGBToLinearTable : table de transposition des valeurs sRGB de gamma 'gammaValue' vers RGB lineaire
 	 * telle que sRGBToLinearTable[sRGBValue_gammaValue] = linearRGBValue avec:
-	 * - sRGBValue_gammaValue la valeur d'intensité d'une composante sRGB dans l'espace de couleur sRGB corrigé avec un gamma de 'gammaValue'
-	 * - _gammaValue indiquant avec quelle valeur de gamma la couleur sRGB a été encodée
-	 * - linearRGBValue la valeur de sRGBValue_gammaValue mais dans l'espace de couleur RGB linéaire
-	 * Pour le même gamma, cette table correspond à la table de transposition réciproque de linearTosRGBTable.
+	 * - sRGBValue_gammaValue la valeur d'intensite d'une composante sRGB dans l'espace de couleur sRGB corrige avec un gamma de 'gammaValue'
+	 * - _gammaValue indiquant avec quelle valeur de gamma la couleur sRGB a ete encodee
+	 * - linearRGBValue la valeur de sRGBValue_gammaValue mais dans l'espace de couleur RGB lineaire
+	 * Pour le meme gamma, cette table correspond a la table de transposition reciproque de linearTosRGBTable.
 	 * 
-	 * @param gammaValue Le valeur du gamma utilisé pour la conversion
+	 * @param gammaValue Le valeur du gamma utilise pour la conversion
 	 * 
-	 * @return Retourne la table de transposition appropriée et décrite ci-dessus
+	 * @return Retourne la table de transposition appropriee et decrite ci-dessus
 	 */
 	protected static int[] computeSRGBToLinearTable(double gammaValue) throws IllegalArgumentException
 	{
@@ -59,16 +59,16 @@ public class ColorOperations
 	}
 	
 	/**
-	 * Calcule la linearToSRGBTable : table de transposition des valeurs RGB linéaire vers sRGB de gamma 'gammaValue'
+	 * Calcule la linearToSRGBTable : table de transposition des valeurs RGB lineaire vers sRGB de gamma 'gammaValue'
 	 * telle que linearToSRGBTable[linearRGBValue] = sRGBValue_gammaValue avec:
-	 * - sRGBValue_gammaValue la valeur d'intensité d'une composante sRGB dans l'espace de couleur sRGB corrigé avec un gamma de 'gammaValue'
-	 * - _gammaValue indiquant avec quelle valeur de gamma la couleur sRGB a été encodée
-	 * - linearRGBValue la valeur de sRGBValue_gammaValue mais dans l'espace de couleur RGB linéaire
-	 * Pour le même gamma, cette table correspond à la table de transposition réciproque de sRGBToLinearTable.
+	 * - sRGBValue_gammaValue la valeur d'intensite d'une composante sRGB dans l'espace de couleur sRGB corrige avec un gamma de 'gammaValue'
+	 * - _gammaValue indiquant avec quelle valeur de gamma la couleur sRGB a ete encodee
+	 * - linearRGBValue la valeur de sRGBValue_gammaValue mais dans l'espace de couleur RGB lineaire
+	 * Pour le meme gamma, cette table correspond a la table de transposition reciproque de sRGBToLinearTable.
 	 * 
-	 * @param gammaValue Le valeur du gamma utilisé pour la conversion
+	 * @param gammaValue Le valeur du gamma utilise pour la conversion
 	 * 
-	 * @return Retourne la table de transposition appropriée et décrite ci-dessus
+	 * @return Retourne la table de transposition appropriee et decrite ci-dessus
 	 */
 	protected static int[] computeLinearToSRGBTable(double gammaValue)
 	{
@@ -101,13 +101,13 @@ public class ColorOperations
 	}
 	
 	/**
-	 * Ajoute deux couleurs terme à terme
+	 * Ajoute deux couleurs terme a terme
 	 * 
-	 * @param col1 Première couleur
-	 * @param col2 Deuxième couleur
+	 * @param col1 Premiere couleur
+	 * @param col2 Deuxieme couleur
 	 * 
-	 * @return Un objet Color représentant la couleur obtenue à partir de l'addition terme à terme des deux couleurs passées en argument.
-	 * Les composantes dépassant 255 lors de l'addition sont ramenées à 255 
+	 * @return Un objet Color representant la couleur obtenue a partir de l'addition terme a terme des deux couleurs passees en argument.
+	 * Les composantes depassant 255 lors de l'addition sont ramenees a 255 
 	 */
 	public static Color addColors(Color col1, Color col2)
 	{
@@ -119,20 +119,20 @@ public class ColorOperations
 	}
 	
 	/**
-	 * Ajoute un entier à la couleur composante par composante
+	 * Ajoute un entier a la couleur composante par composante
 	 * 
-	 * @param col La couleur à laquelle on souhaite ajouter une constante
+	 * @param col La couleur a laquelle on souhaite ajouter une constante
 	 * @param addend La constante que l'on souhaite ajouter. Entier positif
 	 * 
-	 * @return Un objet Color.rgb() résultant de l'addition de chacune des composante de la couleur de départ avec la constante passée en argument.
+	 * @return Un objet Color.rgb() resultant de l'addition de chacune des composante de la couleur de depart avec la constante passee en argument.
 	 * Les composantes 
 	 * 
-	 * @throws IllegalArgumentException Jète cette exception si la constante passée en argument est négative
+	 * @throws IllegalArgumentException Jete cette exception si la constante passee en argument est negative
 	 */
 	public static Color addToColor(Color col, int addend)
 	{
 		if(addend < 0)
-			throw new IllegalArgumentException(String.format("La constante passée à addToColor est négative. addend = %d", addend));
+			throw new IllegalArgumentException(String.format("La constante passee a addToColor est negative. addend = %d", addend));
 		
 		int newRed = (int)(col.getRed() * 255) + addend; newRed = newRed > 255 ? 255 : newRed;
 		int newGreen = (int)(col.getGreen() * 255) + addend; newGreen = newGreen > 255 ? 255 : newGreen;
@@ -142,20 +142,20 @@ public class ColorOperations
 	}
 	
 	/**
-	 * Ajoute un entier à la couleur composante par composante
+	 * Ajoute un entier a la couleur composante par composante
 	 * 
-	 * @param col La couleur à laquelle on souhaite ajouter une constante
-	 * @param addend La constante que l'on souhaite ajouter. Réel entre 0 et 1
+	 * @param col La couleur a laquelle on souhaite ajouter une constante
+	 * @param addend La constante que l'on souhaite ajouter. Reel entre 0 et 1
 	 * 
-	 * @return Un objet Color.rgb() résultant de l'addition de chacune des composante de la couleur de départ avec la constante passée en argument.
+	 * @return Un objet Color.rgb() resultant de l'addition de chacune des composante de la couleur de depart avec la constante passee en argument.
 	 * Les composantes 
 	 * 
-	 * @throws IllegalArgumentException Jète cette exception si la constante passée en argument est négative
+	 * @throws IllegalArgumentException Jete cette exception si la constante passee en argument est negative
 	 */
 	public static Color addToColor(Color col, double addend)
 	{
 		if(addend < 0)
-			throw new IllegalArgumentException(String.format("La constante passée à addToColor n'est pas dans l'intervalle demandé. addend = %.3f", addend));
+			throw new IllegalArgumentException(String.format("La constante passee a addToColor n'est pas dans l'intervalle demande. addend = %.3f", addend));
 		
 		int newRed = (int)((col.getRed() + addend) * 255); newRed = newRed > 255 ? 255 : newRed;
 		int newGreen = (int)((col.getGreen() + addend) * 255); newGreen = newGreen > 255 ? 255 : newGreen;
@@ -165,7 +165,7 @@ public class ColorOperations
 	}
 	
 	/**
-	 * Cette méthode converti la couleur passée en argument en entier 32 bits. Chaque composante de aRGB est codée sur 8 bits. 
+	 * Cette methode converti la couleur passee en argument en entier 32 bits. Chaque composante de aRGB est codee sur 8 bits. 
 	 * Du MSB au LSB: alpha ; red ; green ; blue
 	 * 
 	 * @param color La couleur que l'on souhaite convertir en entier
@@ -185,11 +185,11 @@ public class ColorOperations
 	}
 	
 	/**
-	 * Permet d'obtenir la représentation RGB d'une couleur
+	 * Permet d'obtenir la representation RGB d'une couleur
 	 * 
-	 * @param color La couleur dont on souhaite la représentation RGB sous forme de string
+	 * @param color La couleur dont on souhaite la representation RGB sous forme de string
 	 * 
-	 * @return Retourne une chaîne de caractère représentant la couleur passé en argument sous la forme de ses 3 composantes
+	 * @return Retourne une chaîne de caractere representant la couleur passe en argument sous la forme de ses 3 composantes
 	 */
 	public static String colorToString(Color color)
 	{
@@ -211,11 +211,11 @@ public class ColorOperations
 	}
 	
 	/**
-	 * Retourne une nouvelle instance de Color représentant la même couleur que celle passée en argument
+	 * Retourne une nouvelle instance de Color representant la meme couleur que celle passee en argument
 	 * 
-	 * @param colorToCopy La couleur à copier
+	 * @param colorToCopy La couleur a copier
 	 * 
-	 * @return Une nouvelle instance de couleur dont les valeurs des composantes sont les même que colorToCopy 
+	 * @return Une nouvelle instance de couleur dont les valeurs des composantes sont les meme que colorToCopy 
 	 */
 	public static Color copy(Color colorToCopy) 
 	{
@@ -223,11 +223,11 @@ public class ColorOperations
 	}
 	
 	/**
-	 * Permet de convertir une couleur dont les composantes sont utilisées linéairement en son équivalent sRGB avec une correction correction de gamma de paramètre 2.2
+	 * Permet de convertir une couleur dont les composantes sont utilisees lineairement en son equivalent sRGB avec une correction correction de gamma de parametre 2.2
 	 * 
-	 * @param linearColor La couleur linéaire à convertir
+	 * @param linearColor La couleur lineaire a convertir
 	 * 
-	 * @return Retourne la couleur donnée en entrée convertie en sRGB + gamma 2.2 
+	 * @return Retourne la couleur donnee en entree convertie en sRGB + gamma 2.2 
 	 */
 	public static Color linearTosRGBGamma2_2(Color linearColor)
 	{
@@ -243,11 +243,11 @@ public class ColorOperations
 	}
 	
 	/**
-	 * Permet de convertir une couleur dont les composantes sont utilisées linéairement en son équivalent sRGB avec une correction correction de gamma de paramètre 2.4
+	 * Permet de convertir une couleur dont les composantes sont utilisees lineairement en son equivalent sRGB avec une correction correction de gamma de parametre 2.4
 	 * 
-	 * @param linearColor La couleur linéaire à convertir
+	 * @param linearColor La couleur lineaire a convertir
 	 * 
-	 * @return Retourne la couleur donnée en entrée convertie en sRGB + gamma 2.4 
+	 * @return Retourne la couleur donnee en entree convertie en sRGB + gamma 2.4 
 	 */
 	public static Color linearTosRGBGamma2_4(Color linearColor)
 	{
@@ -266,18 +266,18 @@ public class ColorOperations
 	/**
 	 * Multiplie une couleur composante par composante par un scalaire
 	 * 
-	 * @param col Couleur à multiplier
-	 * @param scalar Le scalaire par lequel la couleur va être multipliée. Entre 0 et 1
+	 * @param col Couleur a multiplier
+	 * @param scalar Le scalaire par lequel la couleur va etre multipliee. Entre 0 et 1
 	 * 
-	 * @return Un objet Color.rgb() représentant la couleur obtenue à partir des multiplications des composantes de la couleur par le scalaire passé en argument
-	 * Les composantes dépassant 255 lors de la multiplication sont ramenées à 255
+	 * @return Un objet Color.rgb() representant la couleur obtenue a partir des multiplications des composantes de la couleur par le scalaire passe en argument
+	 * Les composantes depassant 255 lors de la multiplication sont ramenees a 255
 	 * 
-	 * @throws IllegalArgumentException Jète cette exception si le scalaire passé en argument est inférieur à 0
+	 * @throws IllegalArgumentException Jete cette exception si le scalaire passe en argument est inferieur a 0
 	 */
 	public static Color mulColor(Color col, double scalar)
 	{
 		if(scalar < 0)
-			throw new IllegalArgumentException(String.format("Le scalaire passé en argument de mulColors n'est pas dans l'intervalle demandé. scalar = %.3f", scalar));
+			throw new IllegalArgumentException(String.format("Le scalaire passe en argument de mulColors n'est pas dans l'intervalle demande. scalar = %.3f", scalar));
 		
 		int newRed = (int)(col.getRed() * scalar * 255); newRed = newRed > 255 ? 255 : newRed;
 		int newGreen = (int)(col.getGreen() * scalar * 255); newGreen = newGreen > 255 ? 255 : newGreen;
@@ -287,12 +287,12 @@ public class ColorOperations
 	}
 	
 	/**
-	 * Permet d'élever toutes les composantes d'une couleur à une certaine puissance
+	 * Permet d'elever toutes les composantes d'une couleur a une certaine puissance
 	 * 
-	 * @param col 	La couleur à élever à une certaine puissance
+	 * @param col 	La couleur a elever a une certaine puissance
 	 * @param power L'exposant
 	 * 
-	 * @return Retourne une nouvelle couleur de composante (r^power, g^power, b^power) où ^ dénote l'exponentiation
+	 * @return Retourne une nouvelle couleur de composante (r^power, g^power, b^power) où ^ denote l'exponentiation
 	 */
 	public static Color powColor(Color col, double power)
 	{
@@ -304,11 +304,11 @@ public class ColorOperations
 	}
 	
 	/**
-	 * Permet de convertir une couleur de l'espace sRGB avec une courbe de Gamma de 2.2 vers l'espace RGB linéaire
+	 * Permet de convertir une couleur de l'espace sRGB avec une courbe de Gamma de 2.2 vers l'espace RGB lineaire
 	 * 
-	 * @param sRGB2_2Color La couleur que l'on veut convertir dont les composantes ne sont pas linéaires
+	 * @param sRGB2_2Color La couleur que l'on veut convertir dont les composantes ne sont pas lineaires
 	 * 
-	 * @return Retourne la couleur passée en paramètre mais convertie dans l'espace de couleur RGB linéaire
+	 * @return Retourne la couleur passee en parametre mais convertie dans l'espace de couleur RGB lineaire
 	 */
 	public static Color sRGBGamma2_2ToLinear(Color sRGB2_2Color)
 	{
@@ -320,13 +320,13 @@ public class ColorOperations
 	}
 	
 	/**
-	 * Soustrait deux couleurs terme à terme
+	 * Soustrait deux couleurs terme a terme
 	 * 
-	 * @param col1 Première couleur
-	 * @param col2 Deuxième couleur
+	 * @param col1 Premiere couleur
+	 * @param col2 Deuxieme couleur
 	 * 
-	 * @return Un objet Color.rgb() représentant la couleur obtenue à partir de la soustraction terme à terme des deux couleurs passées en argument.
-	 * Les composantes inférieures à 0 lors de l'addition sont ramenées à 0
+	 * @return Un objet Color.rgb() representant la couleur obtenue a partir de la soustraction terme a terme des deux couleurs passees en argument.
+	 * Les composantes inferieures a 0 lors de l'addition sont ramenees a 0
 	 */
 	public static Color subColors(Color col1, Color col2)
 	{

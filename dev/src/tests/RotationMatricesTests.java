@@ -11,7 +11,7 @@ public class RotationMatricesTests
 		RotationMatrix rotM = new RotationMatrix(axis, angle);
 		Point rotatedPoint = MatrixD.mulPointP(toRotate, rotM);
 
-		System.out.println("Point rotaté: " + rotatedPoint + " | Attendu: " + expected);
+		System.out.println("Point rotate: " + rotatedPoint + " | Attendu: " + expected);
 	}
 
 	public static void main(String[] args)

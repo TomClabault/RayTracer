@@ -3,10 +3,10 @@ package multithreading;
 import java.util.ArrayList;
 
 /**
- * Définit une liste de tâche de calcul qui pourra être utilisée par les multiples threads lors du rendu d'une scène. Voir {@link multithreading.TileTask} pour la définition d'une tâche.<br>
- * Chaque thread pourra alors récupérer une tâche de la liste au moyen de la méthode getTask.<br>
- * Le thread ayant récupéré une tâche, le nombre de tâche donnée doit être incrémenté grâce à la méthode incrementTaskGiven.<br>
- * La gestion du nombre de tâche finie est laissée à l'utilisateur.  
+ * Definit une liste de tâche de calcul qui pourra etre utilisee par les multiples threads lors du rendu d'une scene. Voir {@link multithreading.TileTask} pour la definition d'une tâche.<br>
+ * Chaque thread pourra alors recuperer une tâche de la liste au moyen de la methode getTask.<br>
+ * Le thread ayant recupere une tâche, le nombre de tâche donnee doit etre incremente grâce a la methode incrementTaskGiven.<br>
+ * La gestion du nombre de tâche finie est laissee a l'utilisateur.  
  */
 public class ThreadsTaskList
 {
@@ -56,7 +56,7 @@ public class ThreadsTaskList
 	}
 	
 	/**
-	 * Permet d'initialiser la liste des tâches pour une largeur et hauteur de rendu donnée
+	 * Permet d'initialiser la liste des tâches pour une largeur et hauteur de rendu donnee
 	 * 
 	 * @param renderWidth Largeur en pixel de l'image rendue
 	 * @param renderHeight Hauteur en pixel de l'image rendue
@@ -65,7 +65,7 @@ public class ThreadsTaskList
 	{
 		this.taskList = new ArrayList<>();
 		
-		//Des tuiles de 64*64 pixels semblent être un bon choix arbitraire en terme de performances
+		//Des tuiles de 64*64 pixels semblent etre un bon choix arbitraire en terme de performances
 		int tilesWidth = 64;//renderWidth / 64;
 		int tilesHeight = 64;//renderHeight / 64;
 		
@@ -88,8 +88,8 @@ public class ThreadsTaskList
 	}
 	
 	/**
-	 * Permet de remettre à zéro l'avancement de la liste des tâches. i.e. la liste garde les mêmes tâches mais est prête à être réutilisée.
-	 * Cette méthode doit toujours être appelée avant une nouvelle utilisation des tâches de cette liste. 
+	 * Permet de remettre a zero l'avancement de la liste des tâches. i.e. la liste garde les memes tâches mais est prete a etre reutilisee.
+	 * Cette methode doit toujours etre appelee avant une nouvelle utilisation des tâches de cette liste. 
 	 */
 	public void resetTasksProgression()
 	{

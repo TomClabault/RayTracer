@@ -6,9 +6,9 @@ import materials.textures.*;
 public class MatteMaterial extends Material
 {
 	/**
-	 * Crée un matériau mat d'une certaine couleur
+	 * Cree un materiau mat d'une certaine couleur
 	 * 
-	 * @param color Couleur du matériau
+	 * @param color Couleur du materiau
 	 */
 	public MatteMaterial(Color color)
 	{
@@ -16,10 +16,10 @@ public class MatteMaterial extends Material
 	}
 	
 	/**
-	 * Crée un matériau mat d'une certaine couleur ayant une certaine texture procédurale
+	 * Cree un materiau mat d'une certaine couleur ayant une certaine texture procedurale
 	 * 
-	 * @param color Couleur du matériau
-	 * @param proceduralTexture Texture procédurale du matériau @link{textures.ProceduralTexture}
+	 * @param color Couleur du materiau
+	 * @param proceduralTexture Texture procedurale du materiau @link{textures.ProceduralTexture}
 	 */
 	public MatteMaterial(Color color, ProceduralTexture proceduralTexture)
 	{

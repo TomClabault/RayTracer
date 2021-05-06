@@ -54,40 +54,40 @@ import scene.lights.LightBulb;
 import scene.lights.PositionnalLight;
 
 /**
- * La classe contenant le Main qui gère la totalité de l'application
+ * La classe contenant le Main qui gere la totalite de l'application
 */
 public class MainApp extends Application {
     /**
-     * La hauteur de la résolution de la fenêtre du rendu définie par {@link gui.windows.ChooseRenderSettingsWindow}
+     * La hauteur de la resolution de la fenetre du rendu definie par {@link gui.windows.ChooseRenderSettingsWindow}
     */
     public static int HEIGHT;
     /**
-     * La largeur de la résolution de la fenêtre du rendu définie par {@link gui.windows.ChooseRenderSettingsWindow}
+     * La largeur de la resolution de la fenetre du rendu definie par {@link gui.windows.ChooseRenderSettingsWindow}
     */
     public static int WIDTH;
 
     /**
-     * Vaut true si le mode automatique est activé
+     * Vaut true si le mode automatique est active
      *
-     * Le mode automatique maximize la fenêtre de rendu et étire le rendu, le rendu devient pixélisé si la résolution du rendu est inférieur à la taille de la fenêtre
+     * Le mode automatique maximize la fenetre de rendu et etire le rendu, le rendu devient pixelise si la resolution du rendu est inferieur a la taille de la fenetre
      */
     public static boolean FULLSCREEN_MODE;
 
     /**
-     * True si le ray tracer ne doit rendre qu'une image et arrêter les calculs. False si le RayTracer doit rendre les images en temps
-     * réel (autorise ainsi les mouvements de caméra)
+     * True si le ray tracer ne doit rendre qu'une image et arreter les calculs. False si le RayTracer doit rendre les images en temps
+     * reel (autorise ainsi les mouvements de camera)
      */
     public static boolean SIMPLE_RENDER;
     
     /**
-     * Ouvre un explorateur de fichier et demande à l'utilisateur de choisir un fichier d'une ou plusieurs
-     * extensions autorisées par 'extensions' 
+     * Ouvre un explorateur de fichier et demande a l'utilisateur de choisir un fichier d'une ou plusieurs
+     * extensions autorisees par 'extensions' 
      * 
-     * @param stage La fenêtre mère de l'explorateur de fichier
-     * @param description La description des types de fichiers acceptés
-     * @param extensions La liste des extensions de fichiers qui seront autorisées pour le choix du fichier
+     * @param stage La fenetre mere de l'explorateur de fichier
+     * @param description La description des types de fichiers acceptes
+     * @param extensions La liste des extensions de fichiers qui seront autorisees pour le choix du fichier
      * 
-     * @return Le fichier choisi par l'utilisateur. Null si aucun fichier n'a été choisi
+     * @return Le fichier choisi par l'utilisateur. Null si aucun fichier n'a ete choisi
      */
     public static File chooseFile(Stage stage, String description, String... extensions)
     {
@@ -104,7 +104,7 @@ public class MainApp extends Application {
     }
     
     /**
-     * La méthode main de java
+     * La methode main de java
      * @param args
      */
     public static void main(String[] args) {
@@ -123,18 +123,18 @@ public class MainApp extends Application {
     }
     
     /**
-     * Contient la méthode à Override de {@link javafx.application.Application}
-     * Elle est exécutée dans le main
-     * @param stage Le stage de la fenêtre de rendu
+     * Contient la methode a Override de {@link javafx.application.Application}
+     * Elle est executee dans le main
+     * @param stage Le stage de la fenetre de rendu
      */
     public void start(Stage stage) 
     {
-    	//TODO (tom) clean le main avec des fonctions --> commence à être le bordel
+    	//TODO (tom) clean le main avec des fonctions --> commence a etre le bordel
     	//TODO (tom) n'activer le comptage du nombre d'intersections que sur demande (une feature 'debug' en gros) parce que ça tape dans les perfs
     	//mine de rien
     	File fileChosen = chooseFile(stage, "POV, PLY", "*.pov", "*.ply");
     
-    	if(fileChosen == null)//L'utilisateur n'a pas choisi de fichier / a annulé
+    	if(fileChosen == null)//L'utilisateur n'a pas choisi de fichier / a annule
     	{
     		Platform.exit();
     		System.exit(0);
@@ -153,7 +153,7 @@ public class MainApp extends Application {
 	   			rayTracingScene = createEmptyScene();
 	   			
 	   			Color gold = Color.web("D4AF37");
-	   			PlyParser plyParser = new PlyParser(new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(gold), 1), 4, new Vector(0, -0.5, 0));
+	   			PlyParser plyParser = new PlyParser(new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(gold), 0.75), 4, new Vector(0, -0.5, 0));
 	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
 	   			plyFileShape.getTriangleList().trimToSize();
 	   			
@@ -163,14 +163,14 @@ public class MainApp extends Application {
 	   	}
 	   	catch(InvalidParallelepipedException recExc)
 	   	{
-	   		System.out.println("Le rendu de la scène ne peut pas être effectué dû à un parallélépipède incorrect.");
+	   		System.out.println("Le rendu de la scene ne peut pas etre effectue dû a un parallelepipede incorrect.");
 
 	   		Platform.exit();
 	   		System.exit(0);
 	   	}
 	   	catch(InvalidSphereException sphereExc)
 	   	{
-	   		System.out.println("Le rendu de la scène ne peut pas être effectué dû à une sphère incorrecte.");
+	   		System.out.println("Le rendu de la scene ne peut pas etre effectue dû a une sphere incorrecte.");
 
 	   		Platform.exit();
 	   		System.exit(0);
@@ -199,7 +199,7 @@ public class MainApp extends Application {
         
 	   	RayTracer rayTracer = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT);
 
-        if(!MainApp.SIMPLE_RENDER)//On lance le rendu en temps réel s'il est désiré
+        if(!MainApp.SIMPLE_RENDER)//On lance le rendu en temps reel s'il est desire
         {
         	//TODO (tom) clean render window old
         	RenderWindowOld renderWindow = new RenderWindowOld(stage, rayTracer, rayTracingScene, rayTracerSettings);
@@ -259,9 +259,9 @@ public class MainApp extends Application {
         {
         	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1, skybox);
         }
-        catch (IllegalArgumentException exception)//Skybox mal chargée
+        catch (IllegalArgumentException exception)//Skybox mal chargee
         {
-        	System.err.println(exception.getMessage() + System.lineSeparator() + "Aucune skybox ne sera utilisée.");
+        	System.err.println(exception.getMessage() + System.lineSeparator() + "Aucune skybox ne sera utilisee.");
         	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1);
         }
 
@@ -288,9 +288,9 @@ public class MainApp extends Application {
         {
         	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1, skybox);
         }
-        catch (IllegalArgumentException exception)//Skybox mal chargée
+        catch (IllegalArgumentException exception)//Skybox mal chargee
         {
-        	System.err.println(exception.getMessage() + System.lineSeparator() + "Aucune skybox ne sera utilisée.");
+        	System.err.println(exception.getMessage() + System.lineSeparator() + "Aucune skybox ne sera utilisee.");
         	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1);
         }
 
@@ -315,9 +315,9 @@ public class MainApp extends Application {
     }
     
     /**
-     * La méthode de test pour ajouter des éléments 3d à une scène
-     * @deprecated Les éléments doivent désormais être importés à l'aide d'un fichier POV
-     * @return RayTracingScene contenant les éléments 3d
+     * La methode de test pour ajouter des elements 3d a une scene
+     * @deprecated Les elements doivent desormais etre importes a l'aide d'un fichier POV
+     * @return RayTracingScene contenant les elements 3d
      */
     public RayTracingScene generateUsualScene()
     {
@@ -350,9 +350,9 @@ public class MainApp extends Application {
         {
         	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1, skybox);
         }
-        catch (IllegalArgumentException exception)//Skybox mal chargée
+        catch (IllegalArgumentException exception)//Skybox mal chargee
         {
-        	System.err.println(exception.getMessage() + System.lineSeparator() + "Aucune skybox ne sera utilisée.");
+        	System.err.println(exception.getMessage() + System.lineSeparator() + "Aucune skybox ne sera utilisee.");
         	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1);
         }
 
@@ -361,9 +361,9 @@ public class MainApp extends Application {
     }
 
     /**
-     * Génère une 3d avec des éléments pour visualiser la roughness
-     * @return RaytracingScene contenant des éléments utilisant roughness
-     * @deprecated Les éléments doivent désormais être importés en utilisant un fichier POV
+     * Genere une 3d avec des elements pour visualiser la roughness
+     * @return RaytracingScene contenant des elements utilisant roughness
+     * @deprecated Les elements doivent desormais etre importes en utilisant un fichier POV
      */
     public RayTracingScene generateRoughnessDemoScene()
     {
@@ -394,9 +394,9 @@ public class MainApp extends Application {
         {
         	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1, skybox);
         }
-        catch (IllegalArgumentException exception)//Skybox mal chargée
+        catch (IllegalArgumentException exception)//Skybox mal chargee
         {
-        	System.err.println(exception.getMessage() + System.lineSeparator() + "Aucune skybox ne sera utilisée.");
+        	System.err.println(exception.getMessage() + System.lineSeparator() + "Aucune skybox ne sera utilisee.");
         	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1);
         }
 

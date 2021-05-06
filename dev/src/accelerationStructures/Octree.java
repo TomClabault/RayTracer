@@ -12,9 +12,9 @@ public class Octree
 {
 	private OctreeNode root;
 	private ArrayList<BoundingVolume> shapesVolumes;
-	private ArrayList<Shape> noVolumeShapes;//Shapes qui n'ont pas de bounding volume et doivent être traitées spécifiquement
+	private ArrayList<Shape> noVolumeShapes;//Shapes qui n'ont pas de bounding volume et doivent etre traitees specifiquement
 	//par la strucutre. Les plans par exemple sont infinis, ils n'ont pas de bounding volume. Ces formes ne seront
-	//pas insérées dans la hiérarchie
+	//pas inserees dans la hierarchie
 	
 	private BoundingBox bounds;
 	
@@ -29,7 +29,7 @@ public class Octree
 		computeOctreeBoundingBox();
 		squareifyBoundingBox();
 		
-		//Ajout des bounding volumes à la hiérarchie
+		//Ajout des bounding volumes a la hierarchie
 		for(int i = 0; i < shapesVolumes.size(); i++)
 			root.insert(sceneObjectsVolumes.get(i), bounds.getBounds(0), bounds.getBounds(1), maxDepth);
 		
@@ -58,20 +58,20 @@ public class Octree
 	
 	private void squareifyBoundingBox()
 	{
-		//Détermine quelle dimension de la bounding box est la plus grande. C'est à partie de cette plus grande dimension qu'on
+		//Determine quelle dimension de la bounding box est la plus grande. C'est a partie de cette plus grande dimension qu'on
 		//pourra faire le cube de l'octree, la bounding box de l'octree
 		double lengthX = this.bounds.getBounds(1).getX() - this.bounds.getBounds(0).getX();
 		double lengthY = this.bounds.getBounds(1).getY() - this.bounds.getBounds(0).getY();
 		double lengthZ = this.bounds.getBounds(1).getZ() - this.bounds.getBounds(0).getZ();
 		double maxLength = Math.max(lengthX, Math.max(lengthY, lengthZ));
 		
-		//De combien la bounding box a été aggrandie en X, Y et Z. On va vouloir recentrer le cube autour de tous les objets
+		//De combien la bounding box a ete aggrandie en X, Y et Z. On va vouloir recentrer le cube autour de tous les objets
 		double diffX = maxLength - lengthX;
 		double diffY = maxLength - lengthY;
 		double diffZ = maxLength - lengthZ;
 
-		//En déplaçant le cube négativement de diffX/2, diffY/2 et diffZ/2, on va recentrer le cube autour de tous les objets
-		///le cube n'était jusqu'alors pas centré
+		//En deplaçant le cube negativement de diffX/2, diffY/2 et diffZ/2, on va recentrer le cube autour de tous les objets
+		///le cube n'etait jusqu'alors pas centre
 		Point diffPoint = new Point(-diffX/2, -diffY/2, -diffZ/2);
 		
 		Point bound0 = this.bounds.getBounds(0);

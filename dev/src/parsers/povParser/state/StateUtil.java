@@ -7,7 +7,7 @@ import parsers.povParser.PovAutomat;
 
 
 /**
- * énumération décrivant les différents états d'un modificateur d'objet (couleur, texture ...)
+ * enumeration decrivant les differents etats d'un modificateur d'objet (couleur, texture ...)
  */
 enum Attribute
 {
@@ -28,7 +28,7 @@ enum Attribute
 }
 
 /**
- * Ctte classe décrit l'état "modificateur de figure"
+ * Ctte classe decrit l'etat "modificateur de figure"
  */
 public abstract class StateUtil
 {
@@ -36,9 +36,9 @@ public abstract class StateUtil
     private int nbBracket = 1;
 
     /**
-     * Cette méthode sert à renvoyer le prochain état du jeton
+     * Cette methode sert a renvoyer le prochain etat du jeton
      * @param context contexte courant de l'automate
-     * @return L'état décrivant l'objet qui va être parsée
+     * @return L'etat decrivant l'objet qui va etre parsee
      */
     public Attribute parsePropertryAndGetState(PovAutomat context)
     {
@@ -98,10 +98,10 @@ public abstract class StateUtil
 
 
     /**
-     * Cette méthode sert à tester la présence de fin de bloc après une accolade fermante, s'il y a un objet après un certain
-     * nombre d'accolades, on renvoit l'état décrivant cette objet
+     * Cette methode sert a tester la presence de fin de bloc apres une accolade fermante, s'il y a un objet apres un certain
+     * nombre d'accolades, on renvoit l'etat decrivant cette objet
      * @param context contexte courant de l'automate
-     * @return l'état décrivant l'objet ou létat extérieur si l'on se trouve en fin de bloc
+     * @return l'etat decrivant l'objet ou letat exterieur si l'on se trouve en fin de bloc
      */
     public Attribute checkEndingBracket(PovAutomat context)
     {
@@ -127,9 +127,9 @@ public abstract class StateUtil
     }
 
     /**
-     * Cette méthode sert à parser les modificateurs d'objet afin de les ajouter à une figure
+     * Cette methode sert a parser les modificateurs d'objet afin de les ajouter a une figure
      * @param context contexte courant de l'automate
-     * @return Objet de type Attribute qui décrit toutes les modifications apportées à une figure
+     * @return Objet de type Attribute qui decrit toutes les modifications apportees a une figure
      */
     public Material parseAttributes(PovAutomat context) throws RuntimeException
     {

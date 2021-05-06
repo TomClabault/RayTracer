@@ -6,8 +6,8 @@ import maths.Ray;
 import maths.Vector;
 
 /**
- * Représente le volume constitué de 7 paires de plans parallèles encadrant au mieux un objet de la scène donné
- * Peut être vu comme une BoundingBox plus évoluée
+ * Represente le volume constitue de 7 paires de plans paralleles encadrant au mieux un objet de la scene donne
+ * Peut etre vu comme une BoundingBox plus evoluee
  */
 public class BoundingVolume 
 {
@@ -30,7 +30,7 @@ public class BoundingVolume
 	private Shape enclosedObject;
 	
 	/**
-	 * Crée un bounding volume mais ne définit pas ses limites.
+	 * Cree un bounding volume mais ne definit pas ses limites.
 	 */
 	public BoundingVolume()
 	{
@@ -45,11 +45,11 @@ public class BoundingVolume
 	}
 	
 	/**
-	 * Etend le bounding volume courant en fonction de celui passé en paramètre. Si le bounding volume passé en paramètre est plus
-	 * 'gros' que le bouding volume courant, le volume courant sera étendu et sera, arès l'appel à la fonction, au moins
+	 * Etend le bounding volume courant en fonction de celui passe en parametre. Si le bounding volume passe en parametre est plus
+	 * 'gros' que le bouding volume courant, le volume courant sera etendu et sera, ares l'appel a la fonction, au moins
 	 * aussi gros que 'extender'
 	 * 
-	 * @param extender Le volume qui va tenter d'étendre le volume courant (this)
+	 * @param extender Le volume qui va tenter d'etendre le volume courant (this)
 	 */
 	public void extendsBy(BoundingVolume extender)
 	{
@@ -61,7 +61,7 @@ public class BoundingVolume
 	}
 
 	/**
-	 * @return Le point de coordonnées (x, y, z) représentant le centroïde du volume
+	 * @return Le point de coordonnees (x, y, z) representant le centroïde du volume
 	 */
 	public Point getCentroid()
 	{
@@ -69,11 +69,11 @@ public class BoundingVolume
 	}
 	
 	/**
-	 * Permet d'obtenir le paramètre dMin d'une paire de plan représentant le BoundingVolume
+	 * Permet d'obtenir le parametre dMin d'une paire de plan representant le BoundingVolume
 	 * 
-	 * @param index L'indice de la paire de plan dont le paramètre d est souhaité. Entier entre 0 et 7
+	 * @param index L'indice de la paire de plan dont le parametre d est souhaite. Entier entre 0 et 7
 	 * 
-	 * @return Le paramètre dMin de la paire de plan numéro 'index'
+	 * @return Le parametre dMin de la paire de plan numero 'index'
 	 */
 	public double getDMin(int index)
 	{
@@ -81,11 +81,11 @@ public class BoundingVolume
 	}
 	
 	/**
-	 * Permet d'obtenir le paramètre dMax d'une paire de plan représentant le BoundingVolume
+	 * Permet d'obtenir le parametre dMax d'une paire de plan representant le BoundingVolume
 	 * 
-	 * @param index L'indice de la paire de plan dont le paramètre d est souhaité. Entier entre 0 et 7
+	 * @param index L'indice de la paire de plan dont le parametre d est souhaite. Entier entre 0 et 7
 	 * 
-	 * @return Le paramètre dMax de la paire de plan numéro 'index'
+	 * @return Le parametre dMax de la paire de plan numero 'index'
 	 */
 	public double getDMax(int index)
 	{
@@ -93,7 +93,7 @@ public class BoundingVolume
 	}
 	
 	/**
-	 * @return L'objet encadré par le bounding volume
+	 * @return L'objet encadre par le bounding volume
 	 */
 	public Shape getEnclosedObject()
 	{
@@ -101,9 +101,9 @@ public class BoundingVolume
 	}
 	
 	/**
-	 * Détermine si le rayon 'ray' passé en paramètre intersecte le BoundingVolume ou non
+	 * Determine si le rayon 'ray' passe en parametre intersecte le BoundingVolume ou non
 	 * 
-	 * @param ray Le rayon qui doit être testé contre le bounding volume
+	 * @param ray Le rayon qui doit etre teste contre le bounding volume
 	 * 
 	 * @return True si le rayon a au moins une intersection avec le bounding volume, false sinon
 	 */
@@ -148,9 +148,9 @@ public class BoundingVolume
 	}
 	
 	/**
-	 * Redéfini l'objet encadré par le bounding volume
+	 * Redefini l'objet encadre par le bounding volume
 	 * 
-	 * @param enclosedObject L'objet encadré par le bounding volume
+	 * @param enclosedObject L'objet encadre par le bounding volume
 	 */
 	public void setEnclosedObject(Shape enclosedObject)
 	{
@@ -158,11 +158,11 @@ public class BoundingVolume
 	}
 	
 	/**
-	 * Permet de redéfinir les paramètres dMin et dMax d'une paire de plan du bouding volume
+	 * Permet de redefinir les parametres dMin et dMax d'une paire de plan du bouding volume
 	 * 
-	 * @param near 	Le nouveau paramètre de dMin
-	 * @param far 	Le nouveau paramètre de dMax
-	 * @param index	Le numéro de la paire de plan dont les dMin dMax vont être redéfinis. Entier entre 0 et 7
+	 * @param near 	Le nouveau parametre de dMin
+	 * @param far 	Le nouveau parametre de dMax
+	 * @param index	Le numero de la paire de plan dont les dMin dMax vont etre redefinis. Entier entre 0 et 7
 	 */
 	public void setBounds(double near, double far, int index)
 	{

@@ -33,7 +33,7 @@ public class NoAccelerationStructure implements AccelerationStructure
 				
 			interStats.incrementIntersectionTestsBy(shape.getSubObjectCount());
 			Double t = shape.intersect(ray, tempInterPoint, tempNormalAtInter);
-			if(t != null)//Si on a trouvé une intersection
+			if(t != null)//Si on a trouve une intersection
 			{
 				if(tMin == null || t < tMin)
 				{
@@ -46,7 +46,7 @@ public class NoAccelerationStructure implements AccelerationStructure
 			}
 		}
 		
-		if(closestIntersectedObject != null)//Si on a bel et bien trouvé un point d'intersection entre le rayon et un objet de la scène
+		if(closestIntersectedObject != null)//Si on a bel et bien trouve un point d'intersection entre le rayon et un objet de la scene
 		{
 			if(outInterPoint != null)
 				outInterPoint.copyIn(closestInterPoint);

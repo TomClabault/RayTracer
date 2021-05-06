@@ -1,8 +1,8 @@
 package maths;
 
 /**
- * Permet de créer une matrice de rotation autour d'un axe donné du monde pour un certain angle de rotation
- * Les "axes du monde" sont supposés être les axes standards. C'est à dire:
+ * Permet de creer une matrice de rotation autour d'un axe donne du monde pour un certain angle de rotation
+ * Les "axes du monde" sont supposes etre les axes standards. C'est a dire:
  * X = (1, 0, 0)
  * Y = (0, 1, 0)
  * Z = (0, 0, 1)
@@ -10,17 +10,17 @@ package maths;
 public class RotationMatrix extends MatrixD 
 {
 	/**
-	 * Constante permettant de spécifier l'axe X du monde
+	 * Constante permettant de specifier l'axe X du monde
 	 */
 	public static final int xAxis = 0;
 	
 	/**
-	 * Constante permettant de spécifier l'axe Y du monde
+	 * Constante permettant de specifier l'axe Y du monde
 	 */
 	public static final int yAxis = 1;
 	
 	/**
-	 * Constante permettant de spécifier l'axe Z du monde
+	 * Constante permettant de specifier l'axe Z du monde
 	 */
 	public static final int zAxis = 2;
 
@@ -78,7 +78,7 @@ public class RotationMatrix extends MatrixD
 			break;
 		}
 		default:
-			throw new IllegalArgumentException("L'axe de rotation de la matrice est incorrect. Doit être RotationMatrix.xAxis, RotationMatrix.yAxis ou RotationMatrix.zAxis");
+			throw new IllegalArgumentException("L'axe de rotation de la matrice est incorrect. Doit etre RotationMatrix.xAxis, RotationMatrix.yAxis ou RotationMatrix.zAxis");
 		}
 		
 		super.matrix[0][3] = 0;

@@ -18,11 +18,11 @@ import maths.ColorOperations;
 public class ImageUtil 
 {
 	/**
-	 * Permet de passer d'une image sRGB dont les composantes des pixels sont non-linéaires de gamma 2.2 à son équivalent RGB linéaire
+	 * Permet de passer d'une image sRGB dont les composantes des pixels sont non-lineaires de gamma 2.2 a son equivalent RGB lineaire
 	 * 
-	 * @param sRGBImage L'image sRGB gamma 2.2 à convertir
+	 * @param sRGBImage L'image sRGB gamma 2.2 a convertir
 	 * 
-	 * @return Retourne l'image sRGBImage convertie dans l'espace de couleur RGB linéaire
+	 * @return Retourne l'image sRGBImage convertie dans l'espace de couleur RGB lineaire
 	 */
 	public static Image sRGBImageToLinear(Image sRGBImage)
 	{
@@ -66,10 +66,10 @@ public class ImageUtil
 	}
 	
 	/**
-	 * Permet d'écrire le rendu d'une scène JavaFX sur le disque
+	 * Permet d'ecrire le rendu d'une scene JavaFX sur le disque
 	 * 
-	 * @param javaFXScene Scène javaFX dont on veut faire un instantané à sauvegarder sur le disque
-	 * @param outputPath Le fichier dans lequel sauvegarder l'instantané
+	 * @param javaFXScene Scene javaFX dont on veut faire un instantane a sauvegarder sur le disque
+	 * @param outputPath Le fichier dans lequel sauvegarder l'instantane
 	 */
 	public static void writeSceneToDiskPath(Scene javaFXScene, String outputPath) throws IOException
 	{
@@ -80,10 +80,10 @@ public class ImageUtil
 	/**
 	 * Code de: https://stackoverflow.com/questions/34194427/javafx-2-save-crisp-snapshot-of-scene-to-disk
 	 * 
-	 * Permet d'écrire le rendu d'une scène JavaFX sur le disque
+	 * Permet d'ecrire le rendu d'une scene JavaFX sur le disque
 	 * 
-	 * @param javaFXScene Scène javaFX dont on veut faire un instantané à sauvegarder sur le disque
-	 * @param output Le fichier dans lequel sauvegarder l'instantané
+	 * @param javaFXScene Scene javaFX dont on veut faire un instantane a sauvegarder sur le disque
+	 * @param output Le fichier dans lequel sauvegarder l'instantane
 	 */
 	public static void writeSceneToDiskFile(Scene javaFXScene, File output) throws IOException
 	{

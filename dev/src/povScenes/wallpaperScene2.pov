@@ -101,7 +101,7 @@ sphere
 }
 
 /*
-Green derrière le verre
+Green derriere le verre
 */
 sphere 
 { 
@@ -147,7 +147,7 @@ sphere
 }
 
 /*
-	deux sphères sur les côtés
+	deux spheres sur les cotes
 */
 
 sphere 

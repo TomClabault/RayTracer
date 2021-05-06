@@ -48,7 +48,7 @@ public class Parallelepiped extends ArbitraryTriangleShape implements Shape
 		if(coin1.getX() == coin2.getX()
 		|| coin1.getY() == coin2.getY() 
 		|| coin1.getZ() == coin2.getZ())//Si le rectangle est "plat"
-			throw new InvalidParallelepipedException("Le parallélépipède que vous avez essayé de créer était plat.");
+			throw new InvalidParallelepipedException("Le parallelepipede que vous avez essaye de creer etait plat.");
 			
 		this.A = coin1;
 		this.G = coin2;
@@ -65,7 +65,7 @@ public class Parallelepiped extends ArbitraryTriangleShape implements Shape
 		super(material);
 		
 		if(height == 0 || length == 0 || width == 0)
-			throw new InvalidParallelepipedException("Le parallélépipède que vous avez essayé de créer était plat.");
+			throw new InvalidParallelepipedException("Le parallelepipede que vous avez essaye de creer etait plat.");
 		
 		this.A = A;
 		this.height = height;

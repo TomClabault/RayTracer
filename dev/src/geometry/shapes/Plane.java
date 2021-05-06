@@ -12,15 +12,15 @@ import maths.Vector;
 public class Plane extends ShapeUtil implements Shape
 {
 	//Equation de plan: (p - point).normal = 0
-	private Vector normal;//partie (A, B, C) de l'équation
-	private Point point;//partie D de l'équation
+	private Vector normal;//partie (A, B, C) de l'equation
+	private Point point;//partie D de l'equation
 	
 	/**
-	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan
+	 * Cree un plan a partir d'un vecteur normal au plan et d'un point appartenant au plan
 	 * 
 	 * @param normal 	Vecteur normal au plan
-	 * @param distance 	Distance du plan par rapport à l'origine dans la direction du vecteur 'normal'
-	 * @param material Matériau qui sera utilisé pour le rendu du plan
+	 * @param distance 	Distance du plan par rapport a l'origine dans la direction du vecteur 'normal'
+	 * @param material Materiau qui sera utilise pour le rendu du plan
 	 */
 	public Plane(Vector normal, double distance, Material material)
 	{
@@ -28,11 +28,11 @@ public class Plane extends ShapeUtil implements Shape
 	}
 	
 	/**
-	 * Crée un plan à partir d'un vecteur normal au plan et d'un point appartenant au plan 
+	 * Cree un plan a partir d'un vecteur normal au plan et d'un point appartenant au plan 
 	 * 
 	 * @param normal Vecteur normal au plan
 	 * @param point Vector3D par lequel passe le plan
-	 * @param material Matériau qui sera utilisé pour le rendu du plan
+	 * @param material Materiau qui sera utilise pour le rendu du plan
 	 */
 	public Plane(Vector normal, Point point, Material material)
 	{
@@ -63,7 +63,7 @@ public class Plane extends ShapeUtil implements Shape
 	/**
 	 * Permet d'obtenir la normal du plan
 	 * 
-	 * @param point Paramètre ignoré
+	 * @param point Parametre ignore
 	 * 
 	 * @return Normale du plan
 	 */
@@ -91,20 +91,20 @@ public class Plane extends ShapeUtil implements Shape
 	}
 	
 	/**
-	 * Calcule de façon analytique l'intersection d'un rayon et d'une sphère
+	 * Calcule de façon analytique l'intersection d'un rayon et d'une sphere
 	 * 
-	 * @param ray Le rayon avec lequel l'intersection avec la sphère doit être calculée
-	 * @param outInterPoint		Si un point d'intersection est trouvé, les coordonnées du point d'intersection seront placées dans ce paramètre,
-	 * 							écrasant toutes coordonées pré-existantes
-	 * @param outNormalAtInter 	Ce vecteur contiendra la normale du plan si un point d'intersection a été trouvé. Ce paramètre est inchangé sinon. 
-	 * 							Si ce paramètre est null, la normale au point d'intersection ne sera pas stockée dans outNormalAtInter, même si un point d'intersection a été trouvé
+	 * @param ray Le rayon avec lequel l'intersection avec la sphere doit etre calculee
+	 * @param outInterPoint		Si un point d'intersection est trouve, les coordonnees du point d'intersection seront placees dans ce parametre,
+	 * 							ecrasant toutes coordonees pre-existantes
+	 * @param outNormalAtInter 	Ce vecteur contiendra la normale du plan si un point d'intersection a ete trouve. Ce parametre est inchange sinon. 
+	 * 							Si ce parametre est null, la normale au point d'intersection ne sera pas stockee dans outNormalAtInter, meme si un point d'intersection a ete trouve
 	 * 
-	 * @return Retourne le point d'intersection avec la sphère s'il existe (s'il y a deux points d'intersection, ne retourne que le point le plus près de l'origine du rayon). Retourne null sinon.
+	 * @return Retourne le point d'intersection avec la sphere s'il existe (s'il y a deux points d'intersection, ne retourne que le point le plus pres de l'origine du rayon). Retourne null sinon.
 	 */
 	public Double intersect(Ray ray, Point outInterPoint, Vector outNormalAtInter) 
 	{
 		double NDir = Vector.dotProduct(normal, ray.getDirection());
-		if(NDir > 0.0000001d && NDir < 0.0000001d)//Le rayon et le plan sont parallèles
+		if(NDir > 0.0000001d && NDir < 0.0000001d)//Le rayon et le plan sont paralleles
 			return null;
 			
 		

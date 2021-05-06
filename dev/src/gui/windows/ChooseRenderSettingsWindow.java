@@ -48,7 +48,7 @@ public class ChooseRenderSettingsWindow
 	}
 	
 	/**
-	 * Méthode éxécutant le code pour afficher la fenêtre du choix de rendu.
+	 * Methode executant le code pour afficher la fenetre du choix de rendu.
 	 */
 	public void execute() {
 		this.windowStage = new Stage();
@@ -78,7 +78,7 @@ public class ChooseRenderSettingsWindow
         this.inputHauteur = new TextField("hauteur");
         
         
-        this.fullscreenCheckbox = new CheckBox("Adapter à l'écran");
+        this.fullscreenCheckbox = new CheckBox("Adapter a l'ecran");
         this.simpleRenderCheckbox = new CheckBox("Rendre une seule image");
         
         Button validateButton = new Button("Valider");
@@ -86,7 +86,7 @@ public class ChooseRenderSettingsWindow
         GridPane.setHalignment(validateButton, HPos.CENTER);
         GridPane.setHalignment(cancelButton, HPos.CENTER);
 
-        Label chooseSettingsLabel = new Label("Choisissez les réglages de votre rendu:");
+        Label chooseSettingsLabel = new Label("Choisissez les reglages de votre rendu:");
         this.settingsVBox = new VBox();
         this.settingsVBox.setAlignment(Pos.CENTER);
         this.settingsVBox.getChildren().addAll(new Separator(),
@@ -155,7 +155,7 @@ public class ChooseRenderSettingsWindow
     		
             this.windowStage.close();
 		} catch (NumberFormatException e) {
-			System.out.println("Les arguments doivent être des entiers positifs");
+			System.out.println("Les arguments doivent etre des entiers positifs");
 		}
 	}
 	

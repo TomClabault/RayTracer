@@ -22,9 +22,9 @@ public class ArbitraryTriangleShape implements Shape
 	}
 	
 	/**
-	 * Permet d'ajouter un triangle à la liste de triangles de la forme
+	 * Permet d'ajouter un triangle a la liste de triangles de la forme
 	 * 
-	 * @param triangle Le triangle à ajouter
+	 * @param triangle Le triangle a ajouter
 	 */
 	public void addTriangle(Triangle triangle)
 	{
@@ -112,7 +112,7 @@ public class ArbitraryTriangleShape implements Shape
 			if (intersectedTriangle != null)
 				outNormalAtInter.copyIn(intersectedTriangle.getNormal(null));
 		
-		if(closestInterPoint != null && outInterPoint != null)//Si on a trouvé une intersection et que le point de sortie n'est pas null et qu'il
+		if(closestInterPoint != null && outInterPoint != null)//Si on a trouve une intersection et que le point de sortie n'est pas null et qu'il
 		//peut donc accueillir le nouveau point d'intersection
 			outInterPoint.copyIn(closestInterPoint);
 		
@@ -121,9 +121,9 @@ public class ArbitraryTriangleShape implements Shape
 	
 	/**
 	 * {@link geometry.Shape#getNormal} 
-	 * @deprecated Utiliser 'outNormalAtInter' de {@link geometry.ArbitraryTriangleShape#intersect(Ray, Vector)} pour récupérer la normal 
-	 * à un point d'intersection.
-	 * Cette méthode n'est pas fonctionnelle
+	 * @deprecated Utiliser 'outNormalAtInter' de {@link geometry.ArbitraryTriangleShape#intersect(Ray, Vector)} pour recuperer la normal 
+	 * a un point d'intersection.
+	 * Cette methode n'est pas fonctionnelle
 	 */
 	public Vector getNormal(Point point)
 	{
@@ -141,7 +141,7 @@ public class ArbitraryTriangleShape implements Shape
 	/**
 	 * {@link geometry.Shape#getSubObjectCount()}
 	 * 
-	 * @return Le nombre de triangles dont est composée la forme
+	 * @return Le nombre de triangles dont est composee la forme
 	 */
 	@Override
 	public int getSubObjectCount() 
@@ -174,7 +174,7 @@ public class ArbitraryTriangleShape implements Shape
 	}
 	
 	/**
-	 * Peut produire de très grosses chaîne de caractère.
+	 * Peut produire de tres grosses chaîne de caractere.
 	 */
 	@Override
 	public String toString()

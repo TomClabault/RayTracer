@@ -3,7 +3,7 @@ package materials;
 import javafx.scene.paint.Color;
 
 /**
- * Permet de créer un matériau en verre qui réfracte la lumière et la réfléchit en proportions données par la formule de Fresnel
+ * Permet de creer un materiau en verre qui refracte la lumiere et la reflechit en proportions donnees par la formule de Fresnel
  */
 public class GlassMaterial extends Material
 {

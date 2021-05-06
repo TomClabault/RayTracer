@@ -6,9 +6,9 @@ import materials.textures.*;
 public class MetallicMaterial extends Material
 {
 	/**
-	 * Crée un matériau d'une certaine couleur ayant des reflets métalliques
+	 * Cree un materiau d'une certaine couleur ayant des reflets metalliques
 	 * 
-	 * @param color La couleur du matériau métallique
+	 * @param color La couleur du materiau metallique
 	 */
 	public MetallicMaterial(Color color)
 	{
@@ -16,10 +16,10 @@ public class MetallicMaterial extends Material
 	}
 	
 	/**
-	 * Crée un matériau d'une certaine couleur ayant des reflets métalliques et une certaine texture procédurale
+	 * Cree un materiau d'une certaine couleur ayant des reflets metalliques et une certaine texture procedurale
 	 * 
-	 * @param color La couleur du matériau métallique
-	 * @param proceduralTexture Texture procédurale du matériau @link{textures.ProceduralTexture}
+	 * @param color La couleur du materiau metallique
+	 * @param proceduralTexture Texture procedurale du materiau @link{textures.ProceduralTexture}
 	 */
 	public MetallicMaterial(Color color, ProceduralTexture proceduralTexture)
 	{

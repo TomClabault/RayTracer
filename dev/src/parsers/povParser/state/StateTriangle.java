@@ -11,7 +11,7 @@ import java.io.StreamTokenizer;
 
 
 /**
- * énumération décrivant les différents états d'un objet triangle
+ * enumeration decrivant les differents etats d'un objet triangle
  */
 enum Trianglecontent
 {
@@ -24,19 +24,19 @@ enum Trianglecontent
 }
 
 /**
- * Classe représentant l'état Triangle
+ * Classe representant l'etat Triangle
  */
 public class StateTriangle extends StateUtil implements StateToken
 {
     /**
-     * Cette méthode effectue le parsing d'un objet triangle
+     * Cette methode effectue le parsing d'un objet triangle
      * @param context contexte courant de l'automate
-     * @return Un objet Shape décrivant le triangle
+     * @return Un objet Shape decrivant le triangle
      */
     @Override
     public Shape parse(PovAutomat context)
     {
-        int nextToken = context.callNextToken(); //accolade ouvrante après le mot triangle
+        int nextToken = context.callNextToken(); //accolade ouvrante apres le mot triangle
 
         StreamTokenizer st = context.getStreamTokenizer();
         context.callNextToken();
