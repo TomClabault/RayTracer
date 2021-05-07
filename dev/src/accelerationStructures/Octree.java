@@ -3,6 +3,9 @@ package accelerationStructures;
 import java.util.ArrayList;
 
 import geometry.Shape;
+import geometry.shapes.Parallelepiped;
+import javafx.scene.paint.Color;
+import materials.MatteMaterial;
 import maths.Point;
 import maths.Ray;
 import maths.Vector;
@@ -66,18 +69,10 @@ public class Octree
 		double maxLength = Math.max(lengthX, Math.max(lengthY, lengthZ));
 		
 		//De combien la bounding box a ete aggrandie en X, Y et Z. On va vouloir recentrer le cube autour de tous les objets
-		double diffX = maxLength - lengthX;
-		double diffY = maxLength - lengthY;
-		double diffZ = maxLength - lengthZ;
-
-		//En deplaçant le cube negativement de diffX/2, diffY/2 et diffZ/2, on va recentrer le cube autour de tous les objets
-		///le cube n'etait jusqu'alors pas centre
-		Point diffPoint = new Point(-diffX/2, -diffY/2, -diffZ/2);
+		Point miniMaxi = Point.add(this.bounds.getBounds(0), this.bounds.getBounds(1));
+		Point maxLengthPoint = new Point(maxLength, maxLength, maxLength);
 		
-		Point bound0 = this.bounds.getBounds(0);
-		Point bound1 = this.bounds.getBounds(1);
-		
-		this.bounds.setBound(Point.add(bound0, diffPoint), 0);
-		this.bounds.setBound(Point.add(bound1, diffPoint), 1);
+		this.bounds.setBound(Point.scalarMul(0.5, Point.sub(miniMaxi, maxLengthPoint)), 0);
+		this.bounds.setBound(Point.scalarMul(0.5, Point.add(miniMaxi, maxLengthPoint)), 1);
 	}
 }

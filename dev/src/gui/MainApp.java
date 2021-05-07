@@ -153,13 +153,13 @@ public class MainApp extends Application {
 	   		{
 	   			rayTracingScene = createEmptyScene();
 	   			
-	   			Color gold = Color.web("D4AF37");
-	   			PlyParser plyParser = new PlyParser(new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(gold), 0.75), 4, new Vector(0, -0.5, 0));
-	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
-	   			plyFileShape.getTriangleList().trimToSize();
-	   			
-	   			for(Triangle triangle : plyFileShape.getTriangleList())
-	   				rayTracingScene.addShape(triangle);
+//	   			Color gold = Color.web("D4AF37");
+//	   			PlyParser plyParser = new PlyParser(new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(gold), 0.75), 4, new Vector(0, -0.5, 0));
+//	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
+//	   			plyFileShape.getTriangleList().trimToSize();
+//	   			
+//	   			for(Triangle triangle : plyFileShape.getTriangleList())
+//	   				rayTracingScene.addShape(triangle);
 	   		}
 	   	}
 	   	catch(InvalidParallelepipedException recExc)
@@ -193,14 +193,14 @@ public class MainApp extends Application {
 	   	rayTracingScene.setAccelerationStructure(new BVHAccelerationStructure(rayTracingScene.getSceneObjects(), 16));
 	   	//rayTracingScene.setAccelerationStructure(new NoAccelerationStructure(rayTracingScene.getSceneObjects()));
 	   	
-        RayTracerSettings rayTracerSettings = new RayTracerSettings(1, 4, 9, 4);
+        RayTracerSettings rayTracerSettings = new RayTracerSettings(Runtime.getRuntime().availableProcessors(), 4, 9, 4);
        
 	   	ChooseRenderSettingsWindow renderSettingsWindow = new ChooseRenderSettingsWindow(rayTracerSettings);
         renderSettingsWindow.execute();
         
 	   	RayTracer rayTracer = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT);
 
-        if(!MainApp.SIMPLE_RENDER)//On lance le rendu en temps reel s'il est desire
+        if(!MainApp.SIMPLE_RENDER)//On lance le rendu en temps reel s'il est voulu
         {
         	//TODO (tom) clean render window old
         	RenderWindowOld renderWindow = new RenderWindowOld(stage, rayTracer, rayTracingScene, rayTracerSettings);
@@ -299,14 +299,54 @@ public class MainApp extends Application {
         return sceneRT;
     }
     
-    public RayTracingScene createTestingScene()
+    public RayTracingScene createBVHTestingScene()
     {
-    	Camera cameraRT = new Camera(new Point(0, 0, 0), 0, 0, 45);
+    	Camera cameraRT = new Camera(new Point(3, -1, 3), 0, 0, 45);
         PositionnalLight l = new LightBulb(new Point(2, 2, 1), 1);
 
         ArrayList<Shape> shapeList = new ArrayList<>();
 
-        shapeList.add(new Sphere(new Point(0, 0, -3), 1, new MatteMaterial(Color.rgb(0, 0, 0))));
+        shapeList.add(new Triangle(new Point(0, 0, -1), new Point(1, 0, -1), new Point(0, 1, -1), new MatteMaterial(Color.RED)));
+        shapeList.add(new Triangle(new Point(1.5, 0, -1), new Point(2.5, 0, -1), new Point(2.5, 1, -1), new MatteMaterial(Color.RED)));
+        shapeList.add(new Triangle(new Point(0, -1.5, -1), new Point(1, -1.5, -1), new Point(0, -0.5, -1), new MatteMaterial(Color.RED)));
+        shapeList.add(new Triangle(new Point(1.5, -1.5, -1), new Point(2.5, -1.5, -1), new Point(1.5, -0.5, -1), new MatteMaterial(Color.RED)));
+        
+        shapeList.add(new Triangle(new Point(0, 0, -2), new Point(1, 0, -2), new Point(0, 1, -2), new MatteMaterial(Color.RED)));
+        shapeList.add(new Triangle(new Point(1.5, 0, -2), new Point(2.5, 0, -2), new Point(2.5, 1, -2), new MatteMaterial(Color.RED)));
+        shapeList.add(new Triangle(new Point(0, -1.5, -2), new Point(1, -1.5, -2), new Point(0, -0.5, -2), new MatteMaterial(Color.RED)));
+        shapeList.add(new Triangle(new Point(1.5, -1.5, -2), new Point(2.5, -1.5, -2), new Point(1.5, -0.5, -2), new MatteMaterial(Color.RED)));
+        
+        
+        
+        
+        
+//        shapeList.add(new Triangle(new Point(3.5, 0, -1), new Point(4.5, 0, -1), new Point(3.5, 1, -1), new MatteMaterial(Color.RED)));
+//        shapeList.add(new Triangle(new Point(5, 0, -1), new Point(6, 0, -1), new Point(6, 1, -1), new MatteMaterial(Color.RED)));
+//        shapeList.add(new Triangle(new Point(3.5, -1.5, -1), new Point(4.5, -1.5, -1), new Point(3.5, -0.5, -1), new MatteMaterial(Color.RED)));
+//        shapeList.add(new Triangle(new Point(5, -1.5, -1), new Point(6, -1.5, -1), new Point(5, -0.5, -1), new MatteMaterial(Color.RED)));
+//        
+//        shapeList.add(new Triangle(new Point(3.5, 0, -2), new Point(4.5, 0, -2), new Point(3.5, 1, -2), new MatteMaterial(Color.RED)));
+//        shapeList.add(new Triangle(new Point(5, 0, -2), new Point(6, 0, -2), new Point(6, 1, -2), new MatteMaterial(Color.RED)));
+//        shapeList.add(new Triangle(new Point(3.5, -1.5, -2), new Point(4.5, -1.5, -2), new Point(3.5, -0.5, -2), new MatteMaterial(Color.RED)));
+//        shapeList.add(new Triangle(new Point(5, -1.5, -2), new Point(6, -1.5, -2), new Point(5, -0.5, -2), new MatteMaterial(Color.RED)));
+//        
+//        
+//        
+//        
+//        
+//        shapeList.add(new Triangle(new Point(3.5, -3.5, -1), new Point(4.5, -3.5, -1), new Point(3.5, -2.5, -1), new MatteMaterial(Color.RED)));
+//        shapeList.add(new Triangle(new Point(5, -3.5, -1), new Point(6, -3.5, -1), new Point(6, -2.5, -1), new MatteMaterial(Color.RED)));
+//        shapeList.add(new Triangle(new Point(3.5, -5, -1), new Point(4.5, -5, -1), new Point(3.5, -4, -1), new MatteMaterial(Color.RED)));
+//        shapeList.add(new Triangle(new Point(5, -5, -1), new Point(6, -5, -1), new Point(5, -4, -1), new MatteMaterial(Color.RED)));
+//        
+//        shapeList.add(new Triangle(new Point(3.5, -3.5, -2), new Point(4.5, -3.5, -2), new Point(3.5, -2.5, -2), new MatteMaterial(Color.RED)));
+//        shapeList.add(new Triangle(new Point(5, -3.5, -2), new Point(6, -3.5, -2), new Point(6, -2.5, -2), new MatteMaterial(Color.RED)));
+//        shapeList.add(new Triangle(new Point(3.5, -5, -2), new Point(4.5, -5, -2), new Point(3.5, -4, -2), new MatteMaterial(Color.RED)));
+//        shapeList.add(new Triangle(new Point(5, -5, -2), new Point(6, -5, -2), new Point(5, -4, -2), new MatteMaterial(Color.RED)));
+        
+        
+        
+        
         
         RayTracingScene sceneRT = null;
         

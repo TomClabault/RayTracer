@@ -138,12 +138,7 @@ public class BoundingVolume
 				tFarIntersect = tFar;
 			
 			if(tNearIntersect > tFarIntersect)
-			{
-				tNearIntersect = null;
-				tFarIntersect = null;
-				
 				return null;
-			}
 		}
 		
 		return new Double[] {tNearIntersect, tFarIntersect};

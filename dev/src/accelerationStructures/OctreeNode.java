@@ -136,7 +136,7 @@ public class OctreeNode
 			//On autorise l'ajout du noeud si le noeud contient moins de 9 volumes ou alors si le noeud est a la profondeur
 			//maximale. Dans ce cas, on va juste stacker tous les volumes dans le noeud puisque de toute façon
 			//on a pas le droit de construire l'arbre plus loin, on est a la profondeur maximale
-			if(this.boundingVolumes.size() <= 8 || this.depth == maxDepth)
+			if(this.boundingVolumes.size() == 0 || this.depth == maxDepth)
 				boundingVolumes.add(volume);
 			else//S'il y avait deja un volume dans le noeud et qu'on est pas a la profondeur maximale
 			{
@@ -190,8 +190,7 @@ public class OctreeNode
 		ObjectContainer intersectedObject = new ObjectContainer();
 		
 		//On intersecte d'abord toutes les formes de la hierarchie
-		Double tMin = this.intersect(interStats, ray, outInterPoint, outNormalAtInter, intersectedObject,
-									 null, new PriorityQueue<PriorityNode>(), new ArrayList<Shape>());
+		Double tMin = this.intersect(interStats, ray, outInterPoint, outNormalAtInter, intersectedObject, new PriorityQueue<PriorityNode>());
 		
 		//Puis on intersecte les formes qui n'ont pas de bounding volume
 		for(Shape shape : noVolumeShapes)
@@ -218,17 +217,16 @@ public class OctreeNode
 	}
 	
 	private Double intersect(RayTracerStats interStats, Ray ray, Point outInterPoint, Vector outNormalAtInter, 
-							 ObjectContainer outIntersectedObject, Double minimumDist, 
-							 PriorityQueue<PriorityNode> distanceQueue, ArrayList<Shape> shapeQueue)
+							 ObjectContainer outIntersectedObject, PriorityQueue<PriorityNode> distanceQueue)
 	{
-		Double tMin = Double.POSITIVE_INFINITY;
+		Double tMin = null;
 		
 		if(this.nodeVolume.intersect(ray) == null)
 			return null;
 		
 		distanceQueue.add(new PriorityNode(this, 0));
 		
-		while(distanceQueue.size() > 0 && tMin > distanceQueue.peek().getTDistance())
+		while(distanceQueue.size() > 0 && (tMin == null || tMin > distanceQueue.peek().getTDistance()))
 		{
 			OctreeNode nodeToIntersect = distanceQueue.poll().getNode();
 			
@@ -260,7 +258,7 @@ public class OctreeNode
 			}
 			else
 			{
-				for(OctreeNode child : this.children)
+				for(OctreeNode child : nodeToIntersect.children)
 				{
 					if(child != null)
 					{
@@ -268,6 +266,7 @@ public class OctreeNode
 						if(t != null)
 						{
 							Double nearestT = (t[0] < 0 && t[1] >= 0) ? t[1] : t[0];
+							
 							distanceQueue.add(new PriorityNode(child, nearestT));
 						}
 					}
