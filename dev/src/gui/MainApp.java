@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -192,7 +193,7 @@ public class MainApp extends Application {
 	   	rayTracingScene.setAccelerationStructure(new BVHAccelerationStructure(rayTracingScene.getSceneObjects(), 16));
 	   	//rayTracingScene.setAccelerationStructure(new NoAccelerationStructure(rayTracingScene.getSceneObjects()));
 	   	
-        RayTracerSettings rayTracerSettings = new RayTracerSettings(Runtime.getRuntime().availableProcessors(), 4, 9, 4);
+        RayTracerSettings rayTracerSettings = new RayTracerSettings(1, 4, 9, 4);
        
 	   	ChooseRenderSettingsWindow renderSettingsWindow = new ChooseRenderSettingsWindow(rayTracerSettings);
         renderSettingsWindow.execute();

@@ -1,6 +1,7 @@
 package accelerationStructures;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 import geometry.Shape;
 import materials.Material;
@@ -132,10 +133,10 @@ public class OctreeNode
 		//maximale autorisee de l'arbre. Dans ce cas, on va ajouter le volume au noeud
 		if(isLeaf)
 		{
-			//On autorise l'ajout du noeud si le noeud contient 0 volume ou alors si le noeud est a la profondeur
+			//On autorise l'ajout du noeud si le noeud contient moins de 9 volumes ou alors si le noeud est a la profondeur
 			//maximale. Dans ce cas, on va juste stacker tous les volumes dans le noeud puisque de toute façon
 			//on a pas le droit de construire l'arbre plus loin, on est a la profondeur maximale
-			if(this.boundingVolumes.size() == 0 || this.depth == maxDepth)
+			if(this.boundingVolumes.size() <= 8 || this.depth == maxDepth)
 				boundingVolumes.add(volume);
 			else//S'il y avait deja un volume dans le noeud et qu'on est pas a la profondeur maximale
 			{
@@ -189,8 +190,10 @@ public class OctreeNode
 		ObjectContainer intersectedObject = new ObjectContainer();
 		
 		//On intersecte d'abord toutes les formes de la hierarchie
-		Double tMin = intersect(interStats, ray, outInterPoint, outNormalAtInter, intersectedObject);
+		Double tMin = this.intersect(interStats, ray, outInterPoint, outNormalAtInter, intersectedObject,
+									 null, new PriorityQueue<PriorityNode>(), new ArrayList<Shape>());
 		
+		//Puis on intersecte les formes qui n'ont pas de bounding volume
 		for(Shape shape : noVolumeShapes)
 		{
 			Point tempInterPoint = new Point(0, 0, 0);
@@ -214,17 +217,26 @@ public class OctreeNode
 		return intersectedObject.getContainedShape();
 	}
 	
-	private Double intersect(RayTracerStats interStats, Ray ray, Point outInterPoint, Vector outNormalAtInter, ObjectContainer outIntersectedObject)
+	private Double intersect(RayTracerStats interStats, Ray ray, Point outInterPoint, Vector outNormalAtInter, 
+							 ObjectContainer outIntersectedObject, Double minimumDist, 
+							 PriorityQueue<PriorityNode> distanceQueue, ArrayList<Shape> shapeQueue)
 	{
-		Double tMin = null;
+		Double tMin = Double.POSITIVE_INFINITY;
 		
-		if(this.nodeVolume.intersect(ray))
+		if(this.nodeVolume.intersect(ray) == null)
+			return null;
+		
+		distanceQueue.add(new PriorityNode(this, 0));
+		
+		while(distanceQueue.size() > 0 && tMin > distanceQueue.peek().getTDistance())
 		{
-			if(isLeaf)
+			OctreeNode nodeToIntersect = distanceQueue.poll().getNode();
+			
+			if(nodeToIntersect.isLeaf)
 			{
-				for(BoundingVolume volume : this.boundingVolumes)
+				for(BoundingVolume volume : nodeToIntersect.boundingVolumes)
 				{
-					if(volume.intersect(ray))
+					if(volume.intersect(ray) != null)
 					{
 						Point tempInterPoint = new Point(0, 0, 0);
 						Vector tempNormalAtInter = new Vector(0, 0, 0);
@@ -252,21 +264,11 @@ public class OctreeNode
 				{
 					if(child != null)
 					{
-						Point tempInterPoint = new Point(0, 0, 0);
-						Vector tempNormalAtInter = new Vector(0, 0, 0);
-						ObjectContainer tempContainer = new ObjectContainer();
-						
-						Double t = child.intersect(interStats, ray, tempInterPoint, tempNormalAtInter, tempContainer);
+						Double[] t = child.getBoundingVolume().intersect(ray);
 						if(t != null)
 						{
-							if(tMin == null || tMin > t)
-							{
-								tMin = t;
-								
-								outIntersectedObject.setContainedShape(tempContainer.getContainedShape());
-								outInterPoint.copyIn(tempInterPoint);
-								outNormalAtInter.copyIn(tempNormalAtInter);
-							}
+							Double nearestT = (t[0] < 0 && t[1] >= 0) ? t[1] : t[0];
+							distanceQueue.add(new PriorityNode(child, nearestT));
 						}
 					}
 				}

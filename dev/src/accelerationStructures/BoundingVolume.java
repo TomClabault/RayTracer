@@ -105,9 +105,11 @@ public class BoundingVolume
 	 * 
 	 * @param ray Le rayon qui doit etre teste contre le bounding volume
 	 * 
-	 * @return True si le rayon a au moins une intersection avec le bounding volume, false sinon
+	 * @return Le tableau contenant les distances entre l'origine du rayon et les deux points d'intersection avec le volume.
+	 * [0] contient le point d'intersection le négatif (en coordonnées), [1] le plus positif.
+	 * null s'il n'y a pas eu d'intersection
 	 */
-	public boolean intersect(Ray ray)
+	public Double[] intersect(Ray ray)
 	{
 		Double tNearIntersect = null;
 		Double tFarIntersect = null;
@@ -140,11 +142,11 @@ public class BoundingVolume
 				tNearIntersect = null;
 				tFarIntersect = null;
 				
-				return false;
+				return null;
 			}
 		}
 		
-		return true;
+		return new Double[] {tNearIntersect, tFarIntersect};
 	}
 	
 	/**
