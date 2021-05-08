@@ -2,6 +2,7 @@ package gui.materialChooser;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,7 +22,7 @@ public class MaterialChooser extends Stage
 {
 	private ObservableConcreteMaterial materialChosen;
 	
-	private ColorPicker colorPicker;
+	private MaterialChooserColorPicker colorPicker;
 	
 	private class MaterialUpdateHandler implements MaterialObserver
 	{
@@ -61,8 +62,7 @@ public class MaterialChooser extends Stage
 		MaterialChooserControls chooserControls = new MaterialChooserControls(materialChosen);
 		MaterialChooserPreview previewPane = new MaterialChooserPreview(materialChosen);
 		MaterialChooserPresets presetsPane = new MaterialChooserPresets(this.materialChosen);
-		colorPicker = new ColorPicker();
-		colorPicker.setOnAction(this::colorPickerCallback);
+		colorPicker = new MaterialChooserColorPicker();
 		
 		Button validateButton = new Button("Valider");
 		validateButton.setOnAction(this::validate);
@@ -73,8 +73,13 @@ public class MaterialChooser extends Stage
 		mainPane.setRight(previewPane);
 		mainPane.setLeft(colorPicker);
 		mainPane.setBottom(validateButton);
+		
+		mainPane.setPadding(new Insets(10, 10, 10, 10));
+		BorderPane.setMargin(previewPane, new Insets(10, 10, 10, 0));
+		
+		chooserControls.setAlignment(Pos.CENTER);
+		presetsPane.setAlignment(Pos.CENTER);
 		BorderPane.setAlignment(chooserControls, Pos.CENTER);
-		BorderPane.setAlignment(presetsPane, Pos.CENTER);
 		BorderPane.setAlignment(validateButton, Pos.CENTER);
 		
 		MaterialUpdateHandler materialUpdateHander = new MaterialUpdateHandler(chooserControls, previewPane, materialChosen);
@@ -97,7 +102,7 @@ public class MaterialChooser extends Stage
 
 	private void colorPickerCallback(ActionEvent event)
 	{
-		this.materialChosen.setColor(ColorOperations.sRGBGamma2_2ToLinear(this.colorPicker.getValue()));
+		this.materialChosen.setColor(ColorOperations.sRGBGamma2_2ToLinear(this.colorPicker.getCurrentColor()));
 	}
 	
 	private void gracefulExit(WindowEvent event)
