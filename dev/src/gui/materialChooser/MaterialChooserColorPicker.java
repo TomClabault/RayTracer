@@ -8,6 +8,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -21,11 +23,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
+import materials.observer.ObservableConcreteMaterial;
+import maths.ColorOperations;
 
 /**
  * Class from: https://stackoverflow.com/questions/27171885/display-custom-color-dialog-directly-javafx-colorpicker
  */
-public class MaterialChooserColorPicker extends VBox 
+public class MaterialChooserColorPicker extends VBox
 {
     private final ObjectProperty<Color> currentColorProperty = 
         new SimpleObjectProperty<>(Color.WHITE);
@@ -51,12 +55,19 @@ public class MaterialChooserColorPicker extends VBox
         }
     };
 
-    public MaterialChooserColorPicker() 
+    private ObservableConcreteMaterial material;
+    
+    public MaterialChooserColorPicker(ObservableConcreteMaterial material) 
     {
+    	this.material = material;
+    	
         getStyleClass().add("my-custom-color");
 
         VBox box = new VBox();
 
+        Label materialColorLabel = new Label("Material color : ");
+        box.setAlignment(Pos.CENTER);
+        
         box.getStyleClass().add("color-rect-pane");
         customColorProperty().addListener((ov, t, t1) -> colorChanged());
 
@@ -158,7 +169,7 @@ public class MaterialChooserColorPicker extends VBox
         colorRectOpacityContainer.getChildren().setAll(colorRectHue, colorRectOverlayOne, colorRectOverlayTwo);
         colorRect.getChildren().setAll(colorRectOpacityContainer, colorRectBlackBorder, colorRectIndicator);
         VBox.setVgrow(colorRect, Priority.SOMETIMES);
-        box.getChildren().addAll(colorBar, colorRect, newColorRect);
+        box.getChildren().addAll(materialColorLabel, colorBar, colorRect, newColorRect);
 
         getChildren().add(box);
 
@@ -187,6 +198,7 @@ public class MaterialChooserColorPicker extends VBox
     private void updateHSBColor() {
         Color newColor = Color.hsb(hue.get(), clamp(sat.get() / 100), 
                         clamp(bright.get() / 100), clamp(alpha.get() / 100));
+        
         setCustomColor(newColor);
     }
 
@@ -216,7 +228,8 @@ public class MaterialChooserColorPicker extends VBox
         updateValues();
     }
 
-    Color getCurrentColor() {
+    Color getCurrentColor() 
+    {
         return currentColorProperty.get();
     }
 
@@ -224,11 +237,15 @@ public class MaterialChooserColorPicker extends VBox
         return customColorProperty;
     }
 
-    void setCustomColor(Color color) {
+    void setCustomColor(Color color) 
+    {
         customColorProperty.set(color);
+        
+        this.material.setColor(ColorOperations.sRGBGamma2_2ToLinear(color));
     }
 
-    Color getCustomColor() {
+    Color getCustomColor() 
+    {
         return customColorProperty.get();
     }
 }

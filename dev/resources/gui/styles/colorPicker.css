@@ -65,12 +65,6 @@
     -fx-translate-x: -0.4166667em;
 }
 
-.my-custom-color .transparent-pattern {
-    -fx-background-image: url("pattern-transparent.png"); 
-    -fx-background-repeat: repeat;
-    -fx-background-size: auto;
-}
-
 .my-custom-color .color-new-rect {
     -fx-min-width: 10.666667em;
     -fx-min-height: 1.75em;

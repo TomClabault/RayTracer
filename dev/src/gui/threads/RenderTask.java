@@ -14,7 +14,8 @@ import scene.RayTracingScene;
  * Cette classe est une tâche de javafx, elle execute les calculs de rendu.
  * Elle extends Task pour rendre le calcul independant de l'interface et permet de ne pas bloquer l'interface a cause des calculs.
  */
-public class RenderTask extends Task<IntBuffer> {
+public class RenderTask extends Task<IntBuffer> 
+{
 
 	private IntBuffer pixelBuffer;
 	
@@ -22,14 +23,8 @@ public class RenderTask extends Task<IntBuffer> {
 	private RayTracerSettings rayTracerSettings;
 	private RayTracer rayTracer;
 	
-	/**
-	 * @param pixelWriter
-	 * @param pixelFormat
-	 * @param rayTracer
-	 * @param rayTracingScene
-	 * @param rayTracerSettings
-	 */
-	public RenderTask(PixelWriter pixelWriter, WritablePixelFormat<IntBuffer> pixelFormat,RayTracer rayTracer, RayTracingScene rayTracingScene, RayTracerSettings rayTracerSettings) {
+	public RenderTask(PixelWriter pixelWriter, WritablePixelFormat<IntBuffer> pixelFormat,RayTracer rayTracer, RayTracingScene rayTracingScene, RayTracerSettings rayTracerSettings) 
+	{
 		this.rayTracingScene = rayTracingScene;
 		this.rayTracer = rayTracer;
 		this.rayTracerSettings = rayTracerSettings;

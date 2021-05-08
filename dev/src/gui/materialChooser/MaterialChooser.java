@@ -1,5 +1,7 @@
 package gui.materialChooser;
 
+import java.net.URL;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -62,7 +64,7 @@ public class MaterialChooser extends Stage
 		MaterialChooserControls chooserControls = new MaterialChooserControls(materialChosen);
 		MaterialChooserPreview previewPane = new MaterialChooserPreview(materialChosen);
 		MaterialChooserPresets presetsPane = new MaterialChooserPresets(this.materialChosen);
-		colorPicker = new MaterialChooserColorPicker();
+		colorPicker = new MaterialChooserColorPicker(materialChosen);
 		
 		Button validateButton = new Button("Valider");
 		validateButton.setOnAction(this::validate);
@@ -88,6 +90,15 @@ public class MaterialChooser extends Stage
 		materialUpdateHander.materialUpdated(this);
 		
 		Scene scene = new Scene(mainPane);
+		URL cssURL = getClass().getResource("../styles/colorPicker.css");
+		if(cssURL != null)
+			scene.getStylesheets().add(cssURL.toExternalForm());
+		else
+		{
+			System.out.println("Impossible de trouver colorPicker.css");
+		
+			gracefulExit(null);
+		}
 		
 		this.setScene(scene);
 		this.hide();

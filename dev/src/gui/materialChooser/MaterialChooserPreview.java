@@ -3,11 +3,17 @@ package gui.materialChooser;
 import java.net.URL;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import accelerationStructures.NoAccelerationStructure;
 import geometry.Shape;
 import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
+import gui.threads.RenderTask;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -36,6 +42,9 @@ public class MaterialChooserPreview extends Pane
 	
 	private ObservableConcreteMaterial observableMaterial;
 	
+	private ExecutorService executorService;
+	private Future<?> renderTaskFuture;
+	
 	private static final int PREVIEW_WIDTH = 192;
 	private static final int PREVIEW_HEIGHT = 192;
 	
@@ -49,6 +58,9 @@ public class MaterialChooserPreview extends Pane
 		this.settings = new RayTracerSettings();
 		this.settings.setRecursionDepth(10);
 		this.settings.setBlurryReflectionsSampleCount(5);
+		
+		this.executorService = Executors.newFixedThreadPool(1);
+		this.renderTaskFuture = null;
 		
 		this.observableMaterial = material;
 		
@@ -95,8 +107,21 @@ public class MaterialChooserPreview extends Pane
 	
 	public void updatePreview()
 	{
+		//On selectionne la sphere et on change son materiau
 		this.rtScene.getSceneObjects().get(1).setMaterial(this.observableMaterial.getMaterial());
 		
-		this.drawImage(this.rayTracer.renderImage(this.rtScene, this.settings), WritablePixelFormat.getIntArgbInstance());
+		RenderTask renderTask = new RenderTask(this.writablePreviewImage.getPixelWriter(), WritablePixelFormat.getIntArgbInstance(), rayTracer, rtScene, settings);
+		renderTask.setOnSucceeded(this::pushPreview);
+		
+		if(this.renderTaskFuture == null || this.renderTaskFuture.isDone())
+			this.renderTaskFuture = this.executorService.submit(renderTask);
+	}
+	
+	private void pushPreview(WorkerStateEvent event)
+	{
+		synchronized (this.rtScene)
+		{
+			drawImage(this.rayTracer.getRenderedPixels(), WritablePixelFormat.getIntArgbInstance());
+		}
 	}
 }
