@@ -201,7 +201,9 @@ public class Sphere extends ShapeUtil implements Shape
 		intersection = ray.determinePoint(k1);
 		if(outNormalAtInter != null)
 			outNormalAtInter.copyIn(this.getNormal(intersection));//On defini la normale au point d'intersection
-		outInterPoint.copyIn(intersection);
+		
+		if(outInterPoint != null)
+			outInterPoint.copyIn(intersection);
 		
 		return k1;
 	}

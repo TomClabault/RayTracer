@@ -116,7 +116,9 @@ public class Plane extends ShapeUtil implements Shape
 	    	if(outNormalAtInter != null)
 	    		outNormalAtInter.copyIn(this.getNormal(null));
 	    	
-	    	outInterPoint.copyIn(ray.determinePoint(coeffVectorPoint));
+	    	if(outInterPoint != null)
+	    		outInterPoint.copyIn(ray.determinePoint(coeffVectorPoint));
+	    	
 			return coeffVectorPoint;
 	    }
 	    else

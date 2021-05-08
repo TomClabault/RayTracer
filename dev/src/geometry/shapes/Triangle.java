@@ -22,7 +22,7 @@ public class Triangle implements Shape
 	
 	public Triangle(Point A, Point B, Point C, Material material)
 	{
-		this(A, B, C, material, new TriangleNaiveStrategy());
+		this(A, B, C, material, new TriangleMollerTrumboreStrategy());
 	}
 	
 	public Triangle(Point A, Point B, Point C, Material material, TriangleIntersectionStrategy intersectionStrategy)
@@ -149,6 +149,11 @@ public class Triangle implements Shape
 		return this.interStrategy.intersect(this, ray, outInterPoint, outNormalAtInter);
 	}
 
+	public void setIntersectionStrategy(TriangleIntersectionStrategy intersectionStrategy) 
+	{
+		this.interStrategy = intersectionStrategy;
+	}
+	
 	/**
 	 * {@link geometry.Shape#setMaterial(Material)}
 	 */

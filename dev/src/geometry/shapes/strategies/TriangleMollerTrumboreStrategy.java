@@ -11,8 +11,9 @@ import maths.Vector;
  */
 public class TriangleMollerTrumboreStrategy implements TriangleIntersectionStrategy
 {
-    private static double EPSILON = 0.0000001;
+    private static double EPSILON = 0.000000001;
 
+    //TODO (tom) performances pas tres satisfaisantes vs naive implementation
 	public Double intersect(Triangle triangle, Ray ray, Point outInterPoint, Vector outNormalAtInter)
 	{
         Point vertex0 = triangle.getA();
@@ -61,8 +62,6 @@ public class TriangleMollerTrumboreStrategy implements TriangleIntersectionStrat
             return t;
         }
         else // On a bien une intersection de droite, mais pas de rayon.
-        {
             return null;
-        }
     }
 }
