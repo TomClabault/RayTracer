@@ -4,6 +4,7 @@ import java.io.File;
 
 import geometry.ArbitraryTriangleShape;
 import gui.MainApp;
+import gui.MainUtil;
 import javafx.application.Application;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -22,7 +23,7 @@ public class PlyParserTest extends Application
 	{
 		PlyParser plyParser = new PlyParser(new MatteMaterial(Color.rgb(128, 0, 0)), 1, new Vector(0, 0, 0));
 		
-		File plyTestFile = MainApp.chooseFile(stage, "PLY", "*.ply");
+		File plyTestFile = MainUtil.chooseFile(stage, "PLY", "*.ply");
 		
 		ArbitraryTriangleShape shape = plyParser.parsePly(plyTestFile);
 		
