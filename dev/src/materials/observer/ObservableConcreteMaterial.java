@@ -73,6 +73,14 @@ public class ObservableConcreteMaterial extends Material implements ObservableMa
 	}
 	
 	/**
+	 * @return L'observableMaterial sous forme d'une instance de Material 
+	 */
+	public Material getMaterial()
+	{
+		return new Material(color, ambientCoeff, diffuseCoeff, reflectiveCoeff, specularCoeff, shininess, isTransparent, refractionIndex, roughness, proceduralTexture);
+	}
+	
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override

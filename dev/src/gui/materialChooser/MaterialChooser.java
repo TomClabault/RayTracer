@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -14,19 +15,26 @@ import materials.Material;
 import materials.MatteMaterial;
 import materials.observer.MaterialObserver;
 import materials.observer.ObservableConcreteMaterial;
+import maths.ColorOperations;
 
 public class MaterialChooser extends Stage
 {
 	private ObservableConcreteMaterial materialChosen;
 	
+	private ColorPicker colorPicker;
+	
 	private class MaterialUpdateHandler implements MaterialObserver
 	{
 		private MaterialChooserControls chooserControls;
+		private MaterialChooserPreview chooserPreview;
+		
 		private ObservableConcreteMaterial material;
 		
-		public MaterialUpdateHandler(MaterialChooserControls chooserControls, ObservableConcreteMaterial material) 
+		public MaterialUpdateHandler(MaterialChooserControls chooserControls, MaterialChooserPreview previewPane, ObservableConcreteMaterial material) 
 		{
 			this.chooserControls = chooserControls;
+			this.chooserPreview = previewPane;
+			
 			this.material = material;
 		}
 		
@@ -34,12 +42,14 @@ public class MaterialChooser extends Stage
 		public void materialUpdated(Object updater) 
 		{
 			this.chooserControls.setInputsFromMaterial(this.material);
+			this.chooserPreview.updatePreview();
 		}
 	}
 	
 	public MaterialChooser()
 	{
 		super();
+		this.setTitle("Choisissez votre matériau");
 		this.setOnCloseRequest(this::gracefulExit);
 		
 		this.materialChosen = new ObservableConcreteMaterial();
@@ -48,20 +58,29 @@ public class MaterialChooser extends Stage
 		
 		
 		
-		MaterialChooserControls chooserControls = new MaterialChooserControls(materialChosen, false);
+		MaterialChooserControls chooserControls = new MaterialChooserControls(materialChosen);
+		MaterialChooserPreview previewPane = new MaterialChooserPreview(materialChosen);
+		MaterialChooserPresets presetsPane = new MaterialChooserPresets(this.materialChosen);
+		colorPicker = new ColorPicker();
+		colorPicker.setOnAction(this::colorPickerCallback);
 		
 		Button validateButton = new Button("Valider");
 		validateButton.setOnAction(this::validate);
 		
 		BorderPane mainPane = new BorderPane();
-		mainPane.setTop(new MaterialChooserPresets(this.materialChosen, false));
+		mainPane.setTop(presetsPane);
 		mainPane.setCenter(chooserControls);
+		mainPane.setRight(previewPane);
+		mainPane.setLeft(colorPicker);
 		mainPane.setBottom(validateButton);
+		BorderPane.setAlignment(chooserControls, Pos.CENTER);
+		BorderPane.setAlignment(presetsPane, Pos.CENTER);
 		BorderPane.setAlignment(validateButton, Pos.CENTER);
 		
-		MaterialUpdateHandler materialUpdateHander = new MaterialUpdateHandler(chooserControls, materialChosen);
+		MaterialUpdateHandler materialUpdateHander = new MaterialUpdateHandler(chooserControls, previewPane, materialChosen);
 		
 		this.materialChosen.addListener(materialUpdateHander);
+		materialUpdateHander.materialUpdated(this);
 		
 		Scene scene = new Scene(mainPane);
 		
@@ -74,6 +93,11 @@ public class MaterialChooser extends Stage
 		this.showAndWait();
 		
 		return this.materialChosen;
+	}
+
+	private void colorPickerCallback(ActionEvent event)
+	{
+		this.materialChosen.setColor(ColorOperations.sRGBGamma2_2ToLinear(this.colorPicker.getValue()));
 	}
 	
 	private void gracefulExit(WindowEvent event)

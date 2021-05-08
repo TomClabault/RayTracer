@@ -17,17 +17,14 @@ public class MaterialChooserPresets extends GridPane
 {
 	private ObservableConcreteMaterial materialChosen;
 	
-	private boolean colorChosen;
-	
 	//TODO (tom) ne modifier la couleur que si elle n'a pas déjà été modifié et donc que l'utilisateur a pas déjà choisir la couleur qu'il voulait
-	public MaterialChooserPresets(ObservableConcreteMaterial materialChosen, boolean colorChosen)
+	public MaterialChooserPresets(ObservableConcreteMaterial materialChosen)
 	{
 		super();
 		super.setHgap(10);
 		super.setVgap(10);
 		
 		this.materialChosen = materialChosen;
-		this.colorChosen = colorChosen;
 		
 		Button matteButton = new Button("Matte");
 		Button metallicButton = new Button("Metallic");
@@ -52,10 +49,10 @@ public class MaterialChooserPresets extends GridPane
 		this.add(new Separator(), 0, 2, 3, 1);
 	}
 	
-	private void matteButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new MatteMaterial(Color.RED)); }
-	private void metallicButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new MetallicMaterial(Color.RED)); }
+	private void matteButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new MatteMaterial(this.materialChosen.getColor())); }
+	private void metallicButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new MetallicMaterial(this.materialChosen.getColor())); }
 	private void mirrorButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new MirrorMaterial(0.75)); }
 	private void glassButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new GlassMaterial()); }
-	private void glassyButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new GlassyMaterial(Color.RED)); }
-	private void roughButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new RoughMaterial(Color.RED, 0.75)); }
+	private void glassyButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new GlassyMaterial(this.materialChosen.getColor())); }
+	private void roughButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new RoughMaterial(this.materialChosen.getColor(), 0.75)); }
 }

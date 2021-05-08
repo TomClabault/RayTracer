@@ -37,8 +37,6 @@ public class PredefinedScenes
         ArrayList<Shape> shapeList = new ArrayList<>();
         shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
         
-        shapeList.add(new Sphere(new Point(0, 0, -1), 1, new MatteMaterial(Color.RED)));
-        
         Image skybox = null;
         URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
         if(skyboxURL != null)

@@ -2,7 +2,6 @@ package gui.materialChooser;
 
 import java.util.ArrayList;
 
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -15,19 +14,16 @@ public class MaterialChooserControls extends GridPane
 {
 	private ObservableConcreteMaterial materialChosen;
 	
-	private boolean colorChosen;
-	
 	private String[] labels;
 	private TextField[] inputs;
 	
-	public MaterialChooserControls(ObservableConcreteMaterial material, boolean colorChosen)
+	public MaterialChooserControls(ObservableConcreteMaterial material)
 	{
 		super();
 		super.setHgap(10);
 		super.setVgap(10);
 		
 		this.materialChosen = material;
-		this.colorChosen = colorChosen;
 		
 		this.labels = new String[] {"Ambient : ", "Diffuse : ", "Reflection : ", "Specular intensity : ", "Specular size : ", "Refraction index : ", "Roughness : "};
 		this.inputs = new TextField[labels.length];
@@ -49,10 +45,8 @@ public class MaterialChooserControls extends GridPane
 		}
 
 		for (int i = 0; i < labels.length; i++)
-		{
 			super.add(labelsAndInputs.get(i), i % 4, i / 4);
-			//GridPane.setHalignment(labelsAndInputs.get(i), HPos.CENTER);
-		}
+		
 		super.add(new Separator(), 0, this.labels.length/4 + 1, 4, 1);
 		
 		setInputsFromMaterial(this.materialChosen);

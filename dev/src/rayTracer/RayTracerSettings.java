@@ -39,7 +39,7 @@ public class RayTracerSettings
 	
 	public RayTracerSettings()
 	{
-		this(8, 5, 0, 4, true, true, true, true, true, true, true, false);
+		this(Runtime.getRuntime().availableProcessors(), 5, 4, 4, true, true, true, true, true, true, true, false);
 	}
 	
 	public RayTracerSettings(int nbCore, int maxRecursionDepth, int antialiasingSampling)
