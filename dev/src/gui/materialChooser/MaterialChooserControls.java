@@ -1,0 +1,86 @@
+package gui.materialChooser;
+
+import java.util.ArrayList;
+
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import materials.observer.ObservableConcreteMaterial;
+
+public class MaterialChooserControls extends GridPane 
+{
+	private ObservableConcreteMaterial materialChosen;
+	
+	private boolean colorChosen;
+	
+	private String[] labels;
+	private TextField[] inputs;
+	
+	public MaterialChooserControls(ObservableConcreteMaterial material, boolean colorChosen)
+	{
+		super();
+		super.setHgap(10);
+		super.setVgap(10);
+		
+		this.materialChosen = material;
+		this.colorChosen = colorChosen;
+		
+		this.labels = new String[] {"Ambient : ", "Diffuse : ", "Reflection : ", "Specular intensity : ", "Specular size : ", "Refraction index : ", "Roughness : "};
+		this.inputs = new TextField[labels.length];
+		
+		ArrayList<HBox> labelsAndInputs = new ArrayList<>();
+
+		//On commence par creer autant de HBox qu'il y a de label
+			
+		for(int i = 0; i < labels.length; i++)
+		{
+			inputs[i] = new TextField();
+			inputs[i].setPrefWidth(45);
+			
+			labelsAndInputs.add(new HBox());
+			labelsAndInputs.get(i).getChildren().add(new Label(labels[i]));
+			labelsAndInputs.get(i).getChildren().add(inputs[i]);
+			labelsAndInputs.get(i).setId(labels[i]);
+			labelsAndInputs.get(i).setAlignment(Pos.CENTER);
+		}
+
+		for (int i = 0; i < labels.length; i++)
+		{
+			super.add(labelsAndInputs.get(i), i % 4, i / 4);
+			//GridPane.setHalignment(labelsAndInputs.get(i), HPos.CENTER);
+		}
+		super.add(new Separator(), 0, this.labels.length/4 + 1, 4, 1);
+		
+		setInputsFromMaterial(this.materialChosen);
+	}
+	
+	private double getInputPropertyFromLabel(ObservableConcreteMaterial material, String label)
+	{
+		if(label.equals("Ambient : "))
+			return material.getAmbientCoeff();
+		else if(label.equals("Diffuse : "))
+			return material.getDiffuseCoeff();
+		else if(label.equals("Reflection : "))
+			return material.getReflectiveCoeff();
+		else if(label.equals("Specular intensity : "))
+			return material.getSpecularCoeff();
+		else if(label.equals("Specular size : "))
+			return material.getShininess();
+		else if(label.equals("Refraction index : "))
+			return material.getRefractionIndex();
+		else if(label.equals("Roughness : "))
+			return material.getRoughness();
+		else
+			return 0;
+	}
+	
+	public void setInputsFromMaterial(ObservableConcreteMaterial material)
+	{
+		for(int i = 0; i < this.inputs.length; i++)
+			this.inputs[i].setText(Double.toString(getInputPropertyFromLabel(material, this.labels[i])));
+	}
+}

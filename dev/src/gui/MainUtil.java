@@ -113,13 +113,13 @@ public class MainUtil
 	   			
 	   			MaterialChooser matChoose = new MaterialChooser();
 	   			Material material = matChoose.chooseMaterial();
-//	   			Color gold = Color.web("D4AF37");
-//	   			PlyParser plyParser = new PlyParser(new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(gold), 0.75), 4, new Vector(0, -0.5, 0));
-//	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
-//	   			plyFileShape.getTriangleList().trimToSize();
-//	   			
-//	   			for(Triangle triangle : plyFileShape.getTriangleList())
-//	   				rtScene.addShape(triangle);
+
+	   			PlyParser plyParser = new PlyParser(material, 4, new Vector(0, -0.5, 0));
+	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
+	   			plyFileShape.getTriangleList().trimToSize();
+	   			
+	   			for(Triangle triangle : plyFileShape.getTriangleList())
+	   				rtScene.addShape(triangle);
 	   		}
 	   	}
 	   	catch(InvalidParallelepipedException recExc)

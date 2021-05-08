@@ -22,18 +22,18 @@ import maths.ColorOperations;
  */
 public class Material 
 {	
-	private Color color;
+	protected Color color;
 	
-	private double ambientCoeff;
-	private double diffuseCoeff;
-	private double reflectiveCoeff;
-	private double specularCoeff;
-	private int shininess;
-	private boolean isTransparent;
-	private double refractionIndex;
-	private double roughness;
+	protected double ambientCoeff;
+	protected double diffuseCoeff;
+	protected double reflectiveCoeff;
+	protected double specularCoeff;
+	protected int shininess;
+	protected boolean isTransparent;
+	protected double refractionIndex;
+	protected double roughness;
 	
-	private ProceduralTexture proceduralTexture;//Attribut special qui specifie la texture du materiau. Utilise pour le damier par exemple
+	protected ProceduralTexture proceduralTexture;//Attribut special qui specifie la texture du materiau. Utilise pour le damier par exemple
 	
 	/**
 	 * Cree un materiau de A a Z
@@ -94,6 +94,27 @@ public class Material
 		this.proceduralTexture = proceduralTexture;
 	}
 
+	/**
+	 * Copie les caractéristiques du matériau donne en argument dans le materiau actuel (this)
+	 * 
+	 * @param materialToCopy Le materiau dont les caracteristiques vont etre copiees
+	 */
+	public void copyIn(Material materialToCopy)
+	{
+		this.color = materialToCopy.getColor();
+		
+		this.ambientCoeff = materialToCopy.getAmbientCoeff();
+		this.diffuseCoeff = materialToCopy.getDiffuseCoeff();
+		this.reflectiveCoeff = materialToCopy.getReflectiveCoeff();
+		this.specularCoeff = materialToCopy.getSpecularCoeff();
+		this.shininess = materialToCopy.getShininess();
+		this.isTransparent = materialToCopy.getIsTransparent();
+		this.refractionIndex = materialToCopy.refractionIndex;
+		this.roughness = materialToCopy.getRoughness();
+		
+		this.proceduralTexture = materialToCopy.getProceduralTexture();	
+	}
+	
 	/**
 	 * Retourne le couleur du materiau sous la forme d'un objet Color.RGB(r, g, b)
 	 * 
@@ -156,6 +177,9 @@ public class Material
 		return this.refractionIndex;
 	}
 	
+	/**
+	 * @return La roughness (rugosité) du materiau. réel entre 0 et 1
+	 */
 	public double getRoughness() 
 	{
 		return roughness;

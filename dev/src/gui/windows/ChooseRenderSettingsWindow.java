@@ -74,8 +74,11 @@ public class ChooseRenderSettingsWindow
         Label textLargeur = new Label("Largeur de rendu:");
         Label textHauteur = new Label("Hauteur de rendu:");
         
-        this.inputLargeur = new TextField("largeur");
-        this.inputHauteur = new TextField("hauteur");
+        this.inputLargeur = new TextField("");
+        this.inputLargeur.setPromptText("Largeur");
+        this.inputHauteur = new TextField("");
+        this.inputHauteur.setPromptText("Hauteur");
+        
         
         
         this.fullscreenCheckbox = new CheckBox("Adapter a l'ecran");
@@ -115,7 +118,7 @@ public class ChooseRenderSettingsWindow
         fullscreenCheckbox.selectedProperty().addListener(this::toggleFullscreen);
         simpleRenderCheckbox.selectedProperty().addListener(this::toggleSimpleRender);
         
-        validateButton.setOnAction(this::getWidthHeight);
+        validateButton.setOnAction(this::validate);
         cancelButton.setOnAction(this::exitApp);
         
         this.windowStage.setOnCloseRequest(this::exitApp);
@@ -144,7 +147,7 @@ public class ChooseRenderSettingsWindow
 		MainApp.FULLSCREEN_MODE = newValue;
 	}
 	
-	public void getWidthHeight(ActionEvent event)
+	public void validate(ActionEvent event)
 	{
     	try {
 			if (Integer.parseInt(inputHauteur.getText()) < 0 || Integer.parseInt(inputLargeur.getText()) < 0) {

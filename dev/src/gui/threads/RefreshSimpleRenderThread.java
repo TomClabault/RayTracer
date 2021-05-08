@@ -2,8 +2,8 @@ package gui.threads;
 
 import java.nio.IntBuffer;
 
-import gui.panes.StatsPane;
 import gui.windows.RenderWindowOld;
+import gui.windows.StatsPane;
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritablePixelFormat;

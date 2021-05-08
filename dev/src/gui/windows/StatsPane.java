@@ -1,4 +1,4 @@
-package gui.panes;
+package gui.windows;
 
 import java.net.URL;
 
