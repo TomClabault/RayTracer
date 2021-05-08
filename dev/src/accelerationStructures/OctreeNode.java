@@ -136,7 +136,7 @@ public class OctreeNode
 			//On autorise l'ajout du noeud si le noeud contient moins de 9 volumes ou alors si le noeud est a la profondeur
 			//maximale. Dans ce cas, on va juste stacker tous les volumes dans le noeud puisque de toute façon
 			//on a pas le droit de construire l'arbre plus loin, on est a la profondeur maximale
-			if(this.boundingVolumes.size() == 0 || this.depth == maxDepth)
+			if(this.boundingVolumes.size() <= 7 || this.depth == maxDepth)
 				boundingVolumes.add(volume);
 			else//S'il y avait deja un volume dans le noeud et qu'on est pas a la profondeur maximale
 			{

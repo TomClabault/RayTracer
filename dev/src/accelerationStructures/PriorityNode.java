@@ -22,7 +22,7 @@ public class PriorityNode implements Comparable
 			return 0;
 		
 		else
-			return 1* (int)Math.signum(object.tDistance - this.tDistance);
+			return (int)Math.signum(this.tDistance - object.tDistance);
 	}
 	
 	public OctreeNode getNode()
