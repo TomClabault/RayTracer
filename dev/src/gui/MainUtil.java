@@ -7,12 +7,14 @@ import exceptions.InvalidParallelepipedException;
 import exceptions.InvalidSphereException;
 import geometry.ArbitraryTriangleShape;
 import geometry.shapes.Triangle;
+import gui.materialChooser.MaterialChooser;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
+import materials.Material;
 import materials.RoughMaterial;
 import maths.ColorOperations;
 import maths.Vector;
@@ -109,13 +111,15 @@ public class MainUtil
 	   		{
 	   			rtScene = PredefinedScenes.createEmptyScene();
 	   			
-	   			Color gold = Color.web("D4AF37");
-	   			PlyParser plyParser = new PlyParser(new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(gold), 0.75), 4, new Vector(0, -0.5, 0));
-	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
-	   			plyFileShape.getTriangleList().trimToSize();
-	   			
-	   			for(Triangle triangle : plyFileShape.getTriangleList())
-	   				rtScene.addShape(triangle);
+	   			MaterialChooser matChoose = new MaterialChooser();
+	   			Material material = matChoose.chooseMaterial();
+//	   			Color gold = Color.web("D4AF37");
+//	   			PlyParser plyParser = new PlyParser(new RoughMaterial(ColorOperations.sRGBGamma2_2ToLinear(gold), 0.75), 4, new Vector(0, -0.5, 0));
+//	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
+//	   			plyFileShape.getTriangleList().trimToSize();
+//	   			
+//	   			for(Triangle triangle : plyFileShape.getTriangleList())
+//	   				rtScene.addShape(triangle);
 	   		}
 	   	}
 	   	catch(InvalidParallelepipedException recExc)
