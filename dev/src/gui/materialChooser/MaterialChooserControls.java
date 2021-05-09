@@ -2,6 +2,7 @@ package gui.materialChooser;
 
 import java.util.ArrayList;
 
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -36,6 +37,7 @@ public class MaterialChooserControls extends GridPane
 		{
 			inputs[i] = new TextField();
 			inputs[i].setPrefWidth(45);
+			inputs[i].selectedTextProperty().addListener(this::inputChangeCallback);
 			
 			labelsAndInputs.add(new HBox());
 			labelsAndInputs.get(i).getChildren().add(new Label(labels[i]));
@@ -70,6 +72,19 @@ public class MaterialChooserControls extends GridPane
 			return material.getRoughness();
 		else
 			return 0;
+	}
+	
+	public void inputChangeCallback(ObservableValue<? extends String> observable, String oldValue, String newValue)
+	{
+		Double inputValue = null;
+		try
+		{
+			inputValue = Double.parseDouble(newValue);
+		}
+		catch (NumberFormatException e)
+		{
+			
+		}
 	}
 	
 	public void setInputsFromMaterial(ObservableConcreteMaterial material)
