@@ -117,6 +117,11 @@ public class RayTracer
 	
 	public RayTracer(int renderWidth, int renderHeight)
 	{
+		this(renderWidth, renderHeight, 64);
+	}
+	
+	public RayTracer(int renderWidth, int renderHeight, int tileSize)
+	{
 		this.renderWidth = renderWidth;
 		this.renderHeight = renderHeight;
 		this.renderDone = false;
@@ -130,7 +135,7 @@ public class RayTracer
 		for(int i = 0; i < renderWidth * renderHeight; i++)
 			this.renderedPixels.put(i, ColorOperations.aRGB2Int(Color.rgb(0, 0, 0)));
 		
-		this.threadTaskList = new ThreadsTaskList();
+		this.threadTaskList = new ThreadsTaskList(tileSize);
 		this.randomGenerator= new Random();
 	}
 	

@@ -52,7 +52,7 @@ public class MaterialChooserPreview extends Pane
 	{
 		super();
 
-		this.rayTracer = new RayTracer(PREVIEW_WIDTH, PREVIEW_HEIGHT);
+		this.rayTracer = new RayTracer(PREVIEW_WIDTH, PREVIEW_HEIGHT, 16);
 		this.rtScene = createPreviewScene();
 		this.rtScene.setAccelerationStructure(new NoAccelerationStructure(this.rtScene.getSceneObjects()));
 		this.settings = new RayTracerSettings();
@@ -119,9 +119,6 @@ public class MaterialChooserPreview extends Pane
 	
 	private void pushPreview(WorkerStateEvent event)
 	{
-		synchronized (this.rtScene)
-		{
-			drawImage(this.rayTracer.getRenderedPixels(), WritablePixelFormat.getIntArgbInstance());
-		}
+		drawImage(this.rayTracer.getRenderedPixels(), WritablePixelFormat.getIntArgbInstance());
 	}
 }

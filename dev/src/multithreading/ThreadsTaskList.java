@@ -15,14 +15,21 @@ public class ThreadsTaskList
 	private int totalTaskCount;
 	private int totalTaskGiven;
 	private int totalTaskFinished;
+	private int tileSize;
 	
 	public ThreadsTaskList()
+	{
+		this(64);
+	}
+	
+	public ThreadsTaskList(int tileSize)
 	{
 		this.taskList = new ArrayList<>();
 		
 		this.totalTaskCount = 0;
 		this.totalTaskFinished = 0;
 		this.totalTaskGiven = 0;
+		this.tileSize = tileSize;
 	}
 	
 	synchronized public TileTask getTask(int index)
@@ -66,8 +73,8 @@ public class ThreadsTaskList
 		this.taskList = new ArrayList<>();
 		
 		//Des tuiles de 64*64 pixels semblent etre un bon choix arbitraire en terme de performances
-		int tilesWidth = 64;//renderWidth / 64;
-		int tilesHeight = 64;//renderHeight / 64;
+		int tilesWidth = tileSize;//renderWidth / 64;
+		int tilesHeight = tileSize;//renderHeight / 64;
 		
 		int tilesCountX = renderWidth / tilesWidth; tilesCountX = (tilesCountX * tilesWidth < renderWidth) ? tilesCountX + 1 : tilesCountX; 
 		int tilesCountY = renderHeight / tilesHeight; tilesCountY = (tilesCountY * tilesHeight < renderHeight) ? tilesCountY + 1 : tilesCountY;

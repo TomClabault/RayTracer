@@ -16,6 +16,11 @@
     -fx-max-width: 20em;
 }
 
+.my-custom-color #materialColorLabel
+{
+	-fx-background-color: red;
+}
+
 .my-custom-color:focused,
 .my-custom-color:selected {
     -fx-background-color: transparent;

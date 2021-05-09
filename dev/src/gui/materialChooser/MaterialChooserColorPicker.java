@@ -23,6 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
+import javafx.scene.text.TextAlignment;
 import materials.observer.ObservableConcreteMaterial;
 import maths.ColorOperations;
 
@@ -61,12 +62,14 @@ public class MaterialChooserColorPicker extends VBox
     {
     	this.material = material;
     	
-        getStyleClass().add("my-custom-color");
+        this.getStyleClass().add("my-custom-color");
 
         VBox box = new VBox();
 
         Label materialColorLabel = new Label("Material color : ");
-        box.setAlignment(Pos.CENTER);
+        materialColorLabel.setMaxWidth(Double.MAX_VALUE);
+        materialColorLabel.setAlignment(Pos.CENTER);
+        materialColorLabel.setId("materialColorLabel");
         
         box.getStyleClass().add("color-rect-pane");
         customColorProperty().addListener((ov, t, t1) -> colorChanged());
