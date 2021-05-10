@@ -51,6 +51,19 @@ public class ChooseRenderSettingsWindow
 		this.rayTracerSettings = rayTracerSettings;
 	}
 	
+	/*
+	 * centrer boule
+	 * marge boule gauche
+	 * 
+	 * descendre preset (peut être au centre avec les valeurs) + texte indicatif
+	 * 
+	 * valider plus marqué et en bas à cdroite
+	 * 
+	 * centre sur plusieurs lignes
+	 * 
+	 * code rgb en dessous du color picker et possiblité de le modifier
+	 */
+	
 	/**
 	 * Methode executant le code pour afficher la fenetre du choix de rendu.
 	 */
