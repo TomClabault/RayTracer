@@ -27,6 +27,7 @@ public class RayTracerSettings
 	private int recursionDepth;//Gere le nombre d'appel recursif maximum que peut faire le ray tracer. Determine par exemple le nombre consecutifs de reflets que l'on peut observer dans deux surfaces se reflechissant l'une l'autre
 	private int antialiasingSampling;//Determine le nombre de sous-pixel calcule pour chaque pixel afin de reduire l'aliasing (effet d'escalier) de l'image
 	private int blurryReflectionsSampleCount;//Combien d'echantillons seront utilises pour calculer les reflexion flous de certains materiaux 
+	private int tileSize;//Taille des tuiles qui seront calculées par les threads
 	
 	private boolean enableAmbient;//Permet d'activer ou de desactiver l'effet de lumiere ambiante de l'ombrage de Phong
 	private boolean enableDiffuse;//Permet d'activer ou de desactiver l'effet de lumiere diffuse de l'ombrage de Phong
@@ -39,17 +40,17 @@ public class RayTracerSettings
 	
 	public RayTracerSettings()
 	{
-		this(Runtime.getRuntime().availableProcessors(), 5, 4, 4, true, true, true, true, true, true, true, false);
+		this(Runtime.getRuntime().availableProcessors(), 5, 4, 4, 64, true, true, true, true, true, true, true, false);
 	}
 	
 	public RayTracerSettings(int nbCore, int maxRecursionDepth, int antialiasingSampling)
 	{
-		this(nbCore, maxRecursionDepth, antialiasingSampling, 4, true, true, true, true, true, true, true, false);
+		this(nbCore, maxRecursionDepth, antialiasingSampling, 4, 64, true, true, true, true, true, true, true, false);
 	}
 	
-	public RayTracerSettings(int nbCore, int maxRecursionDepth, int antialiasingSampling, int blurryReflectionsSampleCount)
+	public RayTracerSettings(int nbCore, int maxRecursionDepth, int antialiasingSampling, int blurryReflectionsSampleCount, int tileSize)
 	{
-		this(nbCore, maxRecursionDepth, antialiasingSampling, blurryReflectionsSampleCount, true, true, true, true, true, true, true, false);
+		this(nbCore, maxRecursionDepth, antialiasingSampling, blurryReflectionsSampleCount, tileSize, true, true, true, true, true, true, true, false);
 	}
 
 	public RayTracerSettings(RayTracerSettings settingsToCopy)
@@ -58,6 +59,7 @@ public class RayTracerSettings
 			 settingsToCopy.getRecursionDepth(),
 			 settingsToCopy.getAntialiasingSampling(),
 			 settingsToCopy.getBlurryReflectionsSampleCount(),
+			 settingsToCopy.getTileSize(),
 			 settingsToCopy.isEnableAmbient(),
 			 settingsToCopy.isEnableDiffuse(),
 			 settingsToCopy.isEnableReflections(),
@@ -84,7 +86,7 @@ public class RayTracerSettings
 	 * 
 	 * @throws IllegalArgumentException si "antialiasingSampleCount" n'est pas le carre d'un entier >= 2
 	 */
-	public RayTracerSettings(int nbCore, int recursionDepth, int antialiasingSampleCount, int blurryReflectionsSampleCount, boolean enableAmbient, boolean enableDiffuse, boolean enableReflections, boolean enableBlurryReflections, boolean enableRefractions, boolean enableSpecular, boolean enableFresnel, boolean enableAntialiasing) throws IllegalArgumentException 
+	public RayTracerSettings(int nbCore, int recursionDepth, int antialiasingSampleCount, int blurryReflectionsSampleCount, int tileSize, boolean enableAmbient, boolean enableDiffuse, boolean enableReflections, boolean enableBlurryReflections, boolean enableRefractions, boolean enableSpecular, boolean enableFresnel, boolean enableAntialiasing) throws IllegalArgumentException 
 	{
 		if(!verifAntialiasingSampleCount(antialiasingSampleCount))
 			throw new IllegalArgumentException("Nombre d'echantillons d'antialiasing incorrect. Doit etre le carre d'un entier >= 2");
@@ -93,6 +95,7 @@ public class RayTracerSettings
 		this.recursionDepth = recursionDepth;
 		this.antialiasingSampling = antialiasingSampleCount;
 		this.blurryReflectionsSampleCount = blurryReflectionsSampleCount;
+		this.tileSize = tileSize;
 		
 		this.enableAmbient = enableAmbient;
 		this.enableDiffuse = enableDiffuse;
@@ -219,6 +222,11 @@ public class RayTracerSettings
 		return antialiasingSampling;
 	}
 	
+	public int getTileSize()
+	{
+		return this.tileSize;
+	}
+	
 	/**
 	 * Permet de redefinir le nombre d'echantillons calcules par pixels pour l'antiailiasing du rendu
 	 * 
@@ -232,6 +240,11 @@ public class RayTracerSettings
 			throw new IllegalArgumentException("Nombre d'echantillons d'antialiasing incorrect. Doit etre le carre d'un entier >= 2");
 			
 		this.antialiasingSampling = sampleCount;
+	}
+	
+	public void setTileSize(int newTileSize)
+	{
+		this.tileSize = newTileSize;
 	}
 	
 	/**

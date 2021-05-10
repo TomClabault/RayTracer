@@ -19,6 +19,8 @@ public class MaterialChooserControls extends GridPane
 	private String[] labels;
 	private TextField[] inputs;
 	
+	private static final int NB_INPUT_PER_LINE = 4;
+	
 	public MaterialChooserControls(ObservableConcreteMaterial material)
 	{
 		super();
@@ -31,8 +33,6 @@ public class MaterialChooserControls extends GridPane
 		this.inputs = new TextField[labels.length];
 		
 		ArrayList<HBox> labelsAndInputs = new ArrayList<>();
-
-		//On commence par creer autant de HBox qu'il y a de label
 			
 		for(int i = 0; i < labels.length; i++)
 		{
@@ -48,9 +48,7 @@ public class MaterialChooserControls extends GridPane
 		}
 
 		for (int i = 0; i < labels.length; i++)
-			super.add(labelsAndInputs.get(i), i % 4, i / 4);
-		
-		super.add(new Separator(), 0, this.labels.length/4 + 1, 4, 1);
+			super.add(labelsAndInputs.get(i), i % NB_INPUT_PER_LINE, i / NB_INPUT_PER_LINE);
 		
 		setInputsFromMaterial(this.materialChosen);
 		

@@ -10,6 +10,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import materials.GlassMaterial;
@@ -20,7 +21,7 @@ import materials.MirrorMaterial;
 import materials.RoughMaterial;
 import materials.observer.ObservableConcreteMaterial;
 
-public class MaterialChooserPresets extends GridPane 
+public class MaterialChooserPresets extends HBox 
 {
 	private ObservableConcreteMaterial materialChosen;
 	
@@ -28,8 +29,7 @@ public class MaterialChooserPresets extends GridPane
 	public MaterialChooserPresets(ObservableConcreteMaterial materialChosen)
 	{
 		super();
-		super.setHgap(10);
-		super.setVgap(10);
+		super.setSpacing(10);;
 		
 		this.materialChosen = materialChosen;
 		
@@ -47,13 +47,8 @@ public class MaterialChooserPresets extends GridPane
 		glassyButton.setOnAction(this::glassyButtonCallback);
 		roughButton.setOnAction(this::roughButtonCallback);
 		
-		this.add(matteButton, 0, 0);
-		this.add(metallicButton, 1, 0);
-		this.add(mirrorButton, 2, 0);
-		this.add(glassButton, 3, 0);
-		this.add(glassyButton, 4, 0);
-		this.add(roughButton, 5, 0);
-		this.add(new Separator(), 0, 2, 6, 1);
+		super.getChildren().addAll(matteButton, metallicButton, mirrorButton, glassButton, glassyButton, roughButton);
+		super.setAlignment(Pos.CENTER);
 		
 		this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
 	}

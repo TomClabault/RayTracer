@@ -78,7 +78,7 @@ public class MainApp extends Application {
 	   	rayTracingScene = MainUtil.addSkybox(rayTracingScene);
 	   	rayTracingScene.setAccelerationStructure(new BVHAccelerationStructure(rayTracingScene.getSceneObjects(), 16));
 	   	
-        RayTracerSettings rayTracerSettings = new RayTracerSettings(Runtime.getRuntime().availableProcessors(), 4, 9, 4);
+        RayTracerSettings rayTracerSettings = new RayTracerSettings(Runtime.getRuntime().availableProcessors(), 4, 9, 4, 64);
 	   	ChooseRenderSettingsWindow renderSettingsWindow = new ChooseRenderSettingsWindow(rayTracerSettings);
         renderSettingsWindow.execute();
         

@@ -18,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import jfxtras.styles.jmetro.JMetroStyleClass;
@@ -33,7 +34,7 @@ import scene.RayTracingScene;
 import scene.lights.LightBulb;
 import scene.lights.PositionnalLight;
 
-public class MaterialChooserPreview extends Pane
+public class MaterialChooserPreview extends GridPane
 {
 	private RayTracer rayTracer;
 	private RayTracingScene rtScene;
@@ -53,12 +54,13 @@ public class MaterialChooserPreview extends Pane
 	{
 		super();
 
-		this.rayTracer = new RayTracer(PREVIEW_WIDTH, PREVIEW_HEIGHT, 16);
+		this.rayTracer = new RayTracer(PREVIEW_WIDTH, PREVIEW_HEIGHT);
 		this.rtScene = createPreviewScene();
 		this.rtScene.setAccelerationStructure(new NoAccelerationStructure(this.rtScene.getSceneObjects()));
 		this.settings = new RayTracerSettings();
 		this.settings.setRecursionDepth(10);
 		this.settings.setBlurryReflectionsSampleCount(5);
+		this.settings.setTileSize(16);
 		
 		this.executorService = Executors.newFixedThreadPool(1);
 		this.renderTaskFuture = null;

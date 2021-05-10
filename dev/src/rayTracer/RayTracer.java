@@ -117,11 +117,6 @@ public class RayTracer
 	
 	public RayTracer(int renderWidth, int renderHeight)
 	{
-		this(renderWidth, renderHeight, 64);
-	}
-	
-	public RayTracer(int renderWidth, int renderHeight, int tileSize)
-	{
 		this.renderWidth = renderWidth;
 		this.renderHeight = renderHeight;
 		this.renderDone = false;
@@ -135,7 +130,6 @@ public class RayTracer
 		for(int i = 0; i < renderWidth * renderHeight; i++)
 			this.renderedPixels.put(i, ColorOperations.aRGB2Int(Color.rgb(0, 0, 0)));
 		
-		this.threadTaskList = new ThreadsTaskList(tileSize);
 		this.randomGenerator= new Random();
 	}
 	
@@ -919,6 +913,7 @@ public class RayTracer
 		
 		this.renderDone = false;
 		this.settings = new RayTracerSettings(renderSettings);//On cree une nouvelle instance de RayTracerSettings pour ne pas "lier dynamiquement" les reglages : cela pourrait causer des dechirement d'image lorsqu'on change les reglages pendant un rendu
+		this.threadTaskList = new ThreadsTaskList(renderSettings.getTileSize());
 		this.threadTaskList.initTaskList(renderWidth, renderHeight);
 		this.randomGenerator = new Random(0);//On reinitialise le generateur de nombre avec la graine 0
 		this.totalPixelComputed.set(0);
@@ -934,8 +929,6 @@ public class RayTracer
 		while(threadTaskList.getTotalTaskFinished() < threadTaskList.getTotalTaskCount())
 			this.computeTask(renderScene, threadTaskList);
 
-		this.threadTaskList.resetTasksProgression();
-		
 		this.renderDone = true;
 		return this.getRenderedPixels();
 	}
