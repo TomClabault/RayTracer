@@ -19,6 +19,9 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.stage.Stage;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.JMetroStyleClass;
+import jfxtras.styles.jmetro.Style;
 import rayTracer.RayTracerSettings;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -54,19 +57,23 @@ public class ChooseRenderSettingsWindow
 		this.windowStage = new Stage();
         this.mainGridPane = new GridPane();
         mainGridPane.setHgap(10);
+        mainGridPane.setVgap(10);
+        mainGridPane.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         
         Scene scene = new Scene(mainGridPane);
+        JMetro jMetro = new JMetro(Style.DARK);
+        jMetro.setScene(scene);
         
-        URL styleURL = ChooseRenderSettingsWindow.class.getResource("../styles/windows.css");
-        if(styleURL == null)
-        {
-        	System.out.println("Impossible de trouver le style de SetSizeWindow");
-        	
-        	Platform.exit();
-        	System.exit(0);
-        }
-        	
-        scene.getStylesheets().add(styleURL.toExternalForm());
+//        URL styleURL = ChooseRenderSettingsWindow.class.getResource("../styles/windows.css");
+//        if(styleURL == null)
+//        {
+//        	System.out.println("Impossible de trouver le style de SetSizeWindow");
+//        	
+//        	Platform.exit();
+//        	System.exit(0);
+//        }
+//        	
+//        scene.getStylesheets().add(styleURL.toExternalForm());
 
         this.windowStage.setScene(scene);
         this.windowStage.setTitle("Selection de la taille de rendu");

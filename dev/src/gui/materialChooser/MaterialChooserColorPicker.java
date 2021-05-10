@@ -13,6 +13,10 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -24,6 +28,8 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.text.TextAlignment;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 import materials.observer.ObservableConcreteMaterial;
 import maths.ColorOperations;
 
@@ -61,7 +67,6 @@ public class MaterialChooserColorPicker extends VBox
     public MaterialChooserColorPicker(ObservableConcreteMaterial material) 
     {
     	this.material = material;
-    	
         this.getStyleClass().add("my-custom-color");
 
         VBox box = new VBox();
@@ -69,7 +74,6 @@ public class MaterialChooserColorPicker extends VBox
         Label materialColorLabel = new Label("Material color : ");
         materialColorLabel.setMaxWidth(Double.MAX_VALUE);
         materialColorLabel.setAlignment(Pos.CENTER);
-        materialColorLabel.setId("materialColorLabel");
         
         box.getStyleClass().add("color-rect-pane");
         customColorProperty().addListener((ov, t, t1) -> colorChanged());
@@ -179,6 +183,8 @@ public class MaterialChooserColorPicker extends VBox
         if (currentColorProperty.get() == null) {
             currentColorProperty.set(Color.TRANSPARENT);
         }
+        
+        this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         
         updateValues();
     }

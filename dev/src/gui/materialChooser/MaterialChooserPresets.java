@@ -4,8 +4,14 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 import materials.GlassMaterial;
 import materials.GlassyMaterial;
 import materials.MatteMaterial;
@@ -44,10 +50,12 @@ public class MaterialChooserPresets extends GridPane
 		this.add(matteButton, 0, 0);
 		this.add(metallicButton, 1, 0);
 		this.add(mirrorButton, 2, 0);
-		this.add(glassButton, 0, 1);
-		this.add(glassyButton, 1, 1);
-		this.add(roughButton, 2, 1);
-		this.add(new Separator(), 0, 2, 3, 1);
+		this.add(glassButton, 3, 0);
+		this.add(glassyButton, 4, 0);
+		this.add(roughButton, 5, 0);
+		this.add(new Separator(), 0, 2, 6, 1);
+		
+		this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
 	}
 	
 	private void matteButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new MatteMaterial(this.materialChosen.getColor())); }

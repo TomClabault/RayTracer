@@ -18,7 +18,8 @@
 
 .my-custom-color #materialColorLabel
 {
-	-fx-background-color: red;
+	-fx-font-size: 15px;
+	-fx-font-weight: bold;
 }
 
 .my-custom-color:focused,

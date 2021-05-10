@@ -5,6 +5,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 import rayTracer.RayTracerSettings;
 
 public class ToolboxSliders 
@@ -91,6 +92,7 @@ public class ToolboxSliders
 	    								 antialiasingSlider, 
 	    								 antialiasingCheckbox);
 	    
+	    slidersPane.getStyleClass().add(JMetroStyleClass.BACKGROUND);
 	    return slidersPane;
 	}
 	

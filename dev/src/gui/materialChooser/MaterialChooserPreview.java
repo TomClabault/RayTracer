@@ -20,6 +20,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 import materials.MatteMaterial;
 import materials.observer.ObservableConcreteMaterial;
 import materials.textures.ProceduralTextureCheckerboard;
@@ -69,6 +70,7 @@ public class MaterialChooserPreview extends Pane
 		ImageView imageView = new ImageView(this.writablePreviewImage);
 		
 		this.getChildren().add(imageView);
+		this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
 	}
 	
 	private void drawImage(IntBuffer pixelBuffer, WritablePixelFormat<IntBuffer> pixelFormat) 

@@ -14,6 +14,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.JMetroStyleClass;
+import jfxtras.styles.jmetro.Style;
 import rayTracer.RayTracerSettings;
 
 /**
@@ -47,6 +50,9 @@ public class Toolbox{
 		Stage stage = new Stage();
 		VBox root = new VBox();
 		Scene scene = new Scene(root);
+		JMetro jMetro = new JMetro(Style.DARK);
+		jMetro.setScene(scene);
+		
         scene.getStylesheets().add(ChooseRenderSettingsWindow.class.getResource("../styles/windows.css").toExternalForm());
         stage.setScene(scene);
         stage.setTitle("ToolBox");

@@ -14,6 +14,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.JMetroStyleClass;
+import jfxtras.styles.jmetro.Style;
 import materials.Material;
 import materials.MatteMaterial;
 import materials.observer.MaterialObserver;
@@ -99,6 +102,10 @@ public class MaterialChooser extends Stage
 		
 			gracefulExit(null);
 		}
+		
+		JMetro jMetro = new JMetro(Style.DARK);
+		jMetro.setScene(scene);
+		mainPane.getStyleClass().add(JMetroStyleClass.BACKGROUND);
 		
 		this.setScene(scene);
 		this.hide();

@@ -9,6 +9,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 import materials.observer.ObservableConcreteMaterial;
 
 public class MaterialChooserControls extends GridPane 
@@ -52,6 +53,8 @@ public class MaterialChooserControls extends GridPane
 		super.add(new Separator(), 0, this.labels.length/4 + 1, 4, 1);
 		
 		setInputsFromMaterial(this.materialChosen);
+		
+		this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
 	}
 	
 	private double getInputPropertyFromLabel(ObservableConcreteMaterial material, String label)

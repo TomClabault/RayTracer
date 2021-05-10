@@ -10,6 +10,9 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.JMetroStyleClass;
+import jfxtras.styles.jmetro.Style;
 
 public class SimpleRenderToolbox 
 {
@@ -35,7 +38,11 @@ public class SimpleRenderToolbox
 		mainPane.add(showStatsCheckbox, 0, 3);
 		
 		Scene windowScene = new Scene(mainPane);
-
+		JMetro jMetro = new JMetro(Style.DARK);
+		jMetro.setScene(windowScene);
+		
+		mainPane.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+		
 		saveRenderWindowStage.setScene(windowScene);
 		saveRenderWindowStage.show();
 	}
