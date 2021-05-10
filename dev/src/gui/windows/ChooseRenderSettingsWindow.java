@@ -24,6 +24,7 @@ import jfxtras.styles.jmetro.JMetroStyleClass;
 import jfxtras.styles.jmetro.Style;
 import rayTracer.RayTracerSettings;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
 /**
@@ -64,20 +65,13 @@ public class ChooseRenderSettingsWindow
         JMetro jMetro = new JMetro(Style.DARK);
         jMetro.setScene(scene);
         
-//        URL styleURL = ChooseRenderSettingsWindow.class.getResource("../styles/windows.css");
-//        if(styleURL == null)
-//        {
-//        	System.out.println("Impossible de trouver le style de SetSizeWindow");
-//        	
-//        	Platform.exit();
-//        	System.exit(0);
-//        }
-//        	
-//        scene.getStylesheets().add(styleURL.toExternalForm());
-
         this.windowStage.setScene(scene);
         this.windowStage.setTitle("Selection de la taille de rendu");
 
+        
+        
+        
+        
         Label textLargeur = new Label("Largeur de rendu:");
         Label textHauteur = new Label("Hauteur de rendu:");
         
@@ -96,19 +90,34 @@ public class ChooseRenderSettingsWindow
         GridPane.setHalignment(validateButton, HPos.CENTER);
         GridPane.setHalignment(cancelButton, HPos.CENTER);
 
+        ToolboxCheckboxes toolboxCheckboxes = new ToolboxCheckboxes(rayTracerSettings);
+        ToolboxSliders toolboxSliders = new ToolboxSliders(rayTracerSettings);
+        
         Label chooseSettingsLabel = new Label("Choisissez les reglages de votre rendu:");
+        
+        Separator separatorSettingsLabelTop = new Separator();
+        Separator separatorSettingsLabelBottom = new Separator();
+        Separator separatorSlidersCheckboxes = new Separator();
+        
         this.settingsVBox = new VBox();
         this.settingsVBox.setAlignment(Pos.CENTER);
-        this.settingsVBox.getChildren().addAll(new Separator(),
+        this.settingsVBox.getChildren().addAll(separatorSettingsLabelTop,
         								  chooseSettingsLabel,
-        								  new Separator(),
-        								  new ToolboxSliders(rayTracerSettings).getSlidersPane(),
-        								  new Separator(),
-        								  new ToolboxCheckboxes(rayTracerSettings).getCheckboxesPane());
+        								  separatorSettingsLabelBottom,
+        								  toolboxSliders,
+        								  separatorSlidersCheckboxes,
+        								  toolboxCheckboxes);
+        VBox.setMargin(separatorSettingsLabelTop, new Insets(10, 0, 10, 0));
+        VBox.setMargin(separatorSettingsLabelBottom, new Insets(10, 0, 10, 0));
+        VBox.setMargin(separatorSlidersCheckboxes, new Insets(10, 0, 10, 0));
+        VBox.setMargin(toolboxCheckboxes, new Insets(0, 10, 10, 10));
+        VBox.setMargin(toolboxSliders, new Insets(0, 10, 0, 10));
         
         
         mainGridPane.add(textLargeur, 0, 0);
         mainGridPane.add(textHauteur, 0, 1);
+        GridPane.setMargin(textLargeur, new Insets(10, 10, 0, 0));
+        GridPane.setMargin(inputLargeur, new Insets(10, 0, 0, 10));
         
         mainGridPane.add(inputLargeur, 1, 0);
         mainGridPane.add(inputHauteur, 1, 1);

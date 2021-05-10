@@ -6,25 +6,22 @@ import javafx.scene.layout.GridPane;
 import rayTracer.RayTracerSettings;
 
 //TODO (tom) extends GridPane
-public class ToolboxCheckboxes 
+public class ToolboxCheckboxes extends GridPane
 {
 	private RayTracerSettings rayTracerSettings;
-	
-	private GridPane checkboxesPane;
 	
 	public ToolboxCheckboxes(RayTracerSettings rayTracerSettings)
 	{
 		this.rayTracerSettings = rayTracerSettings;
 		
-		this.checkboxesPane = createCheckboxesPane();
+		createPane();
 	}
 	
-	private GridPane createCheckboxesPane()
+	private void createPane()
 	{
-		GridPane checkboxesPane = new GridPane();
-		checkboxesPane.setHgap(10);
-		checkboxesPane.setVgap(5);
-        
+		this.setHgap(10);
+		this.setVgap(10);
+		
         CheckBox ambiantCheckbox = new CheckBox("Ambiante");
         CheckBox diffuseCheckbox = new CheckBox("Diffuse");
         CheckBox reflectionsCheckbox = new CheckBox("Reflexions");
@@ -59,20 +56,13 @@ public class ToolboxCheckboxes
         GridPane.setConstraints(specularCheckbox, 1, 1);
         GridPane.setConstraints(fresnelCheckbox, 2, 1);
         
-        checkboxesPane.getChildren().addAll(ambiantCheckbox, 
+        this.getChildren().addAll(ambiantCheckbox, 
         									diffuseCheckbox,
         									reflectionsCheckbox,
         									roughReflectionsCheckbox,
         									refractionsCheckbox,
         									specularCheckbox,
         									fresnelCheckbox);
-        
-        return checkboxesPane;
-	}
-	
-	public GridPane getCheckboxesPane()
-	{
-		return this.checkboxesPane;
 	}
 	
 	private void ambiantCheckboxCallback(ObservableValue <? extends Boolean> observable, Boolean oldValue, Boolean newValue)			{ this.rayTracerSettings.enableAmbient(newValue); }

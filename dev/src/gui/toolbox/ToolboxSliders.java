@@ -4,11 +4,17 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import rayTracer.RayTracerSettings;
 
-public class ToolboxSliders 
+public class ToolboxSliders extends GridPane
 {
 	private RayTracerSettings rayTracerSettings;
 	
@@ -23,13 +29,12 @@ public class ToolboxSliders
 	{
 		this.rayTracerSettings = rayTracerSettings;
 		
-		this.slidersPane = createSlidersPane();
+		createSliders();
 	}
 	
-	private GridPane createSlidersPane()
+	private void createSliders()
 	{
-		GridPane slidersPane = new GridPane();
-	    slidersPane.setHgap(20);
+	    this.setHgap(20);
 	    
 	    Label depthSliderLabel = new Label("Profondeur maximale de recursion:");
 	    this.depthSlider = new Slider(0,16,2);
@@ -82,7 +87,7 @@ public class ToolboxSliders
 	    GridPane.setConstraints(this.antialiasingSlider, 0, 7);
 	    GridPane.setConstraints(antialiasingCheckbox, 1, 7);
 	    
-	    slidersPane.getChildren().addAll(depthSliderLabel,
+	    this.getChildren().addAll(depthSliderLabel,
 	    								 depthSlider,
 	    								 nbCoreSliderLabel, 
 	    								 nbCoreSlider, 
@@ -92,8 +97,15 @@ public class ToolboxSliders
 	    								 antialiasingSlider, 
 	    								 antialiasingCheckbox);
 	    
-	    slidersPane.getStyleClass().add(JMetroStyleClass.BACKGROUND);
-	    return slidersPane;
+	    /**
+	     * Pour que les sliders et les autres objets du GridPane prennent toute la largeur du GridPane 
+	     */
+	    for(int i = 0; i < this.getColumnCount(); i++)
+	    {
+	    	ColumnConstraints cc = new ColumnConstraints();
+	    	cc.setHgrow(Priority.ALWAYS);
+	    	this.getColumnConstraints().add(cc);
+	    }
 	}
 	
 	public GridPane getSlidersPane()

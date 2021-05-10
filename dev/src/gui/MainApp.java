@@ -11,7 +11,7 @@ import accelerationStructures.BVHAccelerationStructure;
 import gui.threads.RefreshSimpleRenderThread;
 import gui.threads.RenderTask;
 import gui.toolbox.SimpleRenderToolbox;
-import gui.toolbox.Toolbox;
+import gui.toolbox.ToolboxWindow;
 import gui.windows.ChooseRenderSettingsWindow;
 import gui.windows.RenderWindow;
 import gui.windows.RenderWindowOld;
@@ -106,7 +106,7 @@ public class MainApp extends Application {
         	RenderWindowOld renderWindow = new RenderWindowOld(stage, rayTracer, rayTracingScene, rayTracerSettings);
         	renderWindow.execute();
 
-        	Toolbox toolbox = new Toolbox(renderWindow.getStatPane(), renderWindow.getProgressBar(), rayTracerSettings, renderWindow.getWritableImage());
+        	ToolboxWindow toolbox = new ToolboxWindow(renderWindow.getStatPane(), renderWindow.getProgressBar(), rayTracerSettings, renderWindow.getWritableImage());
         	toolbox.execute();
         }
         else

@@ -22,7 +22,7 @@ import rayTracer.RayTracerSettings;
 /**
  * La classe contenant le code de la toolbox, c'est-a-dire la fenetre contenant les parametres que l'ont peux manipuler pendant l'affichage du rendu.
  */
-public class Toolbox{
+public class ToolboxWindow{
 
 	private Pane statPane;
 	private RayTracerSettings rayTracerSettings;
@@ -35,7 +35,7 @@ public class Toolbox{
 	 * @param statPane le Pane contenant les statistiques du rendu (typiquement les fps).
 	 * @param rayTracerSettings les parametres du rayTracer.
 	 */
-	public Toolbox(Pane statPane, ProgressBar progressBar, RayTracerSettings rayTracerSettings, WritableImage writableImage) {
+	public ToolboxWindow(Pane statPane, ProgressBar progressBar, RayTracerSettings rayTracerSettings, WritableImage writableImage) {
 		this.statPane = statPane;
 		this.rayTracerSettings = rayTracerSettings;
 		this.progressBar = progressBar;
@@ -63,7 +63,7 @@ public class Toolbox{
         progressBar.setMaxWidth(Double.MAX_VALUE);
 
         GridPane slidersPane = new ToolboxSliders(rayTracerSettings).getSlidersPane();
-        GridPane checkboxesPane = new ToolboxCheckboxes(rayTracerSettings).getCheckboxesPane();
+        GridPane checkboxesPane = new ToolboxCheckboxes(rayTracerSettings);
         
         root.getChildren().addAll(statOnOffCheckBox, 
         						  new ToolboxSaveButton("Sauvegarder le rendu", stage, this.writableImage), 
