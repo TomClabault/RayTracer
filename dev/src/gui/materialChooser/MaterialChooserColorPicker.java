@@ -1,5 +1,6 @@
 package gui.materialChooser;
 
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.DoubleProperty;
@@ -9,6 +10,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -18,6 +20,7 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -34,7 +37,7 @@ import materials.observer.ObservableConcreteMaterial;
 import maths.ColorOperations;
 
 /**
- * Class from: https://stackoverflow.com/questions/27171885/display-custom-color-dialog-directly-javafx-colorpicker
+ * Partie de la classe de: https://stackoverflow.com/questions/27171885/display-custom-color-dialog-directly-javafx-colorpicker
  */
 public class MaterialChooserColorPicker extends VBox
 {
@@ -72,7 +75,7 @@ public class MaterialChooserColorPicker extends VBox
         VBox box = new VBox();
 
         Label materialColorLabel = new Label("Material color : ");
-        materialColorLabel.setMaxWidth(Double.MAX_VALUE);
+        materialColorLabel.setPrefWidth(512);
         materialColorLabel.setAlignment(Pos.CENTER);
         
         box.getStyleClass().add("color-rect-pane");
@@ -176,19 +179,46 @@ public class MaterialChooserColorPicker extends VBox
         colorRectOpacityContainer.getChildren().setAll(colorRectHue, colorRectOverlayOne, colorRectOverlayTwo);
         colorRect.getChildren().setAll(colorRectOpacityContainer, colorRectBlackBorder, colorRectIndicator);
         VBox.setVgrow(colorRect, Priority.SOMETIMES);
-        box.getChildren().addAll(materialColorLabel, colorBar, colorRect, newColorRect);
-
+        box.getChildren().addAll(materialColorLabel, colorBar, colorRect, newColorRect, buildColorButtons());
+        
         getChildren().add(box);
 
         if (currentColorProperty.get() == null) {
             currentColorProperty.set(Color.TRANSPARENT);
         }
         
+        this.setBorder(new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT, Insets.EMPTY)));
         this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         
         updateValues();
     }
 
+    private GridPane buildColorButtons()
+    {
+    	GridPane buttonsPane = new GridPane();
+    	
+    	Button rgbButton = new Button("RGB");
+    	Button hsbButton = new Button("HSB");
+    	Button webButton = new Button("Web");
+    	rgbButton.setPrefWidth(256);
+    	hsbButton.setPrefWidth(256);
+    	
+    	Label label = new Label("placeholder");
+    	Label label2 = new Label("placeholder");
+    	label.setMaxWidth(Double.MAX_VALUE);
+    	label2.setMaxWidth(Double.MAX_VALUE);
+    	
+    	buttonsPane.add(rgbButton, 1, 0);
+    	buttonsPane.add(hsbButton, 2, 0);
+    	buttonsPane.add(webButton, 3, 0);
+    	buttonsPane.add(label, 0, 1);
+    	buttonsPane.add(label2, 4, 1);
+    	
+    	//buttonsPane.setBorder(new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, new CornerRadii(4), BorderWidths.DEFAULT, Insets.EMPTY)));
+    	
+    	return buttonsPane;
+    }
+    
     private void updateValues() {
         hue.set(getCurrentColor().getHue());
         sat.set(getCurrentColor().getSaturation()*100);

@@ -7,7 +7,7 @@ import exceptions.InvalidParallelepipedException;
 import exceptions.InvalidSphereException;
 import geometry.ArbitraryTriangleShape;
 import geometry.shapes.Triangle;
-import gui.materialChooser.MaterialChooser;
+import gui.materialChooser.MaterialChooserWindow;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -109,17 +109,17 @@ public class MainUtil
 	   			rtScene = PovAutomat.parsePov(fileChosen);
 	   		else if(fileExtension.equals(".ply"))
 	   		{
-	   			rtScene = PredefinedScenes.createEmptyScene();
+	   			//rtScene = PredefinedScenes.createEmptyScene();
 	   			
-	   			MaterialChooser matChoose = new MaterialChooser();
+	   			MaterialChooserWindow matChoose = new MaterialChooserWindow();
 	   			Material material = matChoose.chooseMaterial();
 
-	   			PlyParser plyParser = new PlyParser(material, 4, new Vector(0, -0.5, 0));
-	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
-	   			plyFileShape.getTriangleList().trimToSize();
-	   			
-	   			for(Triangle triangle : plyFileShape.getTriangleList())
-	   				rtScene.addShape(triangle);
+//	   			PlyParser plyParser = new PlyParser(material, 4, new Vector(0, -0.5, 0));
+//	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
+//	   			plyFileShape.getTriangleList().trimToSize();
+//	   			
+//	   			for(Triangle triangle : plyFileShape.getTriangleList())
+//	   				rtScene.addShape(triangle);
 	   		}
 	   	}
 	   	catch(InvalidParallelepipedException recExc)

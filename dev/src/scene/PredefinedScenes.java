@@ -37,21 +37,8 @@ public class PredefinedScenes
         ArrayList<Shape> shapeList = new ArrayList<>();
         shapeList.add(new Plane(new Vector(0, 1, 0), new Point(0, -1, 0), new MatteMaterial(Color.rgb(128, 128, 128), new ProceduralTextureCheckerboard(Color.rgb(32, 32, 32), Color.rgb(150, 150, 150), 1.0))));
         
-        Image skybox = null;
-        URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
-        if(skyboxURL != null)
-        		skybox = new Image(skyboxURL.toExternalForm());
-
         RayTracingScene sceneRT = null;
-        try
-        {
-        	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1, skybox);
-        }
-        catch (IllegalArgumentException exception)//Skybox mal chargee
-        {
-        	System.err.println(exception.getMessage() + System.lineSeparator() + "Aucune skybox ne sera utilisee.");
-        	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1);
-        }
+       	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1);
 
         return sceneRT;
     }
@@ -69,23 +56,9 @@ public class PredefinedScenes
 
         shapeList.add(new Icosphere(new Point(0, 0.5, -2), 1, subdivision, material));
         
-        Image skybox = null;
-        URL skyboxURL = RayTracingScene.class.getResource("resources/skybox.jpg");
-        if(skyboxURL != null)
-        		skybox = new Image(skyboxURL.toExternalForm());
+        RayTracingScene sceneRT;
+       	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1);
 
-        RayTracingScene sceneRT = null;
-        try
-        {
-        	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1, skybox);
-        }
-        catch (IllegalArgumentException exception)//Skybox mal chargee
-        {
-        	System.err.println(exception.getMessage() + System.lineSeparator() + "Aucune skybox ne sera utilisee.");
-        	sceneRT = new RayTracingScene(cameraRT, l, shapeList, Color.rgb(32, 32, 32), 0.1);
-        }
-
-        //sceneRT.addLight(new LightBulb(new Point(-2, 2.5, 1.440), 1));
         return sceneRT;
     }
     

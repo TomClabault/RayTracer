@@ -1,6 +1,7 @@
 package gui.materialChooser;
 
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
@@ -46,6 +47,13 @@ public class MaterialChooserPresets extends HBox
 		glassButton.setOnAction(this::glassButtonCallback);
 		glassyButton.setOnAction(this::glassyButtonCallback);
 		roughButton.setOnAction(this::roughButtonCallback);
+		
+		matteButton.setPrefSize(96, 48);
+		metallicButton.setPrefSize(96, 48);
+		mirrorButton.setPrefSize(96, 48);
+		glassButton.setPrefSize(96, 48);
+		glassyButton.setPrefSize(96, 48);
+		roughButton.setPrefSize(96, 48);
 		
 		super.getChildren().addAll(matteButton, metallicButton, mirrorButton, glassButton, glassyButton, roughButton);
 		super.setAlignment(Pos.CENTER);

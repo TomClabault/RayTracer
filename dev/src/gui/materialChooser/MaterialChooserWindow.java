@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -39,7 +40,7 @@ import maths.ColorOperations;
  * code rgb en dessous du color picker et possiblité de le modifier
  */
 
-public class MaterialChooser extends Stage
+public class MaterialChooserWindow extends Stage
 {
 	private ObservableConcreteMaterial materialChosen;
 	
@@ -68,9 +69,10 @@ public class MaterialChooser extends Stage
 		}
 	}
 	
-	public MaterialChooser()
+	public MaterialChooserWindow()
 	{
 		super();
+		this.setResizable(false);
 		this.setTitle("Choisissez votre matériau");
 		this.setOnCloseRequest(this::gracefulExit);
 		
@@ -83,12 +85,15 @@ public class MaterialChooser extends Stage
 		MaterialChooserPreview previewPane = new MaterialChooserPreview(materialChosen);
 		MaterialChooserPresets presetsPane = new MaterialChooserPresets(this.materialChosen);
 		colorPicker = new MaterialChooserColorPicker(materialChosen);
-
+		Label presetsLabel = new Label("Presets:");
+		presetsLabel.setAlignment(Pos.CENTER);
+		presetsLabel.setMaxWidth(Double.MAX_VALUE);
+		
 		VBox controlsVBox = new VBox();
 		VBox.setMargin(inputFields, new Insets(10, 10, 10, 10));
 		VBox.setMargin(presetsPane, new Insets(10, 10, 10, 10));
 		controlsVBox.setAlignment(Pos.CENTER_LEFT);
-		controlsVBox.getChildren().addAll(new Separator(), presetsPane, new Separator(), inputFields, new Separator());
+		controlsVBox.getChildren().addAll(new Separator(), presetsLabel, presetsPane, new Separator(), inputFields, new Separator());
 		
 		Button validateButton = new Button("Valider");
 		validateButton.setOnAction(this::validate);
@@ -126,6 +131,7 @@ public class MaterialChooser extends Stage
 		mainPane.getStyleClass().add(JMetroStyleClass.BACKGROUND);
 		
 		this.setScene(scene);
+		this.sizeToScene();
 		this.hide();
 	}
 	
