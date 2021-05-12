@@ -50,6 +50,8 @@ import jfxtras.styles.jmetro.JMetroStyleClass;
 import materials.observer.ObservableConcreteMaterial;
 import maths.ColorOperations;
 
+//TODO(tom) bug de la hue qui revient à 0 quand on déplace la saturation à 0 à la souris / la brightness à 100 à la souris. Problème de valeurs
+//maximales qui sont dépassées et donc le mouse handler set les valeurs comme de la merde ?
 /**
  * ColorRect,  colorBar, colorRectIndicator de:
  * https://stackoverflow.com/questions/27171885/display-custom-color-dialog-directly-javafx-colorpicker
