@@ -14,6 +14,8 @@ import javafx.scene.control.Separator;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -85,9 +87,13 @@ public class MaterialChooserWindow extends Stage
 		MaterialChooserPreview previewPane = new MaterialChooserPreview(materialChosen);
 		MaterialChooserPresets presetsPane = new MaterialChooserPresets(this.materialChosen);
 		colorPicker = new MaterialChooserColorPicker(materialChosen);
+		
 		Label presetsLabel = new Label("Presets:");
 		presetsLabel.setAlignment(Pos.CENTER);
 		presetsLabel.setMaxWidth(Double.MAX_VALUE);
+		
+		Button validateButton = new Button("Valider");
+		validateButton.setOnAction(this::validate);
 		
 		VBox controlsVBox = new VBox();
 		VBox.setMargin(inputFields, new Insets(10, 10, 10, 10));
@@ -95,20 +101,23 @@ public class MaterialChooserWindow extends Stage
 		controlsVBox.setAlignment(Pos.CENTER_LEFT);
 		controlsVBox.getChildren().addAll(new Separator(), presetsLabel, presetsPane, new Separator(), inputFields, new Separator());
 		
-		Button validateButton = new Button("Valider");
-		validateButton.setOnAction(this::validate);
+		HBox previewValidateHBox = new HBox();
+		previewValidateHBox.getChildren().add(previewPane);
+		previewValidateHBox.getChildren().add(validateButton);
 		
-		BorderPane mainPane = new BorderPane();
-		mainPane.setCenter(controlsVBox);
-		mainPane.setRight(previewPane);
-		mainPane.setLeft(colorPicker);
-		mainPane.setBottom(validateButton);
+		
+		
+		
+		
+		GridPane mainPane = new GridPane();
+		mainPane.add(colorPicker, 0, 0, 1, 2);
+		mainPane.add(controlsVBox, 1, 0);
+		mainPane.add(previewValidateHBox, 1, 1);
 		
 		mainPane.setPadding(new Insets(10, 10, 10, 10));
-		BorderPane.setMargin(previewPane, new Insets(10, 0, 10, 10));
+		GridPane.setMargin(previewPane, new Insets(10, 0, 10, 0));
 		
 		previewPane.setAlignment(Pos.CENTER);
-		BorderPane.setAlignment(validateButton, Pos.CENTER);
 		
 		MaterialUpdateHandler materialUpdateHander = new MaterialUpdateHandler(inputFields, previewPane, materialChosen);
 		
@@ -142,11 +151,6 @@ public class MaterialChooserWindow extends Stage
 		return this.materialChosen;
 	}
 
-	private void colorPickerCallback(ActionEvent event)
-	{
-		this.materialChosen.setColor(ColorOperations.sRGBGamma2_2ToLinear(this.colorPicker.getCurrentColor()));
-	}
-	
 	private void gracefulExit(WindowEvent event)
 	{
 		Platform.exit();

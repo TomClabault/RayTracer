@@ -1,17 +1,30 @@
 package gui.materialChooser;
 
 
+import java.util.ArrayList;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -21,6 +34,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -30,14 +44,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
-import javafx.scene.text.TextAlignment;
-import jfxtras.styles.jmetro.JMetro;
+import javafx.util.StringConverter;
+import javafx.util.converter.NumberStringConverter;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import materials.observer.ObservableConcreteMaterial;
 import maths.ColorOperations;
 
 /**
- * Partie de la classe de: https://stackoverflow.com/questions/27171885/display-custom-color-dialog-directly-javafx-colorpicker
+ * ColorRect,  colorBar, colorRectIndicator de:
+ * https://stackoverflow.com/questions/27171885/display-custom-color-dialog-directly-javafx-colorpicker
  */
 public class MaterialChooserColorPicker extends VBox
 {
@@ -54,14 +69,38 @@ public class MaterialChooserColorPicker extends VBox
     private final Region colorBarIndicator;
     private Pane newColorRect;
 
-    private DoubleProperty hue = new SimpleDoubleProperty(-1);
-    private DoubleProperty sat = new SimpleDoubleProperty(-1);
-    private DoubleProperty bright = new SimpleDoubleProperty(-1);
+    private GridPane colorControlsPane;
+    
+    private ToggleButton rgbButton;
+    private ToggleButton hsbButton;
+    private ToggleButton webButton;
+    
+    private final DoubleProperty hueComponent = new SimpleDoubleProperty(0);
+    private final DoubleProperty satComponent = new SimpleDoubleProperty(0);
+    private final DoubleProperty brightComponent = new SimpleDoubleProperty(0);
 
-    private DoubleProperty alpha = new SimpleDoubleProperty(100) {
+    private final IntegerProperty redComponent = new SimpleIntegerProperty(255) 
+    {
+    	@Override
+    	protected void invalidated() {updateRGBColor();}
+	};
+	
+    private final IntegerProperty greenComponent = new SimpleIntegerProperty(255) 
+    {
+    	@Override
+    	protected void invalidated() {updateRGBColor();}
+	};
+	
+    private final IntegerProperty blueComponent = new SimpleIntegerProperty(255)
+    {
+    	@Override
+    	protected void invalidated() {updateRGBColor();}
+	};
+    
+    private DoubleProperty alphaComponent = new SimpleDoubleProperty(100) {
         @Override protected void invalidated() {
             setCustomColor(new Color(getCustomColor().getRed(), getCustomColor().getGreen(), 
-                    getCustomColor().getBlue(), clamp(alpha.get() / 100)));
+                    getCustomColor().getBlue(), clamp(alphaComponent.get() / 100)));
         }
     };
 
@@ -72,13 +111,13 @@ public class MaterialChooserColorPicker extends VBox
     	this.material = material;
         this.getStyleClass().add("my-custom-color");
 
-        VBox box = new VBox();
+        VBox colorPickerBox = new VBox();
 
         Label materialColorLabel = new Label("Material color : ");
-        materialColorLabel.setPrefWidth(512);
+        materialColorLabel.setMaxWidth(Double.MAX_VALUE);
         materialColorLabel.setAlignment(Pos.CENTER);
         
-        box.getStyleClass().add("color-rect-pane");
+        colorPickerBox.getStyleClass().add("color-rect-pane");
         customColorProperty().addListener((ov, t, t1) -> colorChanged());
 
         colorRectIndicator = new Region();
@@ -96,12 +135,12 @@ public class MaterialChooserColorPicker extends VBox
         colorRectHue.backgroundProperty().bind(new ObjectBinding<Background>() {
 
             {
-                bind(hue);
+                bind(hueComponent);
             }
 
             @Override protected Background computeValue() {
                 return new Background(new BackgroundFill(
-                        Color.hsb(hue.getValue(), 1.0, 1.0), 
+                        Color.hsb(hueComponent.getValue(), 1.0, 1.0), 
                         CornerRadii.EMPTY, Insets.EMPTY));
 
             }
@@ -118,8 +157,8 @@ public class MaterialChooserColorPicker extends VBox
         EventHandler<MouseEvent> rectMouseHandler = event -> {
             final double x = event.getX();
             final double y = event.getY();
-            sat.set(clamp(x / colorRect.getWidth()) * 100);
-            bright.set(100 - (clamp(y / colorRect.getHeight()) * 100));
+            satComponent.set(clamp(x / colorRect.getWidth()) * 100);
+            brightComponent.set(100 - (clamp(y / colorRect.getHeight()) * 100));
             updateHSBColor();
         };
 
@@ -147,16 +186,16 @@ public class MaterialChooserColorPicker extends VBox
         colorBarIndicator.setCache(true);
 
         colorRectIndicator.layoutXProperty().bind(
-            sat.divide(100).multiply(colorRect.widthProperty()));
+            satComponent.divide(100).multiply(colorRect.widthProperty()));
         colorRectIndicator.layoutYProperty().bind(
-            Bindings.subtract(1, bright.divide(100)).multiply(colorRect.heightProperty()));
+            Bindings.subtract(1, brightComponent.divide(100)).multiply(colorRect.heightProperty()));
         colorBarIndicator.layoutXProperty().bind(
-            hue.divide(360).multiply(colorBar.widthProperty()));
-        colorRectOpacityContainer.opacityProperty().bind(alpha.divide(100));
+            hueComponent.divide(360).multiply(colorBar.widthProperty()));
+        colorRectOpacityContainer.opacityProperty().bind(alphaComponent.divide(100));
 
         EventHandler<MouseEvent> barMouseHandler = event -> {
             final double x = event.getX();
-            hue.set(clamp(x / colorRect.getWidth()) * 360);
+            hueComponent.set(clamp(x / colorRect.getWidth()) * 360);
             updateHSBColor();
         };
 
@@ -179,10 +218,14 @@ public class MaterialChooserColorPicker extends VBox
         colorRectOpacityContainer.getChildren().setAll(colorRectHue, colorRectOverlayOne, colorRectOverlayTwo);
         colorRect.getChildren().setAll(colorRectOpacityContainer, colorRectBlackBorder, colorRectIndicator);
         VBox.setVgrow(colorRect, Priority.SOMETIMES);
-        box.getChildren().addAll(materialColorLabel, colorBar, colorRect, newColorRect, buildColorButtons());
         
-        getChildren().add(box);
-
+        
+        colorPickerBox.getChildren().addAll(materialColorLabel, colorBar, colorRect, newColorRect);
+        
+        this.colorControlsPane = buildColorControls();
+        this.getChildren().addAll(colorPickerBox, this.colorControlsPane);
+        this.setMaxWidth(Double.MAX_VALUE);
+        
         if (currentColorProperty.get() == null) {
             currentColorProperty.set(Color.TRANSPARENT);
         }
@@ -193,52 +236,213 @@ public class MaterialChooserColorPicker extends VBox
         updateValues();
     }
 
-    private GridPane buildColorButtons()
+    private GridPane buildColorControls()
     {
     	GridPane buttonsPane = new GridPane();
+    	buttonsPane.setVgap(10);
     	
-    	Button rgbButton = new Button("RGB");
-    	Button hsbButton = new Button("HSB");
-    	Button webButton = new Button("Web");
-    	rgbButton.setPrefWidth(256);
-    	hsbButton.setPrefWidth(256);
+    	ToggleGroup buttonsGroup = new ToggleGroup();
     	
-    	Label label = new Label("placeholder");
-    	Label label2 = new Label("placeholder");
-    	label.setMaxWidth(Double.MAX_VALUE);
-    	label2.setMaxWidth(Double.MAX_VALUE);
+    	this.rgbButton = new ToggleButton("RGB");
+    	this.hsbButton = new ToggleButton("HSB");
+    	this.webButton = new ToggleButton("Web");
+    	rgbButton.setToggleGroup(buttonsGroup);
+    	rgbButton.setOnAction(this::createColorControlsCallback);
+    	hsbButton.setOnAction(this::createColorControlsCallback);
+    	hsbButton.setToggleGroup(buttonsGroup);
+    	hsbButton.setSelected(true);
+    	webButton.setOnAction(this::createColorControlsCallback);
+    	webButton.setToggleGroup(buttonsGroup);
     	
-    	buttonsPane.add(rgbButton, 1, 0);
-    	buttonsPane.add(hsbButton, 2, 0);
-    	buttonsPane.add(webButton, 3, 0);
-    	buttonsPane.add(label, 0, 1);
-    	buttonsPane.add(label2, 4, 1);
     	
-    	//buttonsPane.setBorder(new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, new CornerRadii(4), BorderWidths.DEFAULT, Insets.EMPTY)));
+    	
+    	HBox buttonsHBox = new HBox();
+    	HBox.setMargin(hsbButton, new Insets(0, 5, 0, 5));
+    	GridPane.setHalignment(buttonsHBox, HPos.CENTER);
+    	
+    	buttonsHBox.setPadding(new Insets(4));
+    	buttonsHBox.setAlignment(Pos.CENTER);
+    	buttonsHBox.getChildren().addAll(rgbButton, new Label(" -"), hsbButton, new Label("- "), webButton);
+    	
+    	buttonsPane.add(buttonsHBox, 0, 0);
+    	buttonsPane.getChildren().add(createColorControls(1));
     	
     	return buttonsPane;
     }
     
-    private void updateValues() {
-        hue.set(getCurrentColor().getHue());
-        sat.set(getCurrentColor().getSaturation()*100);
-        bright.set(getCurrentColor().getBrightness()*100);
-        alpha.set(getCurrentColor().getOpacity()*100);
-        setCustomColor(Color.hsb(hue.get(), clamp(sat.get() / 100), 
-                clamp(bright.get() / 100), clamp(alpha.get()/100)));
+    private void createColorControlsCallback(ActionEvent event)
+    {
+    	//Supprime les boutons existants car on va les remplacer par les bons 
+    	//(rgb, hsb ou web selon sur quoi on a cliqué)
+   		this.colorControlsPane.getChildren().remove(this.colorControlsPane.getChildren().size() - 1);
+    	
+    	if(event.getSource().equals(this.rgbButton))
+    		this.colorControlsPane.getChildren().addAll(createColorControls(0));
+    	else if(event.getSource().equals(this.hsbButton))
+    		this.colorControlsPane.getChildren().addAll(createColorControls(1));
+    	else if(event.getSource().equals(this.webButton))
+    		this.colorControlsPane.getChildren().addAll(createColorControls(2));
+    }
+    
+    private GridPane createColorControls(int index)
+    {
+    	String prompts[][] =
+    	{
+    		{"red", "green", "blue"},	
+    		{"h", "s", "b"},
+    		{"#FFFFFF", "", ""},
+    	};
+    	
+    	String labels[][] = 
+    	{
+    		{"Red :", "Green :", "Blue :"},
+    		{"Hue :", "Saturation :", "Brightness :"},
+    		{"Hex", "", ""}
+    	};
+    	
+    	String units[][] = 
+    	{
+    		{"", "", ""},
+    		{"\u00B0", "%", "%"},
+    		{"", "", ""}
+    	};
+    	
+    	GridPane nodePane = new GridPane();
+    	
+    	
+    	
+    	Label label1 = new Label(labels[index][0]);
+    	Label label2 = new Label(labels[index][1]);
+    	Label label3 = new Label(labels[index][2]);
+    	
+    	Label unit1 = new Label(units[index][0]);
+    	Label unit2 = new Label(units[index][1]);
+    	Label unit3 = new Label(units[index][2]);
+    	
+    	Slider slider1 = new Slider();
+    	Slider slider2 = new Slider();
+    	Slider slider3 = new Slider();
+    	
+    	TextField input1 = new TextField();
+    	TextField input2 = new TextField();
+    	TextField input3 = new TextField();
+    	input1.setPrefWidth(50);
+    	input1.setPromptText(prompts[index][0]);
+    	input2.setPrefWidth(50);
+    	input2.setPromptText(prompts[index][1]);
+    	input3.setPrefWidth(50);
+    	input3.setPromptText(prompts[index][2]);
+    	
+    	StringConverter<Number> converter = new NumberStringConverter();
+    	switch(index)
+    	{
+    	case 0:
+    		input1.textProperty().bindBidirectional(this.redComponent, converter);
+    		input2.textProperty().bindBidirectional(this.greenComponent, converter);
+    		input3.textProperty().bindBidirectional(this.blueComponent, converter);
+    		
+    		slider1.valueProperty().bindBidirectional(this.redComponent);
+    		slider2.valueProperty().bindBidirectional(this.greenComponent);
+    		slider3.valueProperty().bindBidirectional(this.blueComponent);
+    		
+    		slider1.setMax(255);
+    		slider2.setMax(255);
+    		slider3.setMax(255);
+    		break;
+    		
+    	case 1:
+    		//TODO (tom) la hue retourne à zéro quand on positionne le curseur du color picker tout à gauche ?
+    		input1.textProperty().bindBidirectional(this.hueComponent, converter);
+    		input2.textProperty().bindBidirectional(this.satComponent, converter);
+    		input3.textProperty().bindBidirectional(this.brightComponent, converter);
+    		
+    		slider1.valueProperty().bindBidirectional(this.hueComponent);
+    		slider2.valueProperty().bindBidirectional(this.satComponent);
+    		slider3.valueProperty().bindBidirectional(this.brightComponent);
+    		
+    		slider1.setMax(359);
+    		slider2.setMax(100);
+    		slider3.setMax(100);
+    		break;
+    	}
+    	
+    	Insets labelInsets = new Insets(0, 10, 0, 0);
+    	GridPane.setMargin(label1, labelInsets);
+    	GridPane.setMargin(label2, labelInsets);
+    	GridPane.setMargin(label3, labelInsets);
+    	GridPane.setConstraints(label1, 0, 0);
+    	GridPane.setConstraints(label2, 0, 1);
+    	GridPane.setConstraints(label3, 0, 2);
+
+    	GridPane.setConstraints(slider1, 1, 0, 3, 1);
+    	GridPane.setConstraints(slider2, 1, 1, 3, 1);
+    	GridPane.setConstraints(slider3, 1, 2, 3, 1);
+    	
+    	GridPane.setConstraints(input1, 4, 0);
+    	GridPane.setConstraints(input2, 4, 1);
+    	GridPane.setConstraints(input3, 4, 2);
+    	
+    	Insets unitInsets = new Insets(0, 0, 0, 5);
+    	GridPane.setMargin(unit1, unitInsets);
+    	GridPane.setMargin(unit2, unitInsets);
+    	GridPane.setMargin(unit3, unitInsets);
+    	GridPane.setConstraints(unit1, 5, 0);
+    	GridPane.setConstraints(unit2, 5, 1);
+    	GridPane.setConstraints(unit3, 5, 2);
+    	
+    	
+    	
+    	nodePane.getChildren().add(label1);
+    	if(index >= 0 && index <= 1)//rgb ou hsb --> pas de slider pour le web
+    		nodePane.getChildren().add(slider1);
+    	
+    	nodePane.getChildren().addAll(input1, unit1);
+    	
+    	if(index >= 0 && index <= 1)//rgb ou hsb
+    	{
+    		nodePane.getChildren().addAll(label2, label3,
+    									  slider2, slider3,
+    									  input2, input3, 
+    									  unit2, unit3);
+    	}
+    	
+    	GridPane.setConstraints(nodePane, 0, 1);
+    	return nodePane;
+    }
+    
+    private void updateValues() 
+    {
+        hueComponent.set(getCurrentColor().getHue());
+        satComponent.set(getCurrentColor().getSaturation()*100);
+        brightComponent.set(getCurrentColor().getBrightness()*100);
+        alphaComponent.set(getCurrentColor().getOpacity()*100);
+        setCustomColor(Color.hsb(hueComponent.get(), clamp(satComponent.get() / 100), 
+                clamp(brightComponent.get() / 100), clamp(alphaComponent.get()/100)));
     }
 
     private void colorChanged() {
-        hue.set(getCustomColor().getHue());
-        sat.set(getCustomColor().getSaturation() * 100);
-        bright.set(getCustomColor().getBrightness() * 100);
+        hueComponent.set(getCustomColor().getHue());
+        satComponent.set(getCustomColor().getSaturation() * 100);
+        brightComponent.set(getCustomColor().getBrightness() * 100);
     }
 
-    private void updateHSBColor() {
-        Color newColor = Color.hsb(hue.get(), clamp(sat.get() / 100), 
-                        clamp(bright.get() / 100), clamp(alpha.get() / 100));
+    private void updateHSBColor() 
+    {
+        Color newColor = Color.hsb(hueComponent.get(), 
+        					 clamp(satComponent.get() / 100), 
+        					 clamp(brightComponent.get() / 100),
+        					 clamp(alphaComponent.get() / 100));
+        
+        this.redComponent.set((int)(newColor.getRed() * 255));
+        this.greenComponent.set((int)(newColor.getGreen() * 255));
+        this.blueComponent.set((int)(newColor.getBlue() * 255));
         
         setCustomColor(newColor);
+    }
+    
+    private void updateRGBColor()
+    {
+    	setCustomColor(Color.rgb(this.redComponent.get(), this.greenComponent.get(), this.blueComponent.get()));
     }
 
     @Override 
@@ -247,11 +451,11 @@ public class MaterialChooserColorPicker extends VBox
         colorRectIndicator.autosize();
     }
 
-    static double clamp(double value) {
+    private double clamp(double value) {
         return value < 0 ? 0 : value > 1 ? 1 : value;
     }
 
-    private static LinearGradient createHueGradient() {
+    private LinearGradient createHueGradient() {
         double offset;
         Stop[] stops = new Stop[255];
         for (int x = 0; x < 255; x++) {
@@ -267,16 +471,16 @@ public class MaterialChooserColorPicker extends VBox
         updateValues();
     }
 
-    Color getCurrentColor() 
+    private Color getCurrentColor() 
     {
         return currentColorProperty.get();
     }
 
-    final ObjectProperty<Color> customColorProperty() {
+    private ObjectProperty<Color> customColorProperty() {
         return customColorProperty;
     }
 
-    void setCustomColor(Color color) 
+    private void setCustomColor(Color color) 
     {
         customColorProperty.set(color);
         

@@ -11,9 +11,6 @@
     -fx-background-color: derive(#ececec,26.4%);
     -fx-padding: 1.25em;
     -fx-spacing: 1.25em;
-    -fx-min-width: 20em;
-    -fx-pref-width: 20em;
-    -fx-max-width: 20em;
 }
 
 .my-custom-color #materialColorLabel
@@ -32,6 +29,7 @@
     -fx-pref-height: 16.666667em;
     -fx-alignment: top-left;
     -fx-fill-height: true;
+	-fx-pref-width: 24em;
 }
 
 .my-custom-color .color-rect-pane .color-rect {
