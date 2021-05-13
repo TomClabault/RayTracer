@@ -1,11 +1,14 @@
 package gui;
 
+import javafx.scene.control.ColorPicker;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelFormat;
 
 import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import com.sun.javafx.scene.control.CustomColorDialog;
 
 import accelerationStructures.BVHAccelerationStructure;
 import gui.threads.RefreshSimpleRenderThread;
@@ -69,7 +72,6 @@ public class MainApp extends Application {
     public void start(Stage stage) 
     {
 	   	stage.setOnCloseRequest(this::gracefulExit);
-
 	   	
 	   	
     	//TODO (tom) n'activer le comptage du nombre d'intersections que sur demande (une feature 'debug' en gros) parce que ça tape dans les perfs

@@ -61,7 +61,7 @@ public class MaterialChooserColorPicker extends VBox
     private final ObjectProperty<Color> currentColorProperty = 
         new SimpleObjectProperty<>(Color.WHITE);
     private final ObjectProperty<Color> customColorProperty = 
-        new SimpleObjectProperty<>(Color.TRANSPARENT);
+        new SimpleObjectProperty<>(Color.RED);
 
     private Pane colorRect;
     private final Pane colorBar;
@@ -77,26 +77,26 @@ public class MaterialChooserColorPicker extends VBox
     private ToggleButton hsbButton;
     private ToggleButton webButton;
     
-    private final DoubleProperty hueComponent = new SimpleDoubleProperty(0);
-    private final DoubleProperty satComponent = new SimpleDoubleProperty(0);
-    private final DoubleProperty brightComponent = new SimpleDoubleProperty(0);
+    private final DoubleProperty hueComponent = new SimpleDoubleProperty(-1);
+    private final DoubleProperty satComponent = new SimpleDoubleProperty(-1);
+    private final DoubleProperty brightComponent = new SimpleDoubleProperty(-1);
 
     private final IntegerProperty redComponent = new SimpleIntegerProperty(255) 
     {
     	@Override
-    	protected void invalidated() {updateRGBColor();}
+    	protected void invalidated() {updateColor();}
 	};
 	
     private final IntegerProperty greenComponent = new SimpleIntegerProperty(255) 
     {
     	@Override
-    	protected void invalidated() {updateRGBColor();}
+    	protected void invalidated() {updateColor();}
 	};
 	
     private final IntegerProperty blueComponent = new SimpleIntegerProperty(255)
     {
     	@Override
-    	protected void invalidated() {updateRGBColor();}
+    	protected void invalidated() {updateColor();}
 	};
     
     private DoubleProperty alphaComponent = new SimpleDoubleProperty(100) {
@@ -156,12 +156,17 @@ public class MaterialChooserColorPicker extends VBox
                 new Stop(1, Color.rgb(255, 255, 255, 0))), 
                 CornerRadii.EMPTY, Insets.EMPTY)));
 
-        EventHandler<MouseEvent> rectMouseHandler = event -> {
+        EventHandler<MouseEvent> rectMouseHandler = event -> 
+        {
             final double x = event.getX();
             final double y = event.getY();
+            
             satComponent.set(clamp(x / colorRect.getWidth()) * 100);
             brightComponent.set(100 - (clamp(y / colorRect.getHeight()) * 100));
-            updateHSBColor();
+            
+            //brightComponent.set(0);
+            
+            updateColor();
         };
 
         colorRectOverlayTwo = new Pane();
@@ -198,7 +203,7 @@ public class MaterialChooserColorPicker extends VBox
         EventHandler<MouseEvent> barMouseHandler = event -> {
             final double x = event.getX();
             hueComponent.set(clamp(x / colorRect.getWidth()) * 360);
-            updateHSBColor();
+            updateColor();
         };
 
         colorBar.setOnMouseDragged(barMouseHandler);
@@ -232,7 +237,19 @@ public class MaterialChooserColorPicker extends VBox
             currentColorProperty.set(Color.TRANSPARENT);
         }
         
-        this.setBorder(new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT, Insets.EMPTY)));
+        this.borderProperty().bind(new ObjectBinding<Border>() 
+        {
+        	{
+        		bind(customColorProperty);
+        	}
+        	
+        	@Override
+        	protected Border computeValue()
+        	{
+        		return new Border(new BorderStroke(customColorProperty.get(), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT, Insets.EMPTY));
+        	}
+		});
+        //this.setBorder(new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT, Insets.EMPTY)));
         this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         
         updateValues();
@@ -362,7 +379,7 @@ public class MaterialChooserColorPicker extends VBox
     		slider2.valueProperty().bindBidirectional(this.satComponent);
     		slider3.valueProperty().bindBidirectional(this.brightComponent);
     		
-    		slider1.setMax(359);
+    		slider1.setMax(360);
     		slider2.setMax(100);
     		slider3.setMax(100);
     		break;
@@ -422,13 +439,14 @@ public class MaterialChooserColorPicker extends VBox
                 clamp(brightComponent.get() / 100), clamp(alphaComponent.get()/100)));
     }
 
-    private void colorChanged() {
+    private void colorChanged() 
+    {
         hueComponent.set(getCustomColor().getHue());
         satComponent.set(getCustomColor().getSaturation() * 100);
         brightComponent.set(getCustomColor().getBrightness() * 100);
     }
 
-    private void updateHSBColor() 
+    private void updateColor() 
     {
         Color newColor = Color.hsb(hueComponent.get(), 
         					 clamp(satComponent.get() / 100), 
@@ -442,11 +460,6 @@ public class MaterialChooserColorPicker extends VBox
         setCustomColor(newColor);
     }
     
-    private void updateRGBColor()
-    {
-    	setCustomColor(Color.rgb(this.redComponent.get(), this.greenComponent.get(), this.blueComponent.get()));
-    }
-
     @Override 
     protected void layoutChildren() {
         super.layoutChildren();            
@@ -454,7 +467,7 @@ public class MaterialChooserColorPicker extends VBox
     }
 
     private double clamp(double value) {
-        return value < 0 ? 0 : value > 1 ? 1 : value;
+        return value <= 0 ? 0 : value >= 1 ? 1 : value;
     }
 
     private LinearGradient createHueGradient() {
