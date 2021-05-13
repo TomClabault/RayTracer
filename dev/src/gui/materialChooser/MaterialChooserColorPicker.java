@@ -81,19 +81,19 @@ public class MaterialChooserColorPicker extends VBox
     private final DoubleProperty satComponent = new SimpleDoubleProperty(-1);
     private final DoubleProperty brightComponent = new SimpleDoubleProperty(-1);
 
-    private final IntegerProperty redComponent = new SimpleIntegerProperty(255) 
+    private final IntegerProperty redComponent = new SimpleIntegerProperty(2000) 
     {
     	@Override
     	protected void invalidated() {updateColor();}
 	};
 	
-    private final IntegerProperty greenComponent = new SimpleIntegerProperty(255) 
+    private final IntegerProperty greenComponent = new SimpleIntegerProperty(2000) 
     {
     	@Override
     	protected void invalidated() {updateColor();}
 	};
 	
-    private final IntegerProperty blueComponent = new SimpleIntegerProperty(255)
+    private final IntegerProperty blueComponent = new SimpleIntegerProperty(2000)
     {
     	@Override
     	protected void invalidated() {updateColor();}
