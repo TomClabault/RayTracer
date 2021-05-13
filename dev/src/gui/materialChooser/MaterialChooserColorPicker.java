@@ -1,7 +1,6 @@
 package gui.materialChooser;
 
 
-import java.util.ArrayList;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
@@ -11,15 +10,11 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -50,8 +45,8 @@ import jfxtras.styles.jmetro.JMetroStyleClass;
 import materials.observer.ObservableConcreteMaterial;
 import maths.ColorOperations;
 
-//TODO(tom) bug de la hue qui revient à 0 quand on déplace la saturation à 0 à la souris / la brightness à 100 à la souris. Problème de valeurs
-//maximales qui sont dépassées et donc le mouse handler set les valeurs comme de la merde ?
+//TODO(tom) bug des sliders qui ne sont pas bien positionnés quand on passe de RGB -> HSB ou
+//HSB --> RGB
 /**
  * ColorRect,  colorBar, colorRectIndicator de:
  * https://stackoverflow.com/questions/27171885/display-custom-color-dialog-directly-javafx-colorpicker
@@ -61,7 +56,7 @@ public class MaterialChooserColorPicker extends VBox
     private final ObjectProperty<Color> currentColorProperty = 
         new SimpleObjectProperty<>(Color.WHITE);
     private final ObjectProperty<Color> customColorProperty = 
-        new SimpleObjectProperty<>(Color.RED);
+        new SimpleObjectProperty<>(Color.WHITE);
 
     private Pane colorRect;
     private final Pane colorBar;
@@ -77,27 +72,93 @@ public class MaterialChooserColorPicker extends VBox
     private ToggleButton hsbButton;
     private ToggleButton webButton;
     
-    private final DoubleProperty hueComponent = new SimpleDoubleProperty(-1);
-    private final DoubleProperty satComponent = new SimpleDoubleProperty(-1);
-    private final DoubleProperty brightComponent = new SimpleDoubleProperty(-1);
+    private boolean colorChangeOngoing;
+    
+    private final DoubleProperty hueComponent = new SimpleDoubleProperty(0)
+    { 
+    	@Override protected void invalidated() 
+    	{
+    		if(!colorChangeOngoing)
+    		{
+    			colorChangeOngoing = true;
+    			updateColorFromHSB();
+    			updateRGBComponents();
+    			colorChangeOngoing = false;
+    		}
+    	}
+    };
+    
+    private final DoubleProperty satComponent = new SimpleDoubleProperty(0) 
+    { 
+    	@Override protected void invalidated() 
+    	{
+    		if(!colorChangeOngoing)
+    		{
+    			colorChangeOngoing = true;
+    			updateColorFromHSB();
+    			updateRGBComponents();
+    			colorChangeOngoing = false;
+    		}
+    	}
+    };
+    
+    private final DoubleProperty brightComponent = new SimpleDoubleProperty(0) 
+    { 
+    	@Override protected void invalidated() 
+    	{
+    		if(!colorChangeOngoing)
+    		{
+    			colorChangeOngoing = true;
+    			updateColorFromHSB();
+    			updateRGBComponents();
+    			colorChangeOngoing = false;
+    		}
+    	}
+    };
 
-    private final IntegerProperty redComponent = new SimpleIntegerProperty(2000) 
-    {
-    	@Override
-    	protected void invalidated() {updateColor();}
-	};
-	
-    private final IntegerProperty greenComponent = new SimpleIntegerProperty(2000) 
-    {
-    	@Override
-    	protected void invalidated() {updateColor();}
-	};
-	
-    private final IntegerProperty blueComponent = new SimpleIntegerProperty(2000)
-    {
-    	@Override
-    	protected void invalidated() {updateColor();}
-	};
+    private final IntegerProperty redComponent = new SimpleIntegerProperty(0) 
+    { 
+    	@Override protected void invalidated() 
+    	{
+    		if(!colorChangeOngoing)
+    		{
+    			colorChangeOngoing = true;
+    			updateColorFromRGB();
+    			updateHSBComponents();
+    			colorChangeOngoing = false;
+    			
+    			System.out.println("hue: " + hueComponent);
+    		}
+    	}
+    };
+    
+    private final IntegerProperty greenComponent = new SimpleIntegerProperty(0) 
+    { 
+    	@Override protected void invalidated() 
+    	{
+    		if(!colorChangeOngoing)
+    		{
+    			colorChangeOngoing = true;
+    			updateColorFromRGB();
+    			updateHSBComponents();
+    			colorChangeOngoing = false;
+    		}
+    	}
+    };
+    
+    private final IntegerProperty blueComponent = new SimpleIntegerProperty(0) 
+    { 
+    	@Override protected void invalidated() 
+    	{
+    		if(!colorChangeOngoing)
+    		{
+    			colorChangeOngoing = true;
+    			updateColorFromRGB();
+    			updateHSBComponents();
+    			colorChangeOngoing = false;
+    		}
+    	}
+    };
     
     private DoubleProperty alphaComponent = new SimpleDoubleProperty(100) {
         @Override protected void invalidated() {
@@ -110,6 +171,7 @@ public class MaterialChooserColorPicker extends VBox
     
     public MaterialChooserColorPicker(ObservableConcreteMaterial material) 
     {
+    	this.colorChangeOngoing = false;
     	this.material = material;
         this.getStyleClass().add("my-custom-color");
 
@@ -120,7 +182,7 @@ public class MaterialChooserColorPicker extends VBox
         materialColorLabel.setAlignment(Pos.CENTER);
         
         colorPickerBox.getStyleClass().add("color-rect-pane");
-        customColorProperty().addListener((ov, t, t1) -> colorChanged());
+        customColorProperty().addListener((ov, t, t1) -> updateRGBComponents());
 
         colorRectIndicator = new Region();
         colorRectIndicator.setId("color-rect-indicator");
@@ -158,15 +220,11 @@ public class MaterialChooserColorPicker extends VBox
 
         EventHandler<MouseEvent> rectMouseHandler = event -> 
         {
-            final double x = event.getX();
-            final double y = event.getY();
+            double x = event.getX();
+            double y = event.getY();
             
             satComponent.set(clamp(x / colorRect.getWidth()) * 100);
             brightComponent.set(100 - (clamp(y / colorRect.getHeight()) * 100));
-            
-            //brightComponent.set(0);
-            
-            updateColor();
         };
 
         colorRectOverlayTwo = new Pane();
@@ -192,18 +250,14 @@ public class MaterialChooserColorPicker extends VBox
         colorBarIndicator.setMouseTransparent(true);
         colorBarIndicator.setCache(true);
 
-        colorRectIndicator.layoutXProperty().bind(
-            satComponent.divide(100).multiply(colorRect.widthProperty()));
-        colorRectIndicator.layoutYProperty().bind(
-            Bindings.subtract(1, brightComponent.divide(100)).multiply(colorRect.heightProperty()));
-        colorBarIndicator.layoutXProperty().bind(
-            hueComponent.divide(360).multiply(colorBar.widthProperty()));
+        colorRectIndicator.layoutXProperty().bind(satComponent.divide(100).multiply(colorRect.widthProperty()));
+        colorRectIndicator.layoutYProperty().bind(Bindings.subtract(1, brightComponent.divide(100)).multiply(colorRect.heightProperty()));
+        colorBarIndicator.layoutXProperty().bind(hueComponent.divide(360).multiply(colorBar.widthProperty()));
         colorRectOpacityContainer.opacityProperty().bind(alphaComponent.divide(100));
 
         EventHandler<MouseEvent> barMouseHandler = event -> {
             final double x = event.getX();
             hueComponent.set(clamp(x / colorRect.getWidth()) * 360);
-            updateColor();
         };
 
         colorBar.setOnMouseDragged(barMouseHandler);
@@ -249,7 +303,6 @@ public class MaterialChooserColorPicker extends VBox
         		return new Border(new BorderStroke(customColorProperty.get(), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT, Insets.EMPTY));
         	}
 		});
-        //this.setBorder(new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT, Insets.EMPTY)));
         this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         
         updateValues();
@@ -439,23 +492,40 @@ public class MaterialChooserColorPicker extends VBox
                 clamp(brightComponent.get() / 100), clamp(alphaComponent.get()/100)));
     }
 
-    private void colorChanged() 
+    private void updateRGBComponents() 
     {
-        hueComponent.set(getCustomColor().getHue());
-        satComponent.set(getCustomColor().getSaturation() * 100);
-        brightComponent.set(getCustomColor().getBrightness() * 100);
+        redComponent.set((int)(getCustomColor().getRed() * 255));
+        greenComponent.set((int)(getCustomColor().getGreen() * 255));
+        blueComponent.set((int)(getCustomColor().getBlue() * 255));
+    }
+    
+    private void updateHSBComponents()
+    {
+    	if(!(getCustomColor().getBrightness() == 0 || getCustomColor().getSaturation() == 0))
+    		hueComponent.set(getCustomColor().getHue());
+    	
+    	brightComponent.set(getCustomColor().getBrightness() * 100);
+    	
+    	if(!(getCustomColor().getBrightness() == 0))
+    		satComponent.set(getCustomColor().getSaturation() * 100);
     }
 
-    private void updateColor() 
+    private void updateColorFromHSB() 
     {
         Color newColor = Color.hsb(hueComponent.get(), 
         					 clamp(satComponent.get() / 100), 
         					 clamp(brightComponent.get() / 100),
         					 clamp(alphaComponent.get() / 100));
         
-        this.redComponent.set((int)(newColor.getRed() * 255));
-        this.greenComponent.set((int)(newColor.getGreen() * 255));
-        this.blueComponent.set((int)(newColor.getBlue() * 255));
+        
+        setCustomColor(newColor);
+    }
+    
+    private void updateColorFromRGB() 
+    {
+        Color newColor = Color.rgb(redComponent.get(), 
+					        	   greenComponent.get(), 
+					        	   blueComponent.get());
         
         setCustomColor(newColor);
     }
