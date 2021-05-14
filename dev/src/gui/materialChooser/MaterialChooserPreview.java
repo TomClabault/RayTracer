@@ -47,6 +47,8 @@ public class MaterialChooserPreview extends GridPane
 	private ExecutorService executorService;
 	private Future<?> renderTaskFuture;
 	
+	private boolean previewPushed;
+	
 	private static final int PREVIEW_WIDTH = 192;
 	private static final int PREVIEW_HEIGHT = 192;
 	
@@ -64,6 +66,7 @@ public class MaterialChooserPreview extends GridPane
 		
 		this.executorService = Executors.newFixedThreadPool(1);
 		this.renderTaskFuture = null;
+		this.previewPushed = true;
 		
 		this.observableMaterial = material;
 		
@@ -117,12 +120,19 @@ public class MaterialChooserPreview extends GridPane
 		RenderTask renderTask = new RenderTask(this.writablePreviewImage.getPixelWriter(), WritablePixelFormat.getIntArgbInstance(), rayTracer, rtScene, settings);
 		renderTask.setOnSucceeded(this::pushPreview);
 		
-		if(this.renderTaskFuture == null || this.renderTaskFuture.isDone())
+		if(this.renderTaskFuture == null || this.renderTaskFuture.isDone() && previewPushed)
+		{
+			System.out.println("submitted");
+			previewPushed = false;
+			
 			this.renderTaskFuture = this.executorService.submit(renderTask);
+		}
 	}
 	
 	private void pushPreview(WorkerStateEvent event)
 	{
+		System.out.println("pushPreview : " + this.rayTracer.getProgression());
 		drawImage(this.rayTracer.getRenderedPixels(), WritablePixelFormat.getIntArgbInstance());
+		previewPushed = true;
 	}
 }
