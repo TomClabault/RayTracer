@@ -1,5 +1,7 @@
 package gui.materialChooser;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ import scene.Camera;
 import scene.RayTracingScene;
 import scene.lights.LightBulb;
 import scene.lights.PositionnalLight;
+import util.ImageUtil;
 
 public class MaterialChooserPreview extends GridPane
 {
@@ -55,7 +58,7 @@ public class MaterialChooserPreview extends GridPane
 	public MaterialChooserPreview(ObservableConcreteMaterial material)
 	{
 		super();
-
+		
 		this.rayTracer = new RayTracer(PREVIEW_WIDTH, PREVIEW_HEIGHT);
 		this.rtScene = createPreviewScene();
 		this.rtScene.setAccelerationStructure(new NoAccelerationStructure(this.rtScene.getSceneObjects()));
@@ -63,14 +66,14 @@ public class MaterialChooserPreview extends GridPane
 		this.settings.setRecursionDepth(10);
 		this.settings.setBlurryReflectionsSampleCount(5);
 		this.settings.setTileSize(16);
-		
+
+		this.writablePreviewImage = new WritableImage(PREVIEW_WIDTH, PREVIEW_HEIGHT);
+
 		this.executorService = Executors.newFixedThreadPool(1);
 		this.renderTaskFuture = null;
 		this.previewPushed = true;
 		
 		this.observableMaterial = material;
-		
-		this.writablePreviewImage = new WritableImage(PREVIEW_WIDTH, PREVIEW_HEIGHT);
 		
 		ImageView imageView = new ImageView(this.writablePreviewImage);
 		
@@ -122,16 +125,16 @@ public class MaterialChooserPreview extends GridPane
 		
 		if(this.renderTaskFuture == null || this.renderTaskFuture.isDone() && previewPushed)
 		{
-			System.out.println("submitted");
 			previewPushed = false;
 			
 			this.renderTaskFuture = this.executorService.submit(renderTask);
 		}
 	}
 	
+	//TODO (tom) quand on fait juste un clic dans le color rect du color picker, juste après avoir lancé le programme
+	//il y a du tearing dans la preview
 	private void pushPreview(WorkerStateEvent event)
 	{
-		System.out.println("pushPreview : " + this.rayTracer.getProgression());
 		drawImage(this.rayTracer.getRenderedPixels(), WritablePixelFormat.getIntArgbInstance());
 		previewPushed = true;
 	}

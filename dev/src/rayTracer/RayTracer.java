@@ -1,5 +1,8 @@
 package rayTracer;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.IntBuffer;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -10,6 +13,7 @@ import geometry.shapes.Plane;
 import geometry.shapes.Sphere;
 import materials.Material;
 import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import maths.MatrixD;
 import maths.Point;
@@ -21,6 +25,7 @@ import multithreading.TileTask;
 import multithreading.TileThread;
 import scene.RayTracingScene;
 import scene.lights.PositionnalLight;
+import util.ImageUtil;
 
 /**
  * Permet d'instancier un ray tracer capable de faire le rendu d'une scene donnee.
@@ -511,7 +516,7 @@ public class RayTracer
 				pixelColor = ColorOperations.linearTosRGBGamma2_2(pixelColor);
 				
 				this.renderedPixels.put(y*this.renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
-				this.totalPixelComputed.incrementAndGet();
+				this.totalPixelComputed.incrementAndGet();//TODO (tom) déplacer ça dans la deuxième boucle pour ne pas compter tous les pixels individuellement parce que ça doit faire mal aux perfs
 			}
 		}
 	}

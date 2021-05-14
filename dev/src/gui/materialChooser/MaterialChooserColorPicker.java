@@ -45,8 +45,6 @@ import jfxtras.styles.jmetro.JMetroStyleClass;
 import materials.observer.ObservableConcreteMaterial;
 import maths.ColorOperations;
 
-//TODO(tom) bug des sliders qui ne sont pas bien positionnés quand on passe de RGB -> HSB ou
-//HSB --> RGB
 /**
  * ColorRect,  colorBar, colorRectIndicator de:
  * https://stackoverflow.com/questions/27171885/display-custom-color-dialog-directly-javafx-colorpicker
@@ -413,13 +411,13 @@ public class MaterialChooserColorPicker extends VBox
     		input2.textProperty().bindBidirectional(this.greenComponent, converter);
     		input3.textProperty().bindBidirectional(this.blueComponent, converter);
     		
-    		slider1.valueProperty().bindBidirectional(this.redComponent);
-    		slider2.valueProperty().bindBidirectional(this.greenComponent);
-    		slider3.valueProperty().bindBidirectional(this.blueComponent);
-    		
     		slider1.setMax(255);
     		slider2.setMax(255);
     		slider3.setMax(255);
+    		
+    		slider1.valueProperty().bindBidirectional(this.redComponent);
+    		slider2.valueProperty().bindBidirectional(this.greenComponent);
+    		slider3.valueProperty().bindBidirectional(this.blueComponent);
     		break;
     		
     	case 1:
@@ -428,13 +426,13 @@ public class MaterialChooserColorPicker extends VBox
     		input2.textProperty().bindBidirectional(this.satComponent, converter);
     		input3.textProperty().bindBidirectional(this.brightComponent, converter);
     		
-    		slider1.valueProperty().bindBidirectional(this.hueComponent);
-    		slider2.valueProperty().bindBidirectional(this.satComponent);
-    		slider3.valueProperty().bindBidirectional(this.brightComponent);
-    		
     		slider1.setMax(360);
     		slider2.setMax(100);
     		slider3.setMax(100);
+    		
+    		slider1.valueProperty().bindBidirectional(this.hueComponent);
+    		slider2.valueProperty().bindBidirectional(this.satComponent);
+    		slider3.valueProperty().bindBidirectional(this.brightComponent);
     		break;
     	}
     	
