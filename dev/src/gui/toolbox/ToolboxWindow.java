@@ -48,8 +48,8 @@ public class ToolboxWindow{
 	public void execute() {
 
 		Stage stage = new Stage();
-		VBox root = new VBox();
-		Scene scene = new Scene(root);
+		VBox mainVBox = new VBox();
+		Scene scene = new Scene(mainVBox);
 		JMetro jMetro = new JMetro(Style.DARK);
 		jMetro.setScene(scene);
 		
@@ -62,10 +62,14 @@ public class ToolboxWindow{
         Label progressLabel = new Label("Avancement du rendu de l'image");
         progressBar.setMaxWidth(Double.MAX_VALUE);
 
-        GridPane slidersPane = new ToolboxSliders(rayTracerSettings).getSlidersPane();
+        GridPane slidersPane = new ToolboxSliders(rayTracerSettings);
         GridPane checkboxesPane = new ToolboxCheckboxes(rayTracerSettings);
         
-        root.getChildren().addAll(statOnOffCheckBox, 
+//        slidersPane.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+//        checkboxesPane.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+        
+        mainVBox.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+        mainVBox.getChildren().addAll(statOnOffCheckBox, 
         						  new ToolboxSaveButton("Sauvegarder le rendu", stage, this.writableImage), 
         						  new Separator(),
         						  slidersPane,

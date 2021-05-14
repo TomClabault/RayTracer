@@ -77,8 +77,8 @@ public class MainApp extends Application {
     	//TODO (tom) n'activer le comptage du nombre d'intersections que sur demande (une feature 'debug' en gros) parce que ça tape dans les perfs
     	//mine de rien
     	RayTracingScene rayTracingScene = MainUtil.getSceneFromFile(stage);
-	   	//rayTracingScene = MainUtil.addSkybox(rayTracingScene);
-	   	//rayTracingScene.setAccelerationStructure(new BVHAccelerationStructure(rayTracingScene.getSceneObjects(), 16));
+	   	rayTracingScene = MainUtil.addSkybox(rayTracingScene);
+	   	rayTracingScene.setAccelerationStructure(new BVHAccelerationStructure(rayTracingScene.getSceneObjects(), 16));
 	   	
         RayTracerSettings rayTracerSettings = new RayTracerSettings(Runtime.getRuntime().availableProcessors(), 4, 9, 4, 64);
 	   	ChooseRenderSettingsWindow renderSettingsWindow = new ChooseRenderSettingsWindow(rayTracerSettings);
@@ -86,7 +86,7 @@ public class MainApp extends Application {
         
 	   	RayTracer rayTracer = new RayTracer(MainApp.WIDTH, MainApp.HEIGHT);
 	   	
-	   	//startRender(stage, rayTracer, rayTracingScene, rayTracerSettings);
+	   	startRender(stage, rayTracer, rayTracingScene, rayTracerSettings);
     }
     
     private void gracefulExit(WindowEvent event)

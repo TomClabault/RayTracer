@@ -421,7 +421,6 @@ public class MaterialChooserColorPicker extends VBox
     		break;
     		
     	case 1:
-    		//TODO (tom) la hue retourne à zéro quand on positionne le curseur du color picker tout à gauche ?
     		input1.textProperty().bindBidirectional(this.hueComponent, converter);
     		input2.textProperty().bindBidirectional(this.satComponent, converter);
     		input3.textProperty().bindBidirectional(this.brightComponent, converter);

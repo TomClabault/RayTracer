@@ -26,7 +26,7 @@ public class MaterialChooserPresets extends HBox
 {
 	private ObservableConcreteMaterial materialChosen;
 	
-	//TODO (tom) ne modifier la couleur que si elle n'a pas déjà été modifié et donc que l'utilisateur a pas déjà choisir la couleur qu'il voulait
+	//TODO (tom) quand on choisit du verre ou un material mirror, l'ancienne couleur qu'on avait disparait
 	public MaterialChooserPresets(ObservableConcreteMaterial materialChosen)
 	{
 		super();

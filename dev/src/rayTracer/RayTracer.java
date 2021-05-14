@@ -516,8 +516,9 @@ public class RayTracer
 				pixelColor = ColorOperations.linearTosRGBGamma2_2(pixelColor);
 				
 				this.renderedPixels.put(y*this.renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
-				this.totalPixelComputed.incrementAndGet();//TODO (tom) déplacer ça dans la deuxième boucle pour ne pas compter tous les pixels individuellement parce que ça doit faire mal aux perfs
 			}
+			
+			this.totalPixelComputed.addAndGet(endX - startX + 1);
 		}
 	}
 

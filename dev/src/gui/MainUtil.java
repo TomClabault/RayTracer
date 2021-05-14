@@ -105,21 +105,20 @@ public class MainUtil
 	   		String fileExtension = getFileExtension(fileChosen);
 	   		
 	   		if(fileExtension.equals(".pov"))
-	   			//rayTracingScene = createEmptyScene();
 	   			rtScene = PovAutomat.parsePov(fileChosen);
 	   		else if(fileExtension.equals(".ply"))
 	   		{
-	   			//rtScene = PredefinedScenes.createEmptyScene();
+	   			rtScene = PredefinedScenes.createEmptyScene();
 	   			
 	   			MaterialChooserWindow matChoose = new MaterialChooserWindow();
 	   			Material material = matChoose.chooseMaterial();
 
-//	   			PlyParser plyParser = new PlyParser(material, 4, new Vector(0, -0.5, 0));
-//	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
-//	   			plyFileShape.getTriangleList().trimToSize();
-//	   			
-//	   			for(Triangle triangle : plyFileShape.getTriangleList())
-//	   				rtScene.addShape(triangle);
+	   			PlyParser plyParser = new PlyParser(material, 4, new Vector(0, -0.5, 0));
+	   			ArbitraryTriangleShape plyFileShape = plyParser.parsePly(fileChosen);
+	   			plyFileShape.getTriangleList().trimToSize();
+	   			
+	   			for(Triangle triangle : plyFileShape.getTriangleList())
+	   				rtScene.addShape(triangle);
 	   		}
 	   	}
 	   	catch(InvalidParallelepipedException recExc)

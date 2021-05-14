@@ -18,8 +18,6 @@ public class ToolboxSliders extends GridPane
 {
 	private RayTracerSettings rayTracerSettings;
 	
-	private GridPane slidersPane;
-	
 	private Slider depthSlider;
 	private Slider nbCoreSlider;
 	private Slider blurrySamplesSlider;
@@ -106,11 +104,6 @@ public class ToolboxSliders extends GridPane
 	    	cc.setHgrow(Priority.ALWAYS);
 	    	this.getColumnConstraints().add(cc);
 	    }
-	}
-	
-	public GridPane getSlidersPane()
-	{
-		return this.slidersPane;
 	}
 	
 	private void depthSliderCallback(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)

@@ -27,6 +27,9 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
+//TODO (tom) bien centrer les cases pour choisir la larguer/hauteur et les textes et les boutons et tout en fait
+//#retravailler l'interface
+
 /**
  * La classe contenant le code du choix de la taille du rendu.
  */
