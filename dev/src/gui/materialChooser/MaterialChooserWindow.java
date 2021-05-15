@@ -53,7 +53,7 @@ public class MaterialChooserWindow extends Stage
 		@Override
 		public void materialUpdated(Object updater) 
 		{
-			this.chooserControls.setInputsFromMaterial(this.material);
+			this.chooserControls.setInputsFromMaterial(material);
 			this.chooserPreview.updatePreview();
 		}
 	}
@@ -72,7 +72,7 @@ public class MaterialChooserWindow extends Stage
 		
 		MaterialChooserControls inputFields = new MaterialChooserControls(materialChosen);
 		MaterialChooserPreview previewPane = new MaterialChooserPreview(materialChosen);
-		MaterialChooserPresets presetsPane = new MaterialChooserPresets(this.materialChosen);
+		MaterialChooserPresets presetsPane = new MaterialChooserPresets(materialChosen);
 		colorPicker = new MaterialChooserColorPicker(materialChosen);
 		
 		Label presetsLabel = new Label("Presets:");

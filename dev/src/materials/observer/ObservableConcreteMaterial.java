@@ -96,7 +96,7 @@ public class ObservableConcreteMaterial extends Material implements ObservableMa
 	 */
 	public void setAmbientCoeff(double ambientCoeff)
 	{
-		super.setAmbientCoeff(diffuseCoeff);
+		super.setAmbientCoeff(ambientCoeff);
 		
 		this.notifyListeners();
 	}

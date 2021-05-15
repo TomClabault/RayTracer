@@ -40,6 +40,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.util.StringConverter;
+import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.NumberStringConverter;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import materials.observer.ObservableConcreteMaterial;
@@ -124,8 +125,6 @@ public class MaterialChooserColorPicker extends VBox
     			updateColorFromRGB();
     			updateHSBComponents();
     			colorChangeOngoing = false;
-    			
-    			System.out.println("hue: " + hueComponent);
     		}
     	}
     };
