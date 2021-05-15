@@ -25,8 +25,6 @@ import materials.observer.MaterialObserver;
 import materials.observer.ObservableConcreteMaterial;
 
 //TODO (tom) finir l'interface du material chooser -> centrer la preview et faire quelque chose avec le bouton valider
-//TODO (tom) faire en sorte que les inputs pour changer directement les coefficients du matétriau fonctionnent et faire des sliders avec,
-//à la façon des sliders et des inputs de RGB, HSB...
 //TODO (tom) faire le code hexa fonctionnel pour le color picker
 
 public class MaterialChooserWindow extends Stage
@@ -70,10 +68,10 @@ public class MaterialChooserWindow extends Stage
 		
 		
 		
+		colorPicker = new MaterialChooserColorPicker(materialChosen);
 		MaterialChooserControls inputFields = new MaterialChooserControls(materialChosen);
 		MaterialChooserPreview previewPane = new MaterialChooserPreview(materialChosen);
-		MaterialChooserPresets presetsPane = new MaterialChooserPresets(materialChosen);
-		colorPicker = new MaterialChooserColorPicker(materialChosen);
+		MaterialChooserPresets presetsPane = new MaterialChooserPresets(materialChosen, colorPicker);
 		
 		Label presetsLabel = new Label("Presets:");
 		presetsLabel.setAlignment(Pos.CENTER);

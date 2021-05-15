@@ -3,22 +3,39 @@ package gui.materialChooser;
 import java.util.ArrayList;
 
 import javafx.application.Platform;
-import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.util.StringConverter;
+import javafx.util.converter.NumberStringConverter;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import materials.observer.ObservableConcreteMaterial;
 
-//TODO (tom) add change listener aux inputs pourvérifier avant que ce qui a été écrit dans l'input du coeff du matériau est correct
-//si l'input n'est pas correct, le NumberStringConverter va planter
+//TODO (tom) le matériau de la preview est toujours noir juste apres le lancement du material chooser
 public class MaterialChooserControls extends GridPane 
 {
+	private interface MaterialGetter
+	{
+		public double getCoefficient();
+	}
+	
+	private interface MaterialSetter
+	{
+		public void setCoefficient(double newCoeff);
+	}
+	
+	private final MaterialGetter[] getters;
+	private final MaterialSetter[] setters;
+	
 	private ObservableConcreteMaterial materialChosen;
 	
-	private String[] labels;
+	private final String labelsName[] = new String[] {"Ambient", "Diffuse", "Reflection", "Specular intensity", "Specular size", "Refraction index", "Roughness"};
+	private ArrayList<String> labels;
 	private TextField[] inputs;
+	private Slider[] sliders;
 	
 	private boolean allowedToChangeInputs;
 	
@@ -33,69 +50,124 @@ public class MaterialChooserControls extends GridPane
 		this.allowedToChangeInputs = true;
 		this.materialChosen = material;
 		
-		this.labels = new String[] {"Ambient : ", "Diffuse : ", "Reflection : ", "Specular intensity : ", "Specular size : ", "Refraction index : ", "Roughness : "};
-		this.inputs = new TextField[labels.length];
+		this.getters = new MaterialGetter[]
+		{
+			new MaterialGetter() { @Override public double getCoefficient() { return materialChosen.getAmbientCoeff(); }},
+			new MaterialGetter() { @Override public double getCoefficient() { return materialChosen.getDiffuseCoeff(); }},
+			new MaterialGetter() { @Override public double getCoefficient() { return materialChosen.getReflectiveCoeff(); }},
+			new MaterialGetter() { @Override public double getCoefficient() { return materialChosen.getSpecularCoeff(); }},
+			new MaterialGetter() { @Override public double getCoefficient() { return materialChosen.getShininess(); }},
+			new MaterialGetter() { @Override public double getCoefficient() { return materialChosen.getRefractionIndex(); }},
+			new MaterialGetter() { @Override public double getCoefficient() { return materialChosen.getRoughness(); }}
+		};
+		this.setters = new MaterialSetter[]
+		{
+			new MaterialSetter() {@Override public void setCoefficient(double newCoeff) {materialChosen.setAmbientCoeff(newCoeff);}},
+			new MaterialSetter() {@Override public void setCoefficient(double newCoeff) {materialChosen.setDiffuseCoeff(newCoeff);}},
+			new MaterialSetter() {@Override public void setCoefficient(double newCoeff) {materialChosen.setReflectiveCoeff(newCoeff);}},
+			new MaterialSetter() {@Override public void setCoefficient(double newCoeff) {materialChosen.setSpecularCoeff(newCoeff);}},
+			new MaterialSetter() {@Override public void setCoefficient(double newCoeff) {materialChosen.setShininess((int)newCoeff);}},
+			new MaterialSetter() {@Override public void setCoefficient(double newCoeff) {materialChosen.setRefractionIndex(newCoeff);}},
+			new MaterialSetter() {@Override public void setCoefficient(double newCoeff) {materialChosen.setRoughness(newCoeff);}}
+		};
+		
+		this.labels = new ArrayList<>();
+		createLabels();//Ajoute les labels à l'arrayList
+		this.inputs = new TextField[labels.size()];
+		this.sliders = new Slider[labels.size()];
 		
 		ArrayList<HBox> labelsAndInputs = new ArrayList<>();
 			
-		for(int i = 0; i < labels.length; i++)
+		StringConverter<Number> stringToDoubleConverter = new NumberStringConverter()
+		{
+			@Override
+			public Double fromString(String in)
+			{
+				in = in.replace(',', '.');
+				
+				try
+				{
+					return Double.parseDouble(in);
+				}
+				catch (NumberFormatException e)
+				{
+					return 0.0;
+				}
+			}
+		};
+		
+		for(int i = 0; i < labels.size(); i++)
 		{
 			final int finalI = i;
 			
+			sliders[i] = new Slider();
+			sliders[i].setMax(getMaxSliderValFromLabel(labels.get(i)));
+			HBox.setMargin(sliders[i], new Insets(0, 5, 0, 5));
+			
 			inputs[i] = new TextField();
 			inputs[i].setPrefWidth(64);
-			inputs[i].textProperty().addListener((ov, oldV, newV) -> inputChangeCallback(inputs[finalI], oldV, newV, labels[finalI]));
+			inputs[i].textProperty().addListener((ov, oldV, newV) -> inputChangeCallback(inputs[finalI], oldV, newV, labels.get(finalI)));
+			inputs[i].textProperty().bindBidirectional(sliders[i].valueProperty(), stringToDoubleConverter);
 			
 			labelsAndInputs.add(new HBox());
-			labelsAndInputs.get(i).getChildren().add(new Label(labels[i]));
+			labelsAndInputs.get(i).getChildren().add(new Label(labels.get(i) + " :"));
+			labelsAndInputs.get(i).getChildren().add(sliders[i]);
 			labelsAndInputs.get(i).getChildren().add(inputs[i]);
-			labelsAndInputs.get(i).setAlignment(Pos.CENTER);
 		}
+		
+		
 
-		for (int i = 0; i < labels.length; i++)
-			super.add(labelsAndInputs.get(i), i % NB_INPUT_PER_LINE, i / NB_INPUT_PER_LINE);
+		for (int i = 0; i < labels.size(); i++)
+			super.add(labelsAndInputs.get(i), i / NB_INPUT_PER_LINE, i % NB_INPUT_PER_LINE);
 		
 		setInputsFromMaterial(this.materialChosen);
 		
 		this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
 	}
 	
-	private double getMaterialCoeffFromLabel(String label)
+	private void createLabels()
 	{
-		if(label.equals("Ambient : "))
-			return this.materialChosen.getAmbientCoeff();
-		else if(label.equals("Diffuse : "))
-			return this.materialChosen.getDiffuseCoeff();
-		else if(label.equals("Reflection : "))
-			return this.materialChosen.getReflectiveCoeff();
-		else if(label.equals("Specular intensity : "))
-			return this.materialChosen.getSpecularCoeff();
-		else if(label.equals("Specular size : "))
-			return this.materialChosen.getShininess();
-		else if(label.equals("Refraction index : "))
-			return this.materialChosen.getRefractionIndex();
-		else if(label.equals("Roughness : "))
-			return this.materialChosen.getRoughness();
-		else
-			return 0;
+		for(String label : labelsName)
+			labels.add(label);
 	}
 	
+	private String generateSpaces(int length)
+	{
+		return length == 0 ? "" : new String(new char[length]).replace('\0', ' ');
+	}
+	
+	/**
+	 * En fonction du label passé en argument, retourne le bon coefficient du matériau
+	 * Ex: pour le label 'Ambient :', cette fonction retournera le coefficient ambiant du matériau.
+	 * De même pour les coefficients diffus, reflexifs et autres
+	 * 
+	 * @param label Un des labels de {@link gui.materialChooser.MaterialChooserControls#labelsName}
+	 * 
+	 * @return Le coefficient approprie du materiau
+	 */
+	private double getMaterialCoeffFromLabel(String label)
+	{
+		return this.getters[labels.indexOf(label)].getCoefficient();
+	}
+	
+	private int getMaxSliderValFromLabel(String label)
+	{
+		int[] maxValues = new int[] {1, 1, 1, 1, 256, 10, 1};
+		
+		return maxValues[labels.indexOf(label)];
+	}
+	
+	/**
+	 * Analogue à {@link gui.materialChooser.MaterialChooserControls#getMaterialCoeffFromLabel(String)} mais agit
+	 * comme un setter pour le coefficient
+	 * 
+	 * @param value La nouvelle valeur pour le coefficient designe par 'label'
+	 * 
+	 * @param label Un des labels de {@link gui.materialChooser.MaterialChooserControls#labelsName}
+	 */
 	private void setMaterialCoeffFromLabel(double value, String label)
 	{
-		if(label.equals("Ambient : "))
-			this.materialChosen.setAmbientCoeff(value);
-		else if(label.equals("Diffuse : "))
-			this.materialChosen.setDiffuseCoeff(value);
-		else if(label.equals("Reflection : "))
-			this.materialChosen.setReflectiveCoeff(value);
-		else if(label.equals("Specular intensity : "))
-			this.materialChosen.setSpecularCoeff(value);
-		else if(label.equals("Specular size : "))
-			this.materialChosen.setShininess((int)value);
-		else if(label.equals("Refraction index : "))
-			this.materialChosen.setRefractionIndex(value);
-		else if(label.equals("Roughness : "))
-			this.materialChosen.setRoughness(value);
+		this.setters[labels.indexOf(label)].setCoefficient(value);
 	}
 	
 	private void extendSelection(TextField input, int endSelection)
@@ -113,6 +185,7 @@ public class MaterialChooserControls extends GridPane
 	private void inputChangeCallback(TextField sourceField, String oldValue, String newValue, String coeffLabel)
 	{
 		Double newValueD = null;
+		newValue = newValue.replace(',', '.');
 		
 		try
 		{
@@ -156,6 +229,6 @@ public class MaterialChooserControls extends GridPane
 	{
 		if(allowedToChangeInputs)
 			for(int i = 0; i < this.inputs.length; i++)
-				this.inputs[i].setText(Double.toString(getMaterialCoeffFromLabel(this.labels[i])));
+				this.inputs[i].setText(Double.toString(getMaterialCoeffFromLabel(this.labels.get(i))));
 	}
 }

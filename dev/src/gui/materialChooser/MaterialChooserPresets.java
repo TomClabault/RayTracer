@@ -26,13 +26,15 @@ public class MaterialChooserPresets extends HBox
 {
 	private ObservableConcreteMaterial materialChosen;
 	
-	//TODO (tom) quand on choisit du verre ou un material mirror, l'ancienne couleur qu'on avait disparait
-	public MaterialChooserPresets(ObservableConcreteMaterial materialChosen)
+	private MaterialChooserColorPicker colorPicker;
+	
+	public MaterialChooserPresets(ObservableConcreteMaterial materialChosen, MaterialChooserColorPicker colorPicker)
 	{
 		super();
 		super.setSpacing(10);;
 		
 		this.materialChosen = materialChosen;
+		this.colorPicker = colorPicker;
 		
 		Button matteButton = new Button("Matte");
 		Button metallicButton = new Button("Metallic");
@@ -61,10 +63,10 @@ public class MaterialChooserPresets extends HBox
 		this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
 	}
 	
-	private void matteButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new MatteMaterial(this.materialChosen.getColor())); }
-	private void metallicButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new MetallicMaterial(this.materialChosen.getColor())); }
+	private void matteButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new MatteMaterial(this.colorPicker.getCustomColor())); }
+	private void metallicButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new MetallicMaterial(this.colorPicker.getCustomColor())); }
 	private void mirrorButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new MirrorMaterial(0.75)); }
 	private void glassButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new GlassMaterial()); }
-	private void glassyButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new GlassyMaterial(this.materialChosen.getColor())); }
-	private void roughButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new RoughMaterial(this.materialChosen.getColor(), 0.75)); }
+	private void glassyButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new GlassyMaterial(this.colorPicker.getCustomColor())); }
+	private void roughButtonCallback(ActionEvent event) { this.materialChosen.copyIn(new RoughMaterial(this.colorPicker.getCustomColor(), 0.75)); }
 }
