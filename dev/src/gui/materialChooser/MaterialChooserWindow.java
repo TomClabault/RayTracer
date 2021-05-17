@@ -64,7 +64,6 @@ public class MaterialChooserWindow extends Stage
 		this.setOnCloseRequest(this::gracefulExit);
 		
 		this.materialChosen = new ObservableConcreteMaterial();
-		materialChosen.copyIn(new MatteMaterial(Color.RED));
 		
 		
 		
@@ -108,6 +107,7 @@ public class MaterialChooserWindow extends Stage
 		
 		this.materialChosen.addListener(materialUpdateHander);
 		materialUpdateHander.materialUpdated(this);
+		materialChosen.copyIn(new MatteMaterial(Color.RED));
 		
 		Scene scene = new Scene(mainPane);
 		URL cssURL = getClass().getResource("../styles/colorPicker.css");
