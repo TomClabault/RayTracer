@@ -10,6 +10,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.adapter.JavaBeanDoubleProperty;
+import javafx.beans.property.adapter.JavaBeanDoublePropertyBuilder;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -40,7 +42,6 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.util.StringConverter;
-import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.NumberStringConverter;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import materials.observer.ObservableConcreteMaterial;
@@ -87,7 +88,7 @@ public class MaterialChooserColorPicker extends VBox
     	}
     };
     
-    private final DoubleProperty satComponent = new SimpleDoubleProperty(0) 
+    public final DoubleProperty satComponent = new SimpleDoubleProperty(0) 
     { 
     	@Override protected void invalidated() 
     	{
@@ -115,7 +116,7 @@ public class MaterialChooserColorPicker extends VBox
     	}
     };
 
-    private final IntegerProperty redComponent = new SimpleIntegerProperty(0) 
+    public final IntegerProperty redComponent = new SimpleIntegerProperty(0) 
     { 
     	@Override protected void invalidated() 
     	{
@@ -169,6 +170,7 @@ public class MaterialChooserColorPicker extends VBox
     public MaterialChooserColorPicker(ObservableConcreteMaterial material) 
     {
     	this.colorChangeOngoing = false;
+    	
     	this.material = material;
         this.getStyleClass().add("my-custom-color");
 
@@ -519,8 +521,8 @@ public class MaterialChooserColorPicker extends VBox
     
     private void updateColorFromRGB() 
     {
-        Color newColor = Color.rgb(redComponent.get(), 
-					        	   greenComponent.get(), 
+        Color newColor = Color.rgb(redComponent.get(),
+					        	   greenComponent.get(),
 					        	   blueComponent.get());
         
         setCustomColor(newColor);
@@ -571,5 +573,14 @@ public class MaterialChooserColorPicker extends VBox
     Color getCustomColor() 
     {
         return customColorProperty.get();
+    }
+    
+    public void updatePickerFromMaterial(ObservableConcreteMaterial material) 
+    {
+    	Color materialColor = material.getColor();
+    	
+    	redComponent.set((int)(materialColor.getRed() * 255));
+        greenComponent.set((int)(materialColor.getGreen() * 255));
+        blueComponent.set((int)(materialColor.getBlue() * 255));
     }
 }

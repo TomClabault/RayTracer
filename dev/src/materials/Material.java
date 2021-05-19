@@ -109,7 +109,7 @@ public class Material
 		this.specularCoeff = materialToCopy.getSpecularCoeff();
 		this.shininess = materialToCopy.getShininess();
 		this.isTransparent = materialToCopy.getIsTransparent();
-		this.refractionIndex = materialToCopy.refractionIndex;
+		this.refractionIndex = materialToCopy.getRefractionIndex();
 		this.roughness = materialToCopy.getRoughness();
 		
 		this.proceduralTexture = materialToCopy.getProceduralTexture();	

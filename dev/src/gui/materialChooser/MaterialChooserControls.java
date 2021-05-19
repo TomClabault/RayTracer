@@ -109,8 +109,11 @@ public class MaterialChooserControls extends GridPane
 			inputs[i].textProperty().addListener((ov, oldV, newV) -> inputChangeCallback(inputs[finalI], oldV, newV, labels.get(finalI)));
 			inputs[i].textProperty().bindBidirectional(sliders[i].valueProperty(), stringToDoubleConverter);
 			
+			Label label = new Label(labels.get(i) + " :");
+			label.setPrefWidth(110);
+			
 			labelsAndInputs.add(new HBox());
-			labelsAndInputs.get(i).getChildren().add(new Label(labels.get(i) + " :"));
+			labelsAndInputs.get(i).getChildren().add(label);
 			labelsAndInputs.get(i).getChildren().add(sliders[i]);
 			labelsAndInputs.get(i).getChildren().add(inputs[i]);
 		}
@@ -129,11 +132,6 @@ public class MaterialChooserControls extends GridPane
 	{
 		for(String label : labelsName)
 			labels.add(label);
-	}
-	
-	private String generateSpaces(int length)
-	{
-		return length == 0 ? "" : new String(new char[length]).replace('\0', ' ');
 	}
 	
 	/**

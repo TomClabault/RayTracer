@@ -26,6 +26,7 @@ import materials.observer.ObservableConcreteMaterial;
 
 //TODO (tom) finir l'interface du material chooser -> centrer la preview et faire quelque chose avec le bouton valider
 //TODO (tom) faire le code hexa fonctionnel pour le color picker
+//TODO (tom) bug du color picker qui n'est pas à la bonne position au lancement du material chooser
 
 public class MaterialChooserWindow extends Stage
 {
@@ -36,13 +37,15 @@ public class MaterialChooserWindow extends Stage
 	private class MaterialUpdateHandler implements MaterialObserver
 	{
 		private MaterialChooserControls chooserControls;
+		private MaterialChooserColorPicker colorPicker;
 		private MaterialChooserPreview chooserPreview;
 		
 		private ObservableConcreteMaterial material;
 		
-		public MaterialUpdateHandler(MaterialChooserControls chooserControls, MaterialChooserPreview previewPane, ObservableConcreteMaterial material) 
+		public MaterialUpdateHandler(MaterialChooserControls chooserControls, MaterialChooserColorPicker colorPicker, MaterialChooserPreview previewPane, ObservableConcreteMaterial material) 
 		{
 			this.chooserControls = chooserControls;
+			this.colorPicker = colorPicker;
 			this.chooserPreview = previewPane;
 			
 			this.material = material;
@@ -52,6 +55,7 @@ public class MaterialChooserWindow extends Stage
 		public void materialUpdated(Object updater) 
 		{
 			this.chooserControls.setInputsFromMaterial(material);
+			this.colorPicker.updatePickerFromMaterial(material);
 			this.chooserPreview.updatePreview();
 		}
 	}
@@ -103,10 +107,9 @@ public class MaterialChooserWindow extends Stage
 		
 		previewPane.setAlignment(Pos.CENTER);
 		
-		MaterialUpdateHandler materialUpdateHander = new MaterialUpdateHandler(inputFields, previewPane, materialChosen);
+		MaterialUpdateHandler materialUpdateHander = new MaterialUpdateHandler(inputFields, colorPicker, previewPane, materialChosen);
 		
 		this.materialChosen.addListener(materialUpdateHander);
-		materialUpdateHander.materialUpdated(this);
 		materialChosen.copyIn(new MatteMaterial(Color.RED));
 		
 		Scene scene = new Scene(mainPane);
