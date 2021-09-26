@@ -31,7 +31,7 @@
     </target>
 
     <target name="run" description="execution" depends="compile">
-        <java classname="render.MainApp">
+        <java classname="gui.MainApp">
             <classpath refid="projet.classpath"/>
         </java>
     </target>
