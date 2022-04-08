@@ -11,6 +11,7 @@ light_source
     <2, 2, 1>, 1
 }
 
+/*
 plane
 {
     <0, 1, 0>, -1
@@ -28,6 +29,7 @@ plane
         checker pigment{ color rgb 0.125}, pigment{color rgb 0.59}, size 1
     }
 }
+*/
 
 /*
 mirror
