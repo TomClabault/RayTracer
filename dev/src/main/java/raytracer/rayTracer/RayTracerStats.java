@@ -6,29 +6,31 @@ public class RayTracerStats
 {
 	private AtomicLong nbRaysShot;
 	private AtomicLong nbIntersectionTestsDone;
+	private AtomicLong nbPixelsComputed;
+	
+	private AtomicLong totalPixelCount;
 	
 	public RayTracerStats() 
 	{
 		this.nbRaysShot = new AtomicLong();
 		this.nbIntersectionTestsDone = new AtomicLong();
+		this.totalPixelCount = new AtomicLong();
+		this.nbPixelsComputed = new AtomicLong();
 		
 		this.nbRaysShot.set(0);
 		this.nbIntersectionTestsDone.set(0);
+		this.totalPixelCount.set(0);
+		this.nbPixelsComputed.set(0);
 	}
 	
-	public void incrementNbRaysShot()
+	public long getIntersectionTestsDone()
 	{
-		this.nbRaysShot.incrementAndGet();
+		return this.nbIntersectionTestsDone.get();
 	}
 	
-	public void incrementIntersectionTestsDone()
+	public long getNbPixelsComputed()
 	{
-		this.nbIntersectionTestsDone.incrementAndGet();
-	}
-	
-	public void incrementIntersectionTestsBy(long increment)
-	{
-		this.nbIntersectionTestsDone.addAndGet(increment);
+		return this.nbPixelsComputed.get();
 	}
 	
 	public long getNbRaysShot()
@@ -36,8 +38,33 @@ public class RayTracerStats
 		return this.nbRaysShot.get();
 	}
 	
-	public long getIntersectionTestsDone()
+	public long getTotalNbPixel()
 	{
-		return this.nbIntersectionTestsDone.get();
+		return this.totalPixelCount.get();
+	}
+	
+	public void incrementIntersectionTestsBy(long increment)
+	{
+		this.nbIntersectionTestsDone.addAndGet(increment);
+	}
+	
+	public void incrementIntersectionTestsDone()
+	{
+		this.nbIntersectionTestsDone.incrementAndGet();
+	}
+	
+	public void incrementNbPixelsComputed()
+	{
+		this.nbPixelsComputed.incrementAndGet();
+	}
+	
+	public void incrementNbRaysShot()
+	{
+		this.nbRaysShot.incrementAndGet();
+	}
+	
+	public void setTotalPixelCount(long pixelCount)
+	{
+		this.totalPixelCount.set(pixelCount);
 	}
 }

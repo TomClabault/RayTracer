@@ -122,6 +122,7 @@ public class RayTracer
 		this.renderDone = false;
 		
 		this.rtStats = new RayTracerStats();
+		this.rtStats.setTotalPixelCount(renderHeight * renderWidth);
 		
 		this.totalPixelToRender = renderWidth * renderHeight;
 		this.totalPixelComputed = new AtomicInteger();
@@ -511,6 +512,7 @@ public class RayTracer
 				pixelColor = ColorOperations.linearTosRGBGamma2_2(pixelColor);
 				
 				this.renderedPixels.put(y*this.renderWidth + x, ColorOperations.aRGB2Int(pixelColor));
+				this.rtStats.incrementNbPixelsComputed();
 			}
 			
 			this.totalPixelComputed.addAndGet(endX - startX + 1);
